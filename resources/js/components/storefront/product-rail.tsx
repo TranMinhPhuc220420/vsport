@@ -12,7 +12,7 @@ function ProductRail({ children, className }: ProductRailProps) {
         <div
             data-slot="product-rail"
             className={cn(
-                'scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-2 tablet:-mx-0 tablet:px-0',
+                '-mx-4 flex snap-x snap-mandatory scrollbar-none gap-2 overflow-x-auto px-4 pb-2 tablet:-mx-0 tablet:px-0',
                 className,
             )}
         >

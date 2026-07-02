@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Database\Seeders\CatalogSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -54,7 +55,7 @@ test('seeded product images expose alt text in api', function () {
 });
 
 test('cart and checkout pages use noindex seo', function () {
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
 
     $this->get(route('cart.index'))
         ->assertOk()

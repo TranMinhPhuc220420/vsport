@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $subject_id
  * @property array<string, mixed>|null $properties
  * @property string|null $ip_address
- * @property \Illuminate\Support\Carbon $created_at
+ * @property Carbon $created_at
  */
 class AdminActivityLog extends Model
 {

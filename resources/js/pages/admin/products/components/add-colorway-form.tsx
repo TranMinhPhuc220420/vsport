@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { AdminInputField } from '@/components/admin/admin-field';
 import { AdminFormSection } from '@/components/admin/admin-form-section';
 import { SizeChipPicker } from '@/components/admin/size-chip-picker';
+import { AdminButton } from '@/components/admin/ui/admin-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { AdminButton } from '@/components/admin/ui/admin-button';
 
 type AddColorwayFormProps = {
     productSlug: string;

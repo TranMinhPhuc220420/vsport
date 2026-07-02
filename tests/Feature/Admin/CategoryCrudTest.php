@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use App\Models\User;
+use Database\Seeders\CatalogSeeder;
 
 test('admin can create update and delete a category', function () {
     $admin = User::factory()->admin()->create();
@@ -30,7 +31,7 @@ test('admin can create update and delete a category', function () {
 });
 
 test('admin cannot set category parent to its own descendant', function () {
-    $this->seed(\Database\Seeders\CatalogSeeder::class);
+    $this->seed(CatalogSeeder::class);
 
     $admin = User::factory()->admin()->create();
     $parent = Category::query()->where('slug', 'men')->firstOrFail();
@@ -47,7 +48,7 @@ test('admin cannot set category parent to its own descendant', function () {
 });
 
 test('admin cannot delete category with products', function () {
-    $this->seed(\Database\Seeders\CatalogSeeder::class);
+    $this->seed(CatalogSeeder::class);
 
     $admin = User::factory()->admin()->create();
     $this->actingAs($admin);

@@ -1,11 +1,6 @@
 import type { ReactNode } from 'react';
 
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 
 export type AdminTab = {
@@ -36,12 +31,12 @@ export function AdminTabs({
             onValueChange={onValueChange}
             className={cn('w-full', className)}
         >
-            <TabsList className="inline-flex h-auto w-full justify-start gap-1 rounded-admin-md border border-admin bg-[var(--admin-neutral)] p-1">
+            <TabsList className="rounded-admin-md border-admin inline-flex h-auto w-full justify-start gap-1 border bg-[var(--admin-neutral)] p-1">
                 {tabs.map((tab) => (
                     <TabsTrigger
                         key={tab.value}
                         value={tab.value}
-                        className="rounded-admin-sm px-3 py-1.5 text-sm font-medium text-admin-secondary data-[state=active]:bg-[var(--admin-surface)] data-[state=active]:text-[var(--admin-primary)] data-[state=active]:shadow-sm"
+                        className="rounded-admin-sm text-admin-secondary px-3 py-1.5 text-sm font-medium data-[state=active]:bg-[var(--admin-surface)] data-[state=active]:text-[var(--admin-primary)] data-[state=active]:shadow-sm"
                     >
                         {tab.label}
                     </TabsTrigger>

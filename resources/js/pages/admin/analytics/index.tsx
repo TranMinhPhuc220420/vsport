@@ -1,4 +1,5 @@
 import { Head, setLayoutProps } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import {
     Bar,
     BarChart,
@@ -8,10 +9,8 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import { useTranslation } from 'react-i18next';
 
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { AdminStatCard } from '@/components/admin/ui/admin-stat-card';
 import {
     AdminDataTable,
     AdminDataTableBody,
@@ -21,11 +20,8 @@ import {
     AdminDataTableHeaderRow,
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
-import {
-    formatCurrency,
-    formatDate,
-    useLocale,
-} from '@/hooks/use-locale';
+import { AdminStatCard } from '@/components/admin/ui/admin-stat-card';
+import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
 
 type RevenueByDayRow = {
     date: string;
@@ -84,11 +80,11 @@ export default function AdminAnalyticsIndex({
                         {t('analytics.revenueByDay')}
                     </h2>
                     {chartData.length === 0 ? (
-                        <p className="text-sm text-admin-secondary">
+                        <p className="text-admin-secondary text-sm">
                             {t('analytics.noRevenue')}
                         </p>
                     ) : (
-                        <div className="rounded-lg border border-admin bg-[var(--admin-surface)] p-4 shadow-sm">
+                        <div className="border-admin rounded-lg border bg-[var(--admin-surface)] p-4 shadow-sm">
                             <div className="h-72 w-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={chartData}>
@@ -96,7 +92,10 @@ export default function AdminAnalyticsIndex({
                                             strokeDasharray="3 3"
                                             vertical={false}
                                         />
-                                        <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                                        <XAxis
+                                            dataKey="date"
+                                            tick={{ fontSize: 12 }}
+                                        />
                                         <YAxis tick={{ fontSize: 12 }} />
                                         <Tooltip
                                             formatter={(value) =>
@@ -141,7 +140,7 @@ export default function AdminAnalyticsIndex({
                                 <AdminDataTableRow>
                                     <AdminDataTableCell
                                         colSpan={3}
-                                        className="py-8 text-center text-admin-secondary"
+                                        className="text-admin-secondary py-8 text-center"
                                     >
                                         {t('analytics.noProductSales')}
                                     </AdminDataTableCell>
@@ -152,7 +151,7 @@ export default function AdminAnalyticsIndex({
                                         <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
                                             {product.name}
                                         </AdminDataTableCell>
-                                        <AdminDataTableCell className="text-right text-admin-secondary">
+                                        <AdminDataTableCell className="text-admin-secondary text-right">
                                             {product.quantity}
                                         </AdminDataTableCell>
                                         <AdminDataTableCell className="text-right font-medium text-[var(--admin-primary)]">

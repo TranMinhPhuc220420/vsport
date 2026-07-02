@@ -17,7 +17,11 @@
     --admin-text: var(--admin-primary);
     --admin-text-muted: var(--admin-secondary);
     --admin-border: color-mix(in srgb, var(--admin-secondary) 20%, transparent);
-    --admin-border-strong: color-mix(in srgb, var(--admin-secondary) 35%, transparent);
+    --admin-border-strong: color-mix(
+        in srgb,
+        var(--admin-secondary) 35%,
+        transparent
+    );
 
     --admin-success: #16a34a;
     --admin-success-soft: #f0fdf4;

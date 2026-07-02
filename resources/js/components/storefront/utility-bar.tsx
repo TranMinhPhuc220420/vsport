@@ -25,7 +25,7 @@ export function UtilityBar() {
                 hidden ? 'max-h-0' : 'max-h-9',
             )}
         >
-            <div className="storefront-container flex h-9 items-center justify-end gap-4 text-caption-sm">
+            <div className="storefront-container text-caption-sm flex h-9 items-center justify-end gap-4">
                 {utilityLinks.map((link) => (
                     <Link
                         key={link.label}

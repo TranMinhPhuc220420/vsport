@@ -1,21 +1,22 @@
 import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
 const adminButtonVariants = cva(
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap admin-body-strong transition-colors outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 rounded-admin-md focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_40%,transparent)] focus-visible:ring-offset-2',
+    'admin-body-strong rounded-admin-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_40%,transparent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
     {
         variants: {
             variant: {
                 primary:
-                    'bg-[var(--admin-tertiary)] text-[var(--admin-on-primary)] hover:bg-[var(--admin-tertiary-hover)] py-3 px-5',
+                    'bg-[var(--admin-tertiary)] px-5 py-3 text-[var(--admin-on-primary)] hover:bg-[var(--admin-tertiary-hover)]',
                 secondary:
-                    'bg-[var(--admin-surface)] text-[var(--admin-primary)] border border-admin hover:bg-[var(--admin-neutral)] h-9 px-3.5',
-                ghost: 'text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)] h-9 px-3',
+                    'border-admin h-9 border bg-[var(--admin-surface)] px-3.5 text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
+                ghost: 'h-9 px-3 text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
                 destructive:
-                    'bg-[var(--admin-danger)] text-white hover:bg-red-700 h-9 px-3.5',
+                    'h-9 bg-[var(--admin-danger)] px-3.5 text-white hover:bg-red-700',
             },
             size: {
                 default: '',

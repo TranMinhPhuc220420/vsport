@@ -295,7 +295,8 @@
     }
 
     .motion-hero-ken-burns {
-        animation: motion-ken-burns var(--motion-duration-slow) var(--motion-ease) both;
+        animation: motion-ken-burns var(--motion-duration-slow)
+            var(--motion-ease) both;
     }
 
     .motion-stagger-children > * {
@@ -308,13 +309,47 @@
         transform: translateY(12px);
     }
 
+    .scroll-reveal-pending.scroll-reveal-left {
+        transform: translateX(-24px);
+    }
+
+    .scroll-reveal-pending.scroll-reveal-right {
+        transform: translateX(24px);
+    }
+
+    .scroll-reveal-pending.scroll-reveal-clip {
+        opacity: 1;
+        transform: none;
+        clip-path: inset(0 100% 0 0);
+    }
+
     .scroll-reveal-visible {
         animation: motion-fade-up var(--motion-duration) var(--motion-ease) both;
+    }
+
+    .scroll-reveal-visible.scroll-reveal-left {
+        animation-name: motion-fade-left;
+    }
+
+    .scroll-reveal-visible.scroll-reveal-right {
+        animation-name: motion-fade-right;
+    }
+
+    .scroll-reveal-visible.scroll-reveal-clip {
+        animation-name: motion-clip-reveal;
     }
 
     .scroll-reveal-visible.scroll-reveal-stagger > * {
         animation: motion-fade-up var(--motion-duration) var(--motion-ease) both;
         animation-delay: calc(var(--stagger-index, 0) * 60ms);
+    }
+
+    .scroll-reveal-visible.scroll-reveal-stagger.scroll-reveal-left > * {
+        animation-name: motion-fade-left;
+    }
+
+    .scroll-reveal-visible.scroll-reveal-stagger.scroll-reveal-right > * {
+        animation-name: motion-fade-right;
     }
 
     @keyframes motion-fade-up {
@@ -339,8 +374,85 @@
         }
     }
 
+    @keyframes motion-fade-left {
+        from {
+            opacity: 0;
+            transform: translateX(-24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes motion-fade-right {
+        from {
+            opacity: 0;
+            transform: translateX(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes motion-clip-reveal {
+        from {
+            clip-path: inset(0 100% 0 0);
+        }
+
+        to {
+            clip-path: inset(0 0 0 0);
+        }
+    }
+
+    @keyframes motion-marquee {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    .motion-marquee-track {
+        animation: motion-marquee 30s linear infinite;
+    }
+
+    .motion-hero-progress {
+        animation: motion-hero-progress var(--hero-progress-duration, 6s) linear forwards;
+    }
+
+    @keyframes motion-hero-progress {
+        from {
+            transform: scaleX(0);
+        }
+
+        to {
+            transform: scaleX(1);
+        }
+    }
+
     .motion-safe-hover-scale {
         @apply transition-transform duration-300 ease-[var(--motion-ease)] group-hover:scale-[1.03];
+    }
+
+    .pdp-disclosure-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows var(--motion-duration)
+            var(--motion-ease);
+    }
+
+    .pdp-disclosure-panel-open {
+        grid-template-rows: 1fr;
+    }
+
+    .pdp-disclosure-panel-inner {
+        overflow: hidden;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -348,19 +460,34 @@
         .motion-hero-enter,
         .motion-hero-ken-burns,
         .motion-stagger-children > *,
+        .motion-marquee-track,
+        .motion-hero-progress,
         .scroll-reveal-visible,
         .scroll-reveal-visible.scroll-reveal-stagger > * {
             animation: none;
             opacity: 1;
             transform: none;
+            clip-path: none;
         }
 
-        .scroll-reveal-pending {
+        .scroll-reveal-pending,
+        .scroll-reveal-pending.scroll-reveal-left,
+        .scroll-reveal-pending.scroll-reveal-right,
+        .scroll-reveal-pending.scroll-reveal-clip {
             opacity: 1;
             transform: none;
+            clip-path: none;
         }
 
         .motion-safe-hover-scale {
+            transform: none !important;
+        }
+
+        .pdp-disclosure-panel {
+            transition: none;
+        }
+
+        .motion-gallery-zoom {
             transform: none !important;
         }
     }

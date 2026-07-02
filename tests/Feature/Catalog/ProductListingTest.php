@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Product;
 use Database\Seeders\CatalogSeeder;
 
 beforeEach(function () {

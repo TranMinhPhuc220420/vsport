@@ -2,17 +2,17 @@
 
 namespace App\Providers;
 
+use App\Listeners\MergeCartOnLogin;
+use App\Models\Order;
+use App\Policies\OrderPolicy;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use App\Models\Order;
-use App\Policies\OrderPolicy;
-use Illuminate\Auth\Events\Login;
-use Illuminate\Support\Facades\Event;
-use App\Listeners\MergeCartOnLogin;
 
 class AppServiceProvider extends ServiceProvider
 {

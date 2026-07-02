@@ -1,13 +1,15 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import { FormEvent, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StorefrontButton } from '@/components/storefront/Button';
 import {
     CheckoutField,
     checkoutInputClassName,
 } from '@/components/storefront/checkout-form';
-import { StorefrontButton } from '@/components/storefront/Button';
-import { PageSeo, type SeoData } from '@/components/storefront/page-seo';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { useCart } from '@/contexts/cart-context';
 import { formatCurrency, useLocale } from '@/hooks/use-locale';
 
@@ -139,14 +141,16 @@ export default function CheckoutPage(props: CheckoutPageProps) {
     if (items.length === 0) {
         return (
             <>
-                {seo ? (
-                    <PageSeo seo={seo} />
-                ) : null}
+                {seo ? <PageSeo seo={seo} /> : null}
                 <div className="storefront-container storefront-section text-center">
                     <p className="text-body-strong text-mute">
                         {t('checkout.empty')}
                     </p>
-                    <StorefrontButton variant="primary" className="mt-6" asChild>
+                    <StorefrontButton
+                        variant="primary"
+                        className="mt-6"
+                        asChild
+                    >
                         <Link href="/cart">{t('checkout.backToBag')}</Link>
                     </StorefrontButton>
                 </div>
@@ -159,8 +163,10 @@ export default function CheckoutPage(props: CheckoutPageProps) {
             {seo ? <PageSeo seo={seo} /> : null}
 
             <div className="storefront-container storefront-section">
-                <h1 className="text-heading-xl text-ink">{t('checkout.title')}</h1>
-                <p className="mt-2 text-caption-md text-mute">
+                <h1 className="text-heading-xl text-ink">
+                    {t('checkout.title')}
+                </h1>
+                <p className="text-caption-md mt-2 text-mute">
                     {t('checkout.description')}
                 </p>
 
@@ -180,7 +186,9 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                                 type="text"
                                 required
                                 value={customerName}
-                                onChange={(e) => setCustomerName(e.target.value)}
+                                onChange={(e) =>
+                                    setCustomerName(e.target.value)
+                                }
                                 className={checkoutInputClassName}
                             />
                         </CheckoutField>
@@ -217,7 +225,9 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                                 type="tel"
                                 required
                                 value={customerPhone}
-                                onChange={(e) => setCustomerPhone(e.target.value)}
+                                onChange={(e) =>
+                                    setCustomerPhone(e.target.value)
+                                }
                                 className={checkoutInputClassName}
                             />
                         </CheckoutField>
@@ -243,7 +253,11 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                         <CheckoutField
                             id="discountCode"
                             label={t('checkout.promoCode')}
-                            error={errors.discountCode ?? discountError ?? undefined}
+                            error={
+                                errors.discountCode ??
+                                discountError ??
+                                undefined
+                            }
                         >
                             <div className="flex gap-2">
                                 <input
@@ -271,7 +285,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                             <legend className="text-body-strong text-ink">
                                 {t('checkout.paymentMethod')}
                             </legend>
-                            <label className="flex items-center gap-2 text-caption-md">
+                            <label className="text-caption-md flex items-center gap-2">
                                 <input
                                     type="radio"
                                     name="paymentMethod"
@@ -281,7 +295,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                                 />
                                 {t('checkout.cod')}
                             </label>
-                            <label className="flex items-center gap-2 text-caption-md">
+                            <label className="text-caption-md flex items-center gap-2">
                                 <input
                                     type="radio"
                                     name="paymentMethod"
@@ -321,7 +335,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                             {items.map((item) => (
                                 <li
                                     key={item.variantId}
-                                    className="flex justify-between gap-4 text-caption-md"
+                                    className="text-caption-md flex justify-between gap-4"
                                 >
                                     <span className="text-mute">
                                         {item.productName} × {item.quantity}
@@ -336,14 +350,14 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                             ))}
                         </ul>
                         {discountAmount > 0 && (
-                            <div className="mt-4 flex justify-between text-caption-md text-sale">
+                            <div className="text-caption-md mt-4 flex justify-between text-sale">
                                 <span>{t('checkout.discount')}</span>
                                 <span>
                                     -{formatCurrency(discountAmount, locale)}
                                 </span>
                             </div>
                         )}
-                        <div className="mt-4 flex justify-between border-t border-hairline pt-4 text-body-strong">
+                        <div className="text-body-strong mt-4 flex justify-between border-t border-hairline pt-4">
                             <span>
                                 {t('checkout.totalWithCount', {
                                     count: itemCount,

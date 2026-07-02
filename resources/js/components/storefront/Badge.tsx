@@ -1,16 +1,17 @@
 import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
 const storefrontBadgeVariants = cva(
-    'inline-flex items-center justify-center whitespace-nowrap shrink-0',
+    'inline-flex shrink-0 items-center justify-center whitespace-nowrap',
     {
         variants: {
             variant: {
-                promo: 'bg-canvas border border-hairline text-ink text-caption-sm rounded-pill-lg px-3 py-1',
-                sale: 'text-sale text-caption-md',
+                promo: 'text-caption-sm rounded-pill-lg border border-hairline bg-canvas px-3 py-1 text-ink',
+                sale: 'text-caption-md text-sale',
             },
         },
         defaultVariants: {

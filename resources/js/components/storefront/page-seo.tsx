@@ -15,7 +15,11 @@ type PageSeoProps = {
 export function PageSeo({ seo }: PageSeoProps) {
     return (
         <Head title={seo.title}>
-            <meta head-key="description" name="description" content={seo.description} />
+            <meta
+                head-key="description"
+                name="description"
+                content={seo.description}
+            />
             <link head-key="canonical" rel="canonical" href={seo.canonical} />
             <meta head-key="og:title" property="og:title" content={seo.title} />
             <meta
@@ -24,7 +28,11 @@ export function PageSeo({ seo }: PageSeoProps) {
                 content={seo.description}
             />
             {seo.ogImage ? (
-                <meta head-key="og:image" property="og:image" content={seo.ogImage} />
+                <meta
+                    head-key="og:image"
+                    property="og:image"
+                    content={seo.ogImage}
+                />
             ) : null}
             {seo.robots ? (
                 <meta head-key="robots" name="robots" content={seo.robots} />

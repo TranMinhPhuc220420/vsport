@@ -1,6 +1,6 @@
-import { AppContent } from '@/components/app-content';
 import { AdminSidebar } from '@/components/admin/admin-sidebar';
 import { AdminSidebarHeader } from '@/components/admin/admin-sidebar-header';
+import { AppContent } from '@/components/app-content';
 import { AppShell } from '@/components/app-shell';
 import type { AppLayoutProps } from '@/types';
 
@@ -9,12 +9,12 @@ export default function AdminSidebarLayout({
     breadcrumbs = [],
 }: AppLayoutProps) {
     return (
-        <div className="vsport-admin min-h-screen bg-admin-canvas">
+        <div className="vsport-admin bg-admin-canvas min-h-screen">
             <AppShell variant="sidebar">
                 <AdminSidebar />
                 <AppContent
                     variant="sidebar"
-                    className="overflow-x-hidden bg-admin-canvas"
+                    className="bg-admin-canvas overflow-x-hidden"
                 >
                     <AdminSidebarHeader breadcrumbs={breadcrumbs} />
                     {children}

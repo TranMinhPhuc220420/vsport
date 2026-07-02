@@ -23,9 +23,7 @@ function CheckoutField({
                 {label}
             </label>
             {children}
-            {error && (
-                <p className="text-caption-sm text-sale">{error}</p>
-            )}
+            {error && <p className="text-caption-sm text-sale">{error}</p>}
         </div>
     );
 }

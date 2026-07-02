@@ -1,11 +1,8 @@
 import { Head, Link, setLayoutProps } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-    AdminActiveBadge,
-    AdminTabs,
-} from '@/components/admin/admin-form';
+import { AdminActiveBadge, AdminTabs } from '@/components/admin/admin-form';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { AddColorwayForm } from '@/pages/admin/products/components/add-colorway-form';
@@ -15,8 +12,8 @@ import { ProductDetailsForm } from '@/pages/admin/products/components/product-de
 import {
     getProductTotalStock,
     productHasActiveColorway,
-    type AdminProduct,
 } from '@/types/admin-product';
+import type { AdminProduct } from '@/types/admin-product';
 
 type AdminProductsEditProps = {
     product: AdminProduct;
@@ -33,10 +30,12 @@ export default function AdminProductsEdit({
 }: AdminProductsEditProps) {
     const { t } = useTranslation('admin');
     const [tab, setTab] = useState(activeTab);
+    const [prevActiveTab, setPrevActiveTab] = useState(activeTab);
 
-    useEffect(() => {
+    if (activeTab !== prevActiveTab) {
+        setPrevActiveTab(activeTab);
         setTab(activeTab);
-    }, [activeTab]);
+    }
 
     const totalStock = getProductTotalStock(product);
     const isActive = productHasActiveColorway(product);
@@ -62,12 +61,12 @@ export default function AdminProductsEdit({
                     sticky
                     badges={
                         <>
-                            <span className="inline-flex items-center rounded-md border border-admin bg-[var(--admin-neutral)] px-2 py-1 text-xs text-admin-secondary">
+                            <span className="border-admin text-admin-secondary inline-flex items-center rounded-md border bg-[var(--admin-neutral)] px-2 py-1 text-xs">
                                 {t('products.colorwaysCount', {
                                     count: product.colorways.length,
                                 })}
                             </span>
-                            <span className="inline-flex items-center rounded-md border border-admin bg-[var(--admin-neutral)] px-2 py-1 text-xs text-admin-secondary">
+                            <span className="border-admin text-admin-secondary inline-flex items-center rounded-md border bg-[var(--admin-neutral)] px-2 py-1 text-xs">
                                 {t('products.totalStock', {
                                     count: totalStock,
                                 })}
@@ -108,7 +107,7 @@ export default function AdminProductsEdit({
                             content: (
                                 <div className="space-y-4">
                                     {product.colorways.length === 0 ? (
-                                        <p className="text-sm text-admin-secondary">
+                                        <p className="text-admin-secondary text-sm">
                                             {t('products.noColorways')}
                                         </p>
                                     ) : (
@@ -120,7 +119,9 @@ export default function AdminProductsEdit({
                                             />
                                         ))
                                     )}
-                                    <AddColorwayForm productSlug={product.slug} />
+                                    <AddColorwayForm
+                                        productSlug={product.slug}
+                                    />
                                 </div>
                             ),
                         },

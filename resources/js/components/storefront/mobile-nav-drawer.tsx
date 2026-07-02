@@ -50,7 +50,7 @@ export function MobileNavDrawer({
                         <Link
                             key={item.href}
                             href={item.href}
-                            className="py-3 text-body-strong text-ink"
+                            className="text-body-strong py-3 text-ink"
                             onClick={() => onOpenChange(false)}
                         >
                             {item.label}

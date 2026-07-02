@@ -51,6 +51,7 @@ async function parseCartResponse(response: Response): Promise<{
             typeof body.message === 'string'
                 ? body.message
                 : 'Unable to update cart.';
+
         throw new Error(message);
     }
 

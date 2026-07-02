@@ -18,7 +18,7 @@ function AdminFilterTabs({
     return (
         <div
             className={cn(
-                'inline-flex flex-wrap gap-1 rounded-admin-md border border-admin bg-[var(--admin-neutral)] p-1',
+                'rounded-admin-md border-admin inline-flex flex-wrap gap-1 border bg-[var(--admin-neutral)] p-1',
                 className,
             )}
             role="tablist"

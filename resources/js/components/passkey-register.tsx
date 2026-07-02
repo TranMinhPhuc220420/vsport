@@ -80,7 +80,9 @@ export default function PasskeyRegistration({ onSuccess }: Props) {
             className="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
         >
             <div className="grid gap-2">
-                <Label htmlFor="passkey-name">{t('settings:passkeys.name')}</Label>
+                <Label htmlFor="passkey-name">
+                    {t('settings:passkeys.name')}
+                </Label>
                 <Input
                     id="passkey-name"
                     type="text"

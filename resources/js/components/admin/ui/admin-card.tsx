@@ -11,7 +11,7 @@ function AdminCard({ children, className }: AdminCardProps) {
     return (
         <div
             className={cn(
-                'rounded-admin-lg border border-admin bg-[var(--admin-surface)] p-6',
+                'rounded-admin-lg border-admin border bg-[var(--admin-surface)] p-6',
                 className,
             )}
         >

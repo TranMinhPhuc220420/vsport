@@ -100,7 +100,9 @@ export async function updateProductImage(
         credentials: 'same-origin',
     });
 
-    const body = await parseJsonResponse<{ image: AdminProductImage }>(response);
+    const body = await parseJsonResponse<{ image: AdminProductImage }>(
+        response,
+    );
 
     return body.image;
 }

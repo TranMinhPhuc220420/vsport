@@ -6,12 +6,12 @@ import { toast } from 'sonner';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { adminInputClassName } from '@/components/admin/ui/admin-input-styles';
 import {
-    type AdminProductImage,
     deleteProductImage,
     reorderColorwayImages,
     updateProductImage,
     uploadColorwayImage,
 } from '@/lib/admin-upload';
+import type { AdminProductImage } from '@/lib/admin-upload';
 import { cn } from '@/lib/utils';
 
 type ColorwayImageManagerProps = {
@@ -84,9 +84,7 @@ export function ColorwayImageManager({
                     current.map((image) => ({
                         ...image,
                         isPrimary:
-                            image.id === updated.id
-                                ? updated.isPrimary
-                                : false,
+                            image.id === updated.id ? updated.isPrimary : false,
                     })),
                 ),
             );
@@ -191,9 +189,7 @@ export function ColorwayImageManager({
     return (
         <div>
             <div className="flex flex-wrap items-center justify-between gap-2">
-                <h4 className="admin-section-title">
-                    {t('products.images')}
-                </h4>
+                <h4 className="admin-section-title">{t('products.images')}</h4>
                 <AdminButton
                     type="button"
                     variant="secondary"
@@ -216,7 +212,7 @@ export function ColorwayImageManager({
             />
 
             {images.length === 0 ? (
-                <p className="mt-3 text-sm text-admin-secondary">
+                <p className="text-admin-secondary mt-3 text-sm">
                     {t('products.noImages')}
                 </p>
             ) : (
@@ -225,15 +221,16 @@ export function ColorwayImageManager({
                         <div
                             key={image.id}
                             className={cn(
-                                'space-y-2 rounded-md border border-admin p-3',
-                                image.isPrimary && 'ring-2 ring-[var(--admin-primary)]',
+                                'border-admin space-y-2 rounded-md border p-3',
+                                image.isPrimary &&
+                                    'ring-2 ring-[var(--admin-primary)]',
                             )}
                         >
                             <div className="relative">
                                 <img
                                     src={image.url}
                                     alt={image.alt ?? ''}
-                                    className="aspect-square w-full rounded-md border border-admin object-cover"
+                                    className="border-admin aspect-square w-full rounded-md border object-cover"
                                 />
                                 {image.isPrimary && (
                                     <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-md bg-[var(--admin-primary)] px-2 py-1 text-xs text-white">
@@ -246,7 +243,10 @@ export function ColorwayImageManager({
                             <label className="admin-label block">
                                 {t('products.imageAlt')}
                                 <input
-                                    className={cn('mt-1 w-full', adminInputClassName)}
+                                    className={cn(
+                                        'mt-1 w-full',
+                                        adminInputClassName,
+                                    )}
                                     defaultValue={image.alt ?? ''}
                                     disabled={busyImageId === image.id}
                                     onBlur={(event) =>
@@ -285,7 +285,7 @@ export function ColorwayImageManager({
                             <div className="flex gap-2">
                                 <button
                                     type="button"
-                                    className="inline-flex items-center gap-1 text-sm text-admin-secondary hover:text-[var(--admin-primary)] disabled:opacity-40"
+                                    className="text-admin-secondary inline-flex items-center gap-1 text-sm hover:text-[var(--admin-primary)] disabled:opacity-40"
                                     disabled={
                                         index === 0 || busyImageId === image.id
                                     }
@@ -296,7 +296,7 @@ export function ColorwayImageManager({
                                 </button>
                                 <button
                                     type="button"
-                                    className="inline-flex items-center gap-1 text-sm text-admin-secondary hover:text-[var(--admin-primary)] disabled:opacity-40"
+                                    className="text-admin-secondary inline-flex items-center gap-1 text-sm hover:text-[var(--admin-primary)] disabled:opacity-40"
                                     disabled={
                                         index === images.length - 1 ||
                                         busyImageId === image.id

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
 use App\Models\User;

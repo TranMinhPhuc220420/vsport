@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
 
 import { CampaignHero } from '@/components/storefront/campaign-hero';
 import { cn } from '@/lib/utils';
@@ -17,10 +18,14 @@ function CampaignHeroCarousel({
     className,
 }: CampaignHeroCarouselProps) {
     const [active, setActive] = useState(0);
+    const [progressKey, setProgressKey] = useState(0);
     const count = campaigns.length;
 
     const goTo = useCallback(
-        (index: number) => setActive(((index % count) + count) % count),
+        (index: number) => {
+            setActive(((index % count) + count) % count);
+            setProgressKey((current) => current + 1);
+        },
         [count],
     );
 
@@ -29,10 +34,10 @@ function CampaignHeroCarousel({
             return;
         }
 
-        const timer = window.setInterval(
-            () => setActive((current) => (current + 1) % count),
-            autoplayMs,
-        );
+        const timer = window.setInterval(() => {
+            setActive((current) => (current + 1) % count);
+            setProgressKey((current) => current + 1);
+        }, autoplayMs);
 
         return () => window.clearInterval(timer);
     }, [count, autoplayMs]);
@@ -70,11 +75,23 @@ function CampaignHeroCarousel({
                 ctaHref={current.ctaHref}
             />
 
+            <div className="absolute inset-x-0 top-0 h-0.5 bg-canvas/20">
+                <div
+                    key={progressKey}
+                    className="motion-hero-progress h-full origin-left bg-canvas"
+                    style={
+                        {
+                            '--hero-progress-duration': `${autoplayMs}ms`,
+                        } as CSSProperties
+                    }
+                />
+            </div>
+
             <button
                 type="button"
                 onClick={() => goTo(active - 1)}
                 aria-label="Previous slide"
-                className="absolute left-4 top-1/2 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-canvas/25 text-canvas backdrop-blur transition hover:bg-canvas/40 tablet:flex"
+                className="absolute top-1/2 left-4 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-canvas/25 text-canvas backdrop-blur transition hover:bg-canvas/40 tablet:flex"
             >
                 <ChevronLeft className="size-6" />
             </button>
@@ -82,7 +99,7 @@ function CampaignHeroCarousel({
                 type="button"
                 onClick={() => goTo(active + 1)}
                 aria-label="Next slide"
-                className="absolute right-4 top-1/2 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-canvas/25 text-canvas backdrop-blur transition hover:bg-canvas/40 tablet:flex"
+                className="absolute top-1/2 right-4 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-canvas/25 text-canvas backdrop-blur transition hover:bg-canvas/40 tablet:flex"
             >
                 <ChevronRight className="size-6" />
             </button>

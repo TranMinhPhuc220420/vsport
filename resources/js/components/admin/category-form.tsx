@@ -32,7 +32,9 @@ export function CategoryForm({
     const { data, setData, processing, errors, post, put } = useForm(initial);
 
     const title =
-        mode === 'create' ? t('categories.newTitle') : t('categories.editTitle');
+        mode === 'create'
+            ? t('categories.newTitle')
+            : t('categories.editTitle');
     const submitLabel =
         mode === 'create' ? t('categories.create') : t('categories.save');
 
@@ -41,6 +43,7 @@ export function CategoryForm({
 
         if (method === 'put') {
             put(action);
+
             return;
         }
 

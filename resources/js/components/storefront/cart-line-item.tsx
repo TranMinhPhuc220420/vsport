@@ -27,7 +27,10 @@ function CartLineItem({
     return (
         <article
             data-slot="cart-line-item"
-            className={cn('flex gap-4 border-b border-hairline py-6', className)}
+            className={cn(
+                'flex gap-4 border-b border-hairline py-6',
+                className,
+            )}
         >
             <Link
                 href={`/products/${item.productSlug}`}
@@ -41,7 +44,7 @@ function CartLineItem({
                         className="size-full object-cover"
                     />
                 ) : (
-                    <div className="flex size-full items-center justify-center text-caption-md text-mute">
+                    <div className="text-caption-md flex size-full items-center justify-center text-mute">
                         {t('common:noImage')}
                     </div>
                 )}
@@ -87,7 +90,7 @@ function CartLineItem({
                         >
                             <Minus className="size-4" />
                         </StorefrontButton>
-                        <span className="min-w-8 text-center text-body-strong">
+                        <span className="text-body-strong min-w-8 text-center">
                             {item.quantity}
                         </span>
                         <StorefrontButton

@@ -59,7 +59,7 @@ function FilterSidebar({
 
             <div className="space-y-6 py-4">
                 <div>
-                    <h3 className="mb-3 text-caption-md text-mute">
+                    <h3 className="text-caption-md mb-3 text-mute">
                         {t('storefront:plp.gender')}
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -83,7 +83,7 @@ function FilterSidebar({
 
                 {childCategories.length > 0 && (
                     <div>
-                        <h3 className="mb-3 text-caption-md text-mute">
+                        <h3 className="text-caption-md mb-3 text-mute">
                             {t('storefront:plp.category')}
                         </h3>
                         <ul className="space-y-2">

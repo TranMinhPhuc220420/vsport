@@ -6,7 +6,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { useLocale } from '@/hooks/use-locale';
-import { type AppLocale } from '@/i18n';
+import type { AppLocale } from '@/i18n';
 import { cn } from '@/lib/utils';
 
 type LanguageSwitcherProps = {
@@ -28,8 +28,8 @@ export function LanguageSwitcher({
             <SelectTrigger
                 className={cn(
                     compact
-                        ? 'h-7 w-[4.5rem] border-none bg-transparent px-1 text-caption-sm shadow-none'
-                        : 'h-8 w-[7.5rem] text-caption-sm',
+                        ? 'text-caption-sm h-7 w-[4.5rem] border-none bg-transparent px-1 shadow-none'
+                        : 'text-caption-sm h-8 w-[7.5rem]',
                     className,
                 )}
                 aria-label="Language"

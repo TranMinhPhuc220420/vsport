@@ -19,7 +19,7 @@ function AdminStatCard({
     return (
         <div
             className={cn(
-                'rounded-admin-lg border border-admin bg-[var(--admin-surface)] p-5 transition-colors',
+                'rounded-admin-lg border-admin border bg-[var(--admin-surface)] p-5 transition-colors',
                 className,
             )}
         >

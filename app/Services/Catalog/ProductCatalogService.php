@@ -111,6 +111,75 @@ class ProductCatalogService
     }
 
     /**
+     * @return Collection<int, Product>
+     */
+    public function newArrivals(int $limit = 8): Collection
+    {
+        return Product::query()
+            ->with([
+                'category',
+                'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
+                'activeColorways.variants.inventory',
+            ])
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function bestSellers(int $limit = 8): Collection
+    {
+        return Product::query()
+            ->with([
+                'category',
+                'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
+                'activeColorways.variants.inventory',
+            ])
+            ->orderByDesc('review_count')
+            ->orderByDesc('average_rating')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function relatedProducts(Product $product, int $limit = 8): Collection
+    {
+        $with = [
+            'category',
+            'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
+            'activeColorways.variants.inventory',
+        ];
+
+        $related = Product::query()
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->with($with)
+            ->orderByDesc('is_featured')
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->get();
+
+        if ($related->count() >= $limit) {
+            return $related;
+        }
+
+        $excludeIds = $related->pluck('id')->push($product->id);
+
+        $additional = Product::query()
+            ->whereNotIn('id', $excludeIds)
+            ->with($with)
+            ->orderByDesc('created_at')
+            ->limit($limit - $related->count())
+            ->get();
+
+        return $related->concat($additional);
+    }
+
+    /**
      * @return Collection<int, Category>
      */
     public function topLevelCategories(): Collection

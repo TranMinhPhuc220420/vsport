@@ -8,6 +8,7 @@ type SizePickerProps = {
     variants: ProductVariant[];
     selectedSize: string | null;
     onSelect: (size: string) => void;
+    onSizeGuideClick?: () => void;
     className?: string;
 };
 
@@ -15,13 +16,27 @@ function SizePicker({
     variants,
     selectedSize,
     onSelect,
+    onSizeGuideClick,
     className,
 }: SizePickerProps) {
     const { t } = useTranslation('storefront');
 
     return (
         <div data-slot="size-picker" className={cn('space-y-3', className)}>
-            <p className="text-caption-md text-mute">{t('pdp.selectSize')}</p>
+            <div className="flex items-baseline justify-between gap-4">
+                <p className="text-caption-md text-mute">
+                    {t('pdp.selectSize')}
+                </p>
+                {onSizeGuideClick ? (
+                    <button
+                        type="button"
+                        onClick={onSizeGuideClick}
+                        className="text-caption-md text-ink underline"
+                    >
+                        {t('pdp.sizeGuide')}
+                    </button>
+                ) : null}
+            </div>
             <div className="flex flex-wrap gap-2">
                 {variants.map((variant) => {
                     const outOfStock = !variant.stock.inStock;
@@ -32,7 +47,9 @@ function SizePicker({
                             active={selectedSize === variant.size}
                             disabled={outOfStock}
                             onClick={() => onSelect(variant.size)}
-                            className={cn(outOfStock && 'line-through opacity-50')}
+                            className={cn(
+                                outOfStock && 'line-through opacity-50',
+                            )}
                         >
                             {variant.size}
                         </FilterChip>

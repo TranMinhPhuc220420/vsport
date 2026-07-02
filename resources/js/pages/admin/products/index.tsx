@@ -2,12 +2,12 @@ import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { AdminInputField } from '@/components/admin/admin-field';
 import {
     AdminConfirmDialog,
     AdminStockBadge,
     getStockStatus,
 } from '@/components/admin/admin-form';
-import { AdminInputField } from '@/components/admin/admin-field';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
@@ -150,7 +150,7 @@ export default function AdminProductsIndex({
                                         : null,
                                 })
                             }
-                            className="h-9 min-w-[180px] rounded-md border border-admin bg-[var(--admin-surface)] px-3 text-sm text-[var(--admin-primary)] outline-none focus-visible:border-[var(--admin-tertiary)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_25%,transparent)]"
+                            className="border-admin h-9 min-w-[180px] rounded-md border bg-[var(--admin-surface)] px-3 text-sm text-[var(--admin-primary)] outline-none focus-visible:border-[var(--admin-tertiary)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_25%,transparent)]"
                         >
                             <option value="">{tCommon('all')}</option>
                             {categories.map((category) => (
@@ -175,136 +175,142 @@ export default function AdminProductsIndex({
                         }
                     />
                 ) : (
-                    <div className="overflow-hidden rounded-lg border border-admin bg-[var(--admin-surface)] shadow-sm">
+                    <div className="border-admin overflow-hidden rounded-lg border bg-[var(--admin-surface)] shadow-sm">
                         <div className="overflow-x-auto">
-                        <table className="w-full min-w-[800px] text-left">
-                            <thead>
-                                <tr className="border-b border-admin bg-[var(--admin-neutral)] text-xs font-medium text-admin-secondary">
-                                    <th className="px-4 py-3">
-                                        {t('products.name')}
-                                    </th>
-                                    <th className="px-4 py-3">
-                                        {t('products.style')}
-                                    </th>
-                                    <th className="px-4 py-3">
-                                        {t('products.category')}
-                                    </th>
-                                    <th className="px-4 py-3">
-                                        {t('products.stock')}
-                                    </th>
-                                    <th className="px-4 py-3">
-                                        {t('products.colorways')}
-                                    </th>
-                                    <th className="px-4 py-3">
-                                        {t('products.featured')}
-                                    </th>
-                                    <th className="px-4 py-3 text-right">
-                                        {tCommon('actions')}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {products.data.map((product) => (
-                                    <tr
-                                        key={product.id}
-                                        className="border-b border-admin hover:bg-[var(--admin-neutral)] cursor-pointer"
-                                        onClick={() =>
-                                            router.visit(
-                                                `/admin/products/${product.slug}/edit`,
-                                            )
-                                        }
-                                    >
-                                        <td className="px-4 py-3">
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-admin bg-[var(--admin-neutral)]">
-                                                    {product.thumbnailUrl ? (
-                                                        <img
-                                                            src={
-                                                                product.thumbnailUrl
-                                                            }
-                                                            alt=""
-                                                            className="size-full object-cover"
-                                                        />
-                                                    ) : (
-                                                        <span className="text-xs text-admin-secondary">
-                                                            {tCommon('noImage')}
-                                                        </span>
-                                                    )}
+                            <table className="w-full min-w-[800px] text-left">
+                                <thead>
+                                    <tr className="border-admin text-admin-secondary border-b bg-[var(--admin-neutral)] text-xs font-medium">
+                                        <th className="px-4 py-3">
+                                            {t('products.name')}
+                                        </th>
+                                        <th className="px-4 py-3">
+                                            {t('products.style')}
+                                        </th>
+                                        <th className="px-4 py-3">
+                                            {t('products.category')}
+                                        </th>
+                                        <th className="px-4 py-3">
+                                            {t('products.stock')}
+                                        </th>
+                                        <th className="px-4 py-3">
+                                            {t('products.colorways')}
+                                        </th>
+                                        <th className="px-4 py-3">
+                                            {t('products.featured')}
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            {tCommon('actions')}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products.data.map((product) => (
+                                        <tr
+                                            key={product.id}
+                                            className="border-admin cursor-pointer border-b hover:bg-[var(--admin-neutral)]"
+                                            onClick={() =>
+                                                router.visit(
+                                                    `/admin/products/${product.slug}/edit`,
+                                                )
+                                            }
+                                        >
+                                            <td className="px-4 py-3">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="border-admin flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border bg-[var(--admin-neutral)]">
+                                                        {product.thumbnailUrl ? (
+                                                            <img
+                                                                src={
+                                                                    product.thumbnailUrl
+                                                                }
+                                                                alt=""
+                                                                className="size-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <span className="text-admin-secondary text-xs">
+                                                                {tCommon(
+                                                                    'noImage',
+                                                                )}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <span className="font-medium text-[var(--admin-primary)]">
+                                                        {product.name}
+                                                    </span>
                                                 </div>
-                                                <span className="font-medium text-[var(--admin-primary)]">
-                                                    {product.name}
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-sm text-admin-secondary">
-                                            {product.styleCode}
-                                        </td>
-                                        <td className="px-4 py-2.5 text-sm text-admin-secondary">
-                                            {product.category ??
-                                                tCommon('emDash')}
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-sm text-admin-secondary">
-                                                    {product.totalStock}
-                                                </span>
-                                                <AdminStockBadge
-                                                    status={getStockStatus(
-                                                        product.totalStock,
-                                                    )}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-sm text-admin-secondary">
-                                            {product.colorwaysCount}
-                                        </td>
-                                        <td
-                                            className="px-4 py-3"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={product.isFeatured}
-                                                aria-label={t(
-                                                    'products.toggleFeatured',
-                                                )}
-                                                onChange={() =>
-                                                    toggleFeatured(
-                                                        product.slug,
-                                                        product.isFeatured,
-                                                    )
+                                            </td>
+                                            <td className="text-admin-secondary px-4 py-2.5 text-sm">
+                                                {product.styleCode}
+                                            </td>
+                                            <td className="text-admin-secondary px-4 py-2.5 text-sm">
+                                                {product.category ??
+                                                    tCommon('emDash')}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-admin-secondary text-sm">
+                                                        {product.totalStock}
+                                                    </span>
+                                                    <AdminStockBadge
+                                                        status={getStockStatus(
+                                                            product.totalStock,
+                                                        )}
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className="text-admin-secondary px-4 py-2.5 text-sm">
+                                                {product.colorwaysCount}
+                                            </td>
+                                            <td
+                                                className="px-4 py-3"
+                                                onClick={(e) =>
+                                                    e.stopPropagation()
                                                 }
-                                                className="size-4 rounded border-admin accent-[var(--admin-tertiary)]"
-                                            />
-                                        </td>
-                                        <td
-                                            className="px-4 py-3 text-right"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            <div className="flex justify-end gap-2">
-                                                <Link
-                                                    href={`/admin/products/${product.slug}/edit`}
-                                                    className="text-sm text-admin-secondary hover:text-[var(--admin-primary)] hover:underline"
-                                                >
-                                                    {t('products.edit')}
-                                                </Link>
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        setDeleteSlug(
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={product.isFeatured}
+                                                    aria-label={t(
+                                                        'products.toggleFeatured',
+                                                    )}
+                                                    onChange={() =>
+                                                        toggleFeatured(
                                                             product.slug,
+                                                            product.isFeatured,
                                                         )
                                                     }
-                                                    className="text-sm text-red-600 hover:underline"
-                                                >
-                                                    {t('products.delete')}
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                                    className="border-admin size-4 rounded accent-[var(--admin-tertiary)]"
+                                                />
+                                            </td>
+                                            <td
+                                                className="px-4 py-3 text-right"
+                                                onClick={(e) =>
+                                                    e.stopPropagation()
+                                                }
+                                            >
+                                                <div className="flex justify-end gap-2">
+                                                    <Link
+                                                        href={`/admin/products/${product.slug}/edit`}
+                                                        className="text-admin-secondary text-sm hover:text-[var(--admin-primary)] hover:underline"
+                                                    >
+                                                        {t('products.edit')}
+                                                    </Link>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            setDeleteSlug(
+                                                                product.slug,
+                                                            )
+                                                        }
+                                                        className="text-sm text-red-600 hover:underline"
+                                                    >
+                                                        {t('products.delete')}
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 )}

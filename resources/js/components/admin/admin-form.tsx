@@ -1,9 +1,3 @@
-import {
-    adminInputClassName,
-    adminSelectClassName,
-    adminTextareaClassName,
-} from '@/components/admin/ui/admin-input-styles';
-
 export {
     AdminField,
     AdminInputField,

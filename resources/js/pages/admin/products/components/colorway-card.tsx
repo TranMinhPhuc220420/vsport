@@ -2,21 +2,19 @@ import { router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ColorwayImageManager } from '@/components/admin/colorway-image-manager';
 import { AdminInputField } from '@/components/admin/admin-field';
 import {
     AdminActiveBadge,
     AdminConfirmDialog,
 } from '@/components/admin/admin-form';
+import { ColorwayImageManager } from '@/components/admin/colorway-image-manager';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { AdminCard } from '@/components/admin/ui/admin-card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import {
-    getPrimaryImageUrl,
-    type ProductColorway,
-} from '@/types/admin-product';
+import { getPrimaryImageUrl } from '@/types/admin-product';
+import type { ProductColorway } from '@/types/admin-product';
 
 type ColorwayCardProps = {
     colorway: ProductColorway;
@@ -60,7 +58,7 @@ export function ColorwayCard({
                     onClick={() => setOpen((current) => !current)}
                     className="flex w-full items-center gap-4 p-4 text-left"
                 >
-                    <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-md border border-admin bg-[var(--admin-neutral)]">
+                    <div className="border-admin flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-md border bg-[var(--admin-neutral)]">
                         {thumbnailUrl ? (
                             <img
                                 src={thumbnailUrl}
@@ -68,14 +66,16 @@ export function ColorwayCard({
                                 className="size-full object-cover"
                             />
                         ) : (
-                            <span className="text-xs text-admin-secondary">—</span>
+                            <span className="text-admin-secondary text-xs">
+                                —
+                            </span>
                         )}
                     </div>
                     <div className="min-w-0 flex-1">
                         <p className="font-medium text-[var(--admin-primary)]">
                             {colorway.fullStyleCode}
                         </p>
-                        <p className="text-sm text-admin-secondary">
+                        <p className="text-admin-secondary text-sm">
                             {colorway.colorName}
                         </p>
                     </div>
@@ -84,7 +84,7 @@ export function ColorwayCard({
 
                 <div
                     className={cn(
-                        'border-t border-admin px-4 pb-4',
+                        'border-admin border-t px-4 pb-4',
                         !open && 'hidden',
                     )}
                 >

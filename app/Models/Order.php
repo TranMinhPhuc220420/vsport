@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string $total_amount
  * @property string $shipping_address
  * @property string|null $payment_intent_id
- * @property \App\Enums\PaymentMethod $payment_method
+ * @property PaymentMethod $payment_method
  * @property int|null $discount_code_id
  * @property string $discount_amount
  * @property Carbon|null $created_at
@@ -63,7 +64,7 @@ class Order extends Model
     {
         return [
             'status' => OrderStatus::class,
-            'payment_method' => \App\Enums\PaymentMethod::class,
+            'payment_method' => PaymentMethod::class,
             'total_amount' => 'decimal:2',
             'discount_amount' => 'decimal:2',
         ];

@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FilterChip } from '@/components/storefront/FilterChip';
+import { cn } from '@/lib/utils';
+
 type CustomizationOption = {
     componentName: string;
     allowedMaterials: string[];
@@ -9,7 +12,9 @@ type CustomizationOption = {
 
 type NikeByYouCustomizerProps = {
     options: CustomizationOption[];
-    onChange: (configuration: Record<string, { material: string; color: string }>) => void;
+    onChange: (
+        configuration: Record<string, { material: string; color: string }>,
+    ) => void;
 };
 
 export function NikeByYouCustomizer({
@@ -28,7 +33,9 @@ export function NikeByYouCustomizer({
         patch: Partial<{ material: string; color: string }>,
     ) => {
         setSelections((current) => {
-            const option = options.find((o) => o.componentName === componentName);
+            const option = options.find(
+                (item) => item.componentName === componentName,
+            );
             const next = {
                 ...current,
                 [componentName]: {
@@ -55,62 +62,55 @@ export function NikeByYouCustomizer({
     }
 
     return (
-        <section className="mt-8 border border-hairline p-4">
-            <h2 className="text-heading-md text-ink">{t('pdp.nikeByYou')}</h2>
-            <p className="mt-1 text-caption-md text-mute">
-                {t('pdp.nikeByYouDesc')}
-            </p>
-            <div className="mt-4 space-y-4">
-                {options.map((option) => (
-                    <div key={option.componentName}>
-                        <p className="text-body-strong text-ink">
-                            {option.componentName}
-                        </p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                            {option.allowedMaterials.map((material) => (
-                                <button
-                                    key={material}
-                                    type="button"
-                                    className={`border px-3 py-1 text-caption-md ${
-                                        configuration[option.componentName]
-                                            ?.material === material
-                                            ? 'border-ink bg-ink text-white'
-                                            : 'border-hairline'
-                                    }`}
-                                    onClick={() =>
-                                        updateSelection(option.componentName, {
-                                            material,
-                                        })
-                                    }
-                                >
-                                    {material}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                            {option.allowedColors.map((color) => (
-                                <button
-                                    key={color.hex}
-                                    type="button"
-                                    title={color.name}
-                                    className={`size-8 rounded-full border-2 ${
-                                        configuration[option.componentName]
-                                            ?.color === color.hex
-                                            ? 'border-ink'
-                                            : 'border-transparent'
-                                    }`}
-                                    style={{ backgroundColor: color.hex }}
-                                    onClick={() =>
-                                        updateSelection(option.componentName, {
-                                            color: color.hex,
-                                        })
-                                    }
-                                />
-                            ))}
-                        </div>
+        <div className="space-y-4">
+            <p className="text-caption-md text-mute">{t('pdp.nikeByYouDesc')}</p>
+            {options.map((option) => (
+                <div key={option.componentName}>
+                    <p className="text-body-strong text-ink">
+                        {option.componentName}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                        {option.allowedMaterials.map((material) => (
+                            <FilterChip
+                                key={material}
+                                active={
+                                    configuration[option.componentName]
+                                        ?.material === material
+                                }
+                                onClick={() =>
+                                    updateSelection(option.componentName, {
+                                        material,
+                                    })
+                                }
+                            >
+                                {material}
+                            </FilterChip>
+                        ))}
                     </div>
-                ))}
-            </div>
-        </section>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                        {option.allowedColors.map((color) => (
+                            <button
+                                key={color.hex}
+                                type="button"
+                                title={color.name}
+                                className={cn(
+                                    'size-8 rounded-full ring-1 ring-hairline',
+                                    configuration[option.componentName]
+                                        ?.color === color.hex &&
+                                        'ring-2 ring-ink',
+                                )}
+                                style={{ backgroundColor: color.hex }}
+                                onClick={() =>
+                                    updateSelection(option.componentName, {
+                                        color: color.hex,
+                                    })
+                                }
+                                aria-label={color.name}
+                            />
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 }

@@ -23,19 +23,23 @@ export default function OrderHistoryPage({ orders }: OrderHistoryPageProps) {
                 </h1>
 
                 {orders.data.length === 0 ? (
-                    <p className="mt-6 text-body-strong text-mute">
+                    <p className="text-body-strong mt-6 text-mute">
                         {t('storefront:orders.empty')}
                     </p>
                 ) : (
                     <div className="mt-8 overflow-x-auto">
                         <table className="w-full min-w-[640px] text-left">
                             <thead>
-                                <tr className="border-b border-hairline text-caption-md text-mute">
+                                <tr className="text-caption-md border-b border-hairline text-mute">
                                     <th className="py-3 pr-4">
                                         {t('storefront:orders.order')}
                                     </th>
-                                    <th className="py-3 pr-4">{t('common:date')}</th>
-                                    <th className="py-3 pr-4">{t('common:status')}</th>
+                                    <th className="py-3 pr-4">
+                                        {t('common:date')}
+                                    </th>
+                                    <th className="py-3 pr-4">
+                                        {t('common:status')}
+                                    </th>
                                     <th className="py-3 text-right">
                                         {t('common:total')}
                                     </th>
@@ -55,7 +59,7 @@ export default function OrderHistoryPage({ orders }: OrderHistoryPageProps) {
                                                 {order.orderNumber}
                                             </Link>
                                         </td>
-                                        <td className="py-4 pr-4 text-caption-md text-mute">
+                                        <td className="text-caption-md py-4 pr-4 text-mute">
                                             {order.createdAt
                                                 ? formatDate(
                                                       order.createdAt,
@@ -63,13 +67,13 @@ export default function OrderHistoryPage({ orders }: OrderHistoryPageProps) {
                                                   )
                                                 : t('common:emDash')}
                                         </td>
-                                        <td className="py-4 pr-4 text-caption-md text-ink">
+                                        <td className="text-caption-md py-4 pr-4 text-ink">
                                             {t(
                                                 `storefront:orders.status.${order.status}`,
                                                 { defaultValue: order.status },
                                             )}
                                         </td>
-                                        <td className="py-4 text-right text-body-strong text-ink">
+                                        <td className="text-body-strong py-4 text-right text-ink">
                                             {formatCurrency(
                                                 order.totalAmount,
                                                 locale,

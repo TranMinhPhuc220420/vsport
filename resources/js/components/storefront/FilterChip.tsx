@@ -18,7 +18,7 @@ function FilterChip({
             data-slot="filter-chip"
             data-active={active || undefined}
             className={cn(
-                'inline-flex h-10 items-center justify-center rounded-pill-lg border px-4 text-button-md transition-colors',
+                'text-button-md inline-flex h-10 items-center justify-center rounded-pill-lg border px-4 transition-colors',
                 active
                     ? 'border-ink bg-ink text-canvas'
                     : 'border-hairline bg-canvas text-ink',

@@ -16,15 +16,12 @@ function AdminDataTable({
     return (
         <div
             className={cn(
-                'overflow-hidden rounded-admin-lg border border-admin bg-[var(--admin-surface)]',
+                'rounded-admin-lg border-admin overflow-hidden border bg-[var(--admin-surface)]',
                 className,
             )}
         >
             <div className="overflow-x-auto">
-                <table
-                    className="w-full text-left"
-                    style={{ minWidth }}
-                >
+                <table className="w-full text-left" style={{ minWidth }}>
                     {children}
                 </table>
             </div>
@@ -34,7 +31,7 @@ function AdminDataTable({
 
 function AdminDataTableHead({ children }: { children: ReactNode }) {
     return (
-        <thead className="border-b border-admin bg-[var(--admin-neutral)]">
+        <thead className="border-admin border-b bg-[var(--admin-neutral)]">
             {children}
         </thead>
     );

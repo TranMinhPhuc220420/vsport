@@ -40,8 +40,53 @@
     },
     "home": {
         "featured": "Featured",
+        "newArrivals": "New Arrivals",
+        "bestSellers": "Best Sellers",
         "shopByCategory": "Shop by Category",
-        "viewAll": "View all"
+        "viewAll": "View all",
+        "marquee": {
+            "items": [
+                "Free Shipping",
+                "Cash on Delivery",
+                "Authentic Gear",
+                "14-Day Returns"
+            ]
+        },
+        "editorial": {
+            "headline": "Built to Move",
+            "subtitle": "Performance for every athlete",
+            "ctaLabel": "Shop Women"
+        },
+        "trust": {
+            "items": [
+                {
+                    "title": "Fast Delivery",
+                    "description": "Standard shipping in 2–5 business days across supported regions."
+                },
+                {
+                    "title": "Cash on Delivery",
+                    "description": "Pay when your order arrives. Card checkout also available."
+                },
+                {
+                    "title": "Authentic Products",
+                    "description": "Official VSport footwear and apparel with verified quality."
+                },
+                {
+                    "title": "Easy Returns",
+                    "description": "Contact us within 14 days for returns on eligible items."
+                }
+            ]
+        },
+        "newsletter": {
+            "eyebrow": "Join the community",
+            "headline": "Stay in the Game",
+            "description": "Get early access to drops, member offers, and training inspiration.",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "you@example.com",
+            "submit": "Subscribe",
+            "or": "Or",
+            "createAccount": "create a free account"
+        }
     },
     "search": {
         "title": "Search results",
@@ -85,7 +130,18 @@
         "reviewTitle": "Title (optional)",
         "reviewBody": "Your review",
         "submitReview": "Submit review",
-        "signInToReview": "Sign in to write a review."
+        "signInToReview": "Sign in to write a review.",
+        "details": "Product Details",
+        "shippingReturns": "Shipping & Returns",
+        "shippingReturnsBody": "Standard delivery in 2–5 business days. Cash on delivery available in supported regions. Contact us within 14 days for eligible returns.",
+        "sizeGuide": "Size guide",
+        "sizeGuideBody": "Footwear runs true to size. If between sizes, we recommend sizing up for running shoes and down for lifestyle fits.",
+        "relatedTitle": "You May Also Like",
+        "ratingCount": "({{count}} reviews)",
+        "writeReview": "Write a review",
+        "breadcrumbHome": "Home",
+        "starLabel": "{{n}}★",
+        "closeLightbox": "Close image viewer"
     },
     "cart": {
         "title": "Bag",

@@ -1,21 +1,22 @@
 import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
 const storefrontButtonVariants = cva(
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap text-button-md transition-all outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0',
+    'text-button-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-all outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
     {
         variants: {
             variant: {
                 primary:
-                    'bg-ink text-canvas rounded-pill-lg h-12 px-8 active:scale-95 active:opacity-50',
+                    'h-12 rounded-pill-lg bg-ink px-8 text-canvas active:scale-95 active:opacity-50',
                 secondary:
-                    'bg-soft-cloud text-ink rounded-pill-lg h-12 px-8 active:scale-95 active:opacity-50',
+                    'h-12 rounded-pill-lg bg-soft-cloud px-8 text-ink active:scale-95 active:opacity-50',
                 'outline-on-image':
-                    'bg-canvas text-ink rounded-pill-lg px-6 py-3 active:scale-95 active:opacity-50',
-                icon: 'bg-soft-cloud text-ink rounded-full size-10 active:scale-95 active:opacity-50',
+                    'rounded-pill-lg bg-canvas px-6 py-3 text-ink active:scale-95 active:opacity-50',
+                icon: 'size-10 rounded-full bg-soft-cloud text-ink active:scale-95 active:opacity-50',
             },
             size: {
                 default: '',

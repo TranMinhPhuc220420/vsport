@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\App;
 
 test('default locale is vi when no cookie is set', function () {
@@ -35,7 +36,7 @@ test('invalid locale cookie falls back to vi', function () {
 });
 
 test('locale cookie persists on admin pages', function () {
-    $admin = \App\Models\User::factory()->admin()->create();
+    $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
         ->withUnencryptedCookie('locale', 'en')

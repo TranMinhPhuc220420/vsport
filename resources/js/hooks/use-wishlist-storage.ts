@@ -1,10 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import {
-    WISHLIST_STORAGE_KEY,
-    type WishlistItem,
-    type WishlistState,
-} from '@/types/wishlist';
+import { WISHLIST_STORAGE_KEY } from '@/types/wishlist';
+import type { WishlistItem, WishlistState } from '@/types/wishlist';
 
 function readLocalWishlist(): WishlistState {
     if (typeof window === 'undefined') {
@@ -35,12 +32,9 @@ function writeLocalWishlist(state: WishlistState): void {
 }
 
 function useWishlistStorage() {
-    const local = readLocalWishlist();
-    const [items, setItems] = useState<WishlistItem[]>(local.items);
-
-    useEffect(() => {
-        setItems(readLocalWishlist().items);
-    }, []);
+    const [items, setItems] = useState<WishlistItem[]>(
+        () => readLocalWishlist().items,
+    );
 
     const toggleItem = useCallback((input: WishlistItem) => {
         setItems((current) => {

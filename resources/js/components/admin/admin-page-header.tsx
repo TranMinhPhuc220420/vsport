@@ -29,7 +29,7 @@ export function AdminPageHeader({
             className={cn(
                 'space-y-3',
                 sticky &&
-                    'sticky top-0 z-10 -mx-6 border-b border-admin bg-admin-canvas px-6 py-4',
+                    'border-admin bg-admin-canvas sticky top-0 z-10 -mx-6 border-b px-6 py-4',
                 className,
             )}
         >
@@ -48,11 +48,15 @@ export function AdminPageHeader({
                         <p className="admin-caption mt-1">{subtitle}</p>
                     )}
                     {badges && (
-                        <div className="mt-3 flex flex-wrap gap-2">{badges}</div>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                            {badges}
+                        </div>
                     )}
                 </div>
                 {actions && (
-                    <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>
+                    <div className="flex shrink-0 flex-wrap gap-2">
+                        {actions}
+                    </div>
                 )}
             </div>
         </header>

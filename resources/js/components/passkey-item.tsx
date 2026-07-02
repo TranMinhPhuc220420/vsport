@@ -76,7 +76,9 @@ export default function PasskeyItem({ passkey, onDelete }: Props) {
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
-                    <DialogTitle>{t('settings:passkeys.removeTitle')}</DialogTitle>
+                    <DialogTitle>
+                        {t('settings:passkeys.removeTitle')}
+                    </DialogTitle>
                     <DialogDescription>
                         {t('settings:passkeys.removeDesc', {
                             name: passkey.name,

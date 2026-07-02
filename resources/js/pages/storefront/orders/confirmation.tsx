@@ -30,7 +30,7 @@ export default function OrderConfirmationPage({
                 <h1 className="text-heading-xl text-ink">
                     {t('storefront:orders.thankYou')}
                 </h1>
-                <p className="mt-2 text-body-strong text-mute">
+                <p className="text-body-strong mt-2 text-mute">
                     {t('storefront:orders.confirmDesc')}
                 </p>
 
@@ -38,16 +38,17 @@ export default function OrderConfirmationPage({
                     <p className="text-caption-md text-mute">
                         {t('storefront:orders.orderNumberLabel')}
                     </p>
-                    <p className="text-heading-lg text-ink">{order.orderNumber}</p>
+                    <p className="text-heading-lg text-ink">
+                        {order.orderNumber}
+                    </p>
 
-                    <dl className="mt-6 space-y-3 text-body-strong">
+                    <dl className="text-body-strong mt-6 space-y-3">
                         <div className="flex justify-between">
                             <dt className="text-mute">{t('common:status')}</dt>
                             <dd className="text-ink">
-                                {t(
-                                    `storefront:orders.status.${order.status}`,
-                                    { defaultValue: order.status },
-                                )}
+                                {t(`storefront:orders.status.${order.status}`, {
+                                    defaultValue: order.status,
+                                })}
                             </dd>
                         </div>
                         <div className="flex justify-between">
@@ -62,7 +63,7 @@ export default function OrderConfirmationPage({
                         {order.items.map((item) => (
                             <li
                                 key={item.id}
-                                className="flex justify-between text-caption-md"
+                                className="text-caption-md flex justify-between"
                             >
                                 <span className="text-mute">
                                     {item.productName} ({item.colorName},{' '}

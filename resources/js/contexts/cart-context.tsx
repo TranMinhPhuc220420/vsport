@@ -1,8 +1,5 @@
-import {
-    createContext,
-    useContext,
-    type ReactNode,
-} from 'react';
+import { createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
 
 import { useCartStorage } from '@/hooks/use-cart-storage';
 import type { CartItem } from '@/types/cart';
@@ -25,9 +22,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 function CartProvider({ children }: { children: ReactNode }) {
     const cart = useCartStorage();
 
-    return (
-        <CartContext.Provider value={cart}>{children}</CartContext.Provider>
-    );
+    return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
 }
 
 function useCart(): CartContextValue {

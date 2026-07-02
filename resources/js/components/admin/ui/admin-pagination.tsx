@@ -29,15 +29,25 @@ function AdminPagination({ links, meta, className }: AdminPaginationProps) {
     return (
         <nav
             aria-label={t('pagination')}
-            className={cn('flex items-center justify-center gap-2 py-6', className)}
+            className={cn(
+                'flex items-center justify-center gap-2 py-6',
+                className,
+            )}
         >
             {links.prev ? (
-                <Link href={links.prev} preserveScroll className={navButtonClass}>
+                <Link
+                    href={links.prev}
+                    preserveScroll
+                    className={navButtonClass}
+                >
                     {t('previous')}
                 </Link>
             ) : (
                 <span
-                    className={cn(navButtonClass, 'text-admin-secondary opacity-50')}
+                    className={cn(
+                        navButtonClass,
+                        'text-admin-secondary opacity-50',
+                    )}
                 >
                     {t('previous')}
                 </span>
@@ -53,7 +63,7 @@ function AdminPagination({ links, meta, className }: AdminPaginationProps) {
                                 href={link.url}
                                 preserveScroll
                                 className={cn(
-                                    'inline-flex size-9 items-center justify-center rounded-admin-sm text-sm font-medium',
+                                    'rounded-admin-sm inline-flex size-9 items-center justify-center text-sm font-medium',
                                     link.active
                                         ? 'bg-[var(--admin-primary)] text-[var(--admin-on-primary)]'
                                         : 'text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
@@ -64,7 +74,7 @@ function AdminPagination({ links, meta, className }: AdminPaginationProps) {
                         ) : (
                             <span
                                 key={link.label}
-                                className="inline-flex size-9 items-center justify-center text-admin-secondary"
+                                className="text-admin-secondary inline-flex size-9 items-center justify-center"
                             >
                                 {link.label}
                             </span>
@@ -80,12 +90,19 @@ function AdminPagination({ links, meta, className }: AdminPaginationProps) {
             </span>
 
             {links.next ? (
-                <Link href={links.next} preserveScroll className={navButtonClass}>
+                <Link
+                    href={links.next}
+                    preserveScroll
+                    className={navButtonClass}
+                >
                     {t('next')}
                 </Link>
             ) : (
                 <span
-                    className={cn(navButtonClass, 'text-admin-secondary opacity-50')}
+                    className={cn(
+                        navButtonClass,
+                        'text-admin-secondary opacity-50',
+                    )}
                 >
                     {t('next')}
                 </span>

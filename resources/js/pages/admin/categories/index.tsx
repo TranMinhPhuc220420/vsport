@@ -2,6 +2,7 @@ import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { AdminButton } from '@/components/admin/ui/admin-button';
 import {
     AdminDataTable,
     AdminDataTableBody,
@@ -11,7 +12,6 @@ import {
     AdminDataTableHeaderRow,
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
-import { AdminButton } from '@/components/admin/ui/admin-button';
 
 type CategoryRow = {
     id: number;
@@ -104,7 +104,7 @@ export default function AdminCategoriesIndex({
                                     <div className="flex justify-end gap-2">
                                         <Link
                                             href={`/admin/categories/${category.id}/edit`}
-                                            className="text-sm text-admin-secondary hover:text-[var(--admin-primary)] hover:underline"
+                                            className="text-admin-secondary text-sm hover:text-[var(--admin-primary)] hover:underline"
                                         >
                                             {tCommon('edit')}
                                         </Link>

@@ -15,8 +15,10 @@ export default function WishlistPage() {
             <Head title={t('wishlist.title')} />
 
             <div className="storefront-container storefront-section">
-                <h1 className="text-heading-xl text-ink">{t('wishlist.title')}</h1>
-                <p className="mt-2 text-caption-md text-mute">
+                <h1 className="text-heading-xl text-ink">
+                    {t('wishlist.title')}
+                </h1>
+                <p className="text-caption-md mt-2 text-mute">
                     {t('wishlist.description')}
                 </p>
 
@@ -54,7 +56,7 @@ export default function WishlistPage() {
                                                 className="size-full object-cover"
                                             />
                                         ) : (
-                                            <div className="flex size-full items-center justify-center text-caption-md text-mute">
+                                            <div className="text-caption-md flex size-full items-center justify-center text-mute">
                                                 —
                                             </div>
                                         )}
@@ -68,7 +70,10 @@ export default function WishlistPage() {
                                             {item.productName}
                                         </Link>
                                         <p className="text-caption-md text-ink">
-                                            {formatCurrency(displayPrice, locale)}
+                                            {formatCurrency(
+                                                displayPrice,
+                                                locale,
+                                            )}
                                         </p>
                                         <StorefrontButton
                                             type="button"

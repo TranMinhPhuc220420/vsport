@@ -7,20 +7,7 @@ import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { OrderStatusStepper } from '@/components/admin/order-status-stepper';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { AdminCard } from '@/components/admin/ui/admin-card';
-import {
-    AdminDataTable,
-    AdminDataTableBody,
-    AdminDataTableCell,
-    AdminDataTableHead,
-    AdminDataTableHeaderCell,
-    AdminDataTableHeaderRow,
-    AdminDataTableRow,
-} from '@/components/admin/ui/admin-data-table';
-import {
-    formatCurrency,
-    formatDateTime,
-    useLocale,
-} from '@/hooks/use-locale';
+import { formatCurrency, formatDateTime, useLocale } from '@/hooks/use-locale';
 import type { OrderDetail } from '@/types/order';
 
 type AdminOrderShowPageProps = {
@@ -67,6 +54,7 @@ export default function AdminOrderShow({
     const requestStatusChange = (status: string) => {
         if (status === 'cancelled') {
             setPendingStatus(status);
+
             return;
         }
 
@@ -140,7 +128,7 @@ export default function AdminOrderShow({
                                 </div>
                             </dl>
                         ) : (
-                            <p className="mt-4 text-sm text-admin-secondary">
+                            <p className="text-admin-secondary mt-4 text-sm">
                                 {t('orders.noCustomer')}
                             </p>
                         )}
@@ -162,7 +150,7 @@ export default function AdminOrderShow({
                                     <dt className="admin-label">
                                         {t('orders.paymentIntent')}
                                     </dt>
-                                    <dd className="mt-0.5 break-all font-mono text-xs">
+                                    <dd className="mt-0.5 font-mono text-xs break-all">
                                         {order.paymentIntentId}
                                     </dd>
                                 </div>
@@ -179,7 +167,7 @@ export default function AdminOrderShow({
                                             </span>
                                         )}
                                         {(order.discountAmount ?? 0) > 0 && (
-                                            <span className="ml-2 text-admin-secondary">
+                                            <span className="text-admin-secondary ml-2">
                                                 −
                                                 {formatCurrency(
                                                     order.discountAmount ?? 0,
@@ -227,20 +215,20 @@ export default function AdminOrderShow({
                 </div>
 
                 <AdminCard className="p-0">
-                    <h2 className="admin-section-title border-b border-admin px-6 py-4">
+                    <h2 className="admin-section-title border-admin border-b px-6 py-4">
                         {t('orders.items')}
                     </h2>
                     <ul>
                         {order.items.map((item) => (
                             <li
                                 key={item.id}
-                                className="flex justify-between gap-4 border-b border-admin px-6 py-4 last:border-b-0"
+                                className="border-admin flex justify-between gap-4 border-b px-6 py-4 last:border-b-0"
                             >
                                 <div>
                                     <p className="font-medium text-[var(--admin-primary)]">
                                         {item.productName}
                                     </p>
-                                    <p className="text-sm text-admin-secondary">
+                                    <p className="text-admin-secondary text-sm">
                                         {item.colorName} / {item.size} ×{' '}
                                         {item.quantity}
                                     </p>
@@ -251,7 +239,7 @@ export default function AdminOrderShow({
                             </li>
                         ))}
                     </ul>
-                    <div className="space-y-2 border-t border-admin px-6 py-4 text-sm text-[var(--admin-primary)]">
+                    <div className="border-admin space-y-2 border-t px-6 py-4 text-sm text-[var(--admin-primary)]">
                         {hasDiscount && (
                             <>
                                 <div className="flex justify-between">
@@ -264,7 +252,7 @@ export default function AdminOrderShow({
                                         )}
                                     </span>
                                 </div>
-                                <div className="flex justify-between text-admin-secondary">
+                                <div className="text-admin-secondary flex justify-between">
                                     <span>{t('orders.discount')}</span>
                                     <span>
                                         −

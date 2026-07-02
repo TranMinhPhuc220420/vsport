@@ -47,12 +47,15 @@ function CampaignHero({
                     {subtitle}
                 </p>
                 <h1
-                    className="motion-hero-enter mt-2 text-display-campaign text-canvas"
+                    className="motion-hero-enter text-display-campaign mt-2 text-canvas"
                     style={{ animationDelay: '80ms' }}
                 >
                     {headline}
                 </h1>
-                <div className="motion-hero-enter mt-6 w-fit" style={{ animationDelay: '160ms' }}>
+                <div
+                    className="motion-hero-enter mt-6 w-fit"
+                    style={{ animationDelay: '160ms' }}
+                >
                     <StorefrontButton variant="outline-on-image" asChild>
                         <Link href={ctaHref}>{ctaLabel}</Link>
                     </StorefrontButton>

@@ -69,12 +69,12 @@ export default function AdminReviewsIndex({
         { value: 'all', label: t('reviews.filterAll') },
     ];
 
-    const applyStatus = (status: string) => {
-        router.get(
-            '/admin/reviews',
-            { status },
-            { preserveState: true },
-        );
+    const applyStatus = (status: string | null) => {
+        if (status === null) {
+            return;
+        }
+
+        router.get('/admin/reviews', { status }, { preserveState: true });
     };
 
     const approve = (id: number) => {
@@ -150,7 +150,7 @@ export default function AdminReviewsIndex({
                             <AdminDataTableRow>
                                 <AdminDataTableCell
                                     colSpan={6}
-                                    className="py-8 text-center text-admin-secondary"
+                                    className="text-admin-secondary py-8 text-center"
                                 >
                                     {emptyMessage}
                                 </AdminDataTableCell>
@@ -179,7 +179,7 @@ export default function AdminReviewsIndex({
                                             </p>
                                         )}
                                         {review.body && (
-                                            <p className="mt-1 text-sm text-admin-secondary">
+                                            <p className="text-admin-secondary mt-1 text-sm">
                                                 {review.body}
                                             </p>
                                         )}

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import { AddToBagButton } from '@/components/storefront/add-to-bag-button';
-import { cn } from '@/lib/utils';
 import { formatCurrency, useLocale } from '@/hooks/use-locale';
+import { cn } from '@/lib/utils';
 
 type PdpStickyMobileBarProps = {
     productName: string;
+    colorName?: string;
+    imageUrl?: string;
     price: number;
     disabled: boolean;
     onAddToBag: () => void;
@@ -15,6 +17,8 @@ type PdpStickyMobileBarProps = {
 
 function PdpStickyMobileBar({
     productName,
+    colorName,
+    imageUrl,
     price,
     disabled,
     onAddToBag,
@@ -53,10 +57,23 @@ function PdpStickyMobileBar({
             aria-hidden={!visible}
         >
             <div className="mx-auto flex max-w-[90rem] items-center gap-3">
+                {imageUrl ? (
+                    <img
+                        src={imageUrl}
+                        alt=""
+                        className="size-12 shrink-0 bg-soft-cloud object-cover"
+                        aria-hidden
+                    />
+                ) : null}
                 <div className="min-w-0 flex-1">
-                    <p className="truncate text-body-strong text-ink">
+                    <p className="text-body-strong truncate text-ink">
                         {productName}
                     </p>
+                    {colorName ? (
+                        <p className="text-caption-md truncate text-mute">
+                            {colorName}
+                        </p>
+                    ) : null}
                     <p className="text-caption-md text-ink">
                         {formatCurrency(price, locale)}
                     </p>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Services\Catalog\ProductCatalogService;
 use App\Support\CatalogCache;
 use Database\Seeders\CatalogSeeder;
@@ -17,8 +18,8 @@ test('findCategoryBySlug returns a Category model from database cache', function
     $first = $service->findCategoryBySlug('men');
     $second = $service->findCategoryBySlug('men');
 
-    expect($first)->toBeInstanceOf(\App\Models\Category::class)
-        ->and($second)->toBeInstanceOf(\App\Models\Category::class)
+    expect($first)->toBeInstanceOf(Category::class)
+        ->and($second)->toBeInstanceOf(Category::class)
         ->and($second->slug)->toBe('men');
 });
 
@@ -29,8 +30,8 @@ test('topLevelCategories returns Category models from database cache', function 
     $second = $service->topLevelCategories();
 
     expect($first)->not->toBeEmpty()
-        ->and($first->first())->toBeInstanceOf(\App\Models\Category::class)
-        ->and($second->first())->toBeInstanceOf(\App\Models\Category::class);
+        ->and($first->first())->toBeInstanceOf(Category::class)
+        ->and($second->first())->toBeInstanceOf(Category::class);
 });
 
 test('catalog cache invalidation clears slug entries', function () {

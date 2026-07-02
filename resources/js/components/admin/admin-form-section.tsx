@@ -20,7 +20,7 @@ export function AdminFormSection({
     return (
         <section
             className={cn(
-                'space-y-4 rounded-admin-lg border border-admin bg-[var(--admin-surface)] p-6',
+                'rounded-admin-lg border-admin space-y-4 border bg-[var(--admin-surface)] p-6',
                 className,
             )}
         >

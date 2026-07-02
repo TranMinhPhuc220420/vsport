@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Storefront;
 use App\Data\PageSeo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductDetailResource;
+use App\Http\Resources\ProductSummaryResource;
+use App\Models\Product;
 use App\Services\Catalog\ProductCatalogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Inertia\Inertia;
@@ -24,8 +26,15 @@ class ProductDetailController extends Controller
             abort(404);
         }
 
+        $related = ProductSummaryResource::collection(
+            $this->catalog->relatedProducts($product, 8),
+        );
+
         return Inertia::render('storefront/products/show', [
             'product' => ProductDetailResource::make($product)->resolve(),
+            'relatedProducts' => [
+                'data' => array_values($related->resolve()),
+            ],
             'seo' => PageSeo::forProduct(
                 $product,
                 $this->primaryImageUrl($product),
@@ -33,7 +42,7 @@ class ProductDetailController extends Controller
         ]);
     }
 
-    private function primaryImageUrl(\App\Models\Product $product): ?string
+    private function primaryImageUrl(Product $product): ?string
     {
         $colorway = $product->activeColorways->first();
 

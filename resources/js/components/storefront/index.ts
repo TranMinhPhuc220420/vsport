@@ -4,8 +4,21 @@ export { FilterChip } from '@/components/storefront/FilterChip';
 export { SearchPill } from '@/components/storefront/SearchPill';
 export { ProductCard } from '@/components/storefront/ProductCard';
 export type { ProductCardProps } from '@/components/storefront/ProductCard';
-export { ProductRail, ProductRailItem } from '@/components/storefront/product-rail';
+export {
+    ProductRail,
+    ProductRailItem,
+} from '@/components/storefront/product-rail';
 export { ScrollReveal } from '@/components/storefront/scroll-reveal';
+export { Breadcrumb } from '@/components/storefront/breadcrumb';
+export { StarRating } from '@/components/storefront/star-rating';
+export { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
+export { ProductLightbox } from '@/components/storefront/product-lightbox';
+export { SectionHeader } from '@/components/storefront/section-header';
+export { BrandMarquee } from '@/components/storefront/brand-marquee';
+export { EditorialCategoryShowcase } from '@/components/storefront/editorial-category-showcase';
+export { EditorialBanner } from '@/components/storefront/editorial-banner';
+export { TrustBar } from '@/components/storefront/trust-bar';
+export { NewsletterCta } from '@/components/storefront/newsletter-cta';
 export { CampaignHero } from '@/components/storefront/campaign-hero';
 export { CampaignHeroCarousel } from '@/components/storefront/campaign-hero-carousel';
 export { CategoryTile } from '@/components/storefront/category-tile';
@@ -19,4 +32,7 @@ export { AddToBagButton } from '@/components/storefront/add-to-bag-button';
 export { StorefrontPagination } from '@/components/storefront/pagination';
 export { CartLineItem } from '@/components/storefront/cart-line-item';
 export { CartSummary } from '@/components/storefront/cart-summary';
-export { CheckoutField, checkoutInputClassName } from '@/components/storefront/checkout-form';
+export {
+    CheckoutField,
+    checkoutInputClassName,
+} from '@/components/storefront/checkout-form';

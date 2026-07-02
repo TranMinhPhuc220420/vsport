@@ -25,9 +25,17 @@ function CategoryTile({ name, slug, imageUrl, className }: CategoryTileProps) {
     return (
         <article
             data-slot="category-tile"
-            className={cn('relative aspect-[4/5] overflow-hidden', className)}
+            className={cn(
+                'group relative aspect-[4/5] overflow-hidden',
+                className,
+            )}
         >
-            <img src={src} alt={name} loading="lazy" className="size-full object-cover" />
+            <img
+                src={src}
+                alt={name}
+                loading="lazy"
+                className="motion-safe-hover-scale size-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
             <div className="absolute bottom-4 left-4">
                 <StorefrontButton variant="outline-on-image" asChild>

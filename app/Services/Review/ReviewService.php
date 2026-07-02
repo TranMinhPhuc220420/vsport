@@ -5,7 +5,6 @@ namespace App\Services\Review;
 use App\Models\Product;
 use App\Models\ProductReview;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class ReviewService
 {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductReviewRequest;
-use App\Models\Product;
 use App\Services\Catalog\ProductCatalogService;
 use App\Services\Review\ReviewService;
 use Illuminate\Http\RedirectResponse;

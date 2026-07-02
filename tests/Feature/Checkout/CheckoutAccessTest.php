@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 test('guest can access checkout page', function () {
     $response = $this->get(route('checkout.create'));
 
@@ -11,7 +13,7 @@ test('guest can access checkout page', function () {
 });
 
 test('authenticated user sees checkout without guest flag', function () {
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
 
     $this->actingAs($user)
         ->get(route('checkout.create'))

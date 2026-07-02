@@ -51,7 +51,7 @@ function ProductCard({
                         loading="lazy"
                     />
                 ) : (
-                    <div className="flex size-full items-center justify-center text-caption-md text-mute">
+                    <div className="text-caption-md flex size-full items-center justify-center text-mute">
                         No image
                     </div>
                 )}

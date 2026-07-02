@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Services\Admin\AdminActivityService;
 use App\Services\Admin\OrderExportService;
 use App\Services\Order\OrderStatusService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -116,7 +117,7 @@ class OrderController extends Controller
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<Order>
+     * @return Builder<Order>
      */
     private function filteredQuery(?string $status, string $search)
     {

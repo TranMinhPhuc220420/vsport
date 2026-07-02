@@ -43,13 +43,14 @@ export function OrderStatusStepper({ currentStatus }: OrderStatusStepperProps) {
                     <li
                         key={status}
                         className={cn(
-                            'flex items-center gap-2 rounded-admin-md border border-admin px-3 py-2 text-sm',
-                            isComplete && 'bg-[var(--admin-neutral)] text-admin-secondary',
+                            'rounded-admin-md border-admin flex items-center gap-2 border px-3 py-2 text-sm',
+                            isComplete &&
+                                'text-admin-secondary bg-[var(--admin-neutral)]',
                             isCurrent &&
                                 'border-[var(--admin-primary)] bg-[var(--admin-primary)] font-medium text-[var(--admin-on-primary)]',
                             !isComplete &&
                                 !isCurrent &&
-                                'bg-[var(--admin-surface)] text-admin-secondary',
+                                'text-admin-secondary bg-[var(--admin-surface)]',
                         )}
                     >
                         <span
@@ -61,7 +62,7 @@ export function OrderStatusStepper({ currentStatus }: OrderStatusStepperProps) {
                                     'bg-[var(--admin-on-primary)] text-[var(--admin-primary)]',
                                 !isComplete &&
                                     !isCurrent &&
-                                    'border border-admin',
+                                    'border-admin border',
                             )}
                         >
                             {index + 1}

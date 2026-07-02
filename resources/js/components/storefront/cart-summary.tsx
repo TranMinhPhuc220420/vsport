@@ -38,7 +38,7 @@ function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
         >
             <h2 className="text-heading-lg text-ink">{t('cart.summary')}</h2>
             <dl className="mt-4 space-y-3">
-                <div className="flex justify-between text-body-strong">
+                <div className="text-body-strong flex justify-between">
                     <dt className="text-mute">
                         {t('cart.subtotalWithCount', { count: itemCount })}
                     </dt>
@@ -46,14 +46,16 @@ function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
                         {formatCurrency(subtotal, locale)}
                     </dd>
                 </div>
-                <div className="flex justify-between border-t border-hairline pt-3 text-body-strong">
+                <div className="text-body-strong flex justify-between border-t border-hairline pt-3">
                     <dt className="text-ink">{t('cart.estimatedTotal')}</dt>
                     <dd className="text-ink">
                         {formatCurrency(subtotal, locale)}
                     </dd>
                 </div>
             </dl>
-            <p className="mt-3 text-caption-md text-mute">{t('cart.codNote')}</p>
+            <p className="text-caption-md mt-3 text-mute">
+                {t('cart.codNote')}
+            </p>
             <StorefrontButton
                 variant="primary"
                 className="mt-6 w-full"
@@ -63,7 +65,7 @@ function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
                 {t('cart.checkout')}
             </StorefrontButton>
             {!auth.user && itemCount > 0 && (
-                <p className="mt-3 text-caption-md text-mute">
+                <p className="text-caption-md mt-3 text-mute">
                     <Link href="/login" className="text-ink underline">
                         {t('cart.signInToComplete')}
                     </Link>{' '}

@@ -2,6 +2,7 @@
 
 namespace App\Services\Discount;
 
+use App\Enums\DiscountType;
 use App\Exceptions\InvalidDiscountCodeException;
 use App\Models\DiscountCode;
 use App\Models\Order;
@@ -50,8 +51,8 @@ class DiscountService
     public function calculateAmount(DiscountCode $discount, float $subtotal): float
     {
         $amount = match ($discount->type) {
-            \App\Enums\DiscountType::Percent => $subtotal * ((float) $discount->value / 100),
-            \App\Enums\DiscountType::Fixed => (float) $discount->value,
+            DiscountType::Percent => $subtotal * ((float) $discount->value / 100),
+            DiscountType::Fixed => (float) $discount->value,
         };
 
         return min($subtotal, round($amount, 2));

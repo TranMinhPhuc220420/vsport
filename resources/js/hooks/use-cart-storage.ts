@@ -6,11 +6,8 @@ import {
     removeServerCartItem,
     updateServerCartItem,
 } from '@/lib/cart-api';
-import {
-    CART_STORAGE_KEY,
-    type CartItem,
-    type CartState,
-} from '@/types/cart';
+import { CART_STORAGE_KEY } from '@/types/cart';
+import type { CartItem, CartState } from '@/types/cart';
 
 function readLocalCart(): CartState {
     if (typeof window === 'undefined') {

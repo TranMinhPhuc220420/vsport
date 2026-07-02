@@ -40,8 +40,53 @@
     },
     "home": {
         "featured": "Nổi bật",
+        "newArrivals": "Hàng mới về",
+        "bestSellers": "Bán chạy nhất",
         "shopByCategory": "Mua theo danh mục",
-        "viewAll": "Xem tất cả"
+        "viewAll": "Xem tất cả",
+        "marquee": {
+            "items": [
+                "Miễn phí vận chuyển",
+                "Thanh toán khi nhận hàng",
+                "Hàng chính hãng",
+                "Đổi trả trong 14 ngày"
+            ]
+        },
+        "editorial": {
+            "headline": "Sinh ra để vận động",
+            "subtitle": "Hiệu suất cho mọi vận động viên",
+            "ctaLabel": "Mua Nữ"
+        },
+        "trust": {
+            "items": [
+                {
+                    "title": "Giao hàng nhanh",
+                    "description": "Giao tiêu chuẩn trong 2–5 ngày làm việc tại các khu vực hỗ trợ."
+                },
+                {
+                    "title": "Thanh toán khi nhận hàng",
+                    "description": "Trả tiền khi nhận hàng. Thanh toán thẻ cũng có sẵn."
+                },
+                {
+                    "title": "Sản phẩm chính hãng",
+                    "description": "Giày và trang phục VSport chính hãng với chất lượng đảm bảo."
+                },
+                {
+                    "title": "Đổi trả dễ dàng",
+                    "description": "Liên hệ trong 14 ngày để đổi trả các sản phẩm đủ điều kiện."
+                }
+            ]
+        },
+        "newsletter": {
+            "eyebrow": "Tham gia cộng đồng",
+            "headline": "Luôn bắt kịp xu hướng",
+            "description": "Nhận thông tin sớm về sản phẩm mới, ưu đãi thành viên và cảm hứng tập luyện.",
+            "emailLabel": "Địa chỉ email",
+            "emailPlaceholder": "ban@example.com",
+            "submit": "Đăng ký",
+            "or": "Hoặc",
+            "createAccount": "tạo tài khoản miễn phí"
+        }
     },
     "search": {
         "title": "Kết quả tìm kiếm",
@@ -85,7 +130,18 @@
         "reviewTitle": "Tiêu đề (tùy chọn)",
         "reviewBody": "Nội dung đánh giá",
         "submitReview": "Gửi đánh giá",
-        "signInToReview": "Đăng nhập để viết đánh giá."
+        "signInToReview": "Đăng nhập để viết đánh giá.",
+        "details": "Chi tiết sản phẩm",
+        "shippingReturns": "Vận chuyển & Đổi trả",
+        "shippingReturnsBody": "Giao hàng tiêu chuẩn trong 2–5 ngày làm việc. Thanh toán khi nhận hàng tại các khu vực hỗ trợ. Liên hệ trong 14 ngày để đổi trả các sản phẩm đủ điều kiện.",
+        "sizeGuide": "Hướng dẫn chọn size",
+        "sizeGuideBody": "Giày thường đúng size. Nếu ở giữa hai size, nên chọn size lớn hơn với giày chạy và size nhỏ hơn với giày lifestyle.",
+        "relatedTitle": "Có thể bạn cũng thích",
+        "ratingCount": "({{count}} đánh giá)",
+        "writeReview": "Viết đánh giá",
+        "breadcrumbHome": "Trang chủ",
+        "starLabel": "{{n}}★",
+        "closeLightbox": "Đóng trình xem ảnh"
     },
     "cart": {
         "title": "Giỏ hàng",

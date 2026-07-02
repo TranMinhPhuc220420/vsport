@@ -1,7 +1,8 @@
 import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import { PageSeo, type SeoData } from '@/components/storefront/page-seo';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { StorefrontPagination } from '@/components/storefront/pagination';
 import { ProductCard } from '@/components/storefront/ProductCard';
 import type { Paginated, ProductSummary } from '@/types/catalog';
@@ -31,11 +32,11 @@ export default function ProductSearchPage({
                 </h1>
 
                 {!query ? (
-                    <p className="mt-6 text-body-strong text-mute">
+                    <p className="text-body-strong mt-6 text-mute">
                         {t('search.noQuery')}
                     </p>
                 ) : products === null || products.data.length === 0 ? (
-                    <p className="mt-6 text-body-strong text-mute">
+                    <p className="text-body-strong mt-6 text-mute">
                         {t('search.noProducts')}
                     </p>
                 ) : (
@@ -68,7 +69,7 @@ export default function ProductSearchPage({
                 )}
 
                 {query && (
-                    <p className="mt-8 text-caption-md text-mute">
+                    <p className="text-caption-md mt-8 text-mute">
                         <Link href="/" className="underline">
                             {t('plp.home')}
                         </Link>

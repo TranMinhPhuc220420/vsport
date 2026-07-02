@@ -71,7 +71,9 @@ export default function DeleteUser() {
                                             htmlFor="password"
                                             className="sr-only"
                                         >
-                                            {t('settings:deleteAccount.password')}
+                                            {t(
+                                                'settings:deleteAccount.password',
+                                            )}
                                         </Label>
 
                                         <PasswordInput
@@ -108,7 +110,9 @@ export default function DeleteUser() {
                                                 type="submit"
                                                 data-test="confirm-delete-user-button"
                                             >
-                                                {t('settings:deleteAccount.delete')}
+                                                {t(
+                                                    'settings:deleteAccount.delete',
+                                                )}
                                             </button>
                                         </Button>
                                     </DialogFooter>

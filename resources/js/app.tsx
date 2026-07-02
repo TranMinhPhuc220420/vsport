@@ -1,10 +1,11 @@
 import { createInertiaApp } from '@inertiajs/react';
-import { type ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
-import i18n, { type AppLocale, syncI18nLocale } from '@/i18n';
+import i18n, { syncI18nLocale } from '@/i18n';
+import type { AppLocale } from '@/i18n';
 import AdminLayout from '@/layouts/admin/admin-layout';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';

@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int|null $user_id
  * @property string|null $session_id
- * @property \Illuminate\Support\Carbon $expires_at
+ * @property Carbon $expires_at
  */
 class Cart extends Model
 {

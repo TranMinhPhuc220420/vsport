@@ -5,8 +5,8 @@ import { StorefrontButton } from '@/components/storefront/Button';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
 import { logout } from '@/routes';
 import { edit as profileEdit } from '@/routes/profile';
-import type { OrderDetail } from '@/types/order';
 import type { User } from '@/types/auth';
+import type { OrderDetail } from '@/types/order';
 
 type AccountPageProps = {
     recentOrders: OrderDetail[];
@@ -31,14 +31,16 @@ export default function AccountPage({ recentOrders }: AccountPageProps) {
                 <h1 className="text-heading-xl text-ink">
                     {t('account.greeting', { name: user.name })}
                 </h1>
-                <p className="mt-2 text-caption-md text-mute">{user.email}</p>
+                <p className="text-caption-md mt-2 text-mute">{user.email}</p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                     <StorefrontButton variant="primary" asChild>
                         <Link href="/orders">{t('nav.orders')}</Link>
                     </StorefrontButton>
                     <StorefrontButton variant="secondary" asChild>
-                        <Link href={profileEdit()}>{t('account.settings')}</Link>
+                        <Link href={profileEdit()}>
+                            {t('account.settings')}
+                        </Link>
                     </StorefrontButton>
                     <StorefrontButton variant="secondary" asChild>
                         <Link href="/wishlist">{t('nav.wishlist')}</Link>
@@ -61,7 +63,7 @@ export default function AccountPage({ recentOrders }: AccountPageProps) {
                     </div>
 
                     {recentOrders.length === 0 ? (
-                        <p className="mt-4 text-body-strong text-mute">
+                        <p className="text-body-strong mt-4 text-mute">
                             {t('orders.empty')}
                         </p>
                     ) : (
@@ -75,7 +77,8 @@ export default function AccountPage({ recentOrders }: AccountPageProps) {
                                         <div>
                                             <p className="text-body-strong text-ink">
                                                 {t('orders.orderNumber', {
-                                                    orderNumber: order.orderNumber,
+                                                    orderNumber:
+                                                        order.orderNumber,
                                                 })}
                                             </p>
                                             <p className="text-caption-md text-mute">
@@ -88,7 +91,10 @@ export default function AccountPage({ recentOrders }: AccountPageProps) {
                                                 {' · '}
                                                 {t(
                                                     `orders.status.${order.status}`,
-                                                    { defaultValue: order.status },
+                                                    {
+                                                        defaultValue:
+                                                            order.status,
+                                                    },
                                                 )}
                                             </p>
                                         </div>

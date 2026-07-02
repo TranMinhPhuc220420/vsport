@@ -4,25 +4,34 @@ import {
     useEffect,
     useRef,
     useState,
-    type CSSProperties,
-    type ReactElement,
-    type ReactNode,
 } from 'react';
+import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
+
+type ScrollRevealDirection = 'up' | 'left' | 'right' | 'clip';
 
 type ScrollRevealProps = {
     children: ReactNode;
     className?: string;
     delay?: number;
+    direction?: ScrollRevealDirection;
     staggerChildren?: boolean;
     threshold?: number;
+};
+
+const directionClass: Record<ScrollRevealDirection, string> = {
+    up: '',
+    left: 'scroll-reveal-left',
+    right: 'scroll-reveal-right',
+    clip: 'scroll-reveal-clip',
 };
 
 function ScrollReveal({
     children,
     className,
     delay = 0,
+    direction = 'up',
     staggerChildren = false,
     threshold = 0.15,
 }: ScrollRevealProps) {
@@ -59,7 +68,9 @@ function ScrollReveal({
                           return child;
                       }
 
-                      const element = child as ReactElement<{ style?: CSSProperties }>;
+                      const element = child as ReactElement<{
+                          style?: CSSProperties;
+                      }>;
                       const style = {
                           ...(element.props.style ?? {}),
                           '--stagger-index': index,
@@ -78,7 +89,9 @@ function ScrollReveal({
             ref={ref}
             className={cn(
                 !visible && 'scroll-reveal-pending',
+                !visible && directionClass[direction],
                 visible && 'scroll-reveal-visible',
+                visible && directionClass[direction],
                 visible && staggerChildren && 'scroll-reveal-stagger',
                 className,
             )}
@@ -94,3 +107,4 @@ function ScrollReveal({
 }
 
 export { ScrollReveal };
+export type { ScrollRevealDirection };

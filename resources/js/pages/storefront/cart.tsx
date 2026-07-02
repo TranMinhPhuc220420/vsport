@@ -1,10 +1,11 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
+import { StorefrontButton } from '@/components/storefront/Button';
 import { CartLineItem } from '@/components/storefront/cart-line-item';
 import { CartSummary } from '@/components/storefront/cart-summary';
-import { StorefrontButton } from '@/components/storefront/Button';
-import { PageSeo, type SeoData } from '@/components/storefront/page-seo';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { useCart } from '@/contexts/cart-context';
 
 type CartPageProps = {
@@ -44,7 +45,9 @@ export default function CartPage({ seo }: CartPageProps) {
                             className="mt-6"
                             asChild
                         >
-                            <Link href="/men">{t('cart.continueShopping')}</Link>
+                            <Link href="/men">
+                                {t('cart.continueShopping')}
+                            </Link>
                         </StorefrontButton>
                     </div>
                 ) : (
@@ -59,7 +62,10 @@ export default function CartPage({ seo }: CartPageProps) {
                                 />
                             ))}
                         </div>
-                        <CartSummary subtotal={subtotal} itemCount={itemCount} />
+                        <CartSummary
+                            subtotal={subtotal}
+                            itemCount={itemCount}
+                        />
                     </div>
                 )}
             </div>

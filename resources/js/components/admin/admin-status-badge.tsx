@@ -66,7 +66,7 @@ export function AdminActiveBadge({ active, className }: AdminActiveBadgeProps) {
                 'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium',
                 active
                     ? 'border-green-200 bg-green-50 text-green-800'
-                    : 'border-admin bg-[var(--admin-neutral)] text-admin-secondary',
+                    : 'border-admin text-admin-secondary bg-[var(--admin-neutral)]',
                 className,
             )}
         >

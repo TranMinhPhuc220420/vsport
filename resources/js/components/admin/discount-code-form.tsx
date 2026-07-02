@@ -44,15 +44,14 @@ export function DiscountCodeForm({
             ? t('discountCodes.newTitle')
             : t('discountCodes.editTitle');
     const submitLabel =
-        mode === 'create'
-            ? t('discountCodes.create')
-            : t('discountCodes.save');
+        mode === 'create' ? t('discountCodes.create') : t('discountCodes.save');
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
         if (method === 'put') {
             put(action);
+
             return;
         }
 

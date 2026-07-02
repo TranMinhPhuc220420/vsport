@@ -95,7 +95,7 @@ export default function AdminDashboard({
                     </Link>
                 </div>
 
-                <section className="rounded-lg border border-admin bg-[var(--admin-surface)] p-6 shadow-sm">
+                <section className="border-admin rounded-lg border bg-[var(--admin-surface)] p-6 shadow-sm">
                     <h2 className="admin-section-title">
                         {t('dashboard.orderPipeline')}
                     </h2>
@@ -104,7 +104,7 @@ export default function AdminDashboard({
                             <Link
                                 key={status}
                                 href={`/admin/orders?status=${status}`}
-                                className="flex min-w-[120px] flex-col rounded-md border border-admin bg-[var(--admin-neutral)] px-4 py-3 transition-colors hover:bg-[var(--admin-surface)]"
+                                className="border-admin flex min-w-[120px] flex-col rounded-md border bg-[var(--admin-neutral)] px-4 py-3 transition-colors hover:bg-[var(--admin-surface)]"
                             >
                                 <span className="admin-caption text-admin-secondary">
                                     {t(orderStatusKey(status), {
@@ -120,7 +120,7 @@ export default function AdminDashboard({
                 </section>
 
                 {lowStockProducts.length > 0 && (
-                    <section className="rounded-lg border border-admin bg-[var(--admin-surface)] p-6 shadow-sm">
+                    <section className="border-admin rounded-lg border bg-[var(--admin-surface)] p-6 shadow-sm">
                         <h2 className="admin-section-title">
                             {t('dashboard.lowStock')}
                         </h2>
@@ -133,7 +133,7 @@ export default function AdminDashboard({
                                     >
                                         {product.name}
                                     </Link>
-                                    <span className="admin-caption ml-2 text-admin-secondary">
+                                    <span className="admin-caption text-admin-secondary ml-2">
                                         ({product.totalStock})
                                     </span>
                                 </li>

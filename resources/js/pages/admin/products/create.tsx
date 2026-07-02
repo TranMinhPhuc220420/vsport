@@ -58,12 +58,11 @@ export default function AdminProductsCreate({
             return [];
         }
 
-        return sizes.map(
-            (size) =>
-                `${data.style_code}-${data.colorway_code}-${size}`.replace(
-                    /\s+/g,
-                    '',
-                ),
+        return sizes.map((size) =>
+            `${data.style_code}-${data.colorway_code}-${size}`.replace(
+                /\s+/g,
+                '',
+            ),
         );
     }, [data.colorway_code, data.style_code, sizes]);
 
@@ -129,7 +128,9 @@ export default function AdminProductsCreate({
 
                 <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
                     {step === 1 ? (
-                        <AdminFormSection title={t('products.wizardStep1Title')}>
+                        <AdminFormSection
+                            title={t('products.wizardStep1Title')}
+                        >
                             <div className="grid gap-4 tablet:grid-cols-2">
                                 <AdminInputField
                                     label={t('products.styleCode')}
@@ -221,16 +222,15 @@ export default function AdminProductsCreate({
                             </AdminButton>
                         </AdminFormSection>
                     ) : (
-                        <AdminFormSection title={t('products.wizardStep2Title')}>
+                        <AdminFormSection
+                            title={t('products.wizardStep2Title')}
+                        >
                             <div className="grid gap-4 tablet:grid-cols-2">
                                 <AdminInputField
                                     label={t('products.colorwayCode')}
                                     value={data.colorway_code}
                                     onChange={(e) =>
-                                        setData(
-                                            'colorway_code',
-                                            e.target.value,
-                                        )
+                                        setData('colorway_code', e.target.value)
                                     }
                                     error={errors.colorway_code}
                                 />
@@ -257,8 +257,8 @@ export default function AdminProductsCreate({
 
                             <SizeChipPicker value={sizes} onChange={setSizes} />
 
-                            <div className="rounded-md border border-admin bg-[var(--admin-neutral)] p-4">
-                                <p className="text-sm text-admin-secondary">
+                            <div className="border-admin rounded-md border bg-[var(--admin-neutral)] p-4">
+                                <p className="text-admin-secondary text-sm">
                                     {t('products.skuPreview')}
                                 </p>
                                 {skuPreview.length > 0 ? (
@@ -268,7 +268,7 @@ export default function AdminProductsCreate({
                                         ))}
                                     </ul>
                                 ) : (
-                                    <p className="mt-2 text-sm text-admin-secondary">
+                                    <p className="text-admin-secondary mt-2 text-sm">
                                         {t('products.skuPreviewEmpty')}
                                     </p>
                                 )}
@@ -277,10 +277,7 @@ export default function AdminProductsCreate({
                             {(errors as Record<string, string | undefined>)
                                 .sizes && (
                                 <p className="text-xs text-red-600">
-                                    {
-                                        (errors as Record<string, string>)
-                                            .sizes
-                                    }
+                                    {(errors as Record<string, string>).sizes}
                                 </p>
                             )}
 

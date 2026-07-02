@@ -2,6 +2,8 @@
 
 use App\Mail\OrderConfirmationMail;
 use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\User;
 use Database\Seeders\CatalogSeeder;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,8 +32,8 @@ test('product search returns matching products', function () {
 test('cod checkout sends order confirmation email', function () {
     Mail::fake();
 
-    $user = \App\Models\User::factory()->create();
-    $variant = \App\Models\ProductVariant::query()->firstOrFail();
+    $user = User::factory()->create();
+    $variant = ProductVariant::query()->firstOrFail();
 
     addVariantToCart($this, $user, $variant);
 

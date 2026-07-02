@@ -1,33 +1,92 @@
-import { Link } from '@inertiajs/react';
-import { type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { BrandMarquee } from '@/components/storefront/brand-marquee';
 import { CampaignHeroCarousel } from '@/components/storefront/campaign-hero-carousel';
-import { CategoryTile } from '@/components/storefront/category-tile';
-import { PageSeo, type SeoData } from '@/components/storefront/page-seo';
+import { EditorialBanner } from '@/components/storefront/editorial-banner';
+import { EditorialCategoryShowcase } from '@/components/storefront/editorial-category-showcase';
+import { NewsletterCta } from '@/components/storefront/newsletter-cta';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
+import {
+    ProductRail,
+    ProductRailItem,
+} from '@/components/storefront/product-rail';
 import { ProductCard } from '@/components/storefront/ProductCard';
-import { ProductRail, ProductRailItem } from '@/components/storefront/product-rail';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
-import type {
-    Campaign,
-    Category,
-    ProductSummary,
-} from '@/types/catalog';
+import { SectionHeader } from '@/components/storefront/section-header';
+import { TrustBar } from '@/components/storefront/trust-bar';
+import type { Campaign, Category, ProductSummary } from '@/types/catalog';
+
+type ProductCollection = {
+    data: ProductSummary[];
+};
 
 type HomePageProps = {
-    featuredProducts: { data: ProductSummary[] };
+    featuredProducts: ProductCollection;
+    newArrivals: ProductCollection;
+    bestSellers: ProductCollection;
     categories: { data: Category[] };
     campaigns: Campaign[];
     seo: SeoData;
 };
 
+function ProductRailSection({
+    title,
+    href,
+    products,
+    direction = 'up',
+}: {
+    title: string;
+    href: string;
+    products: ProductSummary[];
+    direction?: 'up' | 'left' | 'right';
+}) {
+    if (products.length === 0) {
+        return null;
+    }
+
+    return (
+        <section className="storefront-container storefront-section-compact">
+            <ScrollReveal direction={direction}>
+                <SectionHeader title={title} href={href} />
+                <ProductRail className="mt-6">
+                    {products.map((product, index) => (
+                        <ProductRailItem key={product.id} index={index}>
+                            <ProductCard
+                                href={`/products/${product.slug}`}
+                                name={product.name}
+                                subtitle={product.subTitle ?? undefined}
+                                imageUrl={product.primaryImage?.url}
+                                price={product.listPrice}
+                                salePrice={product.salePrice ?? undefined}
+                                colorways={product.colorwaySwatches}
+                            />
+                        </ProductRailItem>
+                    ))}
+                </ProductRail>
+            </ScrollReveal>
+        </section>
+    );
+}
+
 export default function HomePage({
     featuredProducts,
+    newArrivals,
+    bestSellers,
     categories,
     campaigns,
     seo,
 }: HomePageProps) {
     const { t } = useTranslation('storefront');
+
+    const editorialCampaign = campaigns[1] ?? {
+        headline: t('home.editorial.headline'),
+        subtitle: t('home.editorial.subtitle'),
+        imageUrl:
+            'https://placehold.co/1440x600/111111/ffffff?text=VSport+Performance',
+        ctaLabel: t('home.editorial.ctaLabel'),
+        ctaHref: '/women',
+    };
 
     return (
         <>
@@ -35,57 +94,42 @@ export default function HomePage({
 
             <CampaignHeroCarousel campaigns={campaigns} />
 
-            <section className="storefront-container storefront-section-compact">
-                <ScrollReveal>
-                    <div className="flex items-baseline justify-between gap-4">
-                        <h2 className="text-heading-xl text-ink">
-                            {t('home.featured')}
-                        </h2>
-                        <Link
-                            href="/men"
-                            className="text-caption-md text-ink underline"
-                        >
-                            {t('home.viewAll')}
-                        </Link>
-                    </div>
-                    <ProductRail className="mt-6">
-                        {featuredProducts.data.map((product, index) => (
-                            <ProductRailItem key={product.id} index={index}>
-                                <ProductCard
-                                    href={`/products/${product.slug}`}
-                                    name={product.name}
-                                    subtitle={product.subTitle ?? undefined}
-                                    imageUrl={product.primaryImage?.url}
-                                    price={product.listPrice}
-                                    salePrice={product.salePrice ?? undefined}
-                                    colorways={product.colorwaySwatches}
-                                />
-                            </ProductRailItem>
-                        ))}
-                    </ProductRail>
-                </ScrollReveal>
-            </section>
+            <BrandMarquee />
 
-            <section className="storefront-container storefront-section-compact">
-                <ScrollReveal staggerChildren>
-                    <h2 className="text-heading-xl text-ink">
-                        {t('home.shopByCategory')}
-                    </h2>
-                    <div className="mt-6 grid grid-cols-1 gap-2 tablet:grid-cols-2 desktop:grid-cols-4">
-                        {categories.data.map((category, index) => (
-                            <div
-                                key={category.id}
-                                style={{ '--stagger-index': index } as CSSProperties}
-                            >
-                                <CategoryTile
-                                    name={category.name}
-                                    slug={category.slug}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </ScrollReveal>
-            </section>
+            <ProductRailSection
+                title={t('home.newArrivals')}
+                href="/men?sort=newest"
+                products={newArrivals.data}
+                direction="left"
+            />
+
+            <EditorialCategoryShowcase categories={categories.data} />
+
+            <ProductRailSection
+                title={t('home.featured')}
+                href="/men"
+                products={featuredProducts.data}
+                direction="right"
+            />
+
+            <EditorialBanner
+                headline={editorialCampaign.headline}
+                subtitle={editorialCampaign.subtitle}
+                imageUrl={editorialCampaign.imageUrl}
+                ctaLabel={editorialCampaign.ctaLabel}
+                ctaHref={editorialCampaign.ctaHref}
+            />
+
+            <ProductRailSection
+                title={t('home.bestSellers')}
+                href="/women"
+                products={bestSellers.data}
+                direction="left"
+            />
+
+            <TrustBar />
+
+            <NewsletterCta />
         </>
     );
 }

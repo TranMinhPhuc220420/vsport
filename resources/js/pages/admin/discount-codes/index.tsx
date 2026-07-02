@@ -15,11 +15,7 @@ import {
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
-import {
-    formatCurrency,
-    formatDateTime,
-    useLocale,
-} from '@/hooks/use-locale';
+import { formatCurrency, formatDateTime, useLocale } from '@/hooks/use-locale';
 
 type DiscountCodeRow = {
     id: number;
@@ -191,15 +187,13 @@ export default function AdminDiscountCodesIndex({
                                     <div className="flex justify-end gap-2">
                                         <Link
                                             href={`/admin/discount-codes/${code.id}/edit`}
-                                            className="text-sm text-admin-secondary hover:text-[var(--admin-primary)] hover:underline"
+                                            className="text-admin-secondary text-sm hover:text-[var(--admin-primary)] hover:underline"
                                         >
                                             {tCommon('edit')}
                                         </Link>
                                         <button
                                             type="button"
-                                            onClick={() =>
-                                                setDeleteId(code.id)
-                                            }
+                                            onClick={() => setDeleteId(code.id)}
                                             className="text-sm text-red-600 hover:underline"
                                         >
                                             {tCommon('delete')}

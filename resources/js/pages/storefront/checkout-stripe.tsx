@@ -72,8 +72,10 @@ export default function CheckoutStripePage({
         <>
             <Head title={t('stripe.title')} />
             <div className="storefront-container storefront-section max-w-lg">
-                <h1 className="text-heading-xl text-ink">{t('stripe.title')}</h1>
-                <p className="mt-2 text-caption-md text-mute">
+                <h1 className="text-heading-xl text-ink">
+                    {t('stripe.title')}
+                </h1>
+                <p className="text-caption-md mt-2 text-mute">
                     {t('stripe.orderSummary', {
                         orderNumber,
                         total: formatCurrency(total, locale),
@@ -81,7 +83,7 @@ export default function CheckoutStripePage({
                 </p>
 
                 {!stripeKey ? (
-                    <p className="mt-6 text-caption-md text-sale">
+                    <p className="text-caption-md mt-6 text-sale">
                         {t('stripe.notConfigured')}
                     </p>
                 ) : (

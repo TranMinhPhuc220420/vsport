@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductIndexRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductSummaryResource;
+use App\Models\Category;
 use App\Services\Catalog\ProductCatalogService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -59,7 +60,7 @@ class ProductListingController extends Controller
     /**
      * @return list<array{name: string, slug: string}>
      */
-    private function breadcrumb(?\App\Models\Category $category): array
+    private function breadcrumb(?Category $category): array
     {
         if ($category === null) {
             return [];

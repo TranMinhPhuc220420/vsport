@@ -35,7 +35,9 @@ export default function Register({ passwordRules }: Props) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">{t('register.name')}</Label>
+                                <Label htmlFor="name">
+                                    {t('register.name')}
+                                </Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -53,7 +55,9 @@ export default function Register({ passwordRules }: Props) {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">{t('register.email')}</Label>
+                                <Label htmlFor="email">
+                                    {t('register.email')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -76,7 +80,9 @@ export default function Register({ passwordRules }: Props) {
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder={t('register.passwordPlaceholder')}
+                                    placeholder={t(
+                                        'register.passwordPlaceholder',
+                                    )}
                                     passwordrules={passwordRules}
                                 />
                                 <InputError message={errors.password} />
@@ -92,7 +98,9 @@ export default function Register({ passwordRules }: Props) {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder={t('register.confirmPlaceholder')}
+                                    placeholder={t(
+                                        'register.confirmPlaceholder',
+                                    )}
                                     passwordrules={passwordRules}
                                 />
                                 <InputError

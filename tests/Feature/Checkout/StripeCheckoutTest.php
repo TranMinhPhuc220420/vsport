@@ -5,6 +5,7 @@ use App\Enums\PaymentMethod;
 use App\Models\Order;
 use App\Models\ProductVariant;
 use App\Models\User;
+use App\Services\Payment\StripeCheckoutService;
 use Database\Seeders\CatalogSeeder;
 
 beforeEach(function () {
@@ -22,7 +23,7 @@ test('stripe checkout creates order with payment method stripe', function () {
 
     addVariantToCart($this, $user, $variant);
 
-    $this->mock(\App\Services\Payment\StripeCheckoutService::class, function ($mock): void {
+    $this->mock(StripeCheckoutService::class, function ($mock): void {
         $mock->shouldReceive('createPaymentIntent')
             ->once()
             ->andReturn([

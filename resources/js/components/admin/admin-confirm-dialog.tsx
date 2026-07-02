@@ -60,7 +60,9 @@ export function AdminConfirmDialog({
                     <AdminButton
                         type="button"
                         variant={
-                            variant === 'destructive' ? 'destructive' : 'primary'
+                            variant === 'destructive'
+                                ? 'destructive'
+                                : 'primary'
                         }
                         onClick={onConfirm}
                         disabled={loading}

@@ -18,14 +18,12 @@ function AdminEmptyState({
     return (
         <div
             className={cn(
-                'rounded-admin-lg border border-dashed border-admin bg-[var(--admin-neutral)] px-6 py-12 text-center',
+                'rounded-admin-lg border-admin border border-dashed bg-[var(--admin-neutral)] px-6 py-12 text-center',
                 className,
             )}
         >
             <p className="admin-section-title">{title}</p>
-            {description && (
-                <p className="admin-caption mt-2">{description}</p>
-            )}
+            {description && <p className="admin-caption mt-2">{description}</p>}
             {action && <div className="mt-6">{action}</div>}
         </div>
     );

@@ -1,10 +1,12 @@
-import { useState, type CSSProperties } from 'react';
+import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FilterSidebar } from '@/components/storefront/filter-sidebar';
-import { PageSeo, type SeoData } from '@/components/storefront/page-seo';
-import { PlpSubNav } from '@/components/storefront/plp-sub-nav';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { StorefrontPagination } from '@/components/storefront/pagination';
+import { PlpSubNav } from '@/components/storefront/plp-sub-nav';
 import { ProductCard } from '@/components/storefront/ProductCard';
 import type {
     CategoryMeta,
@@ -55,7 +57,7 @@ export default function ProductListingPage({
                     />
 
                     <div className="min-w-0 flex-1">
-                        <h1 className="mb-4 text-heading-xl text-ink">
+                        <h1 className="text-heading-xl mb-4 text-ink">
                             {categoryMeta.name}
                         </h1>
 
@@ -77,7 +79,9 @@ export default function ProductListingPage({
                                         <ProductCard
                                             href={`/products/${product.slug}`}
                                             name={product.name}
-                                            subtitle={product.subTitle ?? undefined}
+                                            subtitle={
+                                                product.subTitle ?? undefined
+                                            }
                                             imageUrl={product.primaryImage?.url}
                                             price={product.listPrice}
                                             salePrice={

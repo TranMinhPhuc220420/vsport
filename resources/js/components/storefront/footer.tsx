@@ -29,9 +29,7 @@ export function StorefrontFooter() {
             },
             {
                 title: t('footer.company'),
-                links: [
-                    { label: t('footer.about'), href: '/contact' },
-                ],
+                links: [{ label: t('footer.about'), href: '/contact' }],
             },
         ],
         [t],
@@ -43,7 +41,7 @@ export function StorefrontFooter() {
                 <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2">
                     {footerColumns.map((column) => (
                         <div key={column.title}>
-                            <h2 className="mb-4 text-body-strong text-ink">
+                            <h2 className="text-body-strong mb-4 text-ink">
                                 {column.title}
                             </h2>
                             <ul className="flex flex-col gap-3">
@@ -62,7 +60,7 @@ export function StorefrontFooter() {
                     ))}
                 </div>
 
-                <div className="mt-10 border-t border-hairline pt-6 text-caption-sm">
+                <div className="text-caption-sm mt-10 border-t border-hairline pt-6">
                     <p>
                         {t('footer.copyright', {
                             year: new Date().getFullYear(),

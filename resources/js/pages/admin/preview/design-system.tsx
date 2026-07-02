@@ -26,8 +26,16 @@ const colorTokens = [
     { name: 'primary', hex: '#0A2540', className: 'bg-[#0A2540]' },
     { name: 'secondary', hex: '#425466', className: 'bg-[#425466]' },
     { name: 'tertiary', hex: '#635BFF', className: 'bg-[#635BFF]' },
-    { name: 'neutral', hex: '#F6F9FC', className: 'bg-[#F6F9FC] border border-admin' },
-    { name: 'surface', hex: '#FFFFFF', className: 'bg-[#FFFFFF] border border-admin' },
+    {
+        name: 'neutral',
+        hex: '#F6F9FC',
+        className: 'bg-[#F6F9FC] border border-admin',
+    },
+    {
+        name: 'surface',
+        hex: '#FFFFFF',
+        className: 'bg-[#FFFFFF] border border-admin',
+    },
 ];
 
 export default function AdminDesignSystemPreview() {
@@ -56,7 +64,7 @@ export default function AdminDesignSystemPreview() {
                         {colorTokens.map((token) => (
                             <div key={token.name} className="space-y-2">
                                 <div
-                                    className={`h-16 rounded-admin-md ${token.className}`}
+                                    className={`rounded-admin-md h-16 ${token.className}`}
                                 />
                                 <p className="admin-label">{token.name}</p>
                                 <p className="admin-caption">{token.hex}</p>
@@ -89,7 +97,9 @@ export default function AdminDesignSystemPreview() {
                         </p>
                         <div className="flex flex-wrap gap-3">
                             <AdminButton>Primary (tertiary)</AdminButton>
-                            <AdminButton variant="secondary">Secondary</AdminButton>
+                            <AdminButton variant="secondary">
+                                Secondary
+                            </AdminButton>
                             <AdminButton variant="ghost">Ghost</AdminButton>
                             <AdminButton variant="destructive">
                                 Destructive
@@ -150,8 +160,12 @@ export default function AdminDesignSystemPreview() {
                     <AdminDataTable>
                         <AdminDataTableHead>
                             <AdminDataTableHeaderRow>
-                                <AdminDataTableHeaderCell>Name</AdminDataTableHeaderCell>
-                                <AdminDataTableHeaderCell>Status</AdminDataTableHeaderCell>
+                                <AdminDataTableHeaderCell>
+                                    Name
+                                </AdminDataTableHeaderCell>
+                                <AdminDataTableHeaderCell>
+                                    Status
+                                </AdminDataTableHeaderCell>
                                 <AdminDataTableHeaderCell className="text-right">
                                     Qty
                                 </AdminDataTableHeaderCell>

@@ -95,7 +95,8 @@ export default function TwoFactorRecoveryCodes({
                                     disabled={processing}
                                     aria-describedby="regenerate-warning"
                                 >
-                                    <RefreshCw /> {t('recoveryCodes.regenerate')}
+                                    <RefreshCw />{' '}
+                                    {t('recoveryCodes.regenerate')}
                                 </Button>
                             )}
                         </Form>
@@ -130,7 +131,9 @@ export default function TwoFactorRecoveryCodes({
                                     ) : (
                                         <div
                                             className="space-y-2"
-                                            aria-label={t('recoveryCodes.loading')}
+                                            aria-label={t(
+                                                'recoveryCodes.loading',
+                                            )}
                                         >
                                             {Array.from(
                                                 { length: 8 },

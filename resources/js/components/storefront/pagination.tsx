@@ -22,6 +22,7 @@ function StorefrontPagination({
 }: StorefrontPaginationProps) {
     const { t } = useTranslation('common');
     const linkItems = meta.links ?? [];
+
     if (meta.last_page <= 1) {
         return null;
     }
@@ -29,18 +30,21 @@ function StorefrontPagination({
     return (
         <nav
             aria-label={t('pagination')}
-            className={cn('flex items-center justify-center gap-2 py-8', className)}
+            className={cn(
+                'flex items-center justify-center gap-2 py-8',
+                className,
+            )}
         >
             {links.prev ? (
                 <Link
                     href={links.prev}
                     preserveScroll
-                    className="inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4 text-button-md"
+                    className="text-button-md inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4"
                 >
                     {t('previous')}
                 </Link>
             ) : (
-                <span className="inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4 text-button-md text-mute opacity-50">
+                <span className="text-button-md inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4 text-mute opacity-50">
                     {t('previous')}
                 </span>
             )}
@@ -55,7 +59,7 @@ function StorefrontPagination({
                                 href={link.url}
                                 preserveScroll
                                 className={cn(
-                                    'inline-flex size-10 items-center justify-center rounded-full text-button-md',
+                                    'text-button-md inline-flex size-10 items-center justify-center rounded-full',
                                     link.active
                                         ? 'bg-ink text-canvas'
                                         : 'text-ink',
@@ -85,12 +89,12 @@ function StorefrontPagination({
                 <Link
                     href={links.next}
                     preserveScroll
-                    className="inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4 text-button-md"
+                    className="text-button-md inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4"
                 >
                     {t('next')}
                 </Link>
             ) : (
-                <span className="inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4 text-button-md text-mute opacity-50">
+                <span className="text-button-md inline-flex h-10 items-center rounded-pill-lg border border-hairline px-4 text-mute opacity-50">
                     {t('next')}
                 </span>
             )}

@@ -23,11 +23,19 @@ class HomeController extends Controller
         $categories = $this->catalog->topLevelCategories();
 
         $featured = ProductSummaryResource::collection($this->catalog->featured(8));
+        $newArrivals = ProductSummaryResource::collection($this->catalog->newArrivals(8));
+        $bestSellers = ProductSummaryResource::collection($this->catalog->bestSellers(8));
         $categoriesResource = CategoryResource::collection($categories);
 
         return Inertia::render('storefront/home', [
             'featuredProducts' => [
                 'data' => array_values($featured->resolve()),
+            ],
+            'newArrivals' => [
+                'data' => array_values($newArrivals->resolve()),
+            ],
+            'bestSellers' => [
+                'data' => array_values($bestSellers->resolve()),
             ],
             'categories' => [
                 'data' => array_values($categoriesResource->resolve()),

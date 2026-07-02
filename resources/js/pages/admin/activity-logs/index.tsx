@@ -90,7 +90,9 @@ export default function AdminActivityLogsIndex({
         { value: null, label: tCommon('all') },
         ...actionOptions.map((action) => ({
             value: action,
-            label: t(`activityLogs.actions.${action}`, { defaultValue: action }),
+            label: t(`activityLogs.actions.${action}`, {
+                defaultValue: action,
+            }),
         })),
     ];
 
@@ -146,10 +148,14 @@ export default function AdminActivityLogsIndex({
                             <AdminDataTableRow key={log.id}>
                                 <AdminDataTableCell className="text-admin-secondary">
                                     {log.createdAt
-                                        ? formatDateTime(log.createdAt, locale, {
-                                              dateStyle: 'medium',
-                                              timeStyle: 'short',
-                                          })
+                                        ? formatDateTime(
+                                              log.createdAt,
+                                              locale,
+                                              {
+                                                  dateStyle: 'medium',
+                                                  timeStyle: 'short',
+                                              },
+                                          )
                                         : tCommon('emDash')}
                                 </AdminDataTableCell>
                                 <AdminDataTableCell>
@@ -171,7 +177,7 @@ export default function AdminActivityLogsIndex({
                                         log.subjectId,
                                     )}
                                 </AdminDataTableCell>
-                                <AdminDataTableCell className="max-w-xs truncate text-admin-secondary">
+                                <AdminDataTableCell className="text-admin-secondary max-w-xs truncate">
                                     {formatProperties(log.properties)}
                                 </AdminDataTableCell>
                                 <AdminDataTableCell className="text-admin-secondary">

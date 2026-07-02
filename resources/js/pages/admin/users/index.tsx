@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
 import { AdminInputField } from '@/components/admin/admin-field';
-import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { adminSelectClassName } from '@/components/admin/admin-form';
+import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
-import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import {
     AdminDataTable,
     AdminDataTableBody,
@@ -17,6 +16,7 @@ import {
     AdminDataTableHeaderRow,
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
+import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
 import { formatDate, useLocale } from '@/hooks/use-locale';
 
@@ -197,7 +197,7 @@ export default function AdminUsersIndex({
                                     <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
                                         {user.name}
                                         {user.id === auth.user.id && (
-                                            <span className="ml-2 text-xs text-admin-secondary">
+                                            <span className="text-admin-secondary ml-2 text-xs">
                                                 {t('users.you')}
                                             </span>
                                         )}

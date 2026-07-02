@@ -1,8 +1,10 @@
 <?php
 
 use App\Mail\OrderStatusUpdatedMail;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductReview;
+use App\Models\ProductVariant;
 use App\Models\User;
 use App\Services\Site\HomepageSettingsService;
 use Database\Seeders\CatalogSeeder;
@@ -161,12 +163,12 @@ test('admin order status update sends email to customer', function () {
 
     $admin = User::factory()->admin()->create();
     $customer = User::factory()->create();
-    $variant = \App\Models\ProductVariant::query()->firstOrFail();
+    $variant = ProductVariant::query()->firstOrFail();
 
     addVariantToCart($this, $customer, $variant);
     $this->actingAs($customer)->post(route('checkout.store'), checkoutShippingPayload());
 
-    $order = \App\Models\Order::query()->firstOrFail();
+    $order = Order::query()->firstOrFail();
 
     $this->actingAs($admin)->patch(
         route('admin.orders.status.update', $order->order_number),

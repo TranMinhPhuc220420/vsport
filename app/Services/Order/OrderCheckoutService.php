@@ -5,7 +5,6 @@ namespace App\Services\Order;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Exceptions\CheckoutStockException;
-use App\Exceptions\InvalidDiscountCodeException;
 use App\Models\Cart;
 use App\Models\DiscountCode;
 use App\Models\Order;

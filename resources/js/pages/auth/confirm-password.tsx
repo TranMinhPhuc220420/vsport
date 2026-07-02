@@ -44,7 +44,9 @@ export default function ConfirmPassword() {
                             <PasswordInput
                                 id="password"
                                 name="password"
-                                placeholder={t('confirmPassword.passwordPlaceholder')}
+                                placeholder={t(
+                                    'confirmPassword.passwordPlaceholder',
+                                )}
                                 autoComplete="current-password"
                                 autoFocus
                             />

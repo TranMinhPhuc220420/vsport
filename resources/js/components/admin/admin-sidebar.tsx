@@ -93,9 +93,9 @@ export function AdminSidebar() {
         <Sidebar
             collapsible="icon"
             variant="inset"
-            className="border-r border-admin bg-[var(--admin-surface)]"
+            className="border-admin border-r bg-[var(--admin-surface)]"
         >
-            <SidebarHeader className="border-b border-admin">
+            <SidebarHeader className="border-admin border-b">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -131,7 +131,7 @@ export function AdminSidebar() {
                 </SidebarMenu>
             </SidebarContent>
 
-            <SidebarFooter className="border-t border-admin">
+            <SidebarFooter className="border-admin border-t">
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

@@ -17,7 +17,18 @@ test('product detail page renders with colorways and stock', function () {
             ->has('product.colorways', 2)
             ->has('product.colorways.0.variants')
             ->has('product.colorways.0.variants.0.stock.inStock')
+            ->has('relatedProducts.data')
         );
+});
+
+test('product detail page includes related products from catalog', function () {
+    $response = $this->get(route('products.show', 'zegama-2'));
+
+    $related = $response->original->getData()['page']['props']['relatedProducts']['data'];
+
+    expect($related)->not->toBeEmpty();
+    expect(collect($related)->pluck('slug'))->not->toContain('zegama-2');
+    expect(count($related))->toBeLessThanOrEqual(8);
 });
 
 test('product detail page includes sale pricing on discounted colorway', function () {

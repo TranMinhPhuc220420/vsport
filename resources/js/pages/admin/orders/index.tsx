@@ -1,9 +1,9 @@
-import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
+import { adminInputClassName } from '@/components/admin/admin-form';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
-import { adminInputClassName } from '@/components/admin/admin-form';
 import {
     AdminDataTable,
     AdminDataTableBody,
@@ -15,11 +15,7 @@ import {
 } from '@/components/admin/ui/admin-data-table';
 import { AdminFilterTabs } from '@/components/admin/ui/admin-filter-tabs';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
-import {
-    formatCurrency,
-    formatDateTime,
-    useLocale,
-} from '@/hooks/use-locale';
+import { formatCurrency, formatDateTime, useLocale } from '@/hooks/use-locale';
 import type { PaginatedOrders } from '@/types/order';
 
 type AdminOrdersPageProps = {

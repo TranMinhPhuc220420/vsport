@@ -29,12 +29,12 @@ export default function OrderShowPage({ order }: OrderShowPageProps) {
                     {t('storefront:orders.backToOrders')}
                 </Link>
 
-                <h1 className="mt-4 text-heading-xl text-ink">
+                <h1 className="text-heading-xl mt-4 text-ink">
                     {t('storefront:orders.orderNumber', {
                         orderNumber: order.orderNumber,
                     })}
                 </h1>
-                <p className="mt-2 text-caption-md text-mute">
+                <p className="text-caption-md mt-2 text-mute">
                     {t('storefront:orders.placed', {
                         date: order.createdAt
                             ? formatDate(order.createdAt, locale)
@@ -47,7 +47,7 @@ export default function OrderShowPage({ order }: OrderShowPageProps) {
                         <h2 className="text-heading-lg text-ink">
                             {t('storefront:orders.shipping')}
                         </h2>
-                        <dl className="mt-4 space-y-2 text-body-strong">
+                        <dl className="text-body-strong mt-4 space-y-2">
                             <div>
                                 <dt className="text-caption-md text-mute">
                                     {t('common:name')}
@@ -75,9 +75,11 @@ export default function OrderShowPage({ order }: OrderShowPageProps) {
                         <h2 className="text-heading-lg text-ink">
                             {t('storefront:orders.summary')}
                         </h2>
-                        <dl className="mt-4 space-y-2 text-body-strong">
+                        <dl className="text-body-strong mt-4 space-y-2">
                             <div className="flex justify-between">
-                                <dt className="text-mute">{t('common:status')}</dt>
+                                <dt className="text-mute">
+                                    {t('common:status')}
+                                </dt>
                                 <dd>
                                     {t(
                                         `storefront:orders.status.${order.status}`,
@@ -86,7 +88,9 @@ export default function OrderShowPage({ order }: OrderShowPageProps) {
                                 </dd>
                             </div>
                             <div className="flex justify-between">
-                                <dt className="text-mute">{t('common:total')}</dt>
+                                <dt className="text-mute">
+                                    {t('common:total')}
+                                </dt>
                                 <dd>
                                     {formatCurrency(order.totalAmount, locale)}
                                 </dd>
@@ -96,7 +100,7 @@ export default function OrderShowPage({ order }: OrderShowPageProps) {
                 </div>
 
                 <section className="mt-8 border border-hairline">
-                    <h2 className="border-b border-hairline px-6 py-4 text-heading-lg text-ink">
+                    <h2 className="text-heading-lg border-b border-hairline px-6 py-4 text-ink">
                         {t('storefront:orders.items')}
                     </h2>
                     <ul>

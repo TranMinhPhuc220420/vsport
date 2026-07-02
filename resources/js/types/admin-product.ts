@@ -32,10 +32,9 @@ export type AdminProduct = {
     colorways: ProductColorway[];
 };
 
-export function getPrimaryImageUrl(
-    colorway: ProductColorway,
-): string | null {
+export function getPrimaryImageUrl(colorway: ProductColorway): string | null {
     const primary = colorway.images.find((img) => img.isPrimary);
+
     return primary?.url ?? colorway.images[0]?.url ?? null;
 }
 

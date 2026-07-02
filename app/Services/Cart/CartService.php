@@ -8,8 +8,8 @@ use App\Models\CartItem;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Support\CartSession;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class CartService
@@ -221,7 +221,7 @@ class CartService
         $cart->update(['expires_at' => $this->defaultExpiry()]);
     }
 
-    private function defaultExpiry(): \Carbon\CarbonInterface
+    private function defaultExpiry(): CarbonInterface
     {
         return now()->addHours(self::TTL_HOURS);
     }

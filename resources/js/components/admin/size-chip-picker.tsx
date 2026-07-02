@@ -39,6 +39,7 @@ export function SizeChipPicker({
 
     const addCustomSize = () => {
         const trimmed = customSize.trim();
+
         if (!trimmed || value.includes(trimmed)) {
             return;
         }

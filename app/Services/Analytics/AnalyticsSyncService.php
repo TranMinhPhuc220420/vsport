@@ -9,6 +9,7 @@ use App\Models\Analytics\DimProduct;
 use App\Models\Analytics\FactSale;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AnalyticsSyncService
@@ -71,7 +72,7 @@ class AnalyticsSyncService
             return;
         }
 
-        $date = \Illuminate\Support\Carbon::parse($dateKey);
+        $date = Carbon::parse($dateKey);
 
         DimDate::query()->create([
             'date_key' => $dateKey,

@@ -2,13 +2,11 @@ import { router } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-    AdminConfirmDialog,
-} from '@/components/admin/admin-form';
+import { AdminConfirmDialog } from '@/components/admin/admin-form';
 import { AdminFormSection } from '@/components/admin/admin-form-section';
 import { SizeChipPicker } from '@/components/admin/size-chip-picker';
-import { Input } from '@/components/ui/input';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import type { ProductColorway } from '@/types/admin-product';
 
@@ -31,7 +29,7 @@ export function ColorwayInventoryGrid({
 
     if (!activeColorway) {
         return (
-            <p className="text-sm text-admin-secondary">
+            <p className="text-admin-secondary text-sm">
                 {t('products.noColorwaysForInventory')}
             </p>
         );
@@ -64,9 +62,7 @@ function ColorwayInventoryPanel({
         colorway.variants.map((v) => v.size),
     );
     const [quantities, setQuantities] = useState<Record<number, number>>(
-        Object.fromEntries(
-            colorway.variants.map((v) => [v.id, v.quantity]),
-        ),
+        Object.fromEntries(colorway.variants.map((v) => [v.id, v.quantity])),
     );
     const [saving, setSaving] = useState(false);
     const [syncing, setSyncing] = useState(false);
@@ -130,6 +126,7 @@ function ColorwayInventoryPanel({
     const handleSyncClick = () => {
         if (removedSizes.length > 0) {
             setConfirmSync(true);
+
             return;
         }
 
@@ -163,100 +160,105 @@ function ColorwayInventoryPanel({
 
             <SizeChipPicker value={sizes} onChange={setSizes} />
 
-            <div className="overflow-hidden rounded-lg border border-admin bg-[var(--admin-surface)] shadow-sm">
+            <div className="border-admin overflow-hidden rounded-lg border bg-[var(--admin-surface)] shadow-sm">
                 <div className="overflow-x-auto">
-                <table className="w-full min-w-[520px] text-left">
-                    <thead>
-                        <tr className="border-b border-admin bg-[var(--admin-neutral)] text-xs font-medium text-admin-secondary">
-                            <th className="sticky left-0 bg-[var(--admin-neutral)] px-4 py-2.5">
-                                {t('products.size')}
-                            </th>
-                            <th className="px-4 py-2.5">{t('products.sku')}</th>
-                            <th className="px-4 py-2.5">
-                                {t('products.quantity')}
-                            </th>
-                            <th className="px-4 py-2.5">
-                                {t('products.available')}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {colorway.variants
-                            .filter((variant) => sizes.includes(variant.size))
-                            .map((variant) => {
-                                const changed =
-                                    quantities[variant.id] !==
-                                    originalQuantities[variant.id];
+                    <table className="w-full min-w-[520px] text-left">
+                        <thead>
+                            <tr className="border-admin text-admin-secondary border-b bg-[var(--admin-neutral)] text-xs font-medium">
+                                <th className="sticky left-0 bg-[var(--admin-neutral)] px-4 py-2.5">
+                                    {t('products.size')}
+                                </th>
+                                <th className="px-4 py-2.5">
+                                    {t('products.sku')}
+                                </th>
+                                <th className="px-4 py-2.5">
+                                    {t('products.quantity')}
+                                </th>
+                                <th className="px-4 py-2.5">
+                                    {t('products.available')}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {colorway.variants
+                                .filter((variant) =>
+                                    sizes.includes(variant.size),
+                                )
+                                .map((variant) => {
+                                    const changed =
+                                        quantities[variant.id] !==
+                                        originalQuantities[variant.id];
 
-                                return (
+                                    return (
+                                        <tr
+                                            key={variant.id}
+                                            className="border-admin border-b"
+                                        >
+                                            <td className="sticky left-0 bg-[var(--admin-surface)] px-4 py-2.5">
+                                                {variant.size}
+                                            </td>
+                                            <td className="text-admin-secondary px-4 py-2.5 text-sm">
+                                                {variant.sku}
+                                            </td>
+                                            <td className="px-4 py-2.5">
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    value={
+                                                        quantities[
+                                                            variant.id
+                                                        ] ?? variant.quantity
+                                                    }
+                                                    onChange={(e) =>
+                                                        setQuantities(
+                                                            (current) => ({
+                                                                ...current,
+                                                                [variant.id]:
+                                                                    Number(
+                                                                        e.target
+                                                                            .value,
+                                                                    ),
+                                                            }),
+                                                        )
+                                                    }
+                                                    className={cn(
+                                                        'border-admin h-9 rounded-md bg-[var(--admin-surface)] shadow-none',
+                                                        changed &&
+                                                            'border-amber-400 focus-visible:border-amber-500',
+                                                    )}
+                                                />
+                                            </td>
+                                            <td className="px-4 py-2.5 text-sm">
+                                                {variant.available}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            {sizes
+                                .filter(
+                                    (size) =>
+                                        !colorway.variants.some(
+                                            (v) => v.size === size,
+                                        ),
+                                )
+                                .map((size) => (
                                     <tr
-                                        key={variant.id}
-                                        className="border-b border-admin"
+                                        key={`new-${size}`}
+                                        className="border-admin border-b bg-[var(--admin-neutral)]/50"
                                     >
-                                        <td className="sticky left-0 bg-[var(--admin-surface)] px-4 py-2.5">
-                                            {variant.size}
+                                        <td className="sticky left-0 bg-[var(--admin-neutral)]/50 px-4 py-2.5">
+                                            {size}
                                         </td>
-                                        <td className="px-4 py-2.5 text-sm text-admin-secondary">
-                                            {variant.sku}
-                                        </td>
-                                        <td className="px-4 py-2.5">
-                                            <Input
-                                                type="number"
-                                                min="0"
-                                                value={
-                                                    quantities[variant.id] ??
-                                                    variant.quantity
-                                                }
-                                                onChange={(e) =>
-                                                    setQuantities(
-                                                        (current) => ({
-                                                            ...current,
-                                                            [variant.id]:
-                                                                Number(
-                                                                    e.target
-                                                                        .value,
-                                                                ),
-                                                        }),
-                                                    )
-                                                }
-                                                className={cn(
-                                                    'h-9 rounded-md border-admin bg-[var(--admin-surface)] shadow-none',
-                                                    changed &&
-                                                        'border-amber-400 focus-visible:border-amber-500',
-                                                )}
-                                            />
-                                        </td>
-                                        <td className="px-4 py-2.5 text-sm">
-                                            {variant.available}
+                                        <td
+                                            colSpan={3}
+                                            className="text-admin-secondary px-4 py-2.5 text-sm"
+                                        >
+                                            {t('products.syncToCreateSku')}
                                         </td>
                                     </tr>
-                                );
-                            })}
-                        {sizes
-                            .filter(
-                                (size) =>
-                                    !colorway.variants.some(
-                                        (v) => v.size === size,
-                                    ),
-                            )
-                            .map((size) => (
-                                <tr
-                                    key={`new-${size}`}
-                                    className="border-b border-admin bg-[var(--admin-neutral)]/50"
-                                >
-                                    <td className="sticky left-0 bg-[var(--admin-neutral)]/50 px-4 py-2.5">
-                                        {size}
-                                    </td>
-                                    <td
-                                        colSpan={3}
-                                        className="px-4 py-2.5 text-sm text-admin-secondary"
-                                    >
-                                        {t('products.syncToCreateSku')}
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+                                ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -277,7 +279,7 @@ function ColorwayInventoryPanel({
                     {t('products.syncSizes')}
                 </AdminButton>
             </div>
-            <p className="text-xs text-admin-secondary">
+            <p className="text-admin-secondary text-xs">
                 {t('products.syncSizesHint')}
             </p>
 

@@ -1,8 +1,5 @@
-import {
-    createContext,
-    useContext,
-    type ReactNode,
-} from 'react';
+import { createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
 
 import { useWishlistStorage } from '@/hooks/use-wishlist-storage';
 import type { WishlistItem } from '@/types/wishlist';

@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     adminInputClassName,
     adminSelectClassName,
     adminTextareaClassName,
 } from '@/components/admin/ui/admin-input-styles';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 type AdminFieldProps = {
@@ -26,7 +26,8 @@ export function AdminField({
     className,
     htmlFor,
 }: AdminFieldProps) {
-    const fieldId = htmlFor ?? React.useId();
+    const generatedId = React.useId();
+    const fieldId = htmlFor ?? generatedId;
     const errorId = `${fieldId}-error`;
 
     return (
@@ -49,10 +50,7 @@ export function AdminField({
     );
 }
 
-type AdminInputFieldProps = Omit<
-    React.ComponentProps<typeof Input>,
-    'id'
-> & {
+type AdminInputFieldProps = Omit<React.ComponentProps<typeof Input>, 'id'> & {
     label: string;
     error?: string;
     hint?: string;
@@ -79,10 +77,7 @@ export function AdminInputField({
     );
 }
 
-type AdminTextareaFieldProps = Omit<
-    React.ComponentProps<'textarea'>,
-    'id'
-> & {
+type AdminTextareaFieldProps = Omit<React.ComponentProps<'textarea'>, 'id'> & {
     label: string;
     error?: string;
     hint?: string;

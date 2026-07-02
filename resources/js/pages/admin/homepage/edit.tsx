@@ -1,5 +1,6 @@
 import { Head, Link, useForm, setLayoutProps } from '@inertiajs/react';
-import { type FormEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AdminInputField } from '@/components/admin/admin-field';
@@ -59,22 +60,28 @@ function CampaignFields({
 }: CampaignFieldsProps) {
     const { t } = useTranslation('admin');
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [uploadPreviewUrl, setUploadPreviewUrl] = useState<string | null>(
+        null,
+    );
 
     useEffect(() => {
-        if (!campaign.image) {
-            setPreviewUrl(null);
+        return () => {
+            if (uploadPreviewUrl) {
+                URL.revokeObjectURL(uploadPreviewUrl);
+            }
+        };
+    }, [uploadPreviewUrl]);
 
-            return;
+    const setUploadedImage = (file: File | null) => {
+        if (uploadPreviewUrl) {
+            URL.revokeObjectURL(uploadPreviewUrl);
         }
 
-        const objectUrl = URL.createObjectURL(campaign.image);
-        setPreviewUrl(objectUrl);
+        setUploadPreviewUrl(file ? URL.createObjectURL(file) : null);
+        onChange('image', file);
+    };
 
-        return () => URL.revokeObjectURL(objectUrl);
-    }, [campaign.image]);
-
-    const heroPreview = previewUrl ?? campaign.imageUrl;
+    const heroPreview = uploadPreviewUrl ?? campaign.imageUrl;
     const errorFor = (field: string) => errors[`campaigns.${index}.${field}`];
 
     return (
@@ -115,7 +122,7 @@ function CampaignFields({
                         <img
                             src={heroPreview}
                             alt=""
-                            className="aspect-[12/5] w-full rounded-admin-lg border border-admin object-cover"
+                            className="rounded-admin-lg border-admin aspect-[12/5] w-full border object-cover"
                         />
                     ) : null}
                     <input
@@ -124,7 +131,7 @@ function CampaignFields({
                         accept="image/jpeg,image/png,image/webp"
                         className="hidden"
                         onChange={(e) => {
-                            onChange('image', e.target.files?.[0] ?? null);
+                            setUploadedImage(e.target.files?.[0] ?? null);
                             e.target.value = '';
                         }}
                     />
@@ -140,7 +147,7 @@ function CampaignFields({
                             <AdminButton
                                 type="button"
                                 variant="ghost"
-                                onClick={() => onChange('image', null)}
+                                onClick={() => setUploadedImage(null)}
                             >
                                 {t('homepage.clearUpload')}
                             </AdminButton>
@@ -247,7 +254,9 @@ export default function AdminHomepageEdit({
                             index={index}
                             campaign={campaign}
                             canRemove={data.campaigns.length > 1}
-                            errors={errors as Record<string, string | undefined>}
+                            errors={
+                                errors as Record<string, string | undefined>
+                            }
                             onChange={(field, value) =>
                                 updateCampaign(index, field, value)
                             }
@@ -273,11 +282,11 @@ export default function AdminHomepageEdit({
                     <h2 className="admin-section-title">
                         {t('homepage.featuredProducts')}
                     </h2>
-                    <p className="mt-2 text-sm text-admin-secondary">
+                    <p className="text-admin-secondary mt-2 text-sm">
                         {t('homepage.featuredHint')}
                     </p>
                     {featuredProducts.data.length === 0 ? (
-                        <p className="mt-4 text-sm text-admin-secondary">
+                        <p className="text-admin-secondary mt-4 text-sm">
                             {t('homepage.noFeatured')}
                         </p>
                     ) : (
@@ -290,7 +299,7 @@ export default function AdminHomepageEdit({
                                     >
                                         {product.name}
                                     </Link>
-                                    <span className="ml-2 text-xs text-admin-secondary">
+                                    <span className="text-admin-secondary ml-2 text-xs">
                                         {product.styleCode}
                                     </span>
                                 </li>

@@ -53,11 +53,17 @@ function PlpSubNav({
                     aria-label={t('plp.breadcrumb')}
                     className="flex items-center gap-2"
                 >
-                    <Link href="/" className="text-caption-md text-mute hover:underline">
+                    <Link
+                        href="/"
+                        className="text-caption-md text-mute hover:underline"
+                    >
                         {t('plp.home')}
                     </Link>
                     {categoryMeta.breadcrumb.map((item) => (
-                        <span key={item.slug} className="flex items-center gap-2">
+                        <span
+                            key={item.slug}
+                            className="flex items-center gap-2"
+                        >
                             <span className="text-caption-md text-mute">/</span>
                             <Link
                                 href={`/${item.slug}`}
@@ -90,7 +96,7 @@ function PlpSubNav({
                         <select
                             value={filters.sort}
                             onChange={(e) => handleSortChange(e.target.value)}
-                            className="h-10 rounded-pill-md border border-hairline bg-canvas px-3 text-button-md"
+                            className="text-button-md h-10 rounded-pill-md border border-hairline bg-canvas px-3"
                         >
                             {sortOptions.map((option) => (
                                 <option key={option.value} value={option.value}>

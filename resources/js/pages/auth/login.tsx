@@ -41,7 +41,9 @@ export default function Login({ status, canResetPassword }: Props) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">{t('login.email')}</Label>
+                                <Label htmlFor="email">
+                                    {t('login.email')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"

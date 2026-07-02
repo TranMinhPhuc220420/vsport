@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DiscountController;
 use App\Http\Controllers\Storefront\AccountController;
 use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
@@ -38,11 +39,11 @@ Route::get('/orders/confirmation/{orderNumber}', [OrderConfirmationController::c
     ->name('orders.confirmation');
 
 Route::prefix('api')->group(function () {
-    Route::get('/cart', [\App\Http\Controllers\Api\CartController::class, 'show']);
-    Route::post('/cart/items', [\App\Http\Controllers\Api\CartController::class, 'storeItem']);
-    Route::patch('/cart/items/{variant}', [\App\Http\Controllers\Api\CartController::class, 'updateItem']);
-    Route::delete('/cart/items/{variant}', [\App\Http\Controllers\Api\CartController::class, 'destroyItem']);
-    Route::post('/discount/validate', [\App\Http\Controllers\Api\DiscountController::class, 'validateCode']);
+    Route::get('/cart', [App\Http\Controllers\Api\CartController::class, 'show']);
+    Route::post('/cart/items', [App\Http\Controllers\Api\CartController::class, 'storeItem']);
+    Route::patch('/cart/items/{variant}', [App\Http\Controllers\Api\CartController::class, 'updateItem']);
+    Route::delete('/cart/items/{variant}', [App\Http\Controllers\Api\CartController::class, 'destroyItem']);
+    Route::post('/discount/validate', [DiscountController::class, 'validateCode']);
 });
 
 Route::post('/stripe/webhook', StripeWebhookController::class)->name('stripe.webhook');

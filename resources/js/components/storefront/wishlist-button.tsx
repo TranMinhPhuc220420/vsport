@@ -4,8 +4,8 @@ import { toast } from 'sonner';
 
 import { StorefrontButton } from '@/components/storefront/Button';
 import { useWishlist } from '@/contexts/wishlist-context';
-import type { WishlistItem } from '@/types/wishlist';
 import { cn } from '@/lib/utils';
+import type { WishlistItem } from '@/types/wishlist';
 
 type WishlistButtonProps = {
     item: WishlistItem;
@@ -25,9 +25,7 @@ export function WishlistButton({
     const handleClick = () => {
         toggleItem(item);
 
-        toast.success(
-            active ? t('wishlist.removed') : t('wishlist.added'),
-        );
+        toast.success(active ? t('wishlist.removed') : t('wishlist.added'));
     };
 
     return (
@@ -36,7 +34,9 @@ export function WishlistButton({
             variant={showLabel ? 'secondary' : 'icon'}
             className={cn(className)}
             aria-label={
-                active ? t('wishlist.removeFromWishlist') : t('wishlist.addToWishlist')
+                active
+                    ? t('wishlist.removeFromWishlist')
+                    : t('wishlist.addToWishlist')
             }
             aria-pressed={active}
             onClick={handleClick}
@@ -45,9 +45,7 @@ export function WishlistButton({
                 className={cn('size-5', active && 'fill-current text-sale')}
             />
             {showLabel && (
-                <span>
-                    {active ? t('wishlist.saved') : t('wishlist.save')}
-                </span>
+                <span>{active ? t('wishlist.saved') : t('wishlist.save')}</span>
             )}
         </StorefrontButton>
     );

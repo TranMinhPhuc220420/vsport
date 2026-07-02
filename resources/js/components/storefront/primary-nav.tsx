@@ -1,11 +1,12 @@
 import { Link, router } from '@inertiajs/react';
 import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
-import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StorefrontButton } from '@/components/storefront/Button';
 import { MobileNavDrawer } from '@/components/storefront/mobile-nav-drawer';
 import { SearchPill } from '@/components/storefront/SearchPill';
-import { StorefrontButton } from '@/components/storefront/Button';
 import { useCart } from '@/contexts/cart-context';
 import { useWishlist } from '@/contexts/wishlist-context';
 import { home } from '@/routes';
@@ -112,7 +113,9 @@ export function PrimaryNav() {
                                 <Heart className="size-5" />
                                 {wishlistCount > 0 && (
                                     <span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-ink text-[10px] font-medium text-canvas">
-                                        {wishlistCount > 9 ? '9+' : wishlistCount}
+                                        {wishlistCount > 9
+                                            ? '9+'
+                                            : wishlistCount}
                                     </span>
                                 )}
                             </Link>

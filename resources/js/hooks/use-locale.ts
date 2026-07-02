@@ -1,7 +1,8 @@
 import { router, usePage } from '@inertiajs/react';
 import { useCallback } from 'react';
 
-import i18n, { type AppLocale, syncI18nLocale } from '@/i18n';
+import i18n, { syncI18nLocale } from '@/i18n';
+import type { AppLocale } from '@/i18n';
 import { setCookie } from '@/lib/cookie';
 
 export type LocaleOption = {
@@ -12,15 +13,18 @@ export type LocaleOption = {
 export function useLocale() {
     const { locale, locales } = usePage().props;
 
-    const updateLocale = useCallback((code: AppLocale) => {
-        if (code === locale) {
-            return;
-        }
+    const updateLocale = useCallback(
+        (code: AppLocale) => {
+            if (code === locale) {
+                return;
+            }
 
-        setCookie('locale', code);
-        syncI18nLocale(code);
-        router.reload();
-    }, [locale]);
+            setCookie('locale', code);
+            syncI18nLocale(code);
+            router.reload();
+        },
+        [locale],
+    );
 
     return {
         locale: locale as AppLocale,
@@ -57,10 +61,7 @@ export function formatDateTime(
     );
 }
 
-export function formatDate(
-    value: string | Date,
-    locale: AppLocale,
-): string {
+export function formatDate(value: string | Date, locale: AppLocale): string {
     return formatDateTime(value, locale, {
         year: 'numeric',
         month: 'short',

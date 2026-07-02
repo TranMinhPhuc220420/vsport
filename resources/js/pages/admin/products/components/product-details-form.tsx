@@ -69,9 +69,7 @@ export function ProductDetailsForm({
                 <AdminInputField
                     label={t('products.subtitle')}
                     value={form.data.sub_title}
-                    onChange={(e) =>
-                        form.setData('sub_title', e.target.value)
-                    }
+                    onChange={(e) => form.setData('sub_title', e.target.value)}
                     error={form.errors.sub_title}
                 />
 

@@ -14,8 +14,10 @@ test('home page renders storefront home with featured products', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('storefront/home')
             ->has('featuredProducts.data')
+            ->has('newArrivals.data')
+            ->has('bestSellers.data')
             ->has('categories.data')
-            ->has('campaign.headline')
+            ->has('campaigns.0.headline')
         );
 
     $count = count(
@@ -23,6 +25,20 @@ test('home page renders storefront home with featured products', function () {
     );
 
     expect($count)->toBeGreaterThan(0)->toBeLessThanOrEqual(8);
+});
+
+test('home page new arrivals and best sellers include catalog items', function () {
+    $response = $this->get(route('home'));
+
+    $props = $response->original->getData()['page']['props'];
+
+    $newArrivalSlugs = collect($props['newArrivals']['data'])->pluck('slug');
+    $bestSellerSlugs = collect($props['bestSellers']['data'])->pluck('slug');
+
+    expect($newArrivalSlugs)->not->toBeEmpty();
+    expect($bestSellerSlugs)->not->toBeEmpty();
+    expect(count($props['newArrivals']['data']))->toBeLessThanOrEqual(8);
+    expect(count($props['bestSellers']['data']))->toBeLessThanOrEqual(8);
 });
 
 test('home page featured products include catalog items', function () {

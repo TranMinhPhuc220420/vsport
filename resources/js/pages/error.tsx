@@ -24,9 +24,13 @@ export default function ErrorPage({ status }: ErrorPageProps) {
             <Head title={t(messageKey)} />
 
             <div className="storefront-container storefront-section text-center">
-                <p className="text-heading-xl font-medium text-mute">{status}</p>
-                <h1 className="mt-4 text-heading-xl text-ink">{t(messageKey)}</h1>
-                <p className="mx-auto mt-4 max-w-md text-body-strong text-mute">
+                <p className="text-heading-xl font-medium text-mute">
+                    {status}
+                </p>
+                <h1 className="text-heading-xl mt-4 text-ink">
+                    {t(messageKey)}
+                </h1>
+                <p className="text-body-strong mx-auto mt-4 max-w-md text-mute">
                     {t('error.description')}
                 </p>
                 <StorefrontButton variant="primary" className="mt-8" asChild>

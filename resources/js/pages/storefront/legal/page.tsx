@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { PageSeo, type SeoData } from '@/components/storefront/page-seo';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 
 type LegalPageProps = {
     page: 'privacy' | 'shipping' | 'returns' | 'contact';
@@ -21,7 +22,7 @@ export default function LegalPage({ page, seo }: LegalPageProps) {
                 <h1 className="text-heading-xl text-ink">
                     {t(`legal.${page}.title`)}
                 </h1>
-                <div className="mt-8 space-y-4 text-body text-mute">
+                <div className="text-body mt-8 space-y-4 text-mute">
                     {paragraphs.map((paragraph) => (
                         <p key={paragraph}>{paragraph}</p>
                     ))}

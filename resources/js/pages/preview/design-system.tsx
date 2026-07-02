@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
-import { useState, type CSSProperties } from 'react';
+import { useState } from 'react';
+import type { CSSProperties } from 'react';
 
 import {
     FilterChip,
@@ -57,7 +58,7 @@ export default function DesignSystemPreview() {
                     <h1 className="text-display-campaign text-ink">
                         Design System
                     </h1>
-                    <p className="mt-4 max-w-2xl text-body-strong text-mute">
+                    <p className="text-body-strong mt-4 max-w-2xl text-mute">
                         Nike-style tokens and storefront components for VSport.
                     </p>
                 </section>
@@ -110,7 +111,9 @@ export default function DesignSystemPreview() {
                             <div
                                 key={`motion-${product.name}`}
                                 style={
-                                    { '--stagger-index': index } as CSSProperties
+                                    {
+                                        '--stagger-index': index,
+                                    } as CSSProperties
                                 }
                             >
                                 <ProductCard {...product} />
@@ -119,7 +122,10 @@ export default function DesignSystemPreview() {
                     </ScrollReveal>
                     <ProductRail className="mt-6">
                         {mockProducts.map((product, index) => (
-                            <ProductRailItem key={`rail-${product.name}`} index={index}>
+                            <ProductRailItem
+                                key={`rail-${product.name}`}
+                                index={index}
+                            >
                                 <ProductCard {...product} />
                             </ProductRailItem>
                         ))}
@@ -147,8 +153,12 @@ export default function DesignSystemPreview() {
                 <section className="space-y-4">
                     <h2 className="text-heading-xl text-ink">Badges & chips</h2>
                     <div className="flex flex-wrap items-center gap-4">
-                        <StorefrontBadge variant="promo">Just In</StorefrontBadge>
-                        <StorefrontBadge variant="sale">25% off</StorefrontBadge>
+                        <StorefrontBadge variant="promo">
+                            Just In
+                        </StorefrontBadge>
+                        <StorefrontBadge variant="sale">
+                            25% off
+                        </StorefrontBadge>
                         {['Men', 'Women', 'Kids'].map((chip) => (
                             <FilterChip
                                 key={chip}

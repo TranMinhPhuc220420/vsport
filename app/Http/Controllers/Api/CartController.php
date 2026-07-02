@@ -8,7 +8,6 @@ use App\Services\Cart\CartService;
 use App\Support\CartSession;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class CartController extends Controller
 {
