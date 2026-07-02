@@ -1,0 +1,99 @@
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
+
+import { StorefrontPagination } from '@/components/storefront/pagination';
+import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
+import type { PaginatedOrders } from '@/types/order';
+
+type OrderHistoryPageProps = {
+    orders: PaginatedOrders;
+};
+
+export default function OrderHistoryPage({ orders }: OrderHistoryPageProps) {
+    const { t } = useTranslation(['storefront', 'common']);
+    const { locale } = useLocale();
+
+    return (
+        <>
+            <Head title={t('storefront:orders.title')} />
+
+            <div className="storefront-container storefront-section">
+                <h1 className="text-heading-xl text-ink">
+                    {t('storefront:orders.title')}
+                </h1>
+
+                {orders.data.length === 0 ? (
+                    <p className="mt-6 text-body-strong text-mute">
+                        {t('storefront:orders.empty')}
+                    </p>
+                ) : (
+                    <div className="mt-8 overflow-x-auto">
+                        <table className="w-full min-w-[640px] text-left">
+                            <thead>
+                                <tr className="border-b border-hairline text-caption-md text-mute">
+                                    <th className="py-3 pr-4">
+                                        {t('storefront:orders.order')}
+                                    </th>
+                                    <th className="py-3 pr-4">{t('common:date')}</th>
+                                    <th className="py-3 pr-4">{t('common:status')}</th>
+                                    <th className="py-3 text-right">
+                                        {t('common:total')}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders.data.map((order) => (
+                                    <tr
+                                        key={order.id}
+                                        className="border-b border-hairline-soft"
+                                    >
+                                        <td className="py-4 pr-4">
+                                            <Link
+                                                href={`/orders/${order.orderNumber}`}
+                                                className="text-body-strong text-ink hover:underline"
+                                            >
+                                                {order.orderNumber}
+                                            </Link>
+                                        </td>
+                                        <td className="py-4 pr-4 text-caption-md text-mute">
+                                            {order.createdAt
+                                                ? formatDate(
+                                                      order.createdAt,
+                                                      locale,
+                                                  )
+                                                : t('common:emDash')}
+                                        </td>
+                                        <td className="py-4 pr-4 text-caption-md text-ink">
+                                            {t(
+                                                `storefront:orders.status.${order.status}`,
+                                                { defaultValue: order.status },
+                                            )}
+                                        </td>
+                                        <td className="py-4 text-right text-body-strong text-ink">
+                                            {formatCurrency(
+                                                order.totalAmount,
+                                                locale,
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        <StorefrontPagination
+                            links={orders.links}
+                            meta={{
+                                current_page: orders.meta.current_page,
+                                from: null,
+                                last_page: orders.meta.last_page,
+                                per_page: 10,
+                                to: null,
+                                total: orders.meta.total,
+                            }}
+                        />
+                    </div>
+                )}
+            </div>
+        </>
+    );
+}

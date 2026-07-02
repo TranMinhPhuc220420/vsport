@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'profile_updated' => 'Profile updated.',
+    'password_updated' => 'Password updated.',
+    'product_created_upload_hint' => 'Product created. Upload images for each colorway below.',
+    'inventory_updated' => 'Inventory updated.',
+    'order_status_updated' => 'Order status updated.',
+    'user_role_updated' => 'User role updated.',
+    'review_approved' => 'Review approved.',
+    'review_deleted' => 'Review deleted.',
+    'order_confirmation_subject' => 'Order confirmation :order_number',
+    'order_confirmation_greeting' => 'Hi :name,',
+    'order_confirmation_body' => 'We received your order :order_number. Total: :total. We will notify you when it ships.',
+    'order_confirmation_footer' => 'Thank you for shopping with :app.',
+    'order_confirmation_view' => 'View order',
+    'homepage_updated' => 'Homepage updated.',
+    'product_featured_updated' => 'Featured status updated.',
+    'discount_code_created' => 'Discount code created.',
+    'discount_code_updated' => 'Discount code updated.',
+    'discount_code_deleted' => 'Discount code deleted.',
+    'order_status_updated_subject' => 'Order :order_number status update',
+    'order_status_updated_body' => 'Your order :order_number is now: :status.',
+    'order_statuses' => [
+        'pending' => 'Pending',
+        'confirmed' => 'Confirmed',
+        'shipping' => 'Shipping',
+        'delivered' => 'Delivered',
+        'completed' => 'Completed',
+        'cancelled' => 'Cancelled',
+    ],
+];

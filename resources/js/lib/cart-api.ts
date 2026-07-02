@@ -1,0 +1,132 @@
+import type { CartItem } from '@/types/cart';
+
+function getCsrfToken(): string {
+    const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+
+    return match ? decodeURIComponent(match[1]) : '';
+}
+
+type ApiCartItem = {
+    variantId: number;
+    productSlug: string;
+    productName: string;
+    colorwayName: string;
+    size: string;
+    quantity: number;
+    unitPrice: number;
+    lineTotal: number;
+    imageUrl?: string;
+    customConfiguration?: Record<string, unknown> | null;
+};
+
+type ApiCartResponse = {
+    data: {
+        items: ApiCartItem[];
+        itemCount: number;
+        subtotal: number;
+    };
+};
+
+function mapApiItem(item: ApiCartItem): CartItem {
+    return {
+        variantId: item.variantId,
+        productSlug: item.productSlug,
+        productName: item.productName,
+        colorName: item.colorwayName,
+        size: item.size,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        imageUrl: item.imageUrl,
+    };
+}
+
+async function parseCartResponse(response: Response): Promise<{
+    items: CartItem[];
+    itemCount: number;
+    subtotal: number;
+}> {
+    if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        const message =
+            typeof body.message === 'string'
+                ? body.message
+                : 'Unable to update cart.';
+        throw new Error(message);
+    }
+
+    const json = (await response.json()) as ApiCartResponse;
+
+    return {
+        items: json.data.items.map(mapApiItem),
+        itemCount: json.data.itemCount,
+        subtotal: json.data.subtotal,
+    };
+}
+
+const cartFetchInit: RequestInit = {
+    credentials: 'same-origin',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-XSRF-TOKEN': getCsrfToken(),
+    },
+};
+
+export async function fetchServerCart(): Promise<{
+    items: CartItem[];
+    itemCount: number;
+    subtotal: number;
+}> {
+    const response = await fetch('/api/cart', cartFetchInit);
+
+    return parseCartResponse(response);
+}
+
+export async function addServerCartItem(payload: {
+    variantId: number;
+    quantity: number;
+    customConfiguration?: Record<string, unknown>;
+}): Promise<{
+    items: CartItem[];
+    itemCount: number;
+    subtotal: number;
+}> {
+    const response = await fetch('/api/cart/items', {
+        ...cartFetchInit,
+        method: 'POST',
+        body: JSON.stringify(payload),
+    });
+
+    return parseCartResponse(response);
+}
+
+export async function updateServerCartItem(
+    variantId: number,
+    quantity: number,
+): Promise<{
+    items: CartItem[];
+    itemCount: number;
+    subtotal: number;
+}> {
+    const response = await fetch(`/api/cart/items/${variantId}`, {
+        ...cartFetchInit,
+        method: 'PATCH',
+        body: JSON.stringify({ quantity }),
+    });
+
+    return parseCartResponse(response);
+}
+
+export async function removeServerCartItem(variantId: number): Promise<{
+    items: CartItem[];
+    itemCount: number;
+    subtotal: number;
+}> {
+    const response = await fetch(`/api/cart/items/${variantId}`, {
+        ...cartFetchInit,
+        method: 'DELETE',
+    });
+
+    return parseCartResponse(response);
+}

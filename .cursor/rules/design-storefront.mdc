@@ -1,0 +1,17 @@
+---
+description: Storefront UI must follow DESIGN.md (Nike-inspired customer experience)
+globs: "resources/js/pages/storefront/**,resources/js/components/storefront/**"
+alwaysApply: false
+---
+
+# Storefront design system
+
+When editing customer-facing pages or storefront components, follow [docs/DESIGN.md](../../docs/DESIGN.md).
+
+## Rules
+
+- Use storefront tokens and components under `resources/js/components/storefront/`.
+- Do **not** import admin components into storefront pages.
+- Admin UI has its own system: [DESIGN_ADMIN.md](../../docs/DESIGN_ADMIN.md).
+
+Preview catalog: `/preview/design-system`.

@@ -1,0 +1,240 @@
+{
+    "nav": {
+        "newFeatured": "Mới & Nổi bật",
+        "men": "Nam",
+        "women": "Nữ",
+        "kids": "Trẻ em",
+        "jordan": "Jordan",
+        "openMenu": "Mở menu",
+        "primary": "Điều hướng chính",
+        "search": "Tìm kiếm",
+        "wishlist": "Yêu thích",
+        "bag": "Giỏ hàng",
+        "findStore": "Tìm cửa hàng",
+        "help": "Trợ giúp",
+        "joinUs": "Đăng ký",
+        "orders": "Đơn hàng",
+        "account": "Tài khoản",
+        "signIn": "Đăng nhập"
+    },
+    "footer": {
+        "resources": "Tài nguyên",
+        "giftCards": "Thẻ quà tặng",
+        "findStore": "Tìm cửa hàng",
+        "membership": "Thành viên",
+        "help": "Trợ giúp",
+        "orderStatus": "Trạng thái đơn hàng",
+        "shipping": "Vận chuyển",
+        "returns": "Đổi trả",
+        "privacy": "Chính sách bảo mật",
+        "contactUs": "Liên hệ",
+        "company": "Công ty",
+        "about": "Về VSport",
+        "news": "Tin tức",
+        "careers": "Tuyển dụng",
+        "promotions": "Khuyến mãi",
+        "student": "Sinh viên",
+        "military": "Quân đội",
+        "offers": "Ưu đãi",
+        "copyright": "© {{year}} VSport. Bảo lưu mọi quyền."
+    },
+    "home": {
+        "featured": "Nổi bật",
+        "shopByCategory": "Mua theo danh mục",
+        "viewAll": "Xem tất cả"
+    },
+    "search": {
+        "title": "Kết quả tìm kiếm",
+        "resultsFor": "Kết quả cho \"{{query}}\"",
+        "noQuery": "Nhập từ khóa để tìm sản phẩm.",
+        "noProducts": "Không có sản phẩm phù hợp."
+    },
+    "plp": {
+        "noProducts": "Không tìm thấy sản phẩm.",
+        "outOfStock": "Hết hàng",
+        "home": "Trang chủ",
+        "sortBy": "Sắp xếp theo",
+        "sortNewest": "Mới nhất",
+        "sortPriceLow": "Giá: Thấp đến cao",
+        "sortPriceHigh": "Giá: Cao đến thấp",
+        "breadcrumb": "Đường dẫn",
+        "hideFilters": "Ẩn bộ lọc",
+        "showFilters": "Hiện bộ lọc",
+        "filters": "Bộ lọc",
+        "gender": "Giới tính",
+        "category": "Danh mục",
+        "hideFiltersAction": "Ẩn bộ lọc"
+    },
+    "pdp": {
+        "addedToBag": "Đã thêm vào giỏ",
+        "percentOff": "Giảm {{percent}}%",
+        "selectSize": "Chọn size",
+        "color": "Màu:",
+        "addToBag": "Thêm vào giỏ",
+        "inStock": "Còn hàng",
+        "outOfStock": "Hết hàng",
+        "shopCategory": "Mua {{name}}",
+        "nikeByYou": "Nike By You",
+        "nikeByYouDesc": "Tùy chỉnh chất liệu và màu sắc cho phong cách này.",
+        "moveToZero": "Move to Zero — {{percent}}% tái chế",
+        "materialLine": "{{componentName}} — {{materialType}} ({{weight}}g, {{recycledPct}}% tái chế)",
+        "reviews": "Đánh giá",
+        "ratingSummary": "{{rating}} / 5 ({{count}} đánh giá)",
+        "yourRating": "Đánh giá của bạn",
+        "stars": "{{n}} sao",
+        "reviewTitle": "Tiêu đề (tùy chọn)",
+        "reviewBody": "Nội dung đánh giá",
+        "submitReview": "Gửi đánh giá",
+        "signInToReview": "Đăng nhập để viết đánh giá."
+    },
+    "cart": {
+        "title": "Giỏ hàng",
+        "empty": "Giỏ hàng của bạn đang trống.",
+        "continueShopping": "Tiếp tục mua sắm",
+        "summary": "Tóm tắt",
+        "subtotal": "Tạm tính",
+        "subtotalWithCount_one": "Tạm tính ({{count}} sản phẩm)",
+        "subtotalWithCount_other": "Tạm tính ({{count}} sản phẩm)",
+        "estimatedTotal": "Tổng ước tính",
+        "codNote": "Thanh toán khi nhận hàng. Thuế và phí vận chuyển được tính khi xác nhận.",
+        "checkout": "Thanh toán",
+        "signInToComplete": "Đăng nhập",
+        "signInSuffix": "để hoàn tất đơn hàng.",
+        "removeItem": "Xóa sản phẩm",
+        "decreaseQty": "Giảm số lượng",
+        "increaseQty": "Tăng số lượng"
+    },
+    "checkout": {
+        "title": "Thanh toán",
+        "description": "Chọn thanh toán khi nhận hàng hoặc thanh toán bằng thẻ.",
+        "empty": "Giỏ hàng của bạn đang trống.",
+        "backToBag": "Quay lại giỏ hàng",
+        "apply": "Áp dụng",
+        "placeOrder": "Đặt hàng",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "shippingAddress": "Địa chỉ giao hàng",
+        "promoCode": "Mã giảm giá",
+        "paymentMethod": "Phương thức thanh toán",
+        "cod": "Thanh toán khi nhận hàng",
+        "card": "Thẻ tín dụng / ghi nợ",
+        "unavailable": "(không khả dụng)",
+        "orderSummary": "Tóm tắt đơn hàng",
+        "discount": "Giảm giá",
+        "total": "Tổng cộng",
+        "totalWithCount_one": "Tổng ({{count}} sản phẩm)",
+        "totalWithCount_other": "Tổng ({{count}} sản phẩm)",
+        "invalidDiscount": "Mã giảm giá không hợp lệ.",
+        "discountError": "Không thể xác minh mã giảm giá.",
+        "stockError": "Một số sản phẩm trong giỏ không còn khả dụng. Vui lòng cập nhật giỏ hàng và thử lại."
+    },
+    "stripe": {
+        "title": "Hoàn tất thanh toán",
+        "orderSummary": "Đơn {{orderNumber}} — {{total}}",
+        "paymentFailed": "Thanh toán thất bại.",
+        "notConfigured": "Thanh toán thẻ chưa được cấu hình.",
+        "payNow": "Thanh toán ngay",
+        "viewOrder": "Xem đơn hàng"
+    },
+    "orders": {
+        "title": "Đơn hàng",
+        "empty": "Bạn chưa có đơn hàng nào.",
+        "order": "Đơn hàng",
+        "backToOrders": "Quay lại đơn hàng",
+        "orderNumber": "Đơn {{orderNumber}}",
+        "placed": "Đặt ngày {{date}}",
+        "shipping": "Giao hàng",
+        "summary": "Tóm tắt",
+        "items": "Sản phẩm",
+        "confirmed": "Đặt hàng thành công",
+        "thankYou": "Cảm ơn bạn",
+        "confirmDesc": "Đơn hàng của bạn đã được đặt. Chúng tôi sẽ liên hệ để xác nhận giao hàng.",
+        "orderNumberLabel": "Mã đơn hàng",
+        "viewOrders": "Xem đơn hàng",
+        "status": {
+            "pending": "Chờ xử lý",
+            "confirmed": "Đã xác nhận",
+            "shipping": "Đang giao",
+            "delivered": "Đã giao",
+            "completed": "Hoàn tất",
+            "cancelled": "Đã hủy"
+        }
+    },
+    "wishlist": {
+        "title": "Yêu thích",
+        "description": "Sản phẩm bạn đã lưu để xem sau.",
+        "empty": "Danh sách yêu thích trống.",
+        "shopNow": "Mua sắm ngay",
+        "remove": "Xóa",
+        "addToWishlist": "Thêm vào yêu thích",
+        "removeFromWishlist": "Bỏ khỏi yêu thích",
+        "save": "Lưu yêu thích",
+        "saved": "Đã lưu yêu thích",
+        "added": "Đã thêm vào yêu thích.",
+        "removed": "Đã xóa khỏi yêu thích."
+    },
+    "mobileMenu": {
+        "title": "Menu",
+        "aria": "Điều hướng di động"
+    },
+    "account": {
+        "title": "Tài khoản",
+        "greeting": "Xin chào, {{name}}",
+        "settings": "Cài đặt",
+        "recentOrders": "Đơn hàng gần đây",
+        "viewAllOrders": "Xem tất cả đơn hàng"
+    },
+    "error": {
+        "forbidden": "Không có quyền truy cập",
+        "notFound": "Không tìm thấy trang",
+        "server": "Đã xảy ra lỗi",
+        "unavailable": "Dịch vụ tạm ngưng",
+        "description": "Không thể tải trang bạn yêu cầu. Quay về trang chủ hoặc liên hệ hỗ trợ nếu sự cố tiếp diễn.",
+        "backHome": "Về trang chủ"
+    },
+    "legal": {
+        "privacy": {
+            "title": "Chính sách bảo mật",
+            "paragraphs": [
+                "VSport tôn trọng quyền riêng tư của bạn. Chính sách này giải thích thông tin chúng tôi thu thập khi bạn mua sắm và cách sử dụng.",
+                "Chúng tôi thu thập thông tin tài khoản (tên, email), thông tin đơn hàng (địa chỉ giao hàng, SĐT, sản phẩm) và dữ liệu kỹ thuật như loại trình duyệt để bảo mật và vận hành website.",
+                "Thông tin được dùng để xử lý đơn hàng, hỗ trợ khách hàng, cải thiện dịch vụ và gửi email giao dịch về đơn mua.",
+                "Chúng tôi không bán dữ liệu cá nhân. Thanh toán thẻ được xử lý bởi Stripe theo chính sách riêng của họ.",
+                "Bạn có thể cập nhật hồ sơ trong cài đặt tài khoản hoặc liên hệ để yêu cầu truy cập/xóa dữ liệu, tuân theo quy định lưu trữ pháp lý.",
+                "Chúng tôi có thể cập nhật chính sách theo thời gian. Tiếp tục sử dụng website sau khi thay đổi đồng nghĩa chấp nhận."
+            ]
+        },
+        "shipping": {
+            "title": "Chính sách vận chuyển",
+            "paragraphs": [
+                "VSport giao hàng tại các khu vực được hỗ trợ thông qua đối tác vận chuyển.",
+                "Giao hàng tiêu chuẩn thường mất 2–5 ngày làm việc sau khi đơn được xác nhận. Khu vực xa có thể lâu hơn.",
+                "Phí vận chuyển (nếu có) hiển thị tại checkout trước khi đặt hàng.",
+                "Thanh toán khi nhận hàng (COD) có tại khu vực hỗ trợ. Thanh toán thẻ qua Stripe cũng được cung cấp khi đã cấu hình.",
+                "Khi đơn chuyển sang trạng thái giao hàng, bạn sẽ nhận email cập nhật từ hệ thống.",
+                "Vấn đề giao hàng hoặc đổi địa chỉ trước khi giao — liên hệ hỗ trợ kèm mã đơn hàng."
+            ]
+        },
+        "returns": {
+            "title": "Chính sách đổi trả",
+            "paragraphs": [
+                "Chúng tôi mong bạn hài lòng với sản phẩm VSport. Nếu có vấn đề, liên hệ trong vòng 14 ngày kể từ khi nhận hàng.",
+                "Sản phẩm phải chưa qua sử dụng, còn nguyên bao bì và có chứng từ mua hàng. Sản phẩm Nike By You tùy chỉnh có thể không được đổi trả.",
+                "Để bắt đầu đổi trả, gửi email hỗ trợ kèm mã đơn hàng và lý do. Chúng tôi sẽ hướng dẫn theo khu vực của bạn.",
+                "Hoàn tiền qua phương thức thanh toán ban đầu sau khi nhận và kiểm tra hàng trả. Đơn COD có thể hoàn qua tín dụng cửa hàng hoặc chuyển khoản.",
+                "Hàng lỗi hoặc giao sai được hỗ trợ miễn phí. Phí vận chuyển đổi trả tự nguyện có thể áp dụng trừ khi lỗi thuộc về chúng tôi."
+            ]
+        },
+        "contact": {
+            "title": "Liên hệ",
+            "paragraphs": [
+                "Cần hỗ trợ đơn hàng, sản phẩm hoặc tài khoản? Đội ngũ hỗ trợ sẵn sàng giúp bạn.",
+                "Email: support@vsport.local — ghi mã đơn hàng để được xử lý nhanh hơn.",
+                "Giờ làm việc: Thứ Hai–Thứ Sáu, 9:00–18:00. Chúng tôi phản hồi trong một ngày làm việc.",
+                "Cập nhật giao hàng: xem trạng thái đơn tại Tài khoản → Đơn hàng sau khi đăng nhập.",
+                "Yêu cầu quyền riêng tư hoặc dữ liệu: ghi \"Privacy\" trong tiêu đề email."
+            ]
+        }
+    }
+}

@@ -1,0 +1,110 @@
+{
+    "layout": {
+        "title": "Cài đặt",
+        "description": "Quản lý hồ sơ và cài đặt tài khoản",
+        "nav": {
+            "profile": "Hồ sơ",
+            "security": "Bảo mật",
+            "appearance": "Giao diện"
+        },
+        "aria": "Cài đặt"
+    },
+    "profile": {
+        "title": "Cài đặt hồ sơ",
+        "heading": "Hồ sơ",
+        "description": "Cập nhật tên và địa chỉ email",
+        "name": "Tên",
+        "email": "Địa chỉ email",
+        "namePlaceholder": "Họ và tên",
+        "emailPlaceholder": "Địa chỉ email",
+        "save": "Lưu",
+        "unverified": "Email của bạn chưa được xác minh.",
+        "resendLink": "Nhấn vào đây để gửi lại email xác minh.",
+        "sent": "Liên kết xác minh mới đã được gửi đến email của bạn."
+    },
+    "security": {
+        "title": "Cài đặt bảo mật",
+        "heading": "Cập nhật mật khẩu",
+        "description": "Sử dụng mật khẩu dài và ngẫu nhiên để bảo vệ tài khoản",
+        "currentPassword": "Mật khẩu hiện tại",
+        "newPassword": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "currentPlaceholder": "Mật khẩu hiện tại",
+        "newPlaceholder": "Mật khẩu mới",
+        "confirmPlaceholder": "Xác nhận mật khẩu",
+        "save": "Lưu"
+    },
+    "appearance": {
+        "title": "Cài đặt giao diện",
+        "heading": "Cài đặt giao diện",
+        "description": "Cập nhật giao diện cho tài khoản của bạn",
+        "light": "Sáng",
+        "dark": "Tối",
+        "system": "Hệ thống"
+    },
+    "deleteAccount": {
+        "title": "Xóa tài khoản",
+        "description": "Xóa tài khoản và toàn bộ dữ liệu liên quan",
+        "warning": "Cảnh báo",
+        "caution": "Hãy cẩn thận, thao tác này không thể hoàn tác.",
+        "delete": "Xóa tài khoản",
+        "dialogTitle": "Bạn có chắc muốn xóa tài khoản?",
+        "dialogDescription": "Sau khi xóa, toàn bộ dữ liệu sẽ bị xóa vĩnh viễn. Nhập mật khẩu để xác nhận.",
+        "password": "Mật khẩu",
+        "passwordPlaceholder": "Mật khẩu"
+    },
+    "twoFactor": {
+        "title": "Xác thực hai yếu tố",
+        "description": "Quản lý cài đặt xác thực hai yếu tố",
+        "enabledDesc": "Khi đăng nhập, bạn sẽ được yêu cầu nhập mã PIN từ ứng dụng TOTP trên điện thoại.",
+        "disabledDesc": "Khi bật xác thực hai yếu tố, bạn sẽ được yêu cầu nhập mã PIN khi đăng nhập từ ứng dụng TOTP.",
+        "disable": "Tắt 2FA",
+        "enable": "Bật 2FA",
+        "continueSetup": "Tiếp tục thiết lập",
+        "setupTitle": "Bật xác thực hai yếu tố",
+        "verifyTitle": "Xác minh mã xác thực",
+        "enabledTitle": "Đã bật xác thực hai yếu tố",
+        "setupDesc": "Quét mã QR hoặc nhập khóa thiết lập vào ứng dụng authenticator",
+        "verifyDesc": "Nhập mã 6 chữ số từ ứng dụng authenticator",
+        "enabledSetupDesc": "Xác thực hai yếu tố đã được bật. Quét mã QR hoặc nhập khóa thiết lập.",
+        "continue": "Tiếp tục",
+        "close": "Đóng",
+        "back": "Quay lại",
+        "confirm": "Xác nhận",
+        "manualHint": "hoặc nhập mã thủ công"
+    },
+    "recoveryCodes": {
+        "title": "Mã khôi phục 2FA",
+        "description": "Mã khôi phục giúp bạn truy cập lại nếu mất thiết bị 2FA. Lưu trữ an toàn.",
+        "view": "Xem mã khôi phục",
+        "hide": "Ẩn mã khôi phục",
+        "regenerate": "Tạo lại mã",
+        "warning": "Mỗi mã chỉ dùng một lần để truy cập tài khoản và sẽ bị xóa sau khi dùng. Nếu cần thêm, nhấn <bold>Tạo lại mã</bold> ở trên.",
+        "aria": "Mã khôi phục",
+        "loading": "Đang tải mã khôi phục"
+    },
+    "passkeys": {
+        "title": "Passkey",
+        "description": "Quản lý passkey để đăng nhập không cần mật khẩu",
+        "emptyTitle": "Chưa có passkey",
+        "emptyDesc": "Thêm passkey để đăng nhập không cần mật khẩu",
+        "unsupported": "Trình duyệt không hỗ trợ passkey.",
+        "add": "Thêm passkey",
+        "register": "Đăng ký passkey",
+        "name": "Tên passkey",
+        "namePlaceholder": "vd: MacBook Pro, iPhone",
+        "nameHint": "Tên giúp bạn nhận diện passkey sau này.",
+        "registering": "Đang đăng ký...",
+        "added": "Thêm {{date}}",
+        "lastUsed": "Dùng lần cuối {{date}}",
+        "remove": "Xóa",
+        "removeTitle": "Xóa passkey",
+        "removeDesc": "Bạn có chắc muốn xóa passkey \"{{name}}\"? Bạn sẽ không thể dùng nó để đăng nhập.",
+        "removeAction": "Xóa passkey",
+        "removing": "Đang xóa..."
+    },
+    "language": {
+        "title": "Ngôn ngữ",
+        "description": "Chọn ngôn ngữ hiển thị"
+    }
+}

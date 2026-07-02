@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'profile_updated' => 'Đã cập nhật hồ sơ.',
+    'password_updated' => 'Đã cập nhật mật khẩu.',
+    'product_created_upload_hint' => 'Đã tạo sản phẩm. Hãy tải ảnh cho từng màu bên dưới.',
+    'inventory_updated' => 'Đã cập nhật tồn kho.',
+    'order_status_updated' => 'Đã cập nhật trạng thái đơn hàng.',
+    'user_role_updated' => 'Đã cập nhật vai trò người dùng.',
+    'review_approved' => 'Đã duyệt đánh giá.',
+    'review_deleted' => 'Đã xóa đánh giá.',
+    'order_confirmation_subject' => 'Xác nhận đơn hàng :order_number',
+    'order_confirmation_greeting' => 'Xin chào :name,',
+    'order_confirmation_body' => 'Chúng tôi đã nhận đơn hàng :order_number. Tổng tiền: :total. Chúng tôi sẽ thông báo khi đơn được giao.',
+    'order_confirmation_footer' => 'Cảm ơn bạn đã mua sắm tại :app.',
+    'order_confirmation_view' => 'Xem đơn hàng',
+    'homepage_updated' => 'Đã cập nhật trang chủ.',
+    'product_featured_updated' => 'Đã cập nhật trạng thái nổi bật.',
+    'discount_code_created' => 'Đã tạo mã giảm giá.',
+    'discount_code_updated' => 'Đã cập nhật mã giảm giá.',
+    'discount_code_deleted' => 'Đã xóa mã giảm giá.',
+    'order_status_updated_subject' => 'Cập nhật đơn hàng :order_number',
+    'order_status_updated_body' => 'Đơn hàng :order_number của bạn hiện ở trạng thái: :status.',
+    'order_statuses' => [
+        'pending' => 'Chờ xử lý',
+        'confirmed' => 'Đã xác nhận',
+        'shipping' => 'Đang giao',
+        'delivered' => 'Đã giao',
+        'completed' => 'Hoàn tất',
+        'cancelled' => 'Đã hủy',
+    ],
+];

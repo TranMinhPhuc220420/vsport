@@ -1,0 +1,367 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+@import './admin.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --font-sans:
+        'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Bebas Neue', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /* Nike breakpoints */
+    --breakpoint-tablet: 40rem;
+    --breakpoint-tablet-lg: 60.0625rem;
+    --breakpoint-desktop: 64rem;
+    --breakpoint-desktop-lg: 75rem;
+    --breakpoint-wide: 90rem;
+    --breakpoint-ultrawide: 120rem;
+
+    /* Nike spacing (8px base) */
+    --spacing-xxs: 0.125rem;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 0.75rem;
+    --spacing-lg: 1.125rem;
+    --spacing-xl: 1.5rem;
+    --spacing-xxl: 1.875rem;
+    --spacing-section: 3rem;
+
+    /* Nike border radius */
+    --radius-none: 0px;
+    --radius-pill-sm: 18px;
+    --radius-pill-md: 24px;
+    --radius-pill-lg: 30px;
+    --radius-full: 9999px;
+
+    --radius-lg: var(--radius-pill-lg);
+    --radius-md: var(--radius-pill-md);
+    --radius-sm: var(--radius-pill-sm);
+
+    /* Nike semantic colors */
+    --color-ink: #111111;
+    --color-canvas: #ffffff;
+    --color-soft-cloud: #f5f5f5;
+    --color-charcoal: #39393b;
+    --color-ash: #4b4b4d;
+    --color-mute: #707072;
+    --color-stone: #9e9ea0;
+    --color-hairline: #cacacb;
+    --color-hairline-soft: #e5e5e5;
+    --color-sale: #d30005;
+    --color-sale-deep: #780700;
+    --color-success: #007d48;
+    --color-success-bright: #1eaa52;
+    --color-info: #1151ff;
+    --color-info-deep: #0034e3;
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+    --background: #ffffff;
+    --foreground: #111111;
+    --card: #ffffff;
+    --card-foreground: #111111;
+    --popover: #ffffff;
+    --popover-foreground: #111111;
+    --primary: #111111;
+    --primary-foreground: #ffffff;
+    --secondary: #f5f5f5;
+    --secondary-foreground: #111111;
+    --muted: #f5f5f5;
+    --muted-foreground: #707072;
+    --accent: #f5f5f5;
+    --accent-foreground: #111111;
+    --destructive: #d30005;
+    --destructive-foreground: #ffffff;
+    --border: #cacacb;
+    --input: #cacacb;
+    --ring: #111111;
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --radius: 30px;
+    --sidebar: #f5f5f5;
+    --sidebar-foreground: #111111;
+    --sidebar-primary: #111111;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f5f5f5;
+    --sidebar-accent-foreground: #111111;
+    --sidebar-border: #e5e5e5;
+    --sidebar-ring: #111111;
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.145 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.145 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.985 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.396 0.141 25.723);
+    --destructive-foreground: oklch(0.637 0.237 25.331);
+    --border: oklch(0.269 0 0);
+    --input: oklch(0.269 0 0);
+    --ring: oklch(0.439 0 0);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.985 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(0.269 0 0);
+    --sidebar-ring: oklch(0.439 0 0);
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+@layer utilities {
+    .text-display-campaign {
+        font-family: var(--font-display);
+        font-size: 3rem;
+        font-weight: 400;
+        line-height: 0.9;
+        letter-spacing: -0.005em;
+        text-transform: uppercase;
+    }
+
+    @media (min-width: 40rem) {
+        .text-display-campaign {
+            font-size: 4rem;
+        }
+    }
+
+    @media (min-width: 64rem) {
+        .text-display-campaign {
+            font-size: 6rem;
+        }
+    }
+
+    .text-heading-xl {
+        font-family: var(--font-sans);
+        font-size: 2rem;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    .text-heading-lg {
+        font-family: var(--font-sans);
+        font-size: 1.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    .text-body-strong {
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .text-button-md {
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .text-caption-md {
+        font-family: var(--font-sans);
+        font-size: 0.875rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .text-caption-sm {
+        font-family: var(--font-sans);
+        font-size: 0.75rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .storefront-container {
+        @apply mx-auto w-full max-w-[90rem] px-4 desktop:px-10 ultrawide:px-20;
+    }
+
+    .storefront-grid {
+        @apply grid grid-cols-1 gap-2 tablet:grid-cols-2 desktop:grid-cols-3 desktop-lg:grid-cols-4;
+    }
+
+    .storefront-grid-compact {
+        @apply grid grid-cols-1 gap-1.5 tablet:grid-cols-2 desktop:grid-cols-3 desktop-lg:grid-cols-4;
+    }
+
+    .storefront-section {
+        @apply py-6 tablet:py-8 desktop:py-section;
+    }
+
+    .storefront-section-compact {
+        @apply py-4 tablet:py-6 desktop:py-8;
+    }
+
+    .scrollbar-none {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+
+    .vsport-light {
+        color-scheme: light;
+        --motion-duration-fast: 200ms;
+        --motion-duration: 320ms;
+        --motion-duration-slow: 600ms;
+        --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .motion-fade-up {
+        animation: motion-fade-up var(--motion-duration) var(--motion-ease) both;
+    }
+
+    .motion-hero-enter {
+        animation: motion-fade-up var(--motion-duration) var(--motion-ease) both;
+    }
+
+    .motion-hero-ken-burns {
+        animation: motion-ken-burns var(--motion-duration-slow) var(--motion-ease) both;
+    }
+
+    .motion-stagger-children > * {
+        animation: motion-fade-up var(--motion-duration) var(--motion-ease) both;
+        animation-delay: calc(var(--stagger-index, 0) * 60ms);
+    }
+
+    .scroll-reveal-pending {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    .scroll-reveal-visible {
+        animation: motion-fade-up var(--motion-duration) var(--motion-ease) both;
+    }
+
+    .scroll-reveal-visible.scroll-reveal-stagger > * {
+        animation: motion-fade-up var(--motion-duration) var(--motion-ease) both;
+        animation-delay: calc(var(--stagger-index, 0) * 60ms);
+    }
+
+    @keyframes motion-fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes motion-ken-burns {
+        from {
+            transform: scale(1.05);
+        }
+
+        to {
+            transform: scale(1);
+        }
+    }
+
+    .motion-safe-hover-scale {
+        @apply transition-transform duration-300 ease-[var(--motion-ease)] group-hover:scale-[1.03];
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .motion-fade-up,
+        .motion-hero-enter,
+        .motion-hero-ken-burns,
+        .motion-stagger-children > *,
+        .scroll-reveal-visible,
+        .scroll-reveal-visible.scroll-reveal-stagger > * {
+            animation: none;
+            opacity: 1;
+            transform: none;
+        }
+
+        .scroll-reveal-pending {
+            opacity: 1;
+            transform: none;
+        }
+
+        .motion-safe-hover-scale {
+            transform: none !important;
+        }
+    }
+}

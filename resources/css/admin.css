@@ -1,0 +1,168 @@
+/* VSport Admin — Stripe aesthetic (see docs/DESIGN_ADMIN.md) */
+
+.vsport-admin {
+    color-scheme: light;
+
+    /* Stripe palette */
+    --admin-primary: #0a2540;
+    --admin-secondary: #425466;
+    --admin-tertiary: #635bff;
+    --admin-tertiary-hover: #5851ea;
+    --admin-neutral: #f6f9fc;
+    --admin-surface: #ffffff;
+    --admin-on-primary: #ffffff;
+
+    /* Semantic aliases */
+    --admin-canvas: var(--admin-neutral);
+    --admin-text: var(--admin-primary);
+    --admin-text-muted: var(--admin-secondary);
+    --admin-border: color-mix(in srgb, var(--admin-secondary) 20%, transparent);
+    --admin-border-strong: color-mix(in srgb, var(--admin-secondary) 35%, transparent);
+
+    --admin-success: #16a34a;
+    --admin-success-soft: #f0fdf4;
+    --admin-warning: #d97706;
+    --admin-warning-soft: #fffbeb;
+    --admin-danger: #dc2626;
+    --admin-danger-soft: #fef2f2;
+
+    --admin-radius-sm: 6px;
+    --admin-radius-md: 10px;
+    --admin-radius-lg: 16px;
+
+    /* Remap shadcn semantic vars inside admin scope */
+    --background: var(--admin-neutral);
+    --foreground: var(--admin-primary);
+    --card: var(--admin-surface);
+    --card-foreground: var(--admin-primary);
+    --popover: var(--admin-surface);
+    --popover-foreground: var(--admin-primary);
+    --primary: var(--admin-tertiary);
+    --primary-foreground: var(--admin-on-primary);
+    --secondary: var(--admin-neutral);
+    --secondary-foreground: var(--admin-primary);
+    --muted: var(--admin-neutral);
+    --muted-foreground: var(--admin-secondary);
+    --accent: var(--admin-neutral);
+    --accent-foreground: var(--admin-primary);
+    --destructive: var(--admin-danger);
+    --destructive-foreground: #ffffff;
+    --border: var(--admin-border);
+    --input: var(--admin-border);
+    --ring: color-mix(in srgb, var(--admin-tertiary) 40%, transparent);
+    --radius: var(--admin-radius-md);
+
+    /* Light sidebar */
+    --sidebar: var(--admin-surface);
+    --sidebar-foreground: var(--admin-primary);
+    --sidebar-primary: var(--admin-primary);
+    --sidebar-primary-foreground: var(--admin-on-primary);
+    --sidebar-accent: var(--admin-neutral);
+    --sidebar-accent-foreground: var(--admin-primary);
+    --sidebar-border: var(--admin-border);
+    --sidebar-ring: color-mix(in srgb, var(--admin-tertiary) 40%, transparent);
+}
+
+@layer utilities {
+    .admin-display {
+        font-family: var(--font-sans);
+        font-size: 5rem;
+        font-weight: 300;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+        color: var(--admin-primary);
+    }
+
+    .admin-title {
+        font-family: var(--font-sans);
+        font-size: 2.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--admin-primary);
+    }
+
+    .admin-section-title {
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--admin-primary);
+    }
+
+    .admin-body {
+        font-family: var(--font-sans);
+        font-size: 0.98rem;
+        font-weight: 400;
+        line-height: 1.6;
+        color: var(--admin-primary);
+    }
+
+    .admin-body-strong {
+        font-family: var(--font-sans);
+        font-size: 0.98rem;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--admin-primary);
+    }
+
+    .admin-label {
+        font-family: var(--font-sans);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.4;
+        color: var(--admin-secondary);
+    }
+
+    .admin-caption {
+        font-family: var(--font-sans);
+        font-size: 0.72rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: var(--admin-secondary);
+    }
+
+    .rounded-admin-sm {
+        border-radius: var(--admin-radius-sm);
+    }
+
+    .rounded-admin-md {
+        border-radius: var(--admin-radius-md);
+    }
+
+    .rounded-admin-lg {
+        border-radius: var(--admin-radius-lg);
+    }
+
+    .bg-admin-canvas {
+        background-color: var(--admin-canvas);
+    }
+
+    .bg-admin-neutral {
+        background-color: var(--admin-neutral);
+    }
+
+    .bg-admin-surface {
+        background-color: var(--admin-surface);
+    }
+
+    .text-admin-primary {
+        color: var(--admin-primary);
+    }
+
+    .text-admin-secondary {
+        color: var(--admin-secondary);
+    }
+
+    .text-admin-muted {
+        color: var(--admin-secondary);
+    }
+
+    .border-admin {
+        border-color: var(--admin-border);
+    }
+
+    .border-admin-strong {
+        border-color: var(--admin-border-strong);
+    }
+}

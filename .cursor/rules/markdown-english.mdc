@@ -1,0 +1,23 @@
+---
+description: All Markdown documentation must be written in English
+globs: "**/*.md"
+alwaysApply: false
+---
+
+# Markdown language
+
+All `.md` file content in this project must be written in **English**.
+
+This applies to:
+
+- `README.md` and root-level docs
+- Everything under `docs/`
+- Roadmaps, checklists, ADRs, and any other Markdown files
+
+When creating or updating Markdown:
+
+- Use English for headings, body text, table cells, and checklist items
+- Keep code blocks, file paths, and technical identifiers unchanged
+- Do not mix Vietnamese or other languages into project documentation unless the user explicitly requests an exception for a specific file
+
+Chat responses to the user may still use their preferred language; only persisted `.md` files follow this rule.

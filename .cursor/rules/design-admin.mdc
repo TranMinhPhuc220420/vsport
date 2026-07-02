@@ -1,0 +1,29 @@
+---
+description: Admin UI must follow DESIGN_ADMIN.md (Stripe aesthetic, tertiary CTA only)
+globs: "resources/js/pages/admin/**,resources/js/components/admin/**"
+alwaysApply: false
+---
+
+# Admin design system
+
+When editing admin pages or components, follow [docs/DESIGN_ADMIN.md](../../docs/DESIGN_ADMIN.md).
+
+## Palette (Stripe)
+
+- **Primary** `#0A2540` — headlines, body text
+- **Secondary** `#425466` — labels, captions, borders
+- **Tertiary** `#635BFF` — **sole interaction accent** (primary buttons only)
+- **Neutral** `#F6F9FC` — page canvas
+- **Surface** `#FFFFFF` — cards, sidebar, inputs
+
+## Rules
+
+- Use admin tokens via `.vsport-admin` CSS vars and components under `resources/js/components/admin/`.
+- Do **not** import from `@/components/storefront/*`.
+- Do **not** use storefront classes or hardcode `slate-*` — use `text-admin-secondary`, `border-admin`, `var(--admin-primary)`, etc.
+- **One tertiary CTA per screen** — other actions: `secondary`, `ghost`, or text links.
+- **No gradients** — flat surfaces only.
+- Light sidebar (surface/neutral), not dark chrome.
+- Card radius 16px (`rounded-admin-lg`); button radius 10px (`rounded-admin-md`).
+
+Preview: `/admin/preview/design-system` (admin auth required).

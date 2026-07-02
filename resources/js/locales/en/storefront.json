@@ -1,0 +1,240 @@
+{
+    "nav": {
+        "newFeatured": "New & Featured",
+        "men": "Men",
+        "women": "Women",
+        "kids": "Kids",
+        "jordan": "Jordan",
+        "openMenu": "Open menu",
+        "primary": "Primary",
+        "search": "Search",
+        "wishlist": "Wishlist",
+        "bag": "Bag",
+        "findStore": "Find a Store",
+        "help": "Help",
+        "joinUs": "Join Us",
+        "orders": "Orders",
+        "account": "Account",
+        "signIn": "Sign In"
+    },
+    "footer": {
+        "resources": "Resources",
+        "giftCards": "Gift Cards",
+        "findStore": "Find a Store",
+        "membership": "Membership",
+        "help": "Help",
+        "orderStatus": "Order Status",
+        "shipping": "Shipping",
+        "returns": "Returns",
+        "privacy": "Privacy Policy",
+        "contactUs": "Contact Us",
+        "company": "Company",
+        "about": "About VSport",
+        "news": "News",
+        "careers": "Careers",
+        "promotions": "Promotions",
+        "student": "Student",
+        "military": "Military",
+        "offers": "Offers",
+        "copyright": "© {{year}} VSport. All rights reserved."
+    },
+    "home": {
+        "featured": "Featured",
+        "shopByCategory": "Shop by Category",
+        "viewAll": "View all"
+    },
+    "search": {
+        "title": "Search results",
+        "resultsFor": "Results for \"{{query}}\"",
+        "noQuery": "Enter a search term to find products.",
+        "noProducts": "No products match your search."
+    },
+    "plp": {
+        "noProducts": "No products found.",
+        "outOfStock": "Out of Stock",
+        "home": "Home",
+        "sortBy": "Sort by",
+        "sortNewest": "Newest",
+        "sortPriceLow": "Price: Low to High",
+        "sortPriceHigh": "Price: High to Low",
+        "breadcrumb": "Breadcrumb",
+        "hideFilters": "Hide filters",
+        "showFilters": "Show filters",
+        "filters": "Filters",
+        "gender": "Gender",
+        "category": "Category",
+        "hideFiltersAction": "Hide Filters"
+    },
+    "pdp": {
+        "addedToBag": "Added to bag",
+        "percentOff": "{{percent}}% off",
+        "selectSize": "Select Size",
+        "color": "Color:",
+        "addToBag": "Add to Bag",
+        "inStock": "In Stock",
+        "outOfStock": "Out of Stock",
+        "shopCategory": "Shop {{name}}",
+        "nikeByYou": "Nike By You",
+        "nikeByYouDesc": "Customize materials and colors for this style.",
+        "moveToZero": "Move to Zero — {{percent}}% recycled",
+        "materialLine": "{{componentName}} — {{materialType}} ({{weight}}g, {{recycledPct}}% recycled)",
+        "reviews": "Reviews",
+        "ratingSummary": "{{rating}} / 5 ({{count}} reviews)",
+        "yourRating": "Your rating",
+        "stars": "{{n}} stars",
+        "reviewTitle": "Title (optional)",
+        "reviewBody": "Your review",
+        "submitReview": "Submit review",
+        "signInToReview": "Sign in to write a review."
+    },
+    "cart": {
+        "title": "Bag",
+        "empty": "Your bag is empty.",
+        "continueShopping": "Continue Shopping",
+        "summary": "Summary",
+        "subtotal": "Subtotal",
+        "subtotalWithCount_one": "Subtotal ({{count}} item)",
+        "subtotalWithCount_other": "Subtotal ({{count}} items)",
+        "estimatedTotal": "Estimated Total",
+        "codNote": "Cash on Delivery. Taxes and shipping calculated at confirmation.",
+        "checkout": "Checkout",
+        "signInToComplete": "Sign in",
+        "signInSuffix": "to complete your order.",
+        "removeItem": "Remove item",
+        "decreaseQty": "Decrease quantity",
+        "increaseQty": "Increase quantity"
+    },
+    "checkout": {
+        "title": "Checkout",
+        "description": "Choose cash on delivery or pay by card.",
+        "empty": "Your bag is empty.",
+        "backToBag": "Back to Bag",
+        "apply": "Apply",
+        "placeOrder": "Place Order",
+        "fullName": "Full name",
+        "email": "Email",
+        "phone": "Phone",
+        "shippingAddress": "Shipping address",
+        "promoCode": "Promo code",
+        "paymentMethod": "Payment method",
+        "cod": "Cash on delivery",
+        "card": "Credit / debit card",
+        "unavailable": "(unavailable)",
+        "orderSummary": "Order Summary",
+        "discount": "Discount",
+        "total": "Total",
+        "totalWithCount_one": "Total ({{count}} item)",
+        "totalWithCount_other": "Total ({{count}} items)",
+        "invalidDiscount": "Invalid discount code.",
+        "discountError": "Unable to validate discount code.",
+        "stockError": "Some items in your bag are no longer available. Please update your bag and try again."
+    },
+    "stripe": {
+        "title": "Complete payment",
+        "orderSummary": "Order {{orderNumber}} — {{total}}",
+        "paymentFailed": "Payment failed.",
+        "notConfigured": "Card payments are not configured.",
+        "payNow": "Pay now",
+        "viewOrder": "View order"
+    },
+    "orders": {
+        "title": "Orders",
+        "empty": "You have not placed any orders yet.",
+        "order": "Order",
+        "backToOrders": "Back to Orders",
+        "orderNumber": "Order {{orderNumber}}",
+        "placed": "Placed {{date}}",
+        "shipping": "Shipping",
+        "summary": "Summary",
+        "items": "Items",
+        "confirmed": "Order Confirmed",
+        "thankYou": "Thank you",
+        "confirmDesc": "Your order has been placed. We will contact you to confirm delivery.",
+        "orderNumberLabel": "Order number",
+        "viewOrders": "View Orders",
+        "status": {
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "shipping": "Shipping",
+            "delivered": "Delivered",
+            "completed": "Completed",
+            "cancelled": "Cancelled"
+        }
+    },
+    "wishlist": {
+        "title": "Wishlist",
+        "description": "Products you saved for later.",
+        "empty": "Your wishlist is empty.",
+        "shopNow": "Shop now",
+        "remove": "Remove",
+        "addToWishlist": "Add to wishlist",
+        "removeFromWishlist": "Remove from wishlist",
+        "save": "Save to wishlist",
+        "saved": "Saved to wishlist",
+        "added": "Added to wishlist.",
+        "removed": "Removed from wishlist."
+    },
+    "mobileMenu": {
+        "title": "Menu",
+        "aria": "Mobile primary"
+    },
+    "account": {
+        "title": "Account",
+        "greeting": "Hi, {{name}}",
+        "settings": "Settings",
+        "recentOrders": "Recent orders",
+        "viewAllOrders": "View all orders"
+    },
+    "error": {
+        "forbidden": "Access denied",
+        "notFound": "Page not found",
+        "server": "Something went wrong",
+        "unavailable": "Service unavailable",
+        "description": "The page you requested could not be loaded. Try returning to the home page or contact support if the problem continues.",
+        "backHome": "Back to home"
+    },
+    "legal": {
+        "privacy": {
+            "title": "Privacy Policy",
+            "paragraphs": [
+                "VSport respects your privacy. This policy explains what information we collect when you shop with us and how we use it.",
+                "We collect account details (name, email), order information (shipping address, phone, items purchased), and technical data such as browser type for security and site performance.",
+                "We use your information to process orders, provide customer support, improve our services, and send transactional emails about your purchases.",
+                "We do not sell your personal data. Payment processing for card orders is handled by Stripe according to their privacy policy.",
+                "You may update your profile in account settings or contact us to request access or deletion of your data, subject to legal retention requirements.",
+                "We may update this policy from time to time. Continued use of the site after changes constitutes acceptance."
+            ]
+        },
+        "shipping": {
+            "title": "Shipping Policy",
+            "paragraphs": [
+                "VSport delivers across supported regions using trusted courier partners.",
+                "Standard delivery typically takes 2–5 business days after your order is confirmed. Remote areas may require additional time.",
+                "Shipping fees, if any, are shown at checkout before you place your order.",
+                "Cash on delivery (COD) is available in supported areas. Card payment via Stripe is also offered where configured.",
+                "Once your order ships, you will receive email updates when the order status changes in our system.",
+                "For delivery issues or address changes before shipping, contact customer support with your order number."
+            ]
+        },
+        "returns": {
+            "title": "Returns Policy",
+            "paragraphs": [
+                "We want you to be satisfied with your VSport purchase. If something is not right, contact us within 14 days of delivery.",
+                "Items must be unworn, in original packaging, and include proof of purchase. Customized Nike By You products may not be eligible for return.",
+                "To start a return, email support with your order number and reason. We will provide return instructions for your region.",
+                "Refunds are processed to your original payment method after we receive and inspect the returned items. COD orders may receive store credit or bank transfer where applicable.",
+                "Defective or incorrect items are covered at no extra cost. Shipping fees for discretionary returns may apply unless the error was ours."
+            ]
+        },
+        "contact": {
+            "title": "Contact Us",
+            "paragraphs": [
+                "Need help with an order, product question, or account issue? Our support team is here to assist.",
+                "Email: support@vsport.local — include your order number for faster service.",
+                "Hours: Monday–Friday, 9:00–18:00 (local time). We aim to respond within one business day.",
+                "For shipping updates, check your order status in Account → Orders after signing in.",
+                "For privacy or data requests, mention \"Privacy\" in your subject line."
+            ]
+        }
+    }
+}

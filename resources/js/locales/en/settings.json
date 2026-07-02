@@ -1,0 +1,110 @@
+{
+    "layout": {
+        "title": "Settings",
+        "description": "Manage your profile and account settings",
+        "nav": {
+            "profile": "Profile",
+            "security": "Security",
+            "appearance": "Appearance"
+        },
+        "aria": "Settings"
+    },
+    "profile": {
+        "title": "Profile settings",
+        "heading": "Profile",
+        "description": "Update your name and email address",
+        "name": "Name",
+        "email": "Email address",
+        "namePlaceholder": "Full name",
+        "emailPlaceholder": "Email address",
+        "save": "Save",
+        "unverified": "Your email address is unverified.",
+        "resendLink": "Click here to re-send the verification email.",
+        "sent": "A new verification link has been sent to your email address."
+    },
+    "security": {
+        "title": "Security settings",
+        "heading": "Update password",
+        "description": "Ensure your account is using a long, random password to stay secure",
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm password",
+        "currentPlaceholder": "Current password",
+        "newPlaceholder": "New password",
+        "confirmPlaceholder": "Confirm password",
+        "save": "Save"
+    },
+    "appearance": {
+        "title": "Appearance settings",
+        "heading": "Appearance settings",
+        "description": "Update the appearance settings for your account",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+    },
+    "deleteAccount": {
+        "title": "Delete account",
+        "description": "Delete your account and all of its resources",
+        "warning": "Warning",
+        "caution": "Please proceed with caution, this cannot be undone.",
+        "delete": "Delete account",
+        "dialogTitle": "Are you sure you want to delete your account?",
+        "dialogDescription": "Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.",
+        "password": "Password",
+        "passwordPlaceholder": "Password"
+    },
+    "twoFactor": {
+        "title": "Two-factor authentication",
+        "description": "Manage your two-factor authentication settings",
+        "enabledDesc": "You will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your phone.",
+        "disabledDesc": "When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.",
+        "disable": "Disable 2FA",
+        "enable": "Enable 2FA",
+        "continueSetup": "Continue setup",
+        "setupTitle": "Enable two-factor authentication",
+        "verifyTitle": "Verify authentication code",
+        "enabledTitle": "Two-factor authentication enabled",
+        "setupDesc": "To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app",
+        "verifyDesc": "Enter the 6-digit code from your authenticator app",
+        "enabledSetupDesc": "Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.",
+        "continue": "Continue",
+        "close": "Close",
+        "back": "Back",
+        "confirm": "Confirm",
+        "manualHint": "or, enter the code manually"
+    },
+    "recoveryCodes": {
+        "title": "2FA recovery codes",
+        "description": "Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.",
+        "view": "View recovery codes",
+        "hide": "Hide recovery codes",
+        "regenerate": "Regenerate codes",
+        "warning": "Each recovery code can be used once to access your account and will be removed after use. If you need more, click <bold>Regenerate codes</bold> above.",
+        "aria": "Recovery codes",
+        "loading": "Loading recovery codes"
+    },
+    "passkeys": {
+        "title": "Passkeys",
+        "description": "Manage your passkeys for passwordless sign-in",
+        "emptyTitle": "No passkeys yet",
+        "emptyDesc": "Add a passkey to sign in without a password",
+        "unsupported": "Passkeys are not supported in this browser.",
+        "add": "Add passkey",
+        "register": "Register passkey",
+        "name": "Passkey name",
+        "namePlaceholder": "e.g., MacBook Pro, iPhone",
+        "nameHint": "A name helps you identify this passkey later.",
+        "registering": "Registering...",
+        "added": "Added {{date}}",
+        "lastUsed": "Last used {{date}}",
+        "remove": "Remove",
+        "removeTitle": "Remove passkey",
+        "removeDesc": "Are you sure you want to remove the \"{{name}}\" passkey? You will no longer be able to use it to sign in.",
+        "removeAction": "Remove passkey",
+        "removing": "Removing..."
+    },
+    "language": {
+        "title": "Language",
+        "description": "Choose your preferred display language"
+    }
+}
