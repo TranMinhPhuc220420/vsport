@@ -2,7 +2,10 @@ import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AdminInputField } from '@/components/admin/admin-field';
+import {
+    AdminInputField,
+    AdminSelectField,
+} from '@/components/admin/admin-field';
 import {
     AdminConfirmDialog,
     AdminStockBadge,
@@ -10,8 +13,26 @@ import {
 } from '@/components/admin/admin-form';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import {
+    AdminCardList,
+    AdminCardListField,
+    AdminCardListItem,
+    AdminSkeletonCards,
+} from '@/components/admin/ui/admin-card-list';
+import {
+    AdminDataTable,
+    AdminDataTableBody,
+    AdminDataTableCell,
+    AdminDataTableHead,
+    AdminDataTableHeaderCell,
+    AdminDataTableHeaderRow,
+    AdminDataTableRow,
+} from '@/components/admin/ui/admin-data-table';
 import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
+import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
+import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
+import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
 
 type ProductRow = {
     id: number;
@@ -59,6 +80,7 @@ export default function AdminProductsIndex({
     const { t: tCommon } = useTranslation('common');
     const [search, setSearch] = useState(filters.search ?? '');
     const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
+    const { isPending, onStart, onFinish } = useAdminFilterPending();
 
     setLayoutProps({
         breadcrumbs: [
@@ -78,10 +100,10 @@ export default function AdminProductsIndex({
                             ? (next.category ?? undefined)
                             : (filters.category ?? undefined),
                 },
-                { preserveState: true, replace: true },
+                { preserveState: true, replace: true, onStart, onFinish },
             );
         },
-        [filters.category, filters.search],
+        [filters.category, filters.search, onStart, onFinish],
     );
 
     useEffect(() => {
@@ -136,33 +158,29 @@ export default function AdminProductsIndex({
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={t('products.searchPlaceholder')}
                         className="min-w-[220px] flex-1"
+                        disabled={isPending}
                     />
-                    <div className="space-y-1.5">
-                        <label className="admin-label">
-                            {t('products.category')}
-                        </label>
-                        <select
-                            value={filters.category ?? ''}
-                            onChange={(e) =>
-                                applyFilters({
-                                    category: e.target.value
-                                        ? Number(e.target.value)
-                                        : null,
-                                })
-                            }
-                            className="border-admin h-9 min-w-[180px] rounded-md border bg-[var(--admin-surface)] px-3 text-sm text-[var(--admin-primary)] outline-none focus-visible:border-[var(--admin-tertiary)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_25%,transparent)]"
-                        >
-                            <option value="">{tCommon('all')}</option>
-                            {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    <AdminSelectField
+                        label={t('products.category')}
+                        value={filters.category ?? ''}
+                        onChange={(value) =>
+                            applyFilters({
+                                category: value ? Number(value) : null,
+                            })
+                        }
+                        options={[
+                            { value: '', label: tCommon('all') },
+                            ...categories.map((category) => ({
+                                value: category.id,
+                                label: category.name,
+                            })),
+                        ]}
+                        className="min-w-[180px]"
+                        disabled={isPending}
+                    />
                 </div>
 
-                {products.data.length === 0 ? (
+                {!isPending && products.data.length === 0 ? (
                     <AdminEmptyState
                         title={t('products.emptyTitle')}
                         description={t('products.emptyDescription')}
@@ -175,144 +193,233 @@ export default function AdminProductsIndex({
                         }
                     />
                 ) : (
-                    <div className="border-admin overflow-hidden rounded-lg border bg-[var(--admin-surface)] shadow-sm">
-                        <div className="overflow-x-auto">
-                            <table className="w-full min-w-[800px] text-left">
-                                <thead>
-                                    <tr className="border-admin text-admin-secondary border-b bg-[var(--admin-neutral)] text-xs font-medium">
-                                        <th className="px-4 py-3">
+                    <>
+                        <div className="hidden md:block">
+                            <AdminDataTable minWidth="800px">
+                                <AdminDataTableHead>
+                                    <AdminDataTableHeaderRow>
+                                        <AdminDataTableHeaderCell>
                                             {t('products.name')}
-                                        </th>
-                                        <th className="px-4 py-3">
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
                                             {t('products.style')}
-                                        </th>
-                                        <th className="px-4 py-3">
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
                                             {t('products.category')}
-                                        </th>
-                                        <th className="px-4 py-3">
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
                                             {t('products.stock')}
-                                        </th>
-                                        <th className="px-4 py-3">
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
                                             {t('products.colorways')}
-                                        </th>
-                                        <th className="px-4 py-3">
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
                                             {t('products.featured')}
-                                        </th>
-                                        <th className="px-4 py-3 text-right">
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell align="right">
                                             {tCommon('actions')}
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {products.data.map((product) => (
-                                        <tr
-                                            key={product.id}
-                                            className="border-admin cursor-pointer border-b hover:bg-[var(--admin-neutral)]"
-                                            onClick={() =>
-                                                router.visit(
-                                                    `/admin/products/${product.slug}/edit`,
-                                                )
-                                            }
-                                        >
-                                            <td className="px-4 py-3">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="border-admin flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border bg-[var(--admin-neutral)]">
-                                                        {product.thumbnailUrl ? (
-                                                            <img
-                                                                src={
-                                                                    product.thumbnailUrl
-                                                                }
-                                                                alt=""
-                                                                className="size-full object-cover"
-                                                            />
-                                                        ) : (
-                                                            <span className="text-admin-secondary text-xs">
-                                                                {tCommon(
-                                                                    'noImage',
-                                                                )}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    <span className="font-medium text-[var(--admin-primary)]">
-                                                        {product.name}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="text-admin-secondary px-4 py-2.5 text-sm">
-                                                {product.styleCode}
-                                            </td>
-                                            <td className="text-admin-secondary px-4 py-2.5 text-sm">
-                                                {product.category ??
-                                                    tCommon('emDash')}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-admin-secondary text-sm">
-                                                        {product.totalStock}
-                                                    </span>
-                                                    <AdminStockBadge
-                                                        status={getStockStatus(
-                                                            product.totalStock,
-                                                        )}
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className="text-admin-secondary px-4 py-2.5 text-sm">
-                                                {product.colorwaysCount}
-                                            </td>
-                                            <td
-                                                className="px-4 py-3"
-                                                onClick={(e) =>
-                                                    e.stopPropagation()
+                                        </AdminDataTableHeaderCell>
+                                    </AdminDataTableHeaderRow>
+                                </AdminDataTableHead>
+                                <AdminDataTableBody>
+                                    {isPending ? (
+                                        <AdminSkeletonRows columns={7} />
+                                    ) : (
+                                        products.data.map((product) => (
+                                            <AdminDataTableRow
+                                                key={product.id}
+                                                onClick={() =>
+                                                    router.visit(
+                                                        `/admin/products/${product.slug}/edit`,
+                                                    )
                                                 }
                                             >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={product.isFeatured}
-                                                    aria-label={t(
-                                                        'products.toggleFeatured',
-                                                    )}
-                                                    onChange={() =>
-                                                        toggleFeatured(
+                                                <AdminDataTableCell>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="border-admin flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border bg-[var(--admin-neutral)]">
+                                                            {product.thumbnailUrl ? (
+                                                                <img
+                                                                    src={
+                                                                        product.thumbnailUrl
+                                                                    }
+                                                                    alt=""
+                                                                    className="size-full object-cover"
+                                                                />
+                                                            ) : (
+                                                                <span className="text-admin-secondary text-xs">
+                                                                    {tCommon(
+                                                                        'noImage',
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <span className="font-medium text-[var(--admin-primary)]">
+                                                            {product.name}
+                                                        </span>
+                                                    </div>
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {product.styleCode}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {product.category ??
+                                                        tCommon('emDash')}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-admin-secondary text-sm">
+                                                            {product.totalStock}
+                                                        </span>
+                                                        <AdminStockBadge
+                                                            status={getStockStatus(
+                                                                product.totalStock,
+                                                            )}
+                                                        />
+                                                    </div>
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {product.colorwaysCount}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    <div
+                                                        onClick={(e) =>
+                                                            e.stopPropagation()
+                                                        }
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={
+                                                                product.isFeatured
+                                                            }
+                                                            aria-label={t(
+                                                                'products.toggleFeatured',
+                                                            )}
+                                                            onChange={() =>
+                                                                toggleFeatured(
+                                                                    product.slug,
+                                                                    product.isFeatured,
+                                                                )
+                                                            }
+                                                            className="border-admin size-4 rounded accent-[var(--admin-tertiary)]"
+                                                        />
+                                                    </div>
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell align="right">
+                                                    <div
+                                                        className="flex justify-end gap-2"
+                                                        onClick={(e) =>
+                                                            e.stopPropagation()
+                                                        }
+                                                    >
+                                                        <AdminRowActionLink
+                                                            href={`/admin/products/${product.slug}/edit`}
+                                                        >
+                                                            {t('products.edit')}
+                                                        </AdminRowActionLink>
+                                                        <AdminRowActionLink
+                                                            variant="danger"
+                                                            onClick={() =>
+                                                                setDeleteSlug(
+                                                                    product.slug,
+                                                                )
+                                                            }
+                                                        >
+                                                            {t(
+                                                                'products.delete',
+                                                            )}
+                                                        </AdminRowActionLink>
+                                                    </div>
+                                                </AdminDataTableCell>
+                                            </AdminDataTableRow>
+                                        ))
+                                    )}
+                                </AdminDataTableBody>
+                            </AdminDataTable>
+                        </div>
+
+                        <AdminCardList className="md:hidden">
+                            {isPending ? (
+                                <AdminSkeletonCards />
+                            ) : (
+                                products.data.map((product) => (
+                                    <AdminCardListItem
+                                        key={product.id}
+                                        title={product.name}
+                                        subtitle={product.styleCode}
+                                        badge={
+                                            <AdminStockBadge
+                                                status={getStockStatus(
+                                                    product.totalStock,
+                                                )}
+                                            />
+                                        }
+                                        onClick={() =>
+                                            router.visit(
+                                                `/admin/products/${product.slug}/edit`,
+                                            )
+                                        }
+                                        actions={
+                                            <>
+                                                <AdminRowActionLink
+                                                    href={`/admin/products/${product.slug}/edit`}
+                                                >
+                                                    {t('products.edit')}
+                                                </AdminRowActionLink>
+                                                <AdminRowActionLink
+                                                    variant="danger"
+                                                    onClick={() =>
+                                                        setDeleteSlug(
                                                             product.slug,
-                                                            product.isFeatured,
                                                         )
                                                     }
-                                                    className="border-admin size-4 rounded accent-[var(--admin-tertiary)]"
-                                                />
-                                            </td>
-                                            <td
-                                                className="px-4 py-3 text-right"
+                                                >
+                                                    {t('products.delete')}
+                                                </AdminRowActionLink>
+                                            </>
+                                        }
+                                    >
+                                        <AdminCardListField
+                                            label={t('products.category')}
+                                        >
+                                            {product.category ??
+                                                tCommon('emDash')}
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={t('products.stock')}
+                                        >
+                                            {product.totalStock}
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={t('products.colorways')}
+                                        >
+                                            {product.colorwaysCount}
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={t('products.featured')}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={product.isFeatured}
+                                                aria-label={t(
+                                                    'products.toggleFeatured',
+                                                )}
                                                 onClick={(e) =>
                                                     e.stopPropagation()
                                                 }
-                                            >
-                                                <div className="flex justify-end gap-2">
-                                                    <Link
-                                                        href={`/admin/products/${product.slug}/edit`}
-                                                        className="text-admin-secondary text-sm hover:text-[var(--admin-primary)] hover:underline"
-                                                    >
-                                                        {t('products.edit')}
-                                                    </Link>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            setDeleteSlug(
-                                                                product.slug,
-                                                            )
-                                                        }
-                                                        className="text-sm text-red-600 hover:underline"
-                                                    >
-                                                        {t('products.delete')}
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                                onChange={() =>
+                                                    toggleFeatured(
+                                                        product.slug,
+                                                        product.isFeatured,
+                                                    )
+                                                }
+                                                className="border-admin size-4 rounded accent-[var(--admin-tertiary)]"
+                                            />
+                                        </AdminCardListField>
+                                    </AdminCardListItem>
+                                ))
+                            )}
+                        </AdminCardList>
+                    </>
                 )}
 
                 <AdminPagination

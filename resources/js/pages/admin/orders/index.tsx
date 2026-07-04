@@ -1,9 +1,15 @@
 import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import { adminInputClassName } from '@/components/admin/admin-form';
+import { AdminInputField } from '@/components/admin/admin-field';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import {
+    AdminCardList,
+    AdminCardListField,
+    AdminCardListItem,
+    AdminSkeletonCards,
+} from '@/components/admin/ui/admin-card-list';
 import {
     AdminDataTable,
     AdminDataTableBody,
@@ -13,8 +19,11 @@ import {
     AdminDataTableHeaderRow,
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
+import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import { AdminFilterTabs } from '@/components/admin/ui/admin-filter-tabs';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
+import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
+import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
 import { formatCurrency, formatDateTime, useLocale } from '@/hooks/use-locale';
 import type { PaginatedOrders } from '@/types/order';
 
@@ -36,6 +45,7 @@ export default function AdminOrdersIndex({
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
     const { locale } = useLocale();
+    const { isPending, onStart, onFinish } = useAdminFilterPending();
 
     setLayoutProps({
         breadcrumbs: [
@@ -59,7 +69,7 @@ export default function AdminOrdersIndex({
                 status: status ?? undefined,
                 search: filters.search ?? undefined,
             },
-            { preserveState: true },
+            { preserveState: true, onStart, onFinish },
         );
     };
 
@@ -70,7 +80,7 @@ export default function AdminOrdersIndex({
                 search: search || undefined,
                 status: filters.status ?? undefined,
             },
-            { preserveState: true },
+            { preserveState: true, onStart, onFinish },
         );
     };
 
@@ -118,79 +128,165 @@ export default function AdminOrdersIndex({
                     value={filters.status}
                     onChange={applyStatus}
                     options={filterOptions}
+                    disabled={isPending}
                 />
 
-                <div className="max-w-96">
-                    <label className="admin-label">{t('orders.search')}</label>
-                    <input
-                        className={adminInputClassName}
-                        defaultValue={filters.search ?? ''}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                applySearch(event.currentTarget.value);
-                            }
-                        }}
-                        onBlur={(event) => applySearch(event.target.value)}
-                    />
-                </div>
+                <AdminInputField
+                    label={t('orders.search')}
+                    defaultValue={filters.search ?? ''}
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            applySearch(event.currentTarget.value);
+                        }
+                    }}
+                    onBlur={(event) => applySearch(event.target.value)}
+                    className="max-w-96"
+                    disabled={isPending}
+                />
 
-                <AdminDataTable minWidth="720px">
-                    <AdminDataTableHead>
-                        <AdminDataTableHeaderRow>
-                            <AdminDataTableHeaderCell>
-                                {t('dashboard.order')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('orders.customer')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {tCommon('date')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {tCommon('status')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell align="right">
-                                {tCommon('total')}
-                            </AdminDataTableHeaderCell>
-                        </AdminDataTableHeaderRow>
-                    </AdminDataTableHead>
-                    <AdminDataTableBody>
-                        {orders.data.map((order) => (
-                            <AdminDataTableRow key={order.id}>
-                                <AdminDataTableCell>
-                                    <Link
-                                        href={`/admin/orders/${order.orderNumber}`}
-                                        className="admin-body-strong font-medium text-[var(--admin-primary)] hover:underline"
+                {!isPending && orders.data.length === 0 ? (
+                    <AdminEmptyState
+                        title={t('orders.emptyTitle')}
+                        description={t('orders.emptyDescription')}
+                    />
+                ) : (
+                    <>
+                        <div className="hidden md:block">
+                            <AdminDataTable minWidth="720px">
+                                <AdminDataTableHead>
+                                    <AdminDataTableHeaderRow>
+                                        <AdminDataTableHeaderCell>
+                                            {t('dashboard.order')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('orders.customer')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {tCommon('date')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {tCommon('status')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell align="right">
+                                            {tCommon('total')}
+                                        </AdminDataTableHeaderCell>
+                                    </AdminDataTableHeaderRow>
+                                </AdminDataTableHead>
+                                <AdminDataTableBody>
+                                    {isPending ? (
+                                        <AdminSkeletonRows columns={5} />
+                                    ) : (
+                                        orders.data.map((order) => (
+                                            <AdminDataTableRow key={order.id}>
+                                                <AdminDataTableCell>
+                                                    <Link
+                                                        href={`/admin/orders/${order.orderNumber}`}
+                                                        className="admin-body-strong font-medium text-[var(--admin-primary)] hover:underline"
+                                                    >
+                                                        {order.orderNumber}
+                                                    </Link>
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {'customer' in order &&
+                                                    order.customer &&
+                                                    typeof order.customer ===
+                                                        'object'
+                                                        ? (
+                                                              order.customer as {
+                                                                  email: string;
+                                                              }
+                                                          ).email
+                                                        : tCommon('emDash')}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {formatOrderDate(
+                                                        order.createdAt,
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    {t(
+                                                        orderStatusKey(
+                                                            order.status,
+                                                        ),
+                                                        {
+                                                            defaultValue:
+                                                                order.status,
+                                                        },
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell
+                                                    align="right"
+                                                    className="font-medium"
+                                                >
+                                                    {formatCurrency(
+                                                        order.totalAmount,
+                                                        locale,
+                                                    )}
+                                                </AdminDataTableCell>
+                                            </AdminDataTableRow>
+                                        ))
+                                    )}
+                                </AdminDataTableBody>
+                            </AdminDataTable>
+                        </div>
+
+                        <AdminCardList className="md:hidden">
+                            {isPending ? (
+                                <AdminSkeletonCards />
+                            ) : (
+                                orders.data.map((order) => (
+                                    <AdminCardListItem
+                                        key={order.id}
+                                        title={order.orderNumber}
+                                        subtitle={
+                                            'customer' in order &&
+                                            order.customer &&
+                                            typeof order.customer === 'object'
+                                                ? (
+                                                      order.customer as {
+                                                          email: string;
+                                                      }
+                                                  ).email
+                                                : tCommon('emDash')
+                                        }
+                                        badge={
+                                            <span className="admin-caption text-admin-secondary">
+                                                {t(
+                                                    orderStatusKey(
+                                                        order.status,
+                                                    ),
+                                                    {
+                                                        defaultValue:
+                                                            order.status,
+                                                    },
+                                                )}
+                                            </span>
+                                        }
+                                        onClick={() =>
+                                            router.visit(
+                                                `/admin/orders/${order.orderNumber}`,
+                                            )
+                                        }
                                     >
-                                        {order.orderNumber}
-                                    </Link>
-                                </AdminDataTableCell>
-                                <AdminDataTableCell className="text-admin-secondary">
-                                    {'customer' in order &&
-                                    order.customer &&
-                                    typeof order.customer === 'object'
-                                        ? (order.customer as { email: string })
-                                              .email
-                                        : tCommon('emDash')}
-                                </AdminDataTableCell>
-                                <AdminDataTableCell className="text-admin-secondary">
-                                    {formatOrderDate(order.createdAt)}
-                                </AdminDataTableCell>
-                                <AdminDataTableCell>
-                                    {t(orderStatusKey(order.status), {
-                                        defaultValue: order.status,
-                                    })}
-                                </AdminDataTableCell>
-                                <AdminDataTableCell
-                                    align="right"
-                                    className="font-medium"
-                                >
-                                    {formatCurrency(order.totalAmount, locale)}
-                                </AdminDataTableCell>
-                            </AdminDataTableRow>
-                        ))}
-                    </AdminDataTableBody>
-                </AdminDataTable>
+                                        <AdminCardListField
+                                            label={tCommon('date')}
+                                        >
+                                            {formatOrderDate(order.createdAt)}
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={tCommon('total')}
+                                        >
+                                            {formatCurrency(
+                                                order.totalAmount,
+                                                locale,
+                                            )}
+                                        </AdminCardListField>
+                                    </AdminCardListItem>
+                                ))
+                            )}
+                        </AdminCardList>
+                    </>
+                )}
 
                 <AdminPagination
                     links={orders.links}

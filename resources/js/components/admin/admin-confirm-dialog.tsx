@@ -37,18 +37,18 @@ export function AdminConfirmDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="rounded-admin-lg border-admin bg-[var(--admin-surface)] sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle className="admin-section-title">
+            <DialogContent className="vsport-admin rounded-admin-lg border-admin bg-[var(--admin-surface)]">
+                <DialogHeader className="pr-8">
+                    <DialogTitle className="admin-section-title text-left break-words">
                         {title}
                     </DialogTitle>
                     {description && (
-                        <DialogDescription className="admin-caption">
+                        <DialogDescription className="admin-caption text-left break-words">
                             {description}
                         </DialogDescription>
                     )}
                 </DialogHeader>
-                <DialogFooter className="gap-2 sm:gap-2">
+                <DialogFooter className="flex-row justify-end gap-2">
                     <AdminButton
                         type="button"
                         variant="secondary"

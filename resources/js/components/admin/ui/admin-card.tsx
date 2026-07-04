@@ -1,22 +1,18 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '@/lib/utils';
 
-type AdminCardProps = {
-    children: ReactNode;
-    className?: string;
-};
+type AdminCardProps = ComponentProps<'div'>;
 
-function AdminCard({ children, className }: AdminCardProps) {
+function AdminCard({ className, ...props }: AdminCardProps) {
     return (
         <div
             className={cn(
                 'rounded-admin-lg border-admin border bg-[var(--admin-surface)] p-6',
                 className,
             )}
-        >
-            {children}
-        </div>
+            {...props}
+        />
     );
 }
 

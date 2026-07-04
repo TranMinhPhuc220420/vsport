@@ -3,6 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
+    AdminCardList,
+    AdminCardListField,
+    AdminCardListItem,
+    AdminSkeletonCards,
+} from '@/components/admin/ui/admin-card-list';
+import {
     AdminDataTable,
     AdminDataTableBody,
     AdminDataTableCell,
@@ -11,8 +17,11 @@ import {
     AdminDataTableHeaderRow,
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
+import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import { AdminFilterTabs } from '@/components/admin/ui/admin-filter-tabs';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
+import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
+import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
 import { formatDateTime, useLocale } from '@/hooks/use-locale';
 
 type ActivityLogRow = {
@@ -75,6 +84,7 @@ export default function AdminActivityLogsIndex({
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
     const { locale } = useLocale();
+    const { isPending, onStart, onFinish } = useAdminFilterPending();
 
     setLayoutProps({
         breadcrumbs: [
@@ -100,7 +110,7 @@ export default function AdminActivityLogsIndex({
         router.get(
             '/admin/activity-logs',
             { action: action ?? undefined },
-            { preserveState: true },
+            { preserveState: true, onStart, onFinish },
         );
     };
 
@@ -118,75 +128,158 @@ export default function AdminActivityLogsIndex({
                     value={filters.action}
                     onChange={applyAction}
                     options={filterOptions}
+                    disabled={isPending}
                 />
 
-                <AdminDataTable minWidth="960px">
-                    <AdminDataTableHead>
-                        <AdminDataTableHeaderRow>
-                            <AdminDataTableHeaderCell>
-                                {tCommon('date')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('activityLogs.actor')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('activityLogs.action')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('activityLogs.subject')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('activityLogs.details')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('activityLogs.ip')}
-                            </AdminDataTableHeaderCell>
-                        </AdminDataTableHeaderRow>
-                    </AdminDataTableHead>
-                    <AdminDataTableBody>
-                        {logs.data.map((log) => (
-                            <AdminDataTableRow key={log.id}>
-                                <AdminDataTableCell className="text-admin-secondary">
-                                    {log.createdAt
-                                        ? formatDateTime(
-                                              log.createdAt,
-                                              locale,
-                                              {
-                                                  dateStyle: 'medium',
-                                                  timeStyle: 'short',
-                                              },
-                                          )
-                                        : tCommon('emDash')}
-                                </AdminDataTableCell>
-                                <AdminDataTableCell>
-                                    <div className="font-medium">
-                                        {log.actorName}
-                                    </div>
-                                    <div className="text-admin-secondary text-sm">
-                                        {log.actorEmail}
-                                    </div>
-                                </AdminDataTableCell>
-                                <AdminDataTableCell>
-                                    {t(`activityLogs.actions.${log.action}`, {
-                                        defaultValue: log.action,
-                                    })}
-                                </AdminDataTableCell>
-                                <AdminDataTableCell className="text-admin-secondary">
-                                    {formatSubject(
-                                        log.subjectType,
-                                        log.subjectId,
+                {!isPending && logs.data.length === 0 ? (
+                    <AdminEmptyState
+                        title={t('activityLogs.emptyTitle')}
+                        description={t('activityLogs.emptyDescription')}
+                    />
+                ) : (
+                    <>
+                        <div className="hidden md:block">
+                            <AdminDataTable minWidth="960px">
+                                <AdminDataTableHead>
+                                    <AdminDataTableHeaderRow>
+                                        <AdminDataTableHeaderCell>
+                                            {tCommon('date')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('activityLogs.actor')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('activityLogs.action')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('activityLogs.subject')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('activityLogs.details')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('activityLogs.ip')}
+                                        </AdminDataTableHeaderCell>
+                                    </AdminDataTableHeaderRow>
+                                </AdminDataTableHead>
+                                <AdminDataTableBody>
+                                    {isPending ? (
+                                        <AdminSkeletonRows columns={6} />
+                                    ) : (
+                                        logs.data.map((log) => (
+                                            <AdminDataTableRow key={log.id}>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {log.createdAt
+                                                        ? formatDateTime(
+                                                              log.createdAt,
+                                                              locale,
+                                                              {
+                                                                  dateStyle:
+                                                                      'medium',
+                                                                  timeStyle:
+                                                                      'short',
+                                                              },
+                                                          )
+                                                        : tCommon('emDash')}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    <div className="font-medium">
+                                                        {log.actorName}
+                                                    </div>
+                                                    <div className="text-admin-secondary text-sm">
+                                                        {log.actorEmail}
+                                                    </div>
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    {t(
+                                                        `activityLogs.actions.${log.action}`,
+                                                        {
+                                                            defaultValue:
+                                                                log.action,
+                                                        },
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {formatSubject(
+                                                        log.subjectType,
+                                                        log.subjectId,
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary max-w-xs truncate">
+                                                    {formatProperties(
+                                                        log.properties,
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {log.ipAddress ??
+                                                        tCommon('emDash')}
+                                                </AdminDataTableCell>
+                                            </AdminDataTableRow>
+                                        ))
                                     )}
-                                </AdminDataTableCell>
-                                <AdminDataTableCell className="text-admin-secondary max-w-xs truncate">
-                                    {formatProperties(log.properties)}
-                                </AdminDataTableCell>
-                                <AdminDataTableCell className="text-admin-secondary">
-                                    {log.ipAddress ?? tCommon('emDash')}
-                                </AdminDataTableCell>
-                            </AdminDataTableRow>
-                        ))}
-                    </AdminDataTableBody>
-                </AdminDataTable>
+                                </AdminDataTableBody>
+                            </AdminDataTable>
+                        </div>
+
+                        <AdminCardList className="md:hidden">
+                            {isPending ? (
+                                <AdminSkeletonCards />
+                            ) : (
+                                logs.data.map((log) => (
+                                    <AdminCardListItem
+                                        key={log.id}
+                                        title={log.actorName}
+                                        subtitle={log.actorEmail}
+                                        badge={
+                                            <span className="admin-caption text-admin-secondary text-right">
+                                                {t(
+                                                    `activityLogs.actions.${log.action}`,
+                                                    {
+                                                        defaultValue:
+                                                            log.action,
+                                                    },
+                                                )}
+                                            </span>
+                                        }
+                                    >
+                                        <AdminCardListField
+                                            label={tCommon('date')}
+                                        >
+                                            {log.createdAt
+                                                ? formatDateTime(
+                                                      log.createdAt,
+                                                      locale,
+                                                      {
+                                                          dateStyle: 'medium',
+                                                          timeStyle: 'short',
+                                                      },
+                                                  )
+                                                : tCommon('emDash')}
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={t('activityLogs.subject')}
+                                        >
+                                            {formatSubject(
+                                                log.subjectType,
+                                                log.subjectId,
+                                            )}
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={t('activityLogs.details')}
+                                        >
+                                            {formatProperties(log.properties)}
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={t('activityLogs.ip')}
+                                        >
+                                            {log.ipAddress ?? tCommon('emDash')}
+                                        </AdminCardListField>
+                                    </AdminCardListItem>
+                                ))
+                            )}
+                        </AdminCardList>
+                    </>
+                )}
 
                 <AdminPagination
                     links={logs.links}

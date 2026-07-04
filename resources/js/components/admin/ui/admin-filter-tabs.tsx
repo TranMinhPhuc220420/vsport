@@ -7,6 +7,7 @@ type AdminFilterTabsProps = {
     onChange: (value: string | null) => void;
     options: { value: string | null; label: string }[];
     className?: string;
+    disabled?: boolean;
 };
 
 function AdminFilterTabs({
@@ -14,6 +15,7 @@ function AdminFilterTabs({
     onChange,
     options,
     className,
+    disabled,
 }: AdminFilterTabsProps) {
     return (
         <div
@@ -32,9 +34,10 @@ function AdminFilterTabs({
                         type="button"
                         role="tab"
                         aria-selected={active}
+                        disabled={disabled}
                         onClick={() => onChange(option.value)}
                         className={cn(
-                            'rounded-admin-sm px-3 py-1.5 text-sm font-medium transition-colors',
+                            'rounded-admin-sm px-3 py-1.5 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
                             active
                                 ? 'bg-[var(--admin-surface)] text-[var(--admin-primary)] shadow-sm'
                                 : 'text-admin-secondary hover:text-[var(--admin-primary)]',

@@ -7,6 +7,15 @@ import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { OrderStatusStepper } from '@/components/admin/order-status-stepper';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { AdminCard } from '@/components/admin/ui/admin-card';
+import {
+    AdminDataTable,
+    AdminDataTableBody,
+    AdminDataTableCell,
+    AdminDataTableHead,
+    AdminDataTableHeaderCell,
+    AdminDataTableHeaderRow,
+    AdminDataTableRow,
+} from '@/components/admin/ui/admin-data-table';
 import { formatCurrency, formatDateTime, useLocale } from '@/hooks/use-locale';
 import type { OrderDetail } from '@/types/order';
 
@@ -98,7 +107,7 @@ export default function AdminOrderShow({
                 <OrderStatusStepper currentStatus={order.status} />
 
                 {errors.status && (
-                    <p className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    <p className="rounded-admin-md border border-[var(--admin-danger)]/20 bg-[var(--admin-danger-soft)] px-4 py-3 text-sm text-[var(--admin-danger)]">
                         {errors.status}
                     </p>
                 )}
@@ -218,27 +227,45 @@ export default function AdminOrderShow({
                     <h2 className="admin-section-title border-admin border-b px-6 py-4">
                         {t('orders.items')}
                     </h2>
-                    <ul>
-                        {order.items.map((item) => (
-                            <li
-                                key={item.id}
-                                className="border-admin flex justify-between gap-4 border-b px-6 py-4 last:border-b-0"
-                            >
-                                <div>
-                                    <p className="font-medium text-[var(--admin-primary)]">
+                    <AdminDataTable className="rounded-none border-none">
+                        <AdminDataTableHead>
+                            <AdminDataTableHeaderRow>
+                                <AdminDataTableHeaderCell>
+                                    {t('reviews.product')}
+                                </AdminDataTableHeaderCell>
+                                <AdminDataTableHeaderCell>
+                                    {t('products.size')}
+                                </AdminDataTableHeaderCell>
+                                <AdminDataTableHeaderCell align="right">
+                                    {t('products.quantity')}
+                                </AdminDataTableHeaderCell>
+                                <AdminDataTableHeaderCell align="right">
+                                    {tCommon('total')}
+                                </AdminDataTableHeaderCell>
+                            </AdminDataTableHeaderRow>
+                        </AdminDataTableHead>
+                        <AdminDataTableBody>
+                            {order.items.map((item) => (
+                                <AdminDataTableRow key={item.id}>
+                                    <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
                                         {item.productName}
-                                    </p>
-                                    <p className="text-admin-secondary text-sm">
-                                        {item.colorName} / {item.size} ×{' '}
+                                    </AdminDataTableCell>
+                                    <AdminDataTableCell className="text-admin-secondary">
+                                        {item.colorName} / {item.size}
+                                    </AdminDataTableCell>
+                                    <AdminDataTableCell align="right">
                                         {item.quantity}
-                                    </p>
-                                </div>
-                                <span className="font-medium text-[var(--admin-primary)]">
-                                    {formatCurrency(item.lineTotal, locale)}
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
+                                    </AdminDataTableCell>
+                                    <AdminDataTableCell
+                                        align="right"
+                                        className="font-medium text-[var(--admin-primary)]"
+                                    >
+                                        {formatCurrency(item.lineTotal, locale)}
+                                    </AdminDataTableCell>
+                                </AdminDataTableRow>
+                            ))}
+                        </AdminDataTableBody>
+                    </AdminDataTable>
                     <div className="border-admin space-y-2 border-t px-6 py-4 text-sm text-[var(--admin-primary)]">
                         {hasDiscount && (
                             <>

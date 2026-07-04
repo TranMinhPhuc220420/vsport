@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { adminInputClassName } from '@/components/admin/ui/admin-input-styles';
+import { AdminInputField } from '@/components/admin/admin-field';
 import { cn } from '@/lib/utils';
 
 export const PRESET_SIZES = [
@@ -73,22 +73,18 @@ export function SizeChipPicker({
                 })}
             </div>
             <div className="flex flex-wrap items-end gap-2">
-                <div className="space-y-1.5">
-                    <label className="admin-label">
-                        {t('products.customSize')}
-                    </label>
-                    <input
-                        className={cn(adminInputClassName, 'max-w-[160px]')}
-                        value={customSize}
-                        onChange={(e) => setCustomSize(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault();
-                                addCustomSize();
-                            }
-                        }}
-                    />
-                </div>
+                <AdminInputField
+                    label={t('products.customSize')}
+                    value={customSize}
+                    onChange={(e) => setCustomSize(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addCustomSize();
+                        }
+                    }}
+                    className="max-w-[160px]"
+                />
                 <button
                     type="button"
                     onClick={addCustomSize}

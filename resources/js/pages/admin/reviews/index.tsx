@@ -6,6 +6,12 @@ import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import {
+    AdminCardList,
+    AdminCardListField,
+    AdminCardListItem,
+    AdminSkeletonCards,
+} from '@/components/admin/ui/admin-card-list';
+import {
     AdminDataTable,
     AdminDataTableBody,
     AdminDataTableCell,
@@ -14,8 +20,12 @@ import {
     AdminDataTableHeaderRow,
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
+import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import { AdminFilterTabs } from '@/components/admin/ui/admin-filter-tabs';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
+import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
+import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
+import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
 import { formatDateTime, useLocale } from '@/hooks/use-locale';
 
 type ReviewRow = {
@@ -55,6 +65,7 @@ export default function AdminReviewsIndex({
     const { t: tCommon } = useTranslation('common');
     const { locale } = useLocale();
     const [deleteId, setDeleteId] = useState<number | null>(null);
+    const { isPending, onStart, onFinish } = useAdminFilterPending();
 
     setLayoutProps({
         breadcrumbs: [
@@ -74,7 +85,11 @@ export default function AdminReviewsIndex({
             return;
         }
 
-        router.get('/admin/reviews', { status }, { preserveState: true });
+        router.get(
+            '/admin/reviews',
+            { status },
+            { preserveState: true, onStart, onFinish },
+        );
     };
 
     const approve = (id: number) => {
@@ -120,102 +135,179 @@ export default function AdminReviewsIndex({
                     value={filters.status}
                     onChange={applyStatus}
                     options={filterOptions}
+                    disabled={isPending}
                 />
 
-                <AdminDataTable>
-                    <AdminDataTableHead>
-                        <AdminDataTableHeaderRow>
-                            <AdminDataTableHeaderCell>
-                                {t('reviews.product')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('reviews.customer')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('reviews.rating')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('reviews.review')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell>
-                                {t('reviews.submitted')}
-                            </AdminDataTableHeaderCell>
-                            <AdminDataTableHeaderCell className="text-right">
-                                {tCommon('actions')}
-                            </AdminDataTableHeaderCell>
-                        </AdminDataTableHeaderRow>
-                    </AdminDataTableHead>
-                    <AdminDataTableBody>
-                        {reviews.data.length === 0 ? (
-                            <AdminDataTableRow>
-                                <AdminDataTableCell
-                                    colSpan={6}
-                                    className="text-admin-secondary py-8 text-center"
-                                >
-                                    {emptyMessage}
-                                </AdminDataTableCell>
-                            </AdminDataTableRow>
-                        ) : (
-                            reviews.data.map((review) => (
-                                <AdminDataTableRow
-                                    key={review.id}
-                                    className="align-top"
-                                >
-                                    <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
-                                        {review.productName}
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell className="text-admin-secondary">
-                                        {review.userName}
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell>
-                                        {t('reviews.ratingOf', {
-                                            rating: review.rating,
-                                        })}
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell>
-                                        {review.title && (
-                                            <p className="font-medium text-[var(--admin-primary)]">
-                                                {review.title}
-                                            </p>
-                                        )}
-                                        {review.body && (
-                                            <p className="text-admin-secondary mt-1 text-sm">
-                                                {review.body}
-                                            </p>
-                                        )}
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell className="text-admin-secondary">
-                                        {formatSubmitted(review.createdAt)}
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell className="text-right">
-                                        <div className="flex justify-end gap-2">
-                                            {!review.isApproved && (
-                                                <AdminButton
-                                                    type="button"
-                                                    variant="ghost"
+                {!isPending && reviews.data.length === 0 ? (
+                    <AdminEmptyState
+                        title={t('reviews.emptyTitle')}
+                        description={emptyMessage}
+                    />
+                ) : (
+                    <>
+                        <div className="hidden md:block">
+                            <AdminDataTable>
+                                <AdminDataTableHead>
+                                    <AdminDataTableHeaderRow>
+                                        <AdminDataTableHeaderCell>
+                                            {t('reviews.product')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('reviews.customer')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('reviews.rating')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('reviews.review')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('reviews.submitted')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell className="text-right">
+                                            {tCommon('actions')}
+                                        </AdminDataTableHeaderCell>
+                                    </AdminDataTableHeaderRow>
+                                </AdminDataTableHead>
+                                <AdminDataTableBody>
+                                    {isPending ? (
+                                        <AdminSkeletonRows columns={6} />
+                                    ) : (
+                                        reviews.data.map((review) => (
+                                            <AdminDataTableRow
+                                                key={review.id}
+                                                className="align-top"
+                                            >
+                                                <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
+                                                    {review.productName}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {review.userName}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    {t('reviews.ratingOf', {
+                                                        rating: review.rating,
+                                                    })}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    {review.title && (
+                                                        <p className="font-medium text-[var(--admin-primary)]">
+                                                            {review.title}
+                                                        </p>
+                                                    )}
+                                                    {review.body && (
+                                                        <p className="text-admin-secondary mt-1 text-sm">
+                                                            {review.body}
+                                                        </p>
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {formatSubmitted(
+                                                        review.createdAt,
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        {!review.isApproved && (
+                                                            <AdminButton
+                                                                type="button"
+                                                                variant="ghost"
+                                                                onClick={() =>
+                                                                    approve(
+                                                                        review.id,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {t(
+                                                                    'reviews.approve',
+                                                                )}
+                                                            </AdminButton>
+                                                        )}
+                                                        <AdminRowActionLink
+                                                            variant="danger"
+                                                            onClick={() =>
+                                                                setDeleteId(
+                                                                    review.id,
+                                                                )
+                                                            }
+                                                        >
+                                                            {tCommon('delete')}
+                                                        </AdminRowActionLink>
+                                                    </div>
+                                                </AdminDataTableCell>
+                                            </AdminDataTableRow>
+                                        ))
+                                    )}
+                                </AdminDataTableBody>
+                            </AdminDataTable>
+                        </div>
+
+                        <AdminCardList className="md:hidden">
+                            {isPending ? (
+                                <AdminSkeletonCards />
+                            ) : (
+                                reviews.data.map((review) => (
+                                    <AdminCardListItem
+                                        key={review.id}
+                                        title={review.productName}
+                                        subtitle={review.userName}
+                                        badge={
+                                            <span className="admin-caption text-admin-secondary">
+                                                {t('reviews.ratingOf', {
+                                                    rating: review.rating,
+                                                })}
+                                            </span>
+                                        }
+                                        actions={
+                                            <>
+                                                {!review.isApproved && (
+                                                    <AdminButton
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            approve(review.id)
+                                                        }
+                                                    >
+                                                        {t('reviews.approve')}
+                                                    </AdminButton>
+                                                )}
+                                                <AdminRowActionLink
+                                                    variant="danger"
                                                     onClick={() =>
-                                                        approve(review.id)
+                                                        setDeleteId(review.id)
                                                     }
                                                 >
-                                                    {t('reviews.approve')}
-                                                </AdminButton>
-                                            )}
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    setDeleteId(review.id)
-                                                }
-                                                className="text-sm text-red-600 hover:underline"
-                                            >
-                                                {tCommon('delete')}
-                                            </button>
-                                        </div>
-                                    </AdminDataTableCell>
-                                </AdminDataTableRow>
-                            ))
-                        )}
-                    </AdminDataTableBody>
-                </AdminDataTable>
+                                                    {tCommon('delete')}
+                                                </AdminRowActionLink>
+                                            </>
+                                        }
+                                    >
+                                        {(review.title || review.body) && (
+                                            <div>
+                                                {review.title && (
+                                                    <p className="font-medium text-[var(--admin-primary)]">
+                                                        {review.title}
+                                                    </p>
+                                                )}
+                                                {review.body && (
+                                                    <p className="text-admin-secondary mt-1">
+                                                        {review.body}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+                                        <AdminCardListField
+                                            label={t('reviews.submitted')}
+                                        >
+                                            {formatSubmitted(review.createdAt)}
+                                        </AdminCardListField>
+                                    </AdminCardListItem>
+                                ))
+                            )}
+                        </AdminCardList>
+                    </>
+                )}
 
                 <AdminPagination
                     links={reviews.links}

@@ -84,22 +84,36 @@ function ScrollReveal({
               )
             : children;
 
+    const revealClasses = cn(
+        !visible && 'scroll-reveal-pending',
+        !visible && directionClass[direction],
+        visible && 'scroll-reveal-visible',
+        visible && directionClass[direction],
+        visible && staggerChildren && 'scroll-reveal-stagger',
+    );
+
+    const revealStyle =
+        visible && delay > 0
+            ? ({ animationDelay: `${delay}ms` } as CSSProperties)
+            : undefined;
+
+    // Clip-path on the observed node drives intersectionRatio to zero, so the
+    // observer never reaches threshold. Animate an inner wrapper instead.
+    if (direction === 'clip') {
+        return (
+            <div ref={ref} className={className}>
+                <div className={cn(revealClasses, 'size-full')} style={revealStyle}>
+                    {content}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div
             ref={ref}
-            className={cn(
-                !visible && 'scroll-reveal-pending',
-                !visible && directionClass[direction],
-                visible && 'scroll-reveal-visible',
-                visible && directionClass[direction],
-                visible && staggerChildren && 'scroll-reveal-stagger',
-                className,
-            )}
-            style={
-                visible && delay > 0
-                    ? ({ animationDelay: `${delay}ms` } as CSSProperties)
-                    : undefined
-            }
+            className={cn(revealClasses, className)}
+            style={revealStyle}
         >
             {content}
         </div>

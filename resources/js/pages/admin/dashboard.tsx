@@ -1,7 +1,13 @@
-import { Head, Link, setLayoutProps } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { AdminCard } from '@/components/admin/ui/admin-card';
+import {
+    AdminCardList,
+    AdminCardListField,
+    AdminCardListItem,
+} from '@/components/admin/ui/admin-card-list';
 import {
     AdminDataTable,
     AdminDataTableBody,
@@ -95,7 +101,7 @@ export default function AdminDashboard({
                     </Link>
                 </div>
 
-                <section className="border-admin rounded-lg border bg-[var(--admin-surface)] p-6 shadow-sm">
+                <AdminCard>
                     <h2 className="admin-section-title">
                         {t('dashboard.orderPipeline')}
                     </h2>
@@ -104,7 +110,7 @@ export default function AdminDashboard({
                             <Link
                                 key={status}
                                 href={`/admin/orders?status=${status}`}
-                                className="border-admin flex min-w-[120px] flex-col rounded-md border bg-[var(--admin-neutral)] px-4 py-3 transition-colors hover:bg-[var(--admin-surface)]"
+                                className="border-admin rounded-admin-md flex min-w-[120px] flex-col border bg-[var(--admin-neutral)] px-4 py-3 transition-colors hover:bg-[var(--admin-surface)]"
                             >
                                 <span className="admin-caption text-admin-secondary">
                                     {t(orderStatusKey(status), {
@@ -117,10 +123,10 @@ export default function AdminDashboard({
                             </Link>
                         ))}
                     </div>
-                </section>
+                </AdminCard>
 
                 {lowStockProducts.length > 0 && (
-                    <section className="border-admin rounded-lg border bg-[var(--admin-surface)] p-6 shadow-sm">
+                    <AdminCard>
                         <h2 className="admin-section-title">
                             {t('dashboard.lowStock')}
                         </h2>
@@ -139,7 +145,7 @@ export default function AdminDashboard({
                                 </li>
                             ))}
                         </ul>
-                    </section>
+                    </AdminCard>
                 )}
 
                 <section>
@@ -147,49 +153,87 @@ export default function AdminDashboard({
                         {t('dashboard.recentOrders')}
                     </h2>
                     <div className="mt-4">
-                        <AdminDataTable minWidth="640px">
-                            <AdminDataTableHead>
-                                <AdminDataTableHeaderRow>
-                                    <AdminDataTableHeaderCell>
-                                        {t('dashboard.order')}
-                                    </AdminDataTableHeaderCell>
-                                    <AdminDataTableHeaderCell>
-                                        {tCommon('status')}
-                                    </AdminDataTableHeaderCell>
-                                    <AdminDataTableHeaderCell align="right">
-                                        {tCommon('total')}
-                                    </AdminDataTableHeaderCell>
-                                </AdminDataTableHeaderRow>
-                            </AdminDataTableHead>
-                            <AdminDataTableBody>
-                                {recentOrders.data.map((order) => (
-                                    <AdminDataTableRow key={order.id}>
-                                        <AdminDataTableCell>
-                                            <Link
-                                                href={`/admin/orders/${order.orderNumber}`}
-                                                className="admin-body-strong font-medium hover:underline"
+                        <div className="hidden md:block">
+                            <AdminDataTable minWidth="640px">
+                                <AdminDataTableHead>
+                                    <AdminDataTableHeaderRow>
+                                        <AdminDataTableHeaderCell>
+                                            {t('dashboard.order')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {tCommon('status')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell align="right">
+                                            {tCommon('total')}
+                                        </AdminDataTableHeaderCell>
+                                    </AdminDataTableHeaderRow>
+                                </AdminDataTableHead>
+                                <AdminDataTableBody>
+                                    {recentOrders.data.map((order) => (
+                                        <AdminDataTableRow key={order.id}>
+                                            <AdminDataTableCell>
+                                                <Link
+                                                    href={`/admin/orders/${order.orderNumber}`}
+                                                    className="admin-body-strong font-medium hover:underline"
+                                                >
+                                                    {order.orderNumber}
+                                                </Link>
+                                            </AdminDataTableCell>
+                                            <AdminDataTableCell>
+                                                {t(
+                                                    orderStatusKey(
+                                                        order.status,
+                                                    ),
+                                                    {
+                                                        defaultValue:
+                                                            order.status,
+                                                    },
+                                                )}
+                                            </AdminDataTableCell>
+                                            <AdminDataTableCell
+                                                align="right"
+                                                className="font-medium"
                                             >
-                                                {order.orderNumber}
-                                            </Link>
-                                        </AdminDataTableCell>
-                                        <AdminDataTableCell>
+                                                {formatCurrency(
+                                                    order.totalAmount,
+                                                    locale,
+                                                )}
+                                            </AdminDataTableCell>
+                                        </AdminDataTableRow>
+                                    ))}
+                                </AdminDataTableBody>
+                            </AdminDataTable>
+                        </div>
+
+                        <AdminCardList className="md:hidden">
+                            {recentOrders.data.map((order) => (
+                                <AdminCardListItem
+                                    key={order.id}
+                                    title={order.orderNumber}
+                                    badge={
+                                        <span className="admin-caption text-admin-secondary">
                                             {t(orderStatusKey(order.status), {
                                                 defaultValue: order.status,
                                             })}
-                                        </AdminDataTableCell>
-                                        <AdminDataTableCell
-                                            align="right"
-                                            className="font-medium"
-                                        >
-                                            {formatCurrency(
-                                                order.totalAmount,
-                                                locale,
-                                            )}
-                                        </AdminDataTableCell>
-                                    </AdminDataTableRow>
-                                ))}
-                            </AdminDataTableBody>
-                        </AdminDataTable>
+                                        </span>
+                                    }
+                                    onClick={() =>
+                                        router.visit(
+                                            `/admin/orders/${order.orderNumber}`,
+                                        )
+                                    }
+                                >
+                                    <AdminCardListField
+                                        label={tCommon('total')}
+                                    >
+                                        {formatCurrency(
+                                            order.totalAmount,
+                                            locale,
+                                        )}
+                                    </AdminCardListField>
+                                </AdminCardListItem>
+                            ))}
+                        </AdminCardList>
                     </div>
                 </section>
             </div>

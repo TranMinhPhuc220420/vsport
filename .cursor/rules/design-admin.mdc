@@ -26,4 +26,11 @@ When editing admin pages or components, follow [docs/DESIGN_ADMIN.md](../../docs
 - Light sidebar (surface/neutral), not dark chrome.
 - Card radius 16px (`rounded-admin-lg`); button radius 10px (`rounded-admin-md`).
 
+## Layout width (`max-w-*`)
+
+- **Default: full width.** Admin page content lives in the `p-6` shell — do not wrap forms, tables, or multi-field sections in `max-w-*`.
+- **Use `max-w-*` only when the UI is intentionally narrow:** compact filter bars, single-purpose create forms that match an existing page pattern (e.g. `max-w-2xl` on product create), or `truncate` on table cells (`max-w-xs` + ellipsis). For modals, use the shared `DialogContent` width (`w-[min(calc(100vw-2rem),32rem)]`) — do not add extra `max-w-md` / `sm:max-w-*` unless a smaller modal is explicitly required.
+- **Never** put `max-w-*` on containers that hold grids, image previews, badges + action buttons, or rich campaign/product data — it squeezes content and breaks layout.
+- Prefer `grid` / `flex-wrap` / `min-w-0` for responsive layout instead of capping page width.
+
 Preview: `/admin/preview/design-system` (admin auth required).

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { adminInputClassName } from '@/components/admin/ui/admin-input-styles';
 import {
@@ -36,6 +37,7 @@ export function ColorwayImageManager({
     const [images, setImages] = useState(() => sortImages(initialImages));
     const [uploading, setUploading] = useState(false);
     const [busyImageId, setBusyImageId] = useState<number | null>(null);
+    const [deleteImageId, setDeleteImageId] = useState<number | null>(null);
 
     const defaultAlt = `${productName} - ${colorName}`;
 
@@ -127,18 +129,21 @@ export function ColorwayImageManager({
         }
     };
 
-    const handleDelete = async (imageId: number) => {
-        if (!confirm(t('products.deleteImageConfirm'))) {
+    const confirmDeleteImage = async () => {
+        if (deleteImageId === null) {
             return;
         }
 
-        setBusyImageId(imageId);
+        setBusyImageId(deleteImageId);
 
         try {
-            await deleteProductImage(imageId);
-            const remaining = images.filter((image) => image.id !== imageId);
+            await deleteProductImage(deleteImageId);
+            const remaining = images.filter(
+                (image) => image.id !== deleteImageId,
+            );
 
             setImages(sortImages(remaining));
+            setDeleteImageId(null);
         } catch (error) {
             toast.error(
                 error instanceof Error
@@ -275,7 +280,7 @@ export function ColorwayImageManager({
                                     type="button"
                                     className="inline-flex items-center gap-1 text-sm text-red-600 hover:underline"
                                     disabled={busyImageId === image.id}
-                                    onClick={() => void handleDelete(image.id)}
+                                    onClick={() => setDeleteImageId(image.id)}
                                 >
                                     <Trash2 className="size-3.5" />
                                     {t('products.deleteImage')}
@@ -311,6 +316,16 @@ export function ColorwayImageManager({
                     ))}
                 </div>
             )}
+
+            <AdminConfirmDialog
+                open={deleteImageId !== null}
+                onOpenChange={(open) => !open && setDeleteImageId(null)}
+                title={t('products.deleteImageConfirm')}
+                variant="destructive"
+                confirmLabel={t('products.deleteImage')}
+                loading={deleteImageId !== null && busyImageId === deleteImageId}
+                onConfirm={() => void confirmDeleteImage()}
+            />
         </div>
     );
 }

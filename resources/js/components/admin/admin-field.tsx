@@ -112,6 +112,7 @@ type AdminSelectFieldProps = {
     onChange: (value: string) => void;
     options: { value: string | number; label: string }[];
     className?: string;
+    disabled?: boolean;
 };
 
 export function AdminSelectField({
@@ -122,6 +123,7 @@ export function AdminSelectField({
     onChange,
     options,
     className,
+    disabled,
 }: AdminSelectFieldProps) {
     const fieldId = React.useId();
 
@@ -132,6 +134,7 @@ export function AdminSelectField({
                 aria-invalid={error ? true : undefined}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
+                disabled={disabled}
                 className={cn(adminSelectClassName, className)}
             >
                 {options.map((option) => (

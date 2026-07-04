@@ -8,6 +8,12 @@ import { adminSelectClassName } from '@/components/admin/admin-form';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import {
+    AdminCardList,
+    AdminCardListField,
+    AdminCardListItem,
+    AdminSkeletonCards,
+} from '@/components/admin/ui/admin-card-list';
+import {
     AdminDataTable,
     AdminDataTableBody,
     AdminDataTableCell,
@@ -18,6 +24,8 @@ import {
 } from '@/components/admin/ui/admin-data-table';
 import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
+import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
+import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
 import { formatDate, useLocale } from '@/hooks/use-locale';
 
 type UserRow = {
@@ -70,6 +78,7 @@ export default function AdminUsersIndex({
     const [pendingRoleChange, setPendingRoleChange] =
         useState<PendingRoleChange | null>(null);
     const [updatingRole, setUpdatingRole] = useState(false);
+    const { isPending, onStart, onFinish } = useAdminFilterPending();
 
     setLayoutProps({
         breadcrumbs: [
@@ -78,13 +87,16 @@ export default function AdminUsersIndex({
         ],
     });
 
-    const applySearch = useCallback((value: string) => {
-        router.get(
-            '/admin/users',
-            { search: value || undefined },
-            { preserveState: true, replace: true },
-        );
-    }, []);
+    const applySearch = useCallback(
+        (value: string) => {
+            router.get(
+                '/admin/users',
+                { search: value || undefined },
+                { preserveState: true, replace: true, onStart, onFinish },
+            );
+        },
+        [onStart, onFinish],
+    );
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -149,6 +161,7 @@ export default function AdminUsersIndex({
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={t('users.searchPlaceholder')}
                         className="min-w-[220px] flex-1"
+                        disabled={isPending}
                         onKeyDown={(event) => {
                             if (event.key === 'Enter') {
                                 applySearch(search);
@@ -158,13 +171,14 @@ export default function AdminUsersIndex({
                     <AdminButton
                         type="button"
                         variant="secondary"
+                        disabled={isPending}
                         onClick={() => applySearch(search)}
                     >
                         {tCommon('search')}
                     </AdminButton>
                 </div>
 
-                {users.data.length === 0 ? (
+                {!isPending && users.data.length === 0 ? (
                     <AdminEmptyState
                         title={t('users.noResults')}
                         description={
@@ -174,65 +188,159 @@ export default function AdminUsersIndex({
                         }
                     />
                 ) : (
-                    <AdminDataTable>
-                        <AdminDataTableHead>
-                            <AdminDataTableHeaderRow>
-                                <AdminDataTableHeaderCell>
-                                    {tCommon('name')}
-                                </AdminDataTableHeaderCell>
-                                <AdminDataTableHeaderCell>
-                                    {tCommon('email')}
-                                </AdminDataTableHeaderCell>
-                                <AdminDataTableHeaderCell>
-                                    {t('users.role')}
-                                </AdminDataTableHeaderCell>
-                                <AdminDataTableHeaderCell>
-                                    {t('users.joined')}
-                                </AdminDataTableHeaderCell>
-                            </AdminDataTableHeaderRow>
-                        </AdminDataTableHead>
-                        <AdminDataTableBody>
-                            {users.data.map((user) => (
-                                <AdminDataTableRow key={user.id}>
-                                    <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
-                                        {user.name}
-                                        {user.id === auth.user.id && (
-                                            <span className="text-admin-secondary ml-2 text-xs">
-                                                {t('users.you')}
-                                            </span>
-                                        )}
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell className="text-admin-secondary">
-                                        {user.email}
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell>
-                                        <select
-                                            key={`${user.id}-${user.role}`}
-                                            className={adminSelectClassName}
-                                            value={user.role}
-                                            disabled={user.id === auth.user.id}
-                                            onChange={(event) =>
-                                                requestRoleChange(user, event)
-                                            }
+                    <>
+                        <div className="hidden md:block">
+                            <AdminDataTable>
+                                <AdminDataTableHead>
+                                    <AdminDataTableHeaderRow>
+                                        <AdminDataTableHeaderCell>
+                                            {tCommon('name')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {tCommon('email')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('users.role')}
+                                        </AdminDataTableHeaderCell>
+                                        <AdminDataTableHeaderCell>
+                                            {t('users.joined')}
+                                        </AdminDataTableHeaderCell>
+                                    </AdminDataTableHeaderRow>
+                                </AdminDataTableHead>
+                                <AdminDataTableBody>
+                                    {isPending ? (
+                                        <AdminSkeletonRows columns={4} />
+                                    ) : (
+                                        users.data.map((user) => (
+                                            <AdminDataTableRow key={user.id}>
+                                                <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
+                                                    {user.name}
+                                                    {user.id ===
+                                                        auth.user.id && (
+                                                        <span className="text-admin-secondary ml-2 text-xs">
+                                                            {t('users.you')}
+                                                        </span>
+                                                    )}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {user.email}
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell>
+                                                    <select
+                                                        key={`${user.id}-${user.role}`}
+                                                        className={
+                                                            adminSelectClassName
+                                                        }
+                                                        value={user.role}
+                                                        disabled={
+                                                            user.id ===
+                                                            auth.user.id
+                                                        }
+                                                        onChange={(event) =>
+                                                            requestRoleChange(
+                                                                user,
+                                                                event,
+                                                            )
+                                                        }
+                                                    >
+                                                        {roleOptions.map(
+                                                            (role) => (
+                                                                <option
+                                                                    key={role}
+                                                                    value={role}
+                                                                >
+                                                                    {t(
+                                                                        roleLabelKey(
+                                                                            role,
+                                                                        ),
+                                                                        {
+                                                                            defaultValue:
+                                                                                role,
+                                                                        },
+                                                                    )}
+                                                                </option>
+                                                            ),
+                                                        )}
+                                                    </select>
+                                                </AdminDataTableCell>
+                                                <AdminDataTableCell className="text-admin-secondary">
+                                                    {user.createdAt
+                                                        ? formatDate(
+                                                              user.createdAt,
+                                                              locale,
+                                                          )
+                                                        : tCommon('emDash')}
+                                                </AdminDataTableCell>
+                                            </AdminDataTableRow>
+                                        ))
+                                    )}
+                                </AdminDataTableBody>
+                            </AdminDataTable>
+                        </div>
+
+                        <AdminCardList className="md:hidden">
+                            {isPending ? (
+                                <AdminSkeletonCards />
+                            ) : (
+                                users.data.map((user) => (
+                                    <AdminCardListItem
+                                        key={user.id}
+                                        title={
+                                            <>
+                                                {user.name}
+                                                {user.id === auth.user.id && (
+                                                    <span className="text-admin-secondary ml-2 text-xs">
+                                                        {t('users.you')}
+                                                    </span>
+                                                )}
+                                            </>
+                                        }
+                                        subtitle={user.email}
+                                    >
+                                        <AdminCardListField
+                                            label={t('users.role')}
                                         >
-                                            {roleOptions.map((role) => (
-                                                <option key={role} value={role}>
-                                                    {t(roleLabelKey(role), {
-                                                        defaultValue: role,
-                                                    })}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </AdminDataTableCell>
-                                    <AdminDataTableCell className="text-admin-secondary">
-                                        {user.createdAt
-                                            ? formatDate(user.createdAt, locale)
-                                            : tCommon('emDash')}
-                                    </AdminDataTableCell>
-                                </AdminDataTableRow>
-                            ))}
-                        </AdminDataTableBody>
-                    </AdminDataTable>
+                                            <select
+                                                key={`${user.id}-${user.role}`}
+                                                className={adminSelectClassName}
+                                                value={user.role}
+                                                disabled={
+                                                    user.id === auth.user.id
+                                                }
+                                                onChange={(event) =>
+                                                    requestRoleChange(
+                                                        user,
+                                                        event,
+                                                    )
+                                                }
+                                            >
+                                                {roleOptions.map((role) => (
+                                                    <option
+                                                        key={role}
+                                                        value={role}
+                                                    >
+                                                        {t(roleLabelKey(role), {
+                                                            defaultValue: role,
+                                                        })}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </AdminCardListField>
+                                        <AdminCardListField
+                                            label={t('users.joined')}
+                                        >
+                                            {user.createdAt
+                                                ? formatDate(
+                                                      user.createdAt,
+                                                      locale,
+                                                  )
+                                                : tCommon('emDash')}
+                                        </AdminCardListField>
+                                    </AdminCardListItem>
+                                ))
+                            )}
+                        </AdminCardList>
+                    </>
                 )}
 
                 <AdminPagination

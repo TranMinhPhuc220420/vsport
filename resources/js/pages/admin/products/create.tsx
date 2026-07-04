@@ -11,6 +11,7 @@ import { AdminFormSection } from '@/components/admin/admin-form-section';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { SizeChipPicker } from '@/components/admin/size-chip-picker';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import { AdminCard } from '@/components/admin/ui/admin-card';
 
 type AdminProductsCreateProps = {
     categories: { id: number; name: string }[];
@@ -257,7 +258,7 @@ export default function AdminProductsCreate({
 
                             <SizeChipPicker value={sizes} onChange={setSizes} />
 
-                            <div className="border-admin rounded-md border bg-[var(--admin-neutral)] p-4">
+                            <AdminCard className="bg-[var(--admin-neutral)] p-4">
                                 <p className="text-admin-secondary text-sm">
                                     {t('products.skuPreview')}
                                 </p>
@@ -272,7 +273,7 @@ export default function AdminProductsCreate({
                                         {t('products.skuPreviewEmpty')}
                                     </p>
                                 )}
-                            </div>
+                            </AdminCard>
 
                             {(errors as Record<string, string | undefined>)
                                 .sizes && (

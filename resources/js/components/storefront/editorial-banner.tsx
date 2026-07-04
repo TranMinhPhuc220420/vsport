@@ -29,22 +29,20 @@ function EditorialBanner({
                 className,
             )}
         >
-            <ScrollReveal direction="clip" className="absolute inset-0">
-                <img
-                    src={imageUrl}
-                    alt={headline}
-                    className="motion-hero-ken-burns hidden size-full object-cover tablet:block"
-                />
-                <img
-                    src={imageUrl}
-                    alt={headline}
-                    className="size-full object-cover tablet:hidden"
-                />
-            </ScrollReveal>
+            <img
+                src={imageUrl}
+                alt={headline}
+                className="motion-hero-ken-burns hidden size-full object-cover tablet:block"
+            />
+            <img
+                src={imageUrl}
+                alt={headline}
+                className="size-full object-cover tablet:hidden"
+            />
 
             <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/25 to-transparent" />
 
-            <div className="storefront-container absolute inset-0 flex flex-col justify-end pb-8 tablet:pb-12">
+            <div className="storefront-container absolute inset-0 z-10 flex flex-col justify-end pb-8 tablet:pb-12">
                 <ScrollReveal delay={80}>
                     <p className="text-caption-md text-canvas/80">{subtitle}</p>
                     <h2 className="text-display-campaign mt-2 max-w-3xl text-canvas">
