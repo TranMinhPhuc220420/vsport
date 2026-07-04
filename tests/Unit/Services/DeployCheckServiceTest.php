@@ -1,9 +1,11 @@
 <?php
 
 use App\Services\Ops\DeployCheckService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
-uses(TestCase::class);
+uses(TestCase::class, RefreshDatabase::class);
 
 beforeEach(function () {
     $this->service = app(DeployCheckService::class);
@@ -56,11 +58,16 @@ test('deploy check strict mode fails on stripe webhook warning', function () {
 });
 
 test('deploy check reports missing app key', function () {
-    config(['app.key' => '']);
+    $originalKey = config('app.key');
+    Config::set('app.key', '');
 
-    $report = $this->service->run();
+    try {
+        $report = $this->service->run();
 
-    expect($report->hasFailures())->toBeTrue()
-        ->and(collect($report->items)->pluck('message'))
-        ->toContain('APP_KEY is missing. Run php artisan key:generate.');
+        expect($report->hasFailures())->toBeTrue()
+            ->and(collect($report->items)->pluck('message'))
+            ->toContain('APP_KEY is missing. Run php artisan key:generate.');
+    } finally {
+        Config::set('app.key', $originalKey);
+    }
 });
