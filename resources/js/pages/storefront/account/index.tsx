@@ -18,7 +18,7 @@ type AccountPageProps = {
 export default function AccountPage({ recentOrders, seo }: AccountPageProps) {
     const { t } = useTranslation('storefront');
     const { t: tCommon } = useTranslation('common');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const user = auth.user;
 
@@ -105,6 +105,7 @@ export default function AccountPage({ recentOrders, seo }: AccountPageProps) {
                                             {formatCurrency(
                                                 order.totalAmount,
                                                 locale,
+                                                currency,
                                             )}
                                         </span>
                                     </Link>

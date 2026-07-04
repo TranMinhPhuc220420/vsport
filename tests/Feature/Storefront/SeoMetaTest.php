@@ -73,9 +73,12 @@ test('seeded product images expose alt text in api', function () {
     $response->assertOk();
 
     $payload = $response->json('data') ?? $response->json();
-    $colorways = $payload['colorways'] ?? [];
+    $options = $payload['options'] ?? [];
 
-    $images = collect($colorways)->flatMap(fn (array $colorway) => $colorway['images'] ?? []);
+    $images = collect($options)->flatMap(
+        fn (array $option) => collect($option['values'] ?? [])
+            ->flatMap(fn (array $value) => $value['images'] ?? []),
+    );
 
     expect($images)->not->toBeEmpty();
 

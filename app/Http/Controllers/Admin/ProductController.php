@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreColorwayRequest;
+use App\Http\Requests\Admin\BulkAssignProductCategoryRequest;
+use App\Http\Requests\Admin\BulkDestroyProductsRequest;
+use App\Http\Requests\Admin\BulkUpdateFeaturedProductsRequest;
 use App\Http\Requests\Admin\StoreProductRequest;
-use App\Http\Requests\Admin\UpdateColorwayRequest;
+use App\Http\Requests\Admin\SyncCustomizationOptionsRequest;
+use App\Http\Requests\Admin\SyncProductAttributesRequest;
+use App\Http\Requests\Admin\SyncProductOptionsRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Http\Resources\AdminProductResource;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductColorway;
 use App\Models\ProductImage;
 use App\Services\Admin\AdminActivityService;
 use App\Services\Catalog\ProductAdminService;
+use App\Services\Catalog\ProductOptionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,6 +27,7 @@ class ProductController extends Controller
 {
     public function __construct(
         private readonly ProductAdminService $products,
+        private readonly ProductOptionService $options,
         private readonly AdminActivityService $activity,
     ) {}
 
@@ -34,10 +39,10 @@ class ProductController extends Controller
         $products = Product::query()
             ->with([
                 'category',
-                'colorways.images',
-                'colorways.variants.inventory',
+                'options.values.images',
+                'variants.inventory',
             ])
-            ->withCount('colorways')
+            ->withCount('variants')
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($query) use ($search): void {
                     $query->where('name', 'like', "%{$search}%")
@@ -59,11 +64,11 @@ class ProductController extends Controller
                     'styleCode' => $product->style_code,
                     'category' => $product->category?->name,
                     'categoryId' => $product->category_id,
-                    'colorwaysCount' => $product->colorways_count,
+                    'variantsCount' => $product->variants_count,
                     'thumbnailUrl' => $this->productThumbnailUrl($product),
                     'totalStock' => $this->productTotalStock($product),
                     'lowStock' => $this->productHasLowStock($product),
-                    'isActive' => $product->colorways->contains(fn (ProductColorway $colorway) => $colorway->is_active),
+                    'isActive' => $product->variants->isNotEmpty(),
                     'isFeatured' => $product->is_featured,
                 ])->values()->all(),
                 'links' => [
@@ -108,13 +113,9 @@ class ProductController extends Controller
                 'sub_title',
                 'base_price',
                 'gender',
+                'is_customizable',
             ])->all(),
-            [
-                'colorway_code' => $validated['colorway_code'],
-                'color_name' => $validated['color_name'],
-                'discount_price' => $validated['discount_price'] ?? null,
-                'sizes' => $validated['sizes'],
-            ],
+            $validated['options'] ?? null,
         );
 
         Inertia::flash('toast', [
@@ -124,20 +125,16 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.edit', [
             'product' => $product,
-            'tab' => 'colorways',
+            'tab' => 'options',
         ]);
     }
 
     public function edit(Request $request, Product $product): Response
     {
-        $product->load([
-            'category',
-            'colorways.variants.inventory',
-            'colorways.images',
-        ]);
-
         return Inertia::render('admin/products/edit', [
-            'product' => AdminProductResource::make($product)->resolve(),
+            'product' => AdminProductResource::make(
+                $this->products->loadAdminProduct($product),
+            )->resolve(),
             'categories' => $this->categoryOptions(),
             'genders' => ['Men', 'Women', 'Kids', 'Unisex'],
             'activeTab' => $request->string('tab')->toString() ?: 'details',
@@ -158,36 +155,100 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index');
     }
 
-    public function storeColorway(StoreColorwayRequest $request, Product $product): RedirectResponse
+    public function bulkDestroy(BulkDestroyProductsRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
+        $ids = $request->validated('ids');
 
-        $this->products->createColorway($product, [
-            'colorway_code' => $validated['colorway_code'],
-            'color_name' => $validated['color_name'],
-            'discount_price' => $validated['discount_price'] ?? null,
-            'is_active' => $validated['is_active'] ?? true,
-            'sizes' => $validated['sizes'],
+        Product::query()->whereIn('id', $ids)->delete();
+
+        $this->activity->log(
+            $request->user(),
+            'products.bulk_delete',
+            null,
+            ['ids' => $ids, 'count' => count($ids)],
+            $request,
+        );
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('messages.products_bulk_deleted'),
         ]);
 
-        return redirect()->route('admin.products.edit', $product);
+        return back();
     }
 
-    public function updateColorway(
-        UpdateColorwayRequest $request,
-        ProductColorway $colorway,
-    ): RedirectResponse {
-        $this->products->updateColorway($colorway, $request->validated());
-
-        return redirect()->route('admin.products.edit', $colorway->product);
-    }
-
-    public function destroyColorway(ProductColorway $colorway): RedirectResponse
+    public function bulkUpdateFeatured(BulkUpdateFeaturedProductsRequest $request): RedirectResponse
     {
-        $product = $colorway->product;
-        $this->products->deleteColorway($colorway);
+        $ids = $request->validated('ids');
+        $isFeatured = $request->boolean('is_featured');
 
-        return redirect()->route('admin.products.edit', $product);
+        Product::query()->whereIn('id', $ids)->update(['is_featured' => $isFeatured]);
+
+        $this->activity->log(
+            $request->user(),
+            'products.bulk_featured_update',
+            null,
+            ['ids' => $ids, 'count' => count($ids), 'is_featured' => $isFeatured],
+            $request,
+        );
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('messages.products_bulk_featured_updated'),
+        ]);
+
+        return back();
+    }
+
+    public function bulkAssignCategory(BulkAssignProductCategoryRequest $request): RedirectResponse
+    {
+        $ids = $request->validated('ids');
+        $categoryId = $request->integer('category_id');
+
+        Product::query()->whereIn('id', $ids)->update(['category_id' => $categoryId]);
+
+        $this->activity->log(
+            $request->user(),
+            'products.bulk_category_update',
+            null,
+            ['ids' => $ids, 'count' => count($ids), 'category_id' => $categoryId],
+            $request,
+        );
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('messages.products_bulk_category_updated'),
+        ]);
+
+        return back();
+    }
+
+    public function syncOptions(SyncProductOptionsRequest $request, Product $product): RedirectResponse
+    {
+        $this->options->syncOptions($product, $request->validated('options'));
+
+        return redirect()->route('admin.products.edit', ['product' => $product, 'tab' => 'options']);
+    }
+
+    public function generateVariants(Product $product): RedirectResponse
+    {
+        $this->options->generateVariants($product);
+
+        return redirect()->route('admin.products.edit', ['product' => $product, 'tab' => 'inventory']);
+    }
+
+    public function syncAttributes(SyncProductAttributesRequest $request, Product $product): RedirectResponse
+    {
+        $this->products->syncAttributes($product, $request->validated('attributes'));
+
+        return redirect()->route('admin.products.edit', ['product' => $product, 'tab' => 'attributes']);
+    }
+
+    public function syncCustomization(SyncCustomizationOptionsRequest $request, Product $product): RedirectResponse
+    {
+        $this->products->syncCustomizationOptions($product, $request->validated('options'));
+
+        return redirect()->route('admin.products.edit', ['product' => $product, 'tab' => 'options']);
     }
 
     public function updateFeatured(Request $request, Product $product): RedirectResponse
@@ -214,12 +275,18 @@ class ProductController extends Controller
 
     private function productThumbnailUrl(Product $product): ?string
     {
-        foreach ($product->colorways as $colorway) {
-            $primary = $colorway->images->firstWhere('is_primary', true)
-                ?? $colorway->images->first();
+        foreach ($product->options as $option) {
+            if (! $option->drives_gallery) {
+                continue;
+            }
 
-            if ($primary instanceof ProductImage) {
-                return $primary->image_url;
+            foreach ($option->values as $value) {
+                $primary = $value->images->firstWhere('is_primary', true)
+                    ?? $value->images->first();
+
+                if ($primary instanceof ProductImage) {
+                    return $primary->image_url;
+                }
             }
         }
 
@@ -228,10 +295,8 @@ class ProductController extends Controller
 
     private function productTotalStock(Product $product): int
     {
-        return (int) $product->colorways->sum(
-            fn (ProductColorway $colorway) => $colorway->variants->sum(
-                fn ($variant) => $variant->inventory?->availableQuantity() ?? 0,
-            ),
+        return (int) $product->variants->sum(
+            fn ($variant) => $variant->inventory?->availableQuantity() ?? 0,
         );
     }
 

@@ -10,17 +10,20 @@ build:
 	# Copy .env.production to .env
 	cp .env.production .env
 	# Clear the cache
-	php artisan cache:clear
-	php artisan route:clear
-	php artisan view:clear
-	php artisan config:clear
-	php artisan optimize:clear
+	make clear
 
 	# Run the tests
 	php artisan test
 
 	# Run the build
 	npm run build
+
+clear:
+	php artisan cache:clear
+	php artisan route:clear
+	php artisan view:clear
+	php artisan config:clear
+	php artisan optimize:clear
 
 # Run the tests
 test:

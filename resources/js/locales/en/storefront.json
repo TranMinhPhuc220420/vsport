@@ -15,7 +15,9 @@
         "joinUs": "Join Us",
         "orders": "Orders",
         "account": "Account",
-        "signIn": "Sign In"
+        "signIn": "Sign In",
+        "shopAll": "Shop All {{name}}",
+        "viewCategory": "View {{name}}"
     },
     "footer": {
         "resources": "Resources",
@@ -36,7 +38,9 @@
         "student": "Student",
         "military": "Military",
         "offers": "Offers",
-        "copyright": "© {{year}} Zova Sport. All rights reserved."
+        "copyright": "© {{year}} {{storeName}}. All rights reserved.",
+        "contactTitle": "Contact",
+        "followTitle": "Follow us"
     },
     "home": {
         "featured": "Featured",
@@ -122,6 +126,9 @@
         "addedToBag": "Added to bag",
         "percentOff": "{{percent}}% off",
         "selectSize": "Select Size",
+        "selectOption": "Select {{option}}",
+        "techSpecs": "Tech Specs",
+        "detailsCare": "Details & Care",
         "color": "Color:",
         "addToBag": "Add to Bag",
         "inStock": "In Stock",
@@ -298,7 +305,10 @@
                 "Hours: Monday–Friday, 9:00–18:00 (local time). We aim to respond within one business day.",
                 "For shipping updates, check your order status in Account → Orders after signing in.",
                 "For privacy or data requests, mention \"Privacy\" in your subject line."
-            ]
+            ],
+            "emailLabel": "Email",
+            "phoneLabel": "Phone",
+            "addressLabel": "Address"
         }
     }
 }

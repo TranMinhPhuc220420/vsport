@@ -19,8 +19,8 @@ class ProductCatalogService
     {
         return [
             'category',
-            'activeColorways.images' => fn ($q) => $q->orderBy('sort_order'),
-            'activeColorways.variants.inventory',
+            'options.values.images' => fn ($q) => $q->orderBy('sort_order'),
+            'variants.inventory',
         ];
     }
 
@@ -254,10 +254,12 @@ class ProductCatalogService
             ->where('slug', $slug)
             ->with([
                 'category',
-                'activeColorways.images' => fn ($q) => $q->orderBy('sort_order'),
-                'activeColorways.variants.inventory',
-                'activeColorways.sustainabilityMaterials',
-                'activeColorways.nikeByYouOptions',
+                'options.values.images' => fn ($q) => $q->orderBy('sort_order'),
+                'variants.optionValues.option',
+                'variants.inventory',
+                'attributes',
+                'customizationOptions',
+                'sustainabilityMaterials',
                 'approvedReviews.user',
             ])
             ->firstOrFail();

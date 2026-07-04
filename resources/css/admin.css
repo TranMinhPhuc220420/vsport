@@ -1,14 +1,14 @@
-/* VSport Admin — Stripe aesthetic (see docs/DESIGN_ADMIN.md) */
+/* VSport Admin — Shopify-admin aesthetic (see docs/DESIGN_ADMIN.md) */
 
 .vsport-admin {
     color-scheme: light;
 
-    /* Stripe palette */
-    --admin-primary: #0a2540;
-    --admin-secondary: #425466;
-    --admin-tertiary: #635bff;
-    --admin-tertiary-hover: #5851ea;
-    --admin-neutral: #f6f9fc;
+    /* Shopify-admin palette */
+    --admin-primary: #1a1a1a;
+    --admin-secondary: #6d7175;
+    --admin-tertiary: #008060;
+    --admin-tertiary-hover: #006e52;
+    --admin-neutral: #f1f2f4;
     --admin-surface: #ffffff;
     --admin-on-primary: #ffffff;
 
@@ -16,23 +16,28 @@
     --admin-canvas: var(--admin-neutral);
     --admin-text: var(--admin-primary);
     --admin-text-muted: var(--admin-secondary);
-    --admin-border: color-mix(in srgb, var(--admin-secondary) 20%, transparent);
+    --admin-border: color-mix(in srgb, var(--admin-secondary) 14%, transparent);
     --admin-border-strong: color-mix(
         in srgb,
-        var(--admin-secondary) 35%,
+        var(--admin-secondary) 30%,
         transparent
     );
 
-    --admin-success: #16a34a;
-    --admin-success-soft: #f0fdf4;
-    --admin-warning: #d97706;
-    --admin-warning-soft: #fffbeb;
-    --admin-danger: #dc2626;
-    --admin-danger-soft: #fef2f2;
+    --admin-success: #008060;
+    --admin-success-soft: #e3f1ec;
+    --admin-warning: #b98900;
+    --admin-warning-soft: #fcf1cd;
+    --admin-danger: #d82c0d;
+    --admin-danger-hover: #b8240b;
+    --admin-danger-soft: #fbeae9;
+    --admin-on-tertiary: #ffffff;
+    --admin-on-destructive: #ffffff;
+    --admin-fill-selected: #1a1a1a;
+    --admin-on-fill-selected: #ffffff;
 
     --admin-radius-sm: 6px;
-    --admin-radius-md: 10px;
-    --admin-radius-lg: 16px;
+    --admin-radius-md: 8px;
+    --admin-radius-lg: 12px;
 
     /* Remap shadcn semantic vars inside admin scope */
     --background: var(--admin-neutral);
@@ -42,7 +47,7 @@
     --popover: var(--admin-surface);
     --popover-foreground: var(--admin-primary);
     --primary: var(--admin-tertiary);
-    --primary-foreground: var(--admin-on-primary);
+    --primary-foreground: var(--admin-on-tertiary);
     --secondary: var(--admin-neutral);
     --secondary-foreground: var(--admin-primary);
     --muted: var(--admin-neutral);
@@ -50,13 +55,77 @@
     --accent: var(--admin-neutral);
     --accent-foreground: var(--admin-primary);
     --destructive: var(--admin-danger);
-    --destructive-foreground: #ffffff;
+    --destructive-foreground: var(--admin-on-destructive);
     --border: var(--admin-border);
     --input: var(--admin-border);
     --ring: color-mix(in srgb, var(--admin-tertiary) 40%, transparent);
     --radius: var(--admin-radius-md);
 
     /* Light sidebar */
+    --sidebar: var(--admin-surface);
+    --sidebar-foreground: var(--admin-primary);
+    --sidebar-primary: var(--admin-primary);
+    --sidebar-primary-foreground: var(--admin-on-primary);
+    --sidebar-accent: var(--admin-neutral);
+    --sidebar-accent-foreground: var(--admin-primary);
+    --sidebar-border: var(--admin-border);
+    --sidebar-ring: color-mix(in srgb, var(--admin-tertiary) 40%, transparent);
+}
+
+:is(.dark .vsport-admin, .vsport-admin.dark) {
+    color-scheme: dark;
+
+    /* Shopify-admin dark palette */
+    --admin-primary: #f4f5f6;
+    --admin-secondary: #9a9ea3;
+    --admin-tertiary: #2fbf85;
+    --admin-tertiary-hover: #45cd94;
+    --admin-neutral: #121314;
+    --admin-surface: #1c1d1f;
+    --admin-on-primary: #0c1210;
+
+    --admin-canvas: var(--admin-neutral);
+    --admin-text: var(--admin-primary);
+    --admin-text-muted: var(--admin-secondary);
+    --admin-border: color-mix(in srgb, var(--admin-secondary) 22%, transparent);
+    --admin-border-strong: color-mix(
+        in srgb,
+        var(--admin-secondary) 40%,
+        transparent
+    );
+
+    --admin-success: #2fbf85;
+    --admin-success-soft: color-mix(in srgb, #2fbf85 16%, var(--admin-surface));
+    --admin-warning: #e0b429;
+    --admin-warning-soft: color-mix(in srgb, #e0b429 16%, var(--admin-surface));
+    --admin-danger: #f2604a;
+    --admin-danger-hover: #e04a35;
+    --admin-danger-soft: color-mix(in srgb, #f2604a 16%, var(--admin-surface));
+    --admin-on-tertiary: #ffffff;
+    --admin-on-destructive: #ffffff;
+    --admin-fill-selected: #2a2b2d;
+    --admin-on-fill-selected: #f4f5f6;
+
+    --background: var(--admin-neutral);
+    --foreground: var(--admin-primary);
+    --card: var(--admin-surface);
+    --card-foreground: var(--admin-primary);
+    --popover: var(--admin-surface);
+    --popover-foreground: var(--admin-primary);
+    --primary: var(--admin-tertiary);
+    --primary-foreground: var(--admin-on-tertiary);
+    --secondary: var(--admin-neutral);
+    --secondary-foreground: var(--admin-primary);
+    --muted: var(--admin-neutral);
+    --muted-foreground: var(--admin-secondary);
+    --accent: var(--admin-neutral);
+    --accent-foreground: var(--admin-primary);
+    --destructive: var(--admin-danger);
+    --destructive-foreground: var(--admin-on-destructive);
+    --border: var(--admin-border);
+    --input: var(--admin-border);
+    --ring: color-mix(in srgb, var(--admin-tertiary) 40%, transparent);
+
     --sidebar: var(--admin-surface);
     --sidebar-foreground: var(--admin-primary);
     --sidebar-primary: var(--admin-primary);
@@ -106,7 +175,6 @@
         font-size: 0.98rem;
         font-weight: 500;
         line-height: 1.6;
-        color: var(--admin-primary);
     }
 
     .admin-label {
@@ -168,5 +236,14 @@
 
     .border-admin-strong {
         border-color: var(--admin-border-strong);
+    }
+
+    .vsport-admin select {
+        appearance: auto;
+        color-scheme: light;
+    }
+
+    :is(.dark .vsport-admin, .vsport-admin.dark) select {
+        color-scheme: dark;
     }
 }

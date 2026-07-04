@@ -1,22 +1,44 @@
 import type { AdminProductImage } from '@/lib/admin-upload';
 
-export type ProductVariant = {
+export type AdminProductOptionValue = {
     id: number;
-    size: string;
+    value: string;
+    slug: string;
+    swatchHex?: string | null;
+    salePrice?: number | null;
+    metadata?: Record<string, unknown> | null;
+    sortOrder: number;
+    images: AdminProductImage[];
+};
+
+export type AdminProductOption = {
+    id: number;
+    name: string;
+    position: number;
+    displayType: 'swatch' | 'button' | 'dropdown';
+    isRequired: boolean;
+    drivesGallery: boolean;
+    metadata?: Record<string, unknown> | null;
+    values: AdminProductOptionValue[];
+};
+
+export type AdminProductVariant = {
+    id: number;
     sku: string;
+    optionValueIds: number[];
+    optionLabels: string[];
     quantity: number;
     available: number;
 };
 
-export type ProductColorway = {
-    id: number;
-    colorwayCode: string;
-    fullStyleCode: string;
-    colorName: string;
-    discountPrice: number | null;
-    isActive: boolean;
-    images: AdminProductImage[];
-    variants: ProductVariant[];
+export type AdminProductAttribute = {
+    id?: number;
+    group: string;
+    key: string;
+    label: string;
+    value: string;
+    sortOrder: number;
+    optionValueId?: number | null;
 };
 
 export type AdminProduct = {
@@ -29,27 +51,29 @@ export type AdminProduct = {
     subTitle: string | null;
     basePrice: number;
     gender: string;
-    colorways: ProductColorway[];
+    isCustomizable: boolean;
+    options: AdminProductOption[];
+    variants: AdminProductVariant[];
+    attributes: AdminProductAttribute[];
+    customizationOptions: Array<{
+        componentName: string;
+        allowedMaterials: string[];
+        allowedColors: Array<{ hex: string; name: string }>;
+    }>;
 };
 
-export function getPrimaryImageUrl(colorway: ProductColorway): string | null {
-    const primary = colorway.images.find((img) => img.isPrimary);
-
-    return primary?.url ?? colorway.images[0]?.url ?? null;
-}
-
 export function getProductTotalStock(product: AdminProduct): number {
-    return product.colorways.reduce(
-        (sum, colorway) =>
-            sum +
-            colorway.variants.reduce(
-                (colorwaySum, variant) => colorwaySum + variant.available,
-                0,
-            ),
-        0,
-    );
+    return product.variants.reduce((sum, variant) => sum + variant.available, 0);
 }
 
-export function productHasActiveColorway(product: AdminProduct): boolean {
-    return product.colorways.some((colorway) => colorway.isActive);
+export function productHasActiveVariants(product: AdminProduct): boolean {
+    return product.variants.length > 0;
+}
+
+export function getGalleryOptionValues(product: AdminProduct): AdminProductOptionValue[] {
+    const galleryOption =
+        product.options.find((option) => option.drivesGallery) ??
+        product.options.find((option) => option.displayType === 'swatch');
+
+    return galleryOption?.values ?? [];
 }

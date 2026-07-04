@@ -12,8 +12,8 @@ beforeEach(function () {
 test('order item unit price is computed server side', function () {
     $user = User::factory()->create();
     $variant = ProductVariant::query()
-        ->whereHas('colorway.product', fn ($query) => $query->where('slug', 'zegama-2'))
-        ->with(['colorway.product', 'inventory'])
+        ->whereHas('product', fn ($query) => $query->where('slug', 'zegama-2'))
+        ->with(['product', 'inventory'])
         ->firstOrFail();
 
     $expectedPrice = $variant->unitPrice();

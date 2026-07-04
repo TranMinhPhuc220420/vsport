@@ -7,8 +7,8 @@ use App\Http\Requests\ReorderProductImagesRequest;
 use App\Http\Requests\StoreProductImageRequest;
 use App\Http\Requests\UpdateProductImageRequest;
 use App\Http\Resources\ProductImageResource;
-use App\Models\ProductColorway;
 use App\Models\ProductImage;
+use App\Models\ProductOptionValue;
 use App\Services\ProductImageStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -19,23 +19,23 @@ class ProductImageController extends Controller
         private readonly ProductImageStorage $storage,
     ) {}
 
-    public function store(StoreProductImageRequest $request, ProductColorway $colorway): JsonResponse
+    public function store(StoreProductImageRequest $request, ProductOptionValue $optionValue): JsonResponse
     {
-        $path = $this->storage->upload($request->file('image'), $colorway->id);
+        $path = $this->storage->upload($request->file('image'), $optionValue->id);
 
-        $hasImages = $colorway->images()->exists();
-        $sortOrder = ($colorway->images()->max('sort_order') ?? -1) + 1;
+        $hasImages = $optionValue->images()->exists();
+        $sortOrder = ($optionValue->images()->max('sort_order') ?? -1) + 1;
         $isPrimary = $request->has('is_primary')
             ? (bool) $request->validated('is_primary')
             : ! $hasImages;
 
-        $image = DB::transaction(function () use ($request, $colorway, $path, $sortOrder, $isPrimary) {
+        $image = DB::transaction(function () use ($request, $optionValue, $path, $sortOrder, $isPrimary) {
             if ($isPrimary) {
-                $colorway->images()->update(['is_primary' => false]);
+                $optionValue->images()->update(['is_primary' => false]);
             }
 
             return ProductImage::query()->create([
-                'colorway_id' => $colorway->id,
+                'option_value_id' => $optionValue->id,
                 'image_url' => $this->storage->publicUrl($path),
                 'storage_path' => $path,
                 'image_alt_tag' => $request->validated('image_alt_tag'),
@@ -56,7 +56,7 @@ class ProductImageController extends Controller
         DB::transaction(function () use ($image, $validated) {
             if (($validated['is_primary'] ?? false) === true) {
                 ProductImage::query()
-                    ->where('colorway_id', $image->colorway_id)
+                    ->where('option_value_id', $image->option_value_id)
                     ->whereKeyNot($image->id)
                     ->update(['is_primary' => false]);
             }
@@ -71,11 +71,11 @@ class ProductImageController extends Controller
 
     public function destroy(ProductImage $image): JsonResponse
     {
-        $colorwayId = $image->colorway_id;
+        $optionValueId = $image->option_value_id;
         $wasPrimary = $image->is_primary;
         $storagePath = $image->storage_path;
 
-        DB::transaction(function () use ($image, $wasPrimary, $colorwayId, $storagePath) {
+        DB::transaction(function () use ($image, $wasPrimary, $optionValueId, $storagePath) {
             $image->delete();
 
             if ($storagePath) {
@@ -84,13 +84,13 @@ class ProductImageController extends Controller
 
             if ($wasPrimary) {
                 $nextPrimary = ProductImage::query()
-                    ->where('colorway_id', $colorwayId)
+                    ->where('option_value_id', $optionValueId)
                     ->orderBy('sort_order')
                     ->first();
 
                 if ($nextPrimary) {
                     ProductImage::query()
-                        ->where('colorway_id', $colorwayId)
+                        ->where('option_value_id', $optionValueId)
                         ->update(['is_primary' => false]);
 
                     $nextPrimary->update(['is_primary' => true]);
@@ -103,20 +103,20 @@ class ProductImageController extends Controller
 
     public function reorder(
         ReorderProductImagesRequest $request,
-        ProductColorway $colorway,
+        ProductOptionValue $optionValue,
     ): JsonResponse {
         $order = $request->validated('order');
 
-        DB::transaction(function () use ($colorway, $order) {
+        DB::transaction(function () use ($optionValue, $order) {
             foreach ($order as $index => $imageId) {
                 ProductImage::query()
-                    ->where('colorway_id', $colorway->id)
+                    ->where('option_value_id', $optionValue->id)
                     ->whereKey($imageId)
                     ->update(['sort_order' => $index]);
             }
         });
 
-        $images = $colorway->images()->orderBy('sort_order')->get();
+        $images = $optionValue->images()->orderBy('sort_order')->get();
 
         return response()->json([
             'images' => ProductImageResource::collection($images),

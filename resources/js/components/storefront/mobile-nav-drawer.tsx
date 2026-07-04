@@ -1,4 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '@/components/language-switcher';
@@ -9,28 +11,38 @@ import {
     SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet';
+import {
+    categoryHasChildren,
+    getCategoryChildren,
+} from '@/lib/category-navigation';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { login, register } from '@/routes';
 import type { User } from '@/types/auth';
-
-type NavItem = {
-    label: string;
-    href: string;
-};
+import type { Category } from '@/types/catalog';
 
 type MobileNavDrawerProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    items: NavItem[];
+    categories: Category[];
 };
 
 export function MobileNavDrawer({
     open,
     onOpenChange,
-    items,
+    categories,
 }: MobileNavDrawerProps) {
     const { t } = useTranslation('storefront');
     const { auth } = usePage<{ auth: { user: User | null } }>().props;
+    const [expandedParentId, setExpandedParentId] = useState<number | null>(
+        null,
+    );
+
+    const toggleParent = (parentId: number) => {
+        setExpandedParentId((current) =>
+            current === parentId ? null : parentId,
+        );
+    };
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -44,19 +56,87 @@ export function MobileNavDrawer({
                     </SheetTitle>
                 </SheetHeader>
                 <nav
-                    className="flex flex-col gap-1 px-6 py-6"
+                    className="flex flex-col gap-1 overflow-y-auto px-6 py-6"
                     aria-label={t('mobileMenu.aria')}
                 >
-                    {items.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className="text-body-strong py-3 text-ink"
-                            onClick={() => onOpenChange(false)}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
+                    <Link
+                        href="/"
+                        className="text-body-strong py-3 text-ink"
+                        onClick={() => onOpenChange(false)}
+                    >
+                        {t('nav.newFeatured')}
+                    </Link>
+
+                    {categories.map((category) => {
+                        const children = getCategoryChildren(category);
+                        const hasChildren = categoryHasChildren(category);
+                        const isExpanded = expandedParentId === category.id;
+
+                        if (!hasChildren) {
+                            return (
+                                <Link
+                                    key={category.id}
+                                    href={`/${category.slug}`}
+                                    className="text-body-strong py-3 text-ink"
+                                    onClick={() => onOpenChange(false)}
+                                >
+                                    {category.name}
+                                </Link>
+                            );
+                        }
+
+                        return (
+                            <div key={category.id} className="border-b border-hairline-soft pb-2">
+                                <button
+                                    type="button"
+                                    className="flex w-full items-center justify-between py-3 text-left text-body-strong text-ink"
+                                    aria-expanded={isExpanded}
+                                    onClick={() => toggleParent(category.id)}
+                                >
+                                    <span>{category.name}</span>
+                                    <ChevronDown
+                                        className={cn(
+                                            'size-4 transition-transform',
+                                            isExpanded && 'rotate-180',
+                                        )}
+                                    />
+                                </button>
+
+                                {isExpanded && (
+                                    <div className="flex flex-col gap-1 pb-2 pl-3">
+                                        <Link
+                                            href={`/${category.slug}`}
+                                            className="text-body-md py-2 text-ink"
+                                            onClick={() => onOpenChange(false)}
+                                        >
+                                            {t('nav.shopAll', {
+                                                name: category.name,
+                                            })}
+                                        </Link>
+                                        {children.map((child) => (
+                                            <Link
+                                                key={child.id}
+                                                href={`/${child.slug}`}
+                                                className="flex items-center gap-3 py-2 text-body-md text-mute"
+                                                onClick={() =>
+                                                    onOpenChange(false)
+                                                }
+                                            >
+                                                {child.imageUrl && (
+                                                    <img
+                                                        src={child.imageUrl}
+                                                        alt=""
+                                                        className="size-10 shrink-0 object-cover"
+                                                    />
+                                                )}
+                                                {child.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </nav>
 
                 <div className="mt-auto border-t border-hairline px-6 py-6">

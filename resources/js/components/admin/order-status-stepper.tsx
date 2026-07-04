@@ -47,7 +47,7 @@ export function OrderStatusStepper({ currentStatus }: OrderStatusStepperProps) {
                             isComplete &&
                                 'text-admin-secondary bg-[var(--admin-neutral)]',
                             isCurrent &&
-                                'border-[var(--admin-primary)] bg-[var(--admin-primary)] font-medium text-[var(--admin-on-primary)]',
+                                'border-[var(--admin-fill-selected)] bg-[var(--admin-fill-selected)] font-medium text-[var(--admin-on-fill-selected)]',
                             !isComplete &&
                                 !isCurrent &&
                                 'text-admin-secondary bg-[var(--admin-surface)]',
@@ -57,9 +57,9 @@ export function OrderStatusStepper({ currentStatus }: OrderStatusStepperProps) {
                             className={cn(
                                 'flex size-5 items-center justify-center rounded-full text-xs',
                                 isComplete &&
-                                    'bg-[var(--admin-primary)] text-[var(--admin-on-primary)]',
+                                    'bg-[var(--admin-fill-selected)] text-[var(--admin-on-fill-selected)]',
                                 isCurrent &&
-                                    'bg-[var(--admin-on-primary)] text-[var(--admin-primary)]',
+                                    'bg-[var(--admin-on-fill-selected)] text-[var(--admin-fill-selected)]',
                                 !isComplete &&
                                     !isCurrent &&
                                     'border-admin border',

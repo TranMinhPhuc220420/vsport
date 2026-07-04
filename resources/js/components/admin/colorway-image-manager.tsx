@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
 import { adminInputClassName } from '@/components/admin/ui/admin-input-styles';
 import {
     deleteProductImage,
@@ -238,7 +239,7 @@ export function ColorwayImageManager({
                                     className="border-admin aspect-square w-full rounded-md border object-cover"
                                 />
                                 {image.isPrimary && (
-                                    <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-md bg-[var(--admin-primary)] px-2 py-1 text-xs text-white">
+                                    <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-md bg-[var(--admin-fill-selected)] px-2 py-1 text-xs text-[var(--admin-on-fill-selected)]">
                                         <Star className="size-3 fill-current" />
                                         {t('products.primaryImage')}
                                     </span>
@@ -265,52 +266,48 @@ export function ColorwayImageManager({
 
                             <div className="flex flex-wrap gap-2">
                                 {!image.isPrimary && (
-                                    <button
-                                        type="button"
-                                        className="text-sm text-[var(--admin-primary)] underline"
+                                    <AdminRowActionLink
                                         disabled={busyImageId === image.id}
                                         onClick={() =>
                                             void handleSetPrimary(image.id)
                                         }
                                     >
                                         {t('products.setPrimary')}
-                                    </button>
+                                    </AdminRowActionLink>
                                 )}
-                                <button
-                                    type="button"
-                                    className="inline-flex items-center gap-1 text-sm text-red-600 hover:underline"
+                                <AdminRowActionLink
+                                    variant="danger"
                                     disabled={busyImageId === image.id}
+                                    className="inline-flex items-center gap-1"
                                     onClick={() => setDeleteImageId(image.id)}
                                 >
                                     <Trash2 className="size-3.5" />
                                     {t('products.deleteImage')}
-                                </button>
+                                </AdminRowActionLink>
                             </div>
 
                             <div className="flex gap-2">
-                                <button
-                                    type="button"
-                                    className="text-admin-secondary inline-flex items-center gap-1 text-sm hover:text-[var(--admin-primary)] disabled:opacity-40"
+                                <AdminRowActionLink
                                     disabled={
                                         index === 0 || busyImageId === image.id
                                     }
+                                    className="inline-flex items-center gap-1"
                                     onClick={() => moveImage(image.id, 'up')}
                                 >
                                     <ChevronUp className="size-4" />
                                     {t('products.moveUp')}
-                                </button>
-                                <button
-                                    type="button"
-                                    className="text-admin-secondary inline-flex items-center gap-1 text-sm hover:text-[var(--admin-primary)] disabled:opacity-40"
+                                </AdminRowActionLink>
+                                <AdminRowActionLink
                                     disabled={
                                         index === images.length - 1 ||
                                         busyImageId === image.id
                                     }
+                                    className="inline-flex items-center gap-1"
                                     onClick={() => moveImage(image.id, 'down')}
                                 >
                                     <ChevronDown className="size-4" />
                                     {t('products.moveDown')}
-                                </button>
+                                </AdminRowActionLink>
                             </div>
                         </div>
                     ))}

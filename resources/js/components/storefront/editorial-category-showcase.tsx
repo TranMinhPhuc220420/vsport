@@ -41,8 +41,11 @@ function EditorialCategoryShowcase({
                         style={{ '--stagger-index': 0 } as CSSProperties}
                     >
                         <CategoryTile
+                            featured
                             name={featured.name}
                             slug={featured.slug}
+                            imageUrl={featured.imageUrl}
+                            imageAlt={featured.imageAlt}
                             className="h-full min-h-[20rem] desktop:min-h-[32rem]"
                         />
                     </div>
@@ -59,6 +62,8 @@ function EditorialCategoryShowcase({
                             <CategoryTile
                                 name={category.name}
                                 slug={category.slug}
+                                imageUrl={category.imageUrl}
+                                imageAlt={category.imageAlt}
                             />
                         </div>
                     ))}

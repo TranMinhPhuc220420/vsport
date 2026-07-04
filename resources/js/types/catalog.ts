@@ -10,6 +10,48 @@ export type Category = {
     name: string;
     slug: string;
     parentId: number | null;
+    imageUrl?: string | null;
+    imageAlt?: string | null;
+    children?: Category[];
+};
+
+export type ProductOptionValue = {
+    id: number;
+    value: string;
+    slug: string;
+    swatchHex?: string;
+    salePrice?: number | null;
+    metadata?: Record<string, unknown>;
+    images?: ProductImage[];
+};
+
+export type ProductOption = {
+    id: number;
+    name: string;
+    position: number;
+    displayType: 'swatch' | 'button' | 'dropdown';
+    isRequired: boolean;
+    drivesGallery: boolean;
+    metadata?: Record<string, unknown>;
+    values: ProductOptionValue[];
+};
+
+export type ProductVariant = {
+    id: number;
+    sku: string;
+    optionValueIds: number[];
+    unitPrice: number;
+    stock: {
+        available: number;
+        inStock: boolean;
+    };
+};
+
+export type ProductAttribute = {
+    key: string;
+    label: string;
+    value: string;
+    optionValueId?: number | null;
 };
 
 export type ProductSummary = {
@@ -27,44 +69,8 @@ export type ProductSummary = {
     inStock: boolean;
     colorwaySwatches: string[];
     primaryImage: ProductImage | null;
-};
-
-export type ProductVariant = {
-    id: number;
-    size: string;
-    sku: string;
-    unitPrice: number;
-    stock: {
-        available: number;
-        inStock: boolean;
-    };
-};
-
-export type ProductColorway = {
-    id: number;
-    colorwayCode: string;
-    fullStyleCode: string;
-    colorName: string;
-    isCustomizable?: boolean;
-    swatchColor: string;
-    effectivePrice: number;
-    discountPrice: number | null;
-    images: ProductImage[];
-    variants: ProductVariant[];
-    sustainability?: {
-        weightedRecycledPercent: number;
-        materials: Array<{
-            componentName: string;
-            materialType: string;
-            componentWeightG: number;
-            recycledContentPct: number;
-        }>;
-    };
-    customizationOptions?: Array<{
-        componentName: string;
-        allowedMaterials: string[];
-        allowedColors: Array<{ hex: string; name: string }>;
-    }>;
+    defaultVariantId?: number | null;
+    defaultVariantPrice?: number | null;
 };
 
 export type ProductReview = {
@@ -85,11 +91,28 @@ export type ProductDetail = {
     description: string | null;
     gender: string;
     basePrice: number;
+    isCustomizable?: boolean;
     averageRating?: number;
     reviewCount?: number;
     reviews?: ProductReview[];
     category?: Category;
-    colorways: ProductColorway[];
+    options: ProductOption[];
+    variants: ProductVariant[];
+    attributes?: Record<string, ProductAttribute[]>;
+    sustainability?: {
+        weightedRecycledPercent: number;
+        materials: Array<{
+            componentName: string;
+            materialType: string;
+            componentWeightG: number;
+            recycledContentPct: number;
+        }>;
+    };
+    customizationOptions?: Array<{
+        componentName: string;
+        allowedMaterials: string[];
+        allowedColors: Array<{ hex: string; name: string }>;
+    }>;
 };
 
 export type PaginationLink = {

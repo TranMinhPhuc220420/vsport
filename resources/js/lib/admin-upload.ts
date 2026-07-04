@@ -55,8 +55,8 @@ function jsonHeaders(): Record<string, string> {
     };
 }
 
-export async function uploadColorwayImage(
-    colorwayId: number,
+export async function uploadOptionValueImage(
+    optionValueId: number,
     file: File,
     options: UploadOptions = {},
 ): Promise<AdminProductImage> {
@@ -71,7 +71,7 @@ export async function uploadColorwayImage(
         formData.append('is_primary', options.isPrimary ? '1' : '0');
     }
 
-    const response = await fetch(`/admin/colorways/${colorwayId}/images`, {
+    const response = await fetch(`/admin/option-values/${optionValueId}/images`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -87,6 +87,15 @@ export async function uploadColorwayImage(
     );
 
     return payload.image;
+}
+
+/** @deprecated Use uploadOptionValueImage */
+export async function uploadColorwayImage(
+    optionValueId: number,
+    file: File,
+    options: UploadOptions = {},
+): Promise<AdminProductImage> {
+    return uploadOptionValueImage(optionValueId, file, options);
 }
 
 export async function updateProductImage(
@@ -117,12 +126,12 @@ export async function deleteProductImage(imageId: number): Promise<void> {
     await parseJsonResponse<{ deleted: boolean }>(response);
 }
 
-export async function reorderColorwayImages(
-    colorwayId: number,
+export async function reorderOptionValueImages(
+    optionValueId: number,
     order: number[],
 ): Promise<AdminProductImage[]> {
     const response = await fetch(
-        `/admin/colorways/${colorwayId}/images/reorder`,
+        `/admin/option-values/${optionValueId}/images/reorder`,
         {
             method: 'POST',
             headers: jsonHeaders(),
@@ -136,4 +145,92 @@ export async function reorderColorwayImages(
     );
 
     return body.images;
+}
+
+/** @deprecated Use reorderOptionValueImages */
+export async function reorderColorwayImages(
+    optionValueId: number,
+    order: number[],
+): Promise<AdminProductImage[]> {
+    return reorderOptionValueImages(optionValueId, order);
+}
+
+export type AdminCategoryImage = {
+    id: number;
+    name: string;
+    slug: string;
+    parentId: number | null;
+    imageUrl: string | null;
+    imageAlt: string | null;
+};
+
+type CategoryImageUploadOptions = {
+    imageAlt?: string;
+};
+
+export async function uploadCategoryImage(
+    categoryId: number,
+    file: File,
+    options: CategoryImageUploadOptions = {},
+): Promise<AdminCategoryImage> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    if (options.imageAlt !== undefined) {
+        formData.append('image_alt', options.imageAlt);
+    }
+
+    const response = await fetch(`/admin/categories/${categoryId}/image`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-XSRF-TOKEN': getCsrfToken(),
+        },
+        body: formData,
+        credentials: 'same-origin',
+    });
+
+    const payload = await parseJsonResponse<{ category: AdminCategoryImage }>(
+        response,
+    );
+
+    return payload.category;
+}
+
+export async function deleteCategoryImage(categoryId: number): Promise<void> {
+    const response = await fetch(`/admin/categories/${categoryId}/image`, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-XSRF-TOKEN': getCsrfToken(),
+        },
+        credentials: 'same-origin',
+    });
+
+    if (!response.ok && response.status !== 204) {
+        await parseJsonResponse(response);
+    }
+}
+
+export async function updateCategoryImageAlt(
+    categoryId: number,
+    imageAlt: string,
+): Promise<AdminCategoryImage> {
+    const response = await fetch(
+        `/admin/categories/${categoryId}/image-alt`,
+        {
+            method: 'PATCH',
+            headers: jsonHeaders(),
+            body: JSON.stringify({ image_alt: imageAlt }),
+            credentials: 'same-origin',
+        },
+    );
+
+    const payload = await parseJsonResponse<{ category: AdminCategoryImage }>(
+        response,
+    );
+
+    return payload.category;
 }

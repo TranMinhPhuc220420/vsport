@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\CategoryResource;
+use App\Services\Admin\StoreSettingsService;
+use App\Services\Catalog\ProductCatalogService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,6 +38,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $catalog = app(ProductCatalogService::class);
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -49,6 +54,12 @@ class HandleInertiaRequests extends Middleware
                 ['code' => 'vi', 'label' => 'Tiếng Việt'],
                 ['code' => 'en', 'label' => 'English'],
             ],
+            'navigation' => [
+                'categories' => array_values(
+                    CategoryResource::collection($catalog->topLevelCategories())->resolve()
+                ),
+            ],
+            'storeProfile' => app(StoreSettingsService::class)->profile(),
         ];
     }
 }

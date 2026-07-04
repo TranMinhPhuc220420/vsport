@@ -27,11 +27,8 @@ class StoreProductRequest extends FormRequest
             'sub_title' => ['nullable', 'string', 'max:255'],
             'base_price' => ['required', 'numeric', 'min:0'],
             'gender' => ['required', 'string', Rule::in(array_column(ProductGender::cases(), 'value'))],
-            'colorway_code' => ['required', 'string', 'max:10'],
-            'color_name' => ['required', 'string', 'max:150'],
-            'discount_price' => ['nullable', 'numeric', 'min:0'],
-            'sizes' => ['required', 'array', 'min:1'],
-            'sizes.*' => ['required', 'string', 'max:20'],
+            'is_customizable' => ['sometimes', 'boolean'],
+            'options' => ['nullable', 'array'],
         ];
     }
 }

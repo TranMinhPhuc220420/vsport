@@ -11,7 +11,7 @@ class ProductSustainabilityMaterial extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'colorway_id',
+        'product_id',
         'component_name',
         'material_type',
         'component_weight_g',
@@ -29,8 +29,8 @@ class ProductSustainabilityMaterial extends Model
         ];
     }
 
-    public function colorway(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(ProductColorway::class, 'colorway_id');
+        return $this->belongsTo(Product::class);
     }
 }

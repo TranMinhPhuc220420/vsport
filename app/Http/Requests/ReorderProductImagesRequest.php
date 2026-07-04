@@ -17,14 +17,14 @@ class ReorderProductImagesRequest extends FormRequest
      */
     public function rules(): array
     {
-        $colorway = $this->route('colorway');
+        $optionValue = $this->route('optionValue');
 
         return [
             'order' => ['required', 'array', 'min:1'],
             'order.*' => [
                 'integer',
                 Rule::exists('product_images', 'id')->where(
-                    fn ($query) => $query->where('colorway_id', $colorway?->id),
+                    fn ($query) => $query->where('option_value_id', $optionValue?->id),
                 ),
             ],
         ];

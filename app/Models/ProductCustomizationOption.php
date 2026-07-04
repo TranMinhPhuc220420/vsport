@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class NikeByYouOption extends Model
+class ProductCustomizationOption extends Model
 {
+    protected $table = 'nike_by_you_options';
+
     /**
      * @var list<string>
      */
     protected $fillable = [
-        'colorway_id',
+        'product_id',
         'component_name',
         'allowed_materials',
         'allowed_colors',
@@ -28,8 +30,8 @@ class NikeByYouOption extends Model
         ];
     }
 
-    public function colorway(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(ProductColorway::class, 'colorway_id');
+        return $this->belongsTo(Product::class);
     }
 }

@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property string $average_rating
  * @property int $review_count
  * @property bool $is_featured
+ * @property bool $is_customizable
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -45,6 +46,7 @@ use Illuminate\Support\Carbon;
     'average_rating',
     'review_count',
     'is_featured',
+    'is_customizable',
 ])]
 class Product extends Model
 {
@@ -61,14 +63,29 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function colorways(): HasMany
+    public function options(): HasMany
     {
-        return $this->hasMany(ProductColorway::class);
+        return $this->hasMany(ProductOption::class)->orderBy('position');
     }
 
-    public function activeColorways(): HasMany
+    public function variants(): HasMany
     {
-        return $this->colorways()->where('is_active', true);
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function attributes(): HasMany
+    {
+        return $this->hasMany(ProductAttribute::class)->orderBy('sort_order');
+    }
+
+    public function customizationOptions(): HasMany
+    {
+        return $this->hasMany(ProductCustomizationOption::class);
+    }
+
+    public function sustainabilityMaterials(): HasMany
+    {
+        return $this->hasMany(ProductSustainabilityMaterial::class);
     }
 
     public function reviews(): HasMany
@@ -92,6 +109,7 @@ class Product extends Model
             'average_rating' => 'decimal:2',
             'review_count' => 'integer',
             'is_featured' => 'boolean',
+            'is_customizable' => 'boolean',
         ];
     }
 }

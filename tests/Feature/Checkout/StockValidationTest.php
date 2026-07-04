@@ -12,10 +12,7 @@ beforeEach(function () {
 test('cart rejects out of stock variant', function () {
     $user = User::factory()->create();
 
-    $variant = ProductVariant::query()
-        ->where('size_val', 'US 12')
-        ->whereHas('colorway.product', fn ($query) => $query->where('slug', 'jordan-1-low'))
-        ->firstOrFail();
+    $variant = variantForProductOption('jordan-1-low', 'US 12');
 
     $this->actingAs($user)->postJson('/api/cart/items', [
         'variantId' => $variant->id,

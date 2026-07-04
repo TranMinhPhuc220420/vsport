@@ -40,7 +40,7 @@ export default function AdminOrderShow({
 }: AdminOrderShowPageProps) {
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const { errors } = usePage<{ errors: Record<string, string> }>().props;
     const [pendingStatus, setPendingStatus] = useState<string | null>(null);
 
@@ -181,6 +181,7 @@ export default function AdminOrderShow({
                                                 {formatCurrency(
                                                     order.discountAmount ?? 0,
                                                     locale,
+                                                    currency,
                                                 )}
                                             </span>
                                         )}
@@ -251,7 +252,10 @@ export default function AdminOrderShow({
                                         {item.productName}
                                     </AdminDataTableCell>
                                     <AdminDataTableCell className="text-admin-secondary">
-                                        {item.colorName} / {item.size}
+                                        {(item.options ?? [])
+                                            .map((option) => option.value)
+                                            .join(' / ') ||
+                                            `${item.colorName} / ${item.size}`}
                                     </AdminDataTableCell>
                                     <AdminDataTableCell align="right">
                                         {item.quantity}
@@ -260,7 +264,11 @@ export default function AdminOrderShow({
                                         align="right"
                                         className="font-medium text-[var(--admin-primary)]"
                                     >
-                                        {formatCurrency(item.lineTotal, locale)}
+                                        {formatCurrency(
+                                            item.lineTotal,
+                                            locale,
+                                            currency,
+                                        )}
                                     </AdminDataTableCell>
                                 </AdminDataTableRow>
                             ))}
@@ -276,6 +284,7 @@ export default function AdminOrderShow({
                                             order.subtotalAmount ??
                                                 order.totalAmount,
                                             locale,
+                                            currency,
                                         )}
                                     </span>
                                 </div>
@@ -286,6 +295,7 @@ export default function AdminOrderShow({
                                         {formatCurrency(
                                             order.discountAmount ?? 0,
                                             locale,
+                                            currency,
                                         )}
                                     </span>
                                 </div>
@@ -294,7 +304,11 @@ export default function AdminOrderShow({
                         <div className="flex justify-between font-medium">
                             <span>{tCommon('total')}</span>
                             <span>
-                                {formatCurrency(order.totalAmount, locale)}
+                                {formatCurrency(
+                                    order.totalAmount,
+                                    locale,
+                                    currency,
+                                )}
                             </span>
                         </div>
                     </div>

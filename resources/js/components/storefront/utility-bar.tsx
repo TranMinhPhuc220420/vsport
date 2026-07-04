@@ -21,11 +21,18 @@ export function UtilityBar() {
     return (
         <div
             className={cn(
-                'vsport-light overflow-hidden bg-soft-cloud text-ink transition-[max-height] duration-300 ease-[var(--motion-ease)]',
-                hidden ? 'max-h-0' : 'max-h-9',
+                'vsport-light grid overflow-hidden bg-soft-cloud text-ink transition-[grid-template-rows] duration-300 ease-[var(--motion-ease)]',
+                hidden ? 'grid-rows-[0fr]' : 'grid-rows-[1fr]',
             )}
+            aria-hidden={hidden}
         >
-            <div className="storefront-container text-caption-sm flex h-9 items-center justify-end gap-4">
+            <div
+                className={cn(
+                    'min-h-0 overflow-hidden',
+                    hidden && 'pointer-events-none',
+                )}
+            >
+                <div className="storefront-container text-caption-sm flex h-9 items-center justify-end gap-4">
                 {utilityLinks.map((link) => (
                     <Link
                         key={link.label}
@@ -56,6 +63,7 @@ export function UtilityBar() {
                         {t('nav.signIn')}
                     </Link>
                 )}
+                </div>
             </div>
         </div>
     );

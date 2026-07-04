@@ -14,7 +14,7 @@ type OrderHistoryPageProps = {
 
 export default function OrderHistoryPage({ orders, seo }: OrderHistoryPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
 
     return (
         <>
@@ -80,6 +80,7 @@ export default function OrderHistoryPage({ orders, seo }: OrderHistoryPageProps)
                                             {formatCurrency(
                                                 order.totalAmount,
                                                 locale,
+                                                currency,
                                             )}
                                         </td>
                                     </tr>

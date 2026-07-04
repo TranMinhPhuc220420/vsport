@@ -14,7 +14,7 @@ type OrderShowPageProps = {
 
 export default function OrderShowPage({ order, seo }: OrderShowPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
 
     return (
         <>
@@ -91,7 +91,11 @@ export default function OrderShowPage({ order, seo }: OrderShowPageProps) {
                                     {t('common:total')}
                                 </dt>
                                 <dd>
-                                    {formatCurrency(order.totalAmount, locale)}
+                                    {formatCurrency(
+                                        order.totalAmount,
+                                        locale,
+                                        currency,
+                                    )}
                                 </dd>
                             </div>
                         </dl>
@@ -113,12 +117,20 @@ export default function OrderShowPage({ order, seo }: OrderShowPageProps) {
                                         {item.productName}
                                     </p>
                                     <p className="text-caption-md text-mute">
-                                        {item.colorName} / {item.size} ×{' '}
+                                        {(item.options ?? [])
+                                            .map((option) => option.value)
+                                            .join(' / ') ||
+                                            `${item.colorName} / ${item.size}`}{' '}
+                                        ×{' '}
                                         {item.quantity}
                                     </p>
                                 </div>
                                 <span className="text-body-strong text-ink">
-                                    {formatCurrency(item.lineTotal, locale)}
+                                    {formatCurrency(
+                                        item.lineTotal,
+                                        locale,
+                                        currency,
+                                    )}
                                 </span>
                             </li>
                         ))}

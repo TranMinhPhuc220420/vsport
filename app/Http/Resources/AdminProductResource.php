@@ -27,23 +27,51 @@ class AdminProductResource extends JsonResource
             'subTitle' => $this->sub_title,
             'basePrice' => (float) $this->base_price,
             'gender' => $this->gender->value,
-            'colorways' => $this->whenLoaded('colorways', fn () => $this->colorways->map(fn ($colorway) => [
-                'id' => $colorway->id,
-                'colorwayCode' => $colorway->colorway_code,
-                'fullStyleCode' => $colorway->full_style_code,
-                'colorName' => $colorway->color_name,
-                'discountPrice' => $colorway->discount_price !== null
-                    ? (float) $colorway->discount_price
-                    : null,
-                'isActive' => (bool) $colorway->is_active,
-                'images' => ProductImageResource::collection($colorway->images)->resolve(),
-                'variants' => $colorway->variants->map(fn ($variant) => [
-                    'id' => $variant->id,
-                    'size' => $variant->size_val,
-                    'sku' => $variant->sku,
-                    'quantity' => $variant->inventory?->quantity ?? 0,
-                    'available' => $variant->inventory?->availableQuantity() ?? 0,
+            'isCustomizable' => $this->is_customizable,
+            'options' => $this->whenLoaded('options', fn () => $this->options->map(fn ($option) => [
+                'id' => $option->id,
+                'name' => $option->name,
+                'position' => $option->position,
+                'displayType' => $option->display_type->value,
+                'isRequired' => $option->is_required,
+                'drivesGallery' => $option->drives_gallery,
+                'metadata' => $option->metadata,
+                'values' => $option->values->map(fn ($value) => [
+                    'id' => $value->id,
+                    'value' => $value->value,
+                    'slug' => $value->slug,
+                    'swatchHex' => $value->swatch_hex,
+                    'salePrice' => $value->sale_price !== null ? (float) $value->sale_price : null,
+                    'metadata' => $value->metadata,
+                    'sortOrder' => $value->sort_order,
+                    'images' => ProductImageResource::collection($value->images)->resolve(),
                 ]),
+            ])),
+            'variants' => $this->whenLoaded('variants', fn () => $this->variants->map(fn ($variant) => [
+                'id' => $variant->id,
+                'sku' => $variant->sku,
+                'optionValueIds' => $variant->optionValues->pluck('id')->values()->all(),
+                'optionLabels' => $variant->optionValues
+                    ->sortBy(fn ($v) => $v->option->position)
+                    ->pluck('value')
+                    ->values()
+                    ->all(),
+                'quantity' => $variant->inventory?->quantity ?? 0,
+                'available' => $variant->inventory?->availableQuantity() ?? 0,
+            ])),
+            'attributes' => $this->whenLoaded('attributes', fn () => $this->attributes->map(fn ($attr) => [
+                'id' => $attr->id,
+                'group' => $attr->group->value,
+                'key' => $attr->key,
+                'label' => $attr->label,
+                'value' => $attr->value,
+                'sortOrder' => $attr->sort_order,
+                'optionValueId' => $attr->option_value_id,
+            ])),
+            'customizationOptions' => $this->whenLoaded('customizationOptions', fn () => $this->customizationOptions->map(fn ($option) => [
+                'componentName' => $option->component_name,
+                'allowedMaterials' => $option->allowed_materials,
+                'allowedColors' => $option->allowed_colors,
             ])),
         ];
     }

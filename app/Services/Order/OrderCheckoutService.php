@@ -37,7 +37,7 @@ class OrderCheckoutService
         return DB::transaction(function () use ($cart, $userId, $payload): Order {
             $cart = Cart::query()
                 ->whereKey($cart->id)
-                ->with(['items.variant.colorway.product', 'items.variant.inventory'])
+                ->with(['items.variant.product', 'items.variant.optionValues.option', 'items.variant.inventory'])
                 ->lockForUpdate()
                 ->firstOrFail();
 
@@ -52,8 +52,8 @@ class OrderCheckoutService
                 $available = $variant?->inventory?->availableQuantity() ?? 0;
 
                 if ($variant === null || $item->quantity > $available) {
-                    $size = $variant?->size_val ?? 'item';
-                    $stockErrors[$index] = "{$size} is out of stock.";
+                    $label = $variant?->displayLabel() ?? 'item';
+                    $stockErrors[$index] = "{$label} is out of stock.";
                 }
             }
 
@@ -70,11 +70,23 @@ class OrderCheckoutService
                 $unitPrice = $variant->unitPrice();
                 $subtotal += $unitPrice * $item->quantity;
 
+                $variant->loadMissing('optionValues.option');
+
+                $optionsSnapshot = $variant->optionValues
+                    ->sortBy(fn ($value) => $value->option->position)
+                    ->map(fn ($value) => [
+                        'name' => $value->option->name,
+                        'value' => $value->value,
+                    ])
+                    ->values()
+                    ->all();
+
                 $orderItems[] = [
                     'variant_id' => $variant->id,
-                    'product_name' => $variant->colorway->product->name,
-                    'color_name' => $variant->colorway->color_name,
-                    'size_val' => $variant->size_val,
+                    'product_name' => $variant->product->name,
+                    'color_name' => $optionsSnapshot[0]['value'] ?? '',
+                    'size_val' => $optionsSnapshot[1]['value'] ?? ($optionsSnapshot[0]['value'] ?? ''),
+                    'options_snapshot' => $optionsSnapshot,
                     'custom_configuration' => $item->custom_configuration,
                     'quantity' => $item->quantity,
                     'unit_price' => $unitPrice,

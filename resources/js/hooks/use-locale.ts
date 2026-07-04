@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import i18n, { syncI18nLocale } from '@/i18n';
 import type { AppLocale } from '@/i18n';
 import { setCookie } from '@/lib/cookie';
+import type { StoreProfile } from '@/types/store-profile';
 
 export type LocaleOption = {
     code: AppLocale;
@@ -11,7 +12,7 @@ export type LocaleOption = {
 };
 
 export function useLocale() {
-    const { locale, locales } = usePage().props;
+    const { locale, locales, storeProfile } = usePage().props;
 
     const updateLocale = useCallback(
         (code: AppLocale) => {
@@ -29,6 +30,7 @@ export function useLocale() {
     return {
         locale: locale as AppLocale,
         locales: locales as LocaleOption[],
+        currency: (storeProfile as StoreProfile)?.currency || 'USD',
         updateLocale,
         i18n,
     } as const;

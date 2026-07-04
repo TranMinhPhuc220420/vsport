@@ -1,3 +1,4 @@
+import { AdminCommandPalette } from '@/components/admin/admin-command-palette';
 import { AdminSidebar } from '@/components/admin/admin-sidebar';
 import { AdminSidebarHeader } from '@/components/admin/admin-sidebar-header';
 import { AppContent } from '@/components/app-content';
@@ -20,6 +21,7 @@ export default function AdminSidebarLayout({
                     {children}
                 </AppContent>
             </AppShell>
+            <AdminCommandPalette />
         </div>
     );
 }

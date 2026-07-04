@@ -16,10 +16,12 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string $slug
  * @property int|null $parent_id
+ * @property string|null $image_path
+ * @property string|null $image_alt
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['name', 'slug', 'parent_id'])]
+#[Fillable(['name', 'slug', 'parent_id', 'image_path', 'image_alt'])]
 class Category extends Model
 {
     /** @use HasFactory<CategoryFactory> */
@@ -38,6 +40,11 @@ class Category extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function optionTemplates(): HasMany
+    {
+        return $this->hasMany(CategoryOptionTemplate::class)->orderBy('position');
     }
 
     /**

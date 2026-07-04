@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\ProductColorway;
 use App\Models\ProductImage;
+use App\Models\ProductOptionValue;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class ProductImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'colorway_id' => ProductColorway::factory(),
+            'option_value_id' => ProductOptionValue::factory(),
             'image_url' => 'https://placehold.co/800x800/f5f5f5/111111?text=Product',
             'image_alt_tag' => fake()->sentence(3),
             'is_primary' => true,

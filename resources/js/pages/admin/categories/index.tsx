@@ -1,47 +1,88 @@
-import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
-import { useState } from 'react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
+import { AdminInputField } from '@/components/admin/admin-field';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
-import {
-    AdminCardList,
-    AdminCardListField,
-    AdminCardListItem,
-} from '@/components/admin/ui/admin-card-list';
-import {
-    AdminDataTable,
-    AdminDataTableBody,
-    AdminDataTableCell,
-    AdminDataTableHead,
-    AdminDataTableHeaderCell,
-    AdminDataTableHeaderRow,
-    AdminDataTableRow,
-} from '@/components/admin/ui/admin-data-table';
 import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
-import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
-
-type CategoryRow = {
-    id: number;
-    name: string;
-    slug: string;
-    parentId: number | null;
-    parentName?: string | null;
-    productsCount: number;
-    childrenCount: number;
-};
+import { AdminFilterTabs } from '@/components/admin/ui/admin-filter-tabs';
+import { AdminStatCard } from '@/components/admin/ui/admin-stat-card';
+import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
+import {
+    buildCategoryTree,
+    filterCategoryTree,
+    flattenCategoryTree,
+    getDefaultExpandedIds,
+    type CategoryScope,
+    type CategoryTreeRow,
+} from '@/lib/category-tree';
+import {
+    CategoryTreeCards,
+    CategoryTreeTable,
+} from '@/pages/admin/categories/components/category-tree-table';
 
 type AdminCategoriesIndexProps = {
-    categories: { data: CategoryRow[] };
+    categories: { data: CategoryTreeRow[] };
+    stats: {
+        total: number;
+        roots: number;
+        missingImages: number;
+    };
+    filters: {
+        search: string | null;
+        scope: CategoryScope;
+    };
 };
 
 export default function AdminCategoriesIndex({
     categories,
+    stats,
+    filters,
 }: AdminCategoriesIndexProps) {
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
+    const { errors } = usePage<{ errors: Record<string, string> }>().props;
+    const [search, setSearch] = useState(filters.search ?? '');
     const [deleteId, setDeleteId] = useState<number | null>(null);
+    const { isPending, onStart, onFinish } = useAdminFilterPending();
+
+    const tree = useMemo(
+        () => buildCategoryTree(categories.data),
+        [categories.data],
+    );
+
+    const [expandedIds, setExpandedIds] = useState<Set<number>>(() =>
+        getDefaultExpandedIds(tree),
+    );
+
+    useEffect(() => {
+        setExpandedIds(getDefaultExpandedIds(tree));
+    }, [tree, filters.search, filters.scope]);
+
+    const { roots: filteredRoots, expandedIds: filterExpandedIds } = useMemo(
+        () =>
+            filterCategoryTree(
+                tree,
+                filters.search,
+                filters.scope,
+            ),
+        [tree, filters.search, filters.scope],
+    );
+
+    const effectiveExpandedIds = useMemo(() => {
+        const merged = new Set(expandedIds);
+
+        filterExpandedIds.forEach((id) => merged.add(id));
+
+        return merged;
+    }, [expandedIds, filterExpandedIds]);
+
+    const flatRows = useMemo(
+        () => flattenCategoryTree(filteredRoots, effectiveExpandedIds),
+        [filteredRoots, effectiveExpandedIds],
+    );
 
     setLayoutProps({
         breadcrumbs: [
@@ -49,6 +90,44 @@ export default function AdminCategoriesIndex({
             { title: t('breadcrumb.categories'), href: '/admin/categories' },
         ],
     });
+
+    const applyFilters = useCallback(
+        (next: { search?: string; scope?: CategoryScope }) => {
+            router.get(
+                '/admin/categories',
+                {
+                    search: next.search ?? filters.search ?? undefined,
+                    scope: next.scope ?? filters.scope ?? undefined,
+                },
+                { preserveState: true, replace: true, onStart, onFinish },
+            );
+        },
+        [filters.scope, filters.search, onStart, onFinish],
+    );
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (search !== (filters.search ?? '')) {
+                applyFilters({ search });
+            }
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [search, filters.search, applyFilters]);
+
+    const toggleExpand = (id: number) => {
+        setExpandedIds((current) => {
+            const next = new Set(current);
+
+            if (next.has(id)) {
+                next.delete(id);
+            } else {
+                next.add(id);
+            }
+
+            return next;
+        });
+    };
 
     const destroy = () => {
         if (deleteId === null) {
@@ -59,6 +138,15 @@ export default function AdminCategoriesIndex({
             onFinish: () => setDeleteId(null),
         });
     };
+
+    const scopeOptions: { value: CategoryScope; label: string }[] = [
+        { value: 'all', label: tCommon('all') },
+        { value: 'roots', label: t('categories.filterRoots') },
+        { value: 'children', label: t('categories.filterChildren') },
+    ];
+
+    const hasCategories = stats.total > 0;
+    const hasFilteredResults = flatRows.length > 0;
 
     return (
         <>
@@ -77,7 +165,60 @@ export default function AdminCategoriesIndex({
                     }
                 />
 
-                {categories.data.length === 0 ? (
+                {hasCategories && (
+                    <div className="grid grid-cols-1 gap-4 tablet:grid-cols-3">
+                        <AdminStatCard
+                            label={t('categories.statsTotal')}
+                            value={stats.total}
+                        />
+                        <AdminStatCard
+                            label={t('categories.statsRoots')}
+                            value={stats.roots}
+                        />
+                        <AdminStatCard
+                            label={t('categories.statsMissingImages')}
+                            value={stats.missingImages}
+                        />
+                    </div>
+                )}
+
+                {hasCategories && (
+                    <div className="flex flex-wrap items-end gap-4">
+                        <AdminInputField
+                            label={tCommon('search')}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder={t('categories.searchPlaceholder')}
+                            className="min-w-[220px] flex-1"
+                            disabled={isPending}
+                        />
+                        <div className="space-y-1.5">
+                            <p className="admin-label">{t('categories.filterLabel')}</p>
+                            <AdminFilterTabs
+                                value={filters.scope}
+                                onChange={(value) =>
+                                    applyFilters({
+                                        scope: (value ??
+                                            'all') as CategoryScope,
+                                    })
+                                }
+                                options={scopeOptions}
+                                disabled={isPending}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {errors.category && (
+                    <div
+                        className="rounded-admin-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                        role="alert"
+                    >
+                        {errors.category}
+                    </div>
+                )}
+
+                {!hasCategories ? (
                     <AdminEmptyState
                         title={t('categories.emptyTitle')}
                         description={t('categories.emptyDescription')}
@@ -89,108 +230,24 @@ export default function AdminCategoriesIndex({
                             </AdminButton>
                         }
                     />
+                ) : !hasFilteredResults ? (
+                    <AdminEmptyState
+                        title={t('categories.noResultsTitle')}
+                        description={t('categories.noResultsDescription')}
+                    />
                 ) : (
                     <>
                         <div className="hidden md:block">
-                            <AdminDataTable>
-                                <AdminDataTableHead>
-                                    <AdminDataTableHeaderRow>
-                                        <AdminDataTableHeaderCell>
-                                            {t('products.name')}
-                                        </AdminDataTableHeaderCell>
-                                        <AdminDataTableHeaderCell>
-                                            {t('products.slug')}
-                                        </AdminDataTableHeaderCell>
-                                        <AdminDataTableHeaderCell>
-                                            {t('categories.parent')}
-                                        </AdminDataTableHeaderCell>
-                                        <AdminDataTableHeaderCell>
-                                            {t('categories.products')}
-                                        </AdminDataTableHeaderCell>
-                                        <AdminDataTableHeaderCell className="text-right">
-                                            {tCommon('actions')}
-                                        </AdminDataTableHeaderCell>
-                                    </AdminDataTableHeaderRow>
-                                </AdminDataTableHead>
-                                <AdminDataTableBody>
-                                    {categories.data.map((category) => (
-                                        <AdminDataTableRow key={category.id}>
-                                            <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
-                                                {category.name}
-                                            </AdminDataTableCell>
-                                            <AdminDataTableCell className="text-admin-secondary">
-                                                {category.slug}
-                                            </AdminDataTableCell>
-                                            <AdminDataTableCell className="text-admin-secondary">
-                                                {category.parentName ??
-                                                    tCommon('emDash')}
-                                            </AdminDataTableCell>
-                                            <AdminDataTableCell>
-                                                {category.productsCount}
-                                            </AdminDataTableCell>
-                                            <AdminDataTableCell className="text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <AdminRowActionLink
-                                                        href={`/admin/categories/${category.id}/edit`}
-                                                    >
-                                                        {tCommon('edit')}
-                                                    </AdminRowActionLink>
-                                                    <AdminRowActionLink
-                                                        variant="danger"
-                                                        onClick={() =>
-                                                            setDeleteId(
-                                                                category.id,
-                                                            )
-                                                        }
-                                                    >
-                                                        {tCommon('delete')}
-                                                    </AdminRowActionLink>
-                                                </div>
-                                            </AdminDataTableCell>
-                                        </AdminDataTableRow>
-                                    ))}
-                                </AdminDataTableBody>
-                            </AdminDataTable>
+                            <CategoryTreeTable
+                                rows={flatRows}
+                                onToggleExpand={toggleExpand}
+                                onDelete={setDeleteId}
+                            />
                         </div>
-
-                        <AdminCardList className="md:hidden">
-                            {categories.data.map((category) => (
-                                <AdminCardListItem
-                                    key={category.id}
-                                    title={category.name}
-                                    subtitle={category.slug}
-                                    actions={
-                                        <>
-                                            <AdminRowActionLink
-                                                href={`/admin/categories/${category.id}/edit`}
-                                            >
-                                                {tCommon('edit')}
-                                            </AdminRowActionLink>
-                                            <AdminRowActionLink
-                                                variant="danger"
-                                                onClick={() =>
-                                                    setDeleteId(category.id)
-                                                }
-                                            >
-                                                {tCommon('delete')}
-                                            </AdminRowActionLink>
-                                        </>
-                                    }
-                                >
-                                    <AdminCardListField
-                                        label={t('categories.parent')}
-                                    >
-                                        {category.parentName ??
-                                            tCommon('emDash')}
-                                    </AdminCardListField>
-                                    <AdminCardListField
-                                        label={t('categories.products')}
-                                    >
-                                        {category.productsCount}
-                                    </AdminCardListField>
-                                </AdminCardListItem>
-                            ))}
-                        </AdminCardList>
+                        <CategoryTreeCards
+                            roots={filteredRoots}
+                            onDelete={setDeleteId}
+                        />
                     </>
                 )}
             </div>

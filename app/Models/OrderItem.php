@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $product_name
  * @property string $color_name
  * @property string $size_val
+ * @property array<int, array{name: string, value: string}>|null $options_snapshot
  * @property array<string, mixed>|null $custom_configuration
  * @property int $quantity
  * @property string $unit_price
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'product_name',
     'color_name',
     'size_val',
+    'options_snapshot',
     'custom_configuration',
     'quantity',
     'unit_price',
@@ -52,6 +54,7 @@ class OrderItem extends Model
     protected function casts(): array
     {
         return [
+            'options_snapshot' => 'array',
             'custom_configuration' => 'array',
             'quantity' => 'integer',
             'unit_price' => 'decimal:2',

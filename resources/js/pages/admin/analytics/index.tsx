@@ -46,7 +46,7 @@ export default function AdminAnalyticsIndex({
     averageOrderValue,
 }: AdminAnalyticsIndexProps) {
     const { t } = useTranslation('admin');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
 
     setLayoutProps({
         breadcrumbs: [
@@ -72,7 +72,11 @@ export default function AdminAnalyticsIndex({
 
                 <AdminStatCard
                     label={t('analytics.avgOrder')}
-                    value={formatCurrency(averageOrderValue, locale)}
+                    value={formatCurrency(
+                        averageOrderValue,
+                        locale,
+                        currency,
+                    )}
                 />
 
                 <section className="space-y-4">
@@ -102,6 +106,7 @@ export default function AdminAnalyticsIndex({
                                                 formatCurrency(
                                                     Number(value ?? 0),
                                                     locale,
+                                                    currency,
                                                 )
                                             }
                                         />
@@ -158,6 +163,7 @@ export default function AdminAnalyticsIndex({
                                             {formatCurrency(
                                                 product.revenue,
                                                 locale,
+                                                currency,
                                             )}
                                         </AdminDataTableCell>
                                     </AdminDataTableRow>

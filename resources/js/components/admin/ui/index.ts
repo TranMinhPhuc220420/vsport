@@ -1,3 +1,4 @@
+export { AdminBulkActionBar } from '@/components/admin/ui/admin-bulk-action-bar';
 export { AdminButton } from '@/components/admin/ui/admin-button';
 export {
     adminInputClassName,
@@ -14,6 +15,7 @@ export {
     AdminDataTableHeaderCell,
     AdminDataTableHeaderRow,
     AdminDataTableRow,
+    AdminDataTableSelectCell,
 } from '@/components/admin/ui/admin-data-table';
 export { AdminCard } from '@/components/admin/ui/admin-card';
 export {

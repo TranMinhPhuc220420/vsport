@@ -115,10 +115,12 @@ readonly class ProductStructuredData
     {
         $images = [];
 
-        foreach ($product->activeColorways as $colorway) {
-            foreach ($colorway->images as $image) {
-                if ($image->image_url !== null && $image->image_url !== '') {
-                    $images[] = $image->image_url;
+        foreach ($product->options as $option) {
+            foreach ($option->values as $value) {
+                foreach ($value->images as $image) {
+                    if ($image->image_url !== null && $image->image_url !== '') {
+                        $images[] = $image->image_url;
+                    }
                 }
             }
         }
@@ -132,11 +134,9 @@ readonly class ProductStructuredData
 
     private static function isInStock(Product $product): bool
     {
-        foreach ($product->activeColorways as $colorway) {
-            foreach ($colorway->variants as $variant) {
-                if ($variant->inventory?->isInStock()) {
-                    return true;
-                }
+        foreach ($product->variants as $variant) {
+            if ($variant->inventory?->isInStock()) {
+                return true;
             }
         }
 

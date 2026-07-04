@@ -24,14 +24,20 @@ type AdminStockBadgeProps = {
     className?: string;
 };
 
+const dotStyles: Record<StockStatus, string> = {
+    in_stock: 'bg-[var(--admin-success)]',
+    low_stock: 'bg-[var(--admin-warning)]',
+    out_of_stock: 'bg-[var(--admin-danger)]',
+};
+
+const badgeStyles: Record<StockStatus, string> = {
+    in_stock: 'bg-[var(--admin-success-soft)] text-[var(--admin-success)]',
+    low_stock: 'bg-[var(--admin-warning-soft)] text-[var(--admin-warning)]',
+    out_of_stock: 'bg-[var(--admin-danger-soft)] text-[var(--admin-danger)]',
+};
+
 export function AdminStockBadge({ status, className }: AdminStockBadgeProps) {
     const { t } = useTranslation('admin');
-
-    const styles: Record<StockStatus, string> = {
-        in_stock: 'border-green-200 bg-green-50 text-green-800',
-        low_stock: 'border-amber-200 bg-amber-50 text-amber-800',
-        out_of_stock: 'border-red-200 bg-red-50 text-red-800',
-    };
 
     const labels: Record<StockStatus, string> = {
         in_stock: t('products.stockInStock'),
@@ -42,11 +48,12 @@ export function AdminStockBadge({ status, className }: AdminStockBadgeProps) {
     return (
         <span
             className={cn(
-                'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium',
-                styles[status],
+                'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium',
+                badgeStyles[status],
                 className,
             )}
         >
+            <span className={cn('size-1.5 rounded-full', dotStyles[status])} />
             {labels[status]}
         </span>
     );
@@ -63,13 +70,21 @@ export function AdminActiveBadge({ active, className }: AdminActiveBadgeProps) {
     return (
         <span
             className={cn(
-                'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium',
+                'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium',
                 active
-                    ? 'border-green-200 bg-green-50 text-green-800'
-                    : 'border-admin text-admin-secondary bg-[var(--admin-neutral)]',
+                    ? 'bg-[var(--admin-success-soft)] text-[var(--admin-success)]'
+                    : 'text-admin-secondary bg-[var(--admin-neutral)]',
                 className,
             )}
         >
+            <span
+                className={cn(
+                    'size-1.5 rounded-full',
+                    active
+                        ? 'bg-[var(--admin-success)]'
+                        : 'bg-[var(--admin-secondary)]',
+                )}
+            />
             {active ? t('products.active') : t('products.inactive')}
         </span>
     );

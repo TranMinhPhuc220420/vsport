@@ -7,16 +7,16 @@ beforeEach(function () {
     $this->seed(CatalogSeeder::class);
 });
 
-test('product detail page renders with colorways and stock', function () {
+test('product detail page renders with options and stock', function () {
     $response = $this->get(route('products.show', 'zegama-2'));
 
     $response->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('storefront/products/show')
             ->where('product.slug', 'zegama-2')
-            ->has('product.colorways', 2)
-            ->has('product.colorways.0.variants')
-            ->has('product.colorways.0.variants.0.stock.inStock')
+            ->has('product.options', 2)
+            ->has('product.variants')
+            ->has('product.variants.0.stock.inStock')
             ->has('relatedProducts.data')
         );
 });
@@ -31,12 +31,13 @@ test('product detail page includes related products from catalog', function () {
     expect(count($related))->toBeLessThanOrEqual(8);
 });
 
-test('product detail page includes sale pricing on discounted colorway', function () {
+test('product detail page includes sale pricing on discounted color option value', function () {
     $response = $this->get(route('products.show', 'zegama-2'));
 
-    $colorways = $response->original->getData()['page']['props']['product']['colorways'];
+    $options = $response->original->getData()['page']['props']['product']['options'];
+    $colorOption = collect($options)->firstWhere('name', 'Color');
 
-    expect($colorways[0]['discountPrice'])->toBe(135.0);
+    expect($colorOption['values'][0]['salePrice'])->toBe(135.0);
 });
 
 test('product detail page returns 404 for unknown slug', function () {
@@ -50,9 +51,12 @@ test('jordan 1 low has out of stock variant in seeded data', function () {
 
     $response->assertOk();
 
-    $colorways = $response->original->getData()['page']['props']['product']['colorways'];
-    $variants = collect($colorways)->flatMap(fn ($c) => $c['variants']);
-    $us12 = $variants->firstWhere('size', 'US 12');
+    $product = $response->original->getData()['page']['props']['product'];
+    $sizeOption = collect($product['options'])->firstWhere('name', 'Size');
+    $us12Id = collect($sizeOption['values'])->firstWhere('value', 'US 12')['id'];
+    $us12 = collect($product['variants'])->first(
+        fn (array $variant) => in_array($us12Id, $variant['optionValueIds'], true),
+    );
 
     expect($us12)->not->toBeNull()
         ->and($us12['stock']['inStock'])->toBeFalse();

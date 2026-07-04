@@ -23,13 +23,13 @@ import { adminInputClassName } from '@/components/admin/ui/admin-input-styles';
 import { AdminStatCard } from '@/components/admin/ui/admin-stat-card';
 
 const colorTokens = [
-    { name: 'primary', hex: '#0A2540', className: 'bg-[#0A2540]' },
-    { name: 'secondary', hex: '#425466', className: 'bg-[#425466]' },
-    { name: 'tertiary', hex: '#635BFF', className: 'bg-[#635BFF]' },
+    { name: 'primary', hex: '#1A1A1A', className: 'bg-[#1A1A1A]' },
+    { name: 'secondary', hex: '#6D7175', className: 'bg-[#6D7175]' },
+    { name: 'tertiary', hex: '#008060', className: 'bg-[#008060]' },
     {
         name: 'neutral',
-        hex: '#F6F9FC',
-        className: 'bg-[#F6F9FC] border border-admin',
+        hex: '#F1F2F4',
+        className: 'bg-[#F1F2F4] border border-admin',
     },
     {
         name: 'surface',
@@ -55,7 +55,7 @@ export default function AdminDesignSystemPreview() {
             <div className="flex flex-1 flex-col gap-8 p-6">
                 <AdminPageHeader
                     title="Admin design system"
-                    subtitle="Stripe aesthetic — flat surfaces, navy typography, indigo tertiary CTA only (see docs/DESIGN_ADMIN.md)."
+                    subtitle="Shopify-admin aesthetic — flat surfaces, ink typography, one green tertiary CTA (see docs/DESIGN_ADMIN.md)."
                 />
 
                 <section className="space-y-4">
@@ -90,20 +90,59 @@ export default function AdminDesignSystemPreview() {
 
                 <section className="space-y-4">
                     <h2 className="admin-section-title">Buttons</h2>
-                    <AdminCard className="space-y-4">
+                    <AdminCard className="space-y-6">
                         <p className="admin-caption">
                             One tertiary (primary) action per screen. Others use
-                            secondary or ghost.
+                            secondary or ghost. Filled variants always pair a
+                            dark/colored background with light foreground text
+                            via admin tokens.
                         </p>
-                        <div className="flex flex-wrap gap-3">
-                            <AdminButton>Primary (tertiary)</AdminButton>
-                            <AdminButton variant="secondary">
-                                Secondary
-                            </AdminButton>
-                            <AdminButton variant="ghost">Ghost</AdminButton>
-                            <AdminButton variant="destructive">
-                                Destructive
-                            </AdminButton>
+                        <div className="space-y-3">
+                            <p className="admin-label">Variants</p>
+                            <div className="flex flex-wrap gap-3">
+                                <AdminButton>Primary (tertiary)</AdminButton>
+                                <AdminButton variant="secondary">
+                                    Secondary
+                                </AdminButton>
+                                <AdminButton variant="ghost">Ghost</AdminButton>
+                                <AdminButton variant="destructive">
+                                    Destructive
+                                </AdminButton>
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            <p className="admin-label">Sizes</p>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <AdminButton size="sm">Small</AdminButton>
+                                <AdminButton>Default</AdminButton>
+                                <AdminButton size="lg">Large</AdminButton>
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            <p className="admin-label">
+                                Contrast (filled backgrounds)
+                            </p>
+                            <div className="grid gap-3 tablet:grid-cols-2">
+                                <div className="rounded-admin-md flex items-center gap-3 bg-[var(--admin-tertiary)] px-4 py-3">
+                                    <span className="text-sm text-[var(--admin-on-tertiary)]">
+                                        Tertiary fill + on-tertiary text
+                                    </span>
+                                </div>
+                                <div className="rounded-admin-md flex items-center gap-3 bg-[var(--admin-danger)] px-4 py-3">
+                                    <span className="text-sm text-[var(--admin-on-destructive)]">
+                                        Danger fill + on-destructive text
+                                    </span>
+                                </div>
+                                <div className="rounded-admin-md flex items-center gap-3 bg-[var(--admin-fill-selected)] px-4 py-3">
+                                    <span className="text-sm text-[var(--admin-on-fill-selected)]">
+                                        Selected fill + on-fill-selected text
+                                    </span>
+                                </div>
+                            </div>
+                            <p className="admin-caption">
+                                Toggle appearance (header) to verify light and
+                                dark mode contrast.
+                            </p>
                         </div>
                     </AdminCard>
                 </section>
@@ -211,8 +250,8 @@ export default function AdminDesignSystemPreview() {
                     <h2 className="admin-section-title">Shell</h2>
                     <p className="admin-caption">
                         Light sidebar on surface white; content canvas uses
-                        neutral #F6F9FC. Navigation uses primary navy — tertiary
-                        reserved for page CTAs only.
+                        neutral #F1F2F4. Navigation uses primary ink — tertiary
+                        green reserved for page CTAs only.
                     </p>
                 </section>
             </div>

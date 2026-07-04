@@ -20,11 +20,11 @@ class InventoryReservationService
             ->first();
 
         if ($inventory === null) {
-            throw new CheckoutStockException([0 => "{$variant->size_val} is unavailable."]);
+            throw new CheckoutStockException([0 => "{$variant->displayLabel()} is unavailable."]);
         }
 
         if ($delta > 0 && $delta > $inventory->availableQuantity()) {
-            throw new CheckoutStockException([0 => "{$variant->size_val} is out of stock."]);
+            throw new CheckoutStockException([0 => "{$variant->displayLabel()} is out of stock."]);
         }
 
         if ($delta < 0 && $inventory->reserved_quantity < abs($delta)) {

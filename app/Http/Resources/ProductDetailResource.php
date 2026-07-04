@@ -29,6 +29,7 @@ class ProductDetailResource extends JsonResource
             'description' => $this->description,
             'gender' => $this->gender->value,
             'basePrice' => (float) $this->base_price,
+            'isCustomizable' => $this->is_customizable,
             'averageRating' => (float) $this->average_rating,
             'reviewCount' => $this->review_count,
             'category' => CategoryResource::make($this->whenLoaded('category')),
@@ -42,45 +43,61 @@ class ProductDetailResource extends JsonResource
                     'authorName' => $review->user?->name,
                     'createdAt' => $review->created_at?->toIso8601String(),
                 ])),
-            'colorways' => $this->activeColorways->map(fn ($colorway) => [
-                'id' => $colorway->id,
-                'colorwayCode' => $colorway->colorway_code,
-                'fullStyleCode' => $colorway->full_style_code,
-                'colorName' => $colorway->color_name,
-                'isCustomizable' => $colorway->is_customizable,
-                'swatchColor' => ColorSwatch::fromColorName($colorway->color_name),
-                'effectivePrice' => $colorway->effectivePrice(),
-                'discountPrice' => $colorway->discount_price !== null
-                    ? (float) $colorway->discount_price
-                    : null,
-                'images' => ProductImageResource::collection($colorway->images)->resolve(),
-                'variants' => $colorway->variants->map(fn ($variant) => [
-                    'id' => $variant->id,
-                    'size' => $variant->size_val,
-                    'sku' => $variant->sku,
-                    'unitPrice' => $variant->unitPrice(),
-                    'stock' => [
-                        'available' => $variant->inventory?->availableQuantity() ?? 0,
-                        'inStock' => $variant->inventory?->isInStock() ?? false,
-                    ],
+            'options' => $this->options->map(fn ($option) => [
+                'id' => $option->id,
+                'name' => $option->name,
+                'position' => $option->position,
+                'displayType' => $option->display_type->value,
+                'isRequired' => $option->is_required,
+                'drivesGallery' => $option->drives_gallery,
+                'metadata' => $option->metadata,
+                'values' => $option->values->map(fn ($value) => [
+                    'id' => $value->id,
+                    'value' => $value->value,
+                    'slug' => $value->slug,
+                    'swatchHex' => $value->swatch_hex ?? ColorSwatch::fromColorName($value->value),
+                    'salePrice' => $value->sale_price !== null ? (float) $value->sale_price : null,
+                    'metadata' => $value->metadata,
+                    'images' => ProductImageResource::collection($value->images)->resolve(),
                 ]),
-                'sustainability' => [
-                    'weightedRecycledPercent' => $calculator->weightedRecycledPercent($colorway->sustainabilityMaterials),
-                    'materials' => $colorway->sustainabilityMaterials->map(fn ($material) => [
+            ]),
+            'variants' => $this->variants->map(fn ($variant) => [
+                'id' => $variant->id,
+                'sku' => $variant->sku,
+                'optionValueIds' => $variant->optionValues->pluck('id')->values()->all(),
+                'unitPrice' => $variant->unitPrice(),
+                'stock' => [
+                    'available' => $variant->inventory?->availableQuantity() ?? 0,
+                    'inStock' => $variant->inventory?->isInStock() ?? false,
+                ],
+            ]),
+            'attributes' => $this->whenLoaded('attributes', fn () => $this->attributes
+                ->groupBy(fn ($attr) => $attr->group->value)
+                ->map(fn ($group) => $group->map(fn ($attr) => [
+                    'key' => $attr->key,
+                    'label' => $attr->label,
+                    'value' => $attr->value,
+                    'optionValueId' => $attr->option_value_id,
+                ])->values())),
+            'sustainability' => $this->when(
+                $this->relationLoaded('sustainabilityMaterials'),
+                fn () => [
+                    'weightedRecycledPercent' => $calculator->weightedRecycledPercent($this->sustainabilityMaterials),
+                    'materials' => $this->sustainabilityMaterials->map(fn ($material) => [
                         'componentName' => $material->component_name,
                         'materialType' => $material->material_type,
                         'componentWeightG' => $material->component_weight_g,
                         'recycledContentPct' => $material->recycled_content_pct,
                     ]),
                 ],
-                'customizationOptions' => $colorway->is_customizable
-                    ? $colorway->nikeByYouOptions->map(fn ($option) => [
-                        'componentName' => $option->component_name,
-                        'allowedMaterials' => $option->allowed_materials,
-                        'allowedColors' => $option->allowed_colors,
-                    ])
-                    : [],
-            ]),
+            ),
+            'customizationOptions' => $this->is_customizable
+                ? $this->customizationOptions->map(fn ($option) => [
+                    'componentName' => $option->component_name,
+                    'allowedMaterials' => $option->allowed_materials,
+                    'allowedColors' => $option->allowed_colors,
+                ])
+                : [],
         ];
     }
 }

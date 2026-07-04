@@ -137,7 +137,7 @@ test('confirm fails when stock is insufficient', function () {
         'variant_id' => $variant->id,
         'product_name' => 'Test Shoe',
         'color_name' => 'Black',
-        'size_val' => $variant->size_val,
+        'size_val' => 'US 8',
         'quantity' => 4,
         'unit_price' => 50,
     ]);

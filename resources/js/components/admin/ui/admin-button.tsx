@@ -6,22 +6,22 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const adminButtonVariants = cva(
-    'admin-body-strong rounded-admin-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_40%,transparent)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+    'admin-body-strong rounded-admin-md inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap px-4 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--admin-surface)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
     {
         variants: {
             variant: {
                 primary:
-                    'bg-[var(--admin-tertiary)] px-5 py-3 text-[var(--admin-on-primary)] hover:bg-[var(--admin-tertiary-hover)]',
+                    'bg-[var(--admin-tertiary)] text-[var(--admin-on-tertiary)] hover:bg-[var(--admin-tertiary-hover)]',
                 secondary:
-                    'border-admin h-9 border bg-[var(--admin-surface)] px-3.5 text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
-                ghost: 'h-9 px-3 text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
+                    'border-admin border bg-[var(--admin-surface)] text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
+                ghost: 'text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
                 destructive:
-                    'h-9 bg-[var(--admin-danger)] px-3.5 text-white hover:bg-red-700',
+                    'bg-[var(--admin-danger)] text-[var(--admin-on-destructive)] hover:bg-[var(--admin-danger-hover)]',
             },
             size: {
                 default: '',
-                sm: 'h-8 px-2.5 text-xs',
-                lg: 'h-10 px-4',
+                sm: 'h-8 px-3 text-xs',
+                lg: 'h-10 px-5',
             },
         },
         defaultVariants: {
@@ -30,6 +30,13 @@ const adminButtonVariants = cva(
         },
     },
 );
+
+function adminActionButtonClass(
+    variant: NonNullable<VariantProps<typeof adminButtonVariants>['variant']>,
+    size: NonNullable<VariantProps<typeof adminButtonVariants>['size']> = 'default',
+) {
+    return adminButtonVariants({ variant, size });
+}
 
 function AdminButton({
     className,
@@ -52,4 +59,4 @@ function AdminButton({
     );
 }
 
-export { AdminButton, adminButtonVariants };
+export { AdminButton, adminActionButtonClass, adminButtonVariants };

@@ -21,7 +21,7 @@ export default function OrderConfirmationPage({
     seo,
 }: OrderConfirmationPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const { clearCart } = useCart();
 
     useEffect(() => {
@@ -94,12 +94,20 @@ export default function OrderConfirmationPage({
                                             {item.productName}
                                         </p>
                                         <p className="text-caption-md mt-1 text-mute">
-                                            {item.colorName} / {item.size} ×{' '}
+                                            {(item.options ?? [])
+                                                .map((option) => option.value)
+                                                .join(' / ') ||
+                                                `${item.colorName} / ${item.size}`}{' '}
+                                            ×{' '}
                                             {item.quantity}
                                         </p>
                                     </div>
                                     <span className="text-body-strong shrink-0 text-ink">
-                                        {formatCurrency(item.lineTotal, locale)}
+                                        {formatCurrency(
+                                            item.lineTotal,
+                                            locale,
+                                            currency,
+                                        )}
                                     </span>
                                 </li>
                             ))}
@@ -121,6 +129,7 @@ export default function OrderConfirmationPage({
                                             {formatCurrency(
                                                 order.subtotalAmount,
                                                 locale,
+                                                currency,
                                             )}
                                         </dd>
                                     </div>
@@ -138,6 +147,7 @@ export default function OrderConfirmationPage({
                                             {formatCurrency(
                                                 order.discountAmount ?? 0,
                                                 locale,
+                                                currency,
                                             )}
                                         </dd>
                                     </div>
@@ -150,6 +160,7 @@ export default function OrderConfirmationPage({
                                         {formatCurrency(
                                             order.totalAmount,
                                             locale,
+                                            currency,
                                         )}
                                     </dd>
                                 </div>

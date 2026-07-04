@@ -96,7 +96,7 @@ class OrderStatusService
 
             if ($item->quantity > $variant->inventory->quantity) {
                 throw new OrderConfirmStockException(
-                    "{$item->size_val} for {$item->product_name} has insufficient stock.",
+                    ($item->options_snapshot[0]['value'] ?? $item->size_val)." for {$item->product_name} has insufficient stock.",
                 );
             }
         }

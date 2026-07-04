@@ -63,7 +63,7 @@ export function SizeChipPicker({
                             className={cn(
                                 'rounded-admin-sm border px-3 py-1.5 text-sm font-medium transition-colors',
                                 selected
-                                    ? 'border-[var(--admin-primary)] bg-[var(--admin-primary)] text-[var(--admin-on-primary)]'
+                                    ? 'border-[var(--admin-fill-selected)] bg-[var(--admin-fill-selected)] text-[var(--admin-on-fill-selected)]'
                                     : 'border-admin bg-[var(--admin-surface)] text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
                             )}
                         >

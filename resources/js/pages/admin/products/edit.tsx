@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { AdminActiveBadge, AdminTabs } from '@/components/admin/admin-form';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
-import { AddColorwayForm } from '@/pages/admin/products/components/add-colorway-form';
-import { ColorwayCard } from '@/pages/admin/products/components/colorway-card';
-import { ColorwayInventoryGrid } from '@/pages/admin/products/components/colorway-inventory-grid';
+import { OptionValueImagesPanel } from '@/pages/admin/products/components/option-value-images-panel';
+import { ProductAttributesEditor } from '@/pages/admin/products/components/product-attributes-editor';
 import { ProductDetailsForm } from '@/pages/admin/products/components/product-details-form';
+import { ProductOptionsEditor } from '@/pages/admin/products/components/product-options-editor';
+import { VariantInventoryGrid } from '@/pages/admin/products/components/variant-inventory-grid';
 import {
     getProductTotalStock,
-    productHasActiveColorway,
+    productHasActiveVariants,
 } from '@/types/admin-product';
 import type { AdminProduct } from '@/types/admin-product';
 
@@ -38,7 +39,7 @@ export default function AdminProductsEdit({
     }
 
     const totalStock = getProductTotalStock(product);
-    const isActive = productHasActiveColorway(product);
+    const isActive = productHasActiveVariants(product);
 
     setLayoutProps({
         breadcrumbs: [
@@ -62,8 +63,8 @@ export default function AdminProductsEdit({
                     badges={
                         <>
                             <span className="border-admin text-admin-secondary inline-flex items-center rounded-md border bg-[var(--admin-neutral)] px-2 py-1 text-xs">
-                                {t('products.colorwaysCount', {
-                                    count: product.colorways.length,
+                                {t('products.variantsCount', {
+                                    count: product.variants.length,
                                 })}
                             </span>
                             <span className="border-admin text-admin-secondary inline-flex items-center rounded-md border bg-[var(--admin-neutral)] px-2 py-1 text-xs">
@@ -102,37 +103,26 @@ export default function AdminProductsEdit({
                             ),
                         },
                         {
-                            value: 'colorways',
-                            label: t('products.tabColorways'),
+                            value: 'options',
+                            label: t('products.tabOptions'),
+                            content: <ProductOptionsEditor product={product} />,
+                        },
+                        {
+                            value: 'images',
+                            label: t('products.tabImages'),
+                            content: <OptionValueImagesPanel product={product} />,
+                        },
+                        {
+                            value: 'attributes',
+                            label: t('products.tabAttributes'),
                             content: (
-                                <div className="space-y-4">
-                                    {product.colorways.length === 0 ? (
-                                        <p className="text-admin-secondary text-sm">
-                                            {t('products.noColorways')}
-                                        </p>
-                                    ) : (
-                                        product.colorways.map((colorway) => (
-                                            <ColorwayCard
-                                                key={colorway.id}
-                                                colorway={colorway}
-                                                productName={product.name}
-                                            />
-                                        ))
-                                    )}
-                                    <AddColorwayForm
-                                        productSlug={product.slug}
-                                    />
-                                </div>
+                                <ProductAttributesEditor product={product} />
                             ),
                         },
                         {
                             value: 'inventory',
                             label: t('products.tabInventory'),
-                            content: (
-                                <ColorwayInventoryGrid
-                                    colorways={product.colorways}
-                                />
-                            ),
+                            content: <VariantInventoryGrid product={product} />,
                         },
                     ]}
                 />

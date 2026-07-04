@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import type { PaginationMeta } from '@/types/catalog';
 
+import { adminActionButtonClass } from '@/components/admin/ui/admin-button';
+
 type AdminPaginationProps = {
     links: {
         first: string | null;
@@ -23,8 +25,7 @@ function AdminPagination({ links, meta, className }: AdminPaginationProps) {
         return null;
     }
 
-    const navButtonClass =
-        'admin-body-strong inline-flex h-9 items-center rounded-admin-md border border-admin bg-[var(--admin-surface)] px-3 hover:bg-[var(--admin-neutral)]';
+    const navButtonClass = adminActionButtonClass('secondary');
 
     return (
         <nav
@@ -65,7 +66,7 @@ function AdminPagination({ links, meta, className }: AdminPaginationProps) {
                                 className={cn(
                                     'rounded-admin-sm inline-flex size-9 items-center justify-center text-sm font-medium',
                                     link.active
-                                        ? 'bg-[var(--admin-primary)] text-[var(--admin-on-primary)]'
+                                        ? 'bg-[var(--admin-fill-selected)] text-[var(--admin-on-fill-selected)]'
                                         : 'text-[var(--admin-primary)] hover:bg-[var(--admin-neutral)]',
                                 )}
                             >

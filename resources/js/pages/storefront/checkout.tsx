@@ -34,7 +34,7 @@ type CheckoutPageProps = {
 
 export default function CheckoutPage(props: CheckoutPageProps) {
     const { t } = useTranslation('storefront');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const {
         errors: pageErrors,
         stripeKey: pageStripeKey,
@@ -344,6 +344,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                                         {formatCurrency(
                                             item.unitPrice * item.quantity,
                                             locale,
+                                            currency,
                                         )}
                                     </span>
                                 </li>
@@ -353,7 +354,12 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                             <div className="text-caption-md mt-4 flex justify-between text-sale">
                                 <span>{t('checkout.discount')}</span>
                                 <span>
-                                    -{formatCurrency(discountAmount, locale)}
+                                    -
+                                    {formatCurrency(
+                                        discountAmount,
+                                        locale,
+                                        currency,
+                                    )}
                                 </span>
                             </div>
                         )}
@@ -363,7 +369,9 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                                     count: itemCount,
                                 })}
                             </span>
-                            <span>{formatCurrency(total, locale)}</span>
+                            <span>
+                                {formatCurrency(total, locale, currency)}
+                            </span>
                         </div>
                         <StorefrontButton
                             type="submit"

@@ -10,8 +10,7 @@ type ApiCartItem = {
     variantId: number;
     productSlug: string;
     productName: string;
-    colorwayName: string;
-    size: string;
+    options: Array<{ name: string; value: string }>;
     quantity: number;
     unitPrice: number;
     lineTotal: number;
@@ -28,12 +27,15 @@ type ApiCartResponse = {
 };
 
 function mapApiItem(item: ApiCartItem): CartItem {
+    const options = item.options ?? [];
+
     return {
         variantId: item.variantId,
         productSlug: item.productSlug,
         productName: item.productName,
-        colorName: item.colorwayName,
-        size: item.size,
+        colorName: options[0]?.value ?? '',
+        size: options[1]?.value ?? options[0]?.value ?? '',
+        options,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         imageUrl: item.imageUrl,

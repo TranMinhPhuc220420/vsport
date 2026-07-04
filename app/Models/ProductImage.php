@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- * @property int $colorway_id
+ * @property int $option_value_id
  * @property string $image_url
  * @property string|null $storage_path
  * @property string|null $image_alt_tag
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $sort_order
  */
 #[Fillable([
-    'colorway_id',
+    'option_value_id',
     'image_url',
     'storage_path',
     'image_alt_tag',
@@ -33,9 +33,9 @@ class ProductImage extends Model
 
     public $timestamps = false;
 
-    public function colorway(): BelongsTo
+    public function optionValue(): BelongsTo
     {
-        return $this->belongsTo(ProductColorway::class, 'colorway_id');
+        return $this->belongsTo(ProductOptionValue::class, 'option_value_id');
     }
 
     /**

@@ -210,8 +210,9 @@ class CartService
     public function loadCartForResponse(Cart $cart): Cart
     {
         return $cart->load([
-            'items.variant.colorway.product',
-            'items.variant.colorway.images',
+            'items.variant.product',
+            'items.variant.optionValues.option',
+            'items.variant.optionValues.images',
             'items.variant.inventory',
         ]);
     }

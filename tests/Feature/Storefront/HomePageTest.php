@@ -20,6 +20,7 @@ test('home page renders storefront home with featured products', function () {
             ->has('newArrivals.data')
             ->has('bestSellers.data')
             ->has('categories.data')
+            ->has('navigation.categories')
             ->has('campaigns.0.headline')
         );
 
@@ -63,10 +64,16 @@ test('home page product summaries include primary image urls', function () {
 });
 
 test('product summary falls back to first image when none is marked primary', function () {
-    $product = Product::query()->with('activeColorways')->firstOrFail();
-    $product->activeColorways->each(
-        fn ($colorway) => $colorway->images()->update(['is_primary' => false]),
-    );
+    $product = Product::query()->with(['options.values.images'])->firstOrFail();
+    foreach ($product->options as $option) {
+        if (! $option->drives_gallery) {
+            continue;
+        }
+
+        foreach ($option->values as $value) {
+            $value->images()->update(['is_primary' => false]);
+        }
+    }
 
     $summary = ProductSummaryResource::make(
         app(ProductCatalogService::class)->findBySlug($product->slug),

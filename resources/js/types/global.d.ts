@@ -1,4 +1,5 @@
 import type { Auth } from '@/types/auth';
+import type { StoreProfile } from '@/types/store-profile';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +16,10 @@ declare module '@inertiajs/core' {
             sidebarOpen: boolean;
             locale: 'vi' | 'en';
             locales: { code: 'vi' | 'en'; label: string }[];
+            navigation: {
+                categories: import('@/types/catalog').Category[];
+            };
+            storeProfile: StoreProfile;
             [key: string]: unknown;
         };
     }

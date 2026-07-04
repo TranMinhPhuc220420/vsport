@@ -173,6 +173,7 @@ return;
                                         >
                                             <ProductCard
                                                 href={`/products/${product.slug}`}
+                                                slug={product.slug}
                                                 name={product.name}
                                                 subtitle={
                                                     product.subTitle ?? undefined
@@ -185,6 +186,15 @@ return;
                                                     product.salePrice ?? undefined
                                                 }
                                                 colorways={product.colorwaySwatches}
+                                                defaultVariantId={
+                                                    product.defaultVariantId ??
+                                                    undefined
+                                                }
+                                                defaultVariantPrice={
+                                                    product.defaultVariantPrice ??
+                                                    undefined
+                                                }
+                                                inStock={product.inStock}
                                                 badge={
                                                     !product.inStock
                                                         ? t('plp.outOfStock')

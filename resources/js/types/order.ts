@@ -2,6 +2,7 @@ export type OrderItemDetail = {
     id: number;
     variantId: number;
     productName: string;
+    options: Array<{ name: string; value: string }>;
     colorName: string;
     size: string;
     quantity: number;

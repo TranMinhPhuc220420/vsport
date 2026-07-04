@@ -8,11 +8,16 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductReview;
+use App\Services\Admin\DashboardMetricsService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private readonly DashboardMetricsService $metrics,
+    ) {}
+
     public function index(): Response
     {
         $pendingOrdersCount = Order::query()
@@ -38,13 +43,11 @@ class DashboardController extends Controller
             ->count();
 
         $lowStockProducts = Product::query()
-            ->with(['colorways.variants.inventory'])
+            ->with(['variants.inventory'])
             ->get()
             ->map(function (Product $product): ?array {
-                $totalStock = (int) $product->colorways->sum(
-                    fn ($colorway) => $colorway->variants->sum(
-                        fn ($variant) => $variant->inventory?->availableQuantity() ?? 0,
-                    ),
+                $totalStock = (int) $product->variants->sum(
+                    fn ($variant) => $variant->inventory?->availableQuantity() ?? 0,
                 );
 
                 if ($totalStock <= 0 || $totalStock >= 5) {
@@ -75,6 +78,7 @@ class DashboardController extends Controller
                 'revenueTotal' => $revenueTotal,
                 'productCount' => $productCount,
                 'pendingReviewsCount' => $pendingReviewsCount,
+                ...$this->metrics->periodStats(),
             ],
             'ordersByStatus' => $ordersByStatus,
             'lowStockProducts' => $lowStockProducts,

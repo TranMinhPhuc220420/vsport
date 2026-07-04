@@ -17,9 +17,15 @@ import {
     AdminDataTableHeaderRow,
     AdminDataTableRow,
 } from '@/components/admin/ui/admin-data-table';
+import type { AdminStatCardTrend } from '@/components/admin/ui/admin-stat-card';
 import { AdminStatCard } from '@/components/admin/ui/admin-stat-card';
 import { formatCurrency, useLocale } from '@/hooks/use-locale';
 import type { OrderDetail } from '@/types/order';
+
+type PeriodTrend = {
+    direction: 'up' | 'down' | 'flat';
+    percent: number | null;
+};
 
 type AdminDashboardProps = {
     stats: {
@@ -27,6 +33,12 @@ type AdminDashboardProps = {
         revenueTotal: number;
         productCount: number;
         pendingReviewsCount: number;
+        periodRevenueTotal: number;
+        periodRevenueTrend: PeriodTrend;
+        periodOrdersCount: number;
+        periodOrdersTrend: PeriodTrend;
+        averageOrderValue: number;
+        averageOrderValueTrend: PeriodTrend;
     };
     ordersByStatus: Record<string, number>;
     lowStockProducts: {
@@ -49,6 +61,18 @@ function orderStatusKey(status: string): string {
     return `orders.status.${status}`;
 }
 
+function toStatCardTrend(
+    trend: PeriodTrend,
+    t: (key: string) => string,
+): AdminStatCardTrend {
+    const value =
+        trend.percent === null
+            ? t('dashboard.newActivity')
+            : `${trend.percent > 0 ? '+' : ''}${trend.percent}%`;
+
+    return { direction: trend.direction, value };
+}
+
 export default function AdminDashboard({
     stats,
     ordersByStatus,
@@ -57,7 +81,7 @@ export default function AdminDashboard({
 }: AdminDashboardProps) {
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
 
     setLayoutProps({
         breadcrumbs: [{ title: t('dashboard.title'), href: '/admin' }],
@@ -73,7 +97,7 @@ export default function AdminDashboard({
                     subtitle={t('dashboard.description')}
                 />
 
-                <div className="grid gap-4 tablet:grid-cols-2 desktop:grid-cols-4">
+                <div className="grid gap-4 tablet:grid-cols-2 desktop:grid-cols-3">
                     <Link href="/admin/orders?status=pending" className="block">
                         <AdminStatCard
                             label={t('dashboard.pendingOrders')}
@@ -83,7 +107,26 @@ export default function AdminDashboard({
                     </Link>
                     <AdminStatCard
                         label={t('dashboard.revenue')}
-                        value={formatCurrency(stats.revenueTotal, locale)}
+                        value={formatCurrency(
+                            stats.revenueTotal,
+                            locale,
+                            currency,
+                        )}
+                        trend={toStatCardTrend(stats.periodRevenueTrend, t)}
+                    />
+                    <AdminStatCard
+                        label={t('dashboard.ordersPlaced')}
+                        value={stats.periodOrdersCount}
+                        trend={toStatCardTrend(stats.periodOrdersTrend, t)}
+                    />
+                    <AdminStatCard
+                        label={t('dashboard.averageOrderValue')}
+                        value={formatCurrency(
+                            stats.averageOrderValue,
+                            locale,
+                            currency,
+                        )}
+                        trend={toStatCardTrend(stats.averageOrderValueTrend, t)}
                     />
                     <Link href="/admin/products" className="block">
                         <AdminStatCard
@@ -101,52 +144,58 @@ export default function AdminDashboard({
                     </Link>
                 </div>
 
-                <AdminCard>
-                    <h2 className="admin-section-title">
-                        {t('dashboard.orderPipeline')}
-                    </h2>
-                    <div className="mt-4 flex flex-wrap gap-3">
-                        {pipelineStatuses.map((status) => (
-                            <Link
-                                key={status}
-                                href={`/admin/orders?status=${status}`}
-                                className="border-admin rounded-admin-md flex min-w-[120px] flex-col border bg-[var(--admin-neutral)] px-4 py-3 transition-colors hover:bg-[var(--admin-surface)]"
-                            >
-                                <span className="admin-caption text-admin-secondary">
-                                    {t(orderStatusKey(status), {
-                                        defaultValue: status,
-                                    })}
-                                </span>
-                                <span className="mt-1 text-lg font-semibold text-[var(--admin-primary)]">
-                                    {ordersByStatus[status] ?? 0}
-                                </span>
-                            </Link>
-                        ))}
-                    </div>
-                </AdminCard>
+                <p className="admin-caption text-admin-secondary -mt-2">
+                    {t('dashboard.vsLastPeriod')}
+                </p>
 
-                {lowStockProducts.length > 0 && (
+                <div className="grid gap-4 lg:grid-cols-2">
                     <AdminCard>
                         <h2 className="admin-section-title">
-                            {t('dashboard.lowStock')}
+                            {t('dashboard.orderPipeline')}
                         </h2>
-                        <ul className="mt-4 space-y-2">
-                            {lowStockProducts.map((product) => (
-                                <li key={product.slug}>
-                                    <Link
-                                        href={`/admin/products/${product.slug}/edit?tab=inventory`}
-                                        className="admin-body-strong hover:underline"
-                                    >
-                                        {product.name}
-                                    </Link>
-                                    <span className="admin-caption text-admin-secondary ml-2">
-                                        ({product.totalStock})
+                        <div className="mt-4 flex flex-wrap gap-3">
+                            {pipelineStatuses.map((status) => (
+                                <Link
+                                    key={status}
+                                    href={`/admin/orders?status=${status}`}
+                                    className="border-admin rounded-admin-md flex min-w-[120px] flex-col border bg-[var(--admin-neutral)] px-4 py-3 transition-colors hover:bg-[var(--admin-surface)]"
+                                >
+                                    <span className="admin-caption text-admin-secondary">
+                                        {t(orderStatusKey(status), {
+                                            defaultValue: status,
+                                        })}
                                     </span>
-                                </li>
+                                    <span className="mt-1 text-lg font-semibold text-[var(--admin-primary)]">
+                                        {ordersByStatus[status] ?? 0}
+                                    </span>
+                                </Link>
                             ))}
-                        </ul>
+                        </div>
                     </AdminCard>
-                )}
+
+                    {lowStockProducts.length > 0 && (
+                        <AdminCard>
+                            <h2 className="admin-section-title">
+                                {t('dashboard.lowStock')}
+                            </h2>
+                            <ul className="mt-4 space-y-2">
+                                {lowStockProducts.map((product) => (
+                                    <li key={product.slug}>
+                                        <Link
+                                            href={`/admin/products/${product.slug}/edit?tab=inventory`}
+                                            className="admin-body-strong hover:underline"
+                                        >
+                                            {product.name}
+                                        </Link>
+                                        <span className="admin-caption text-admin-secondary ml-2">
+                                            ({product.totalStock})
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </AdminCard>
+                    )}
+                </div>
 
                 <section>
                     <h2 className="admin-section-title">
@@ -197,6 +246,7 @@ export default function AdminDashboard({
                                                 {formatCurrency(
                                                     order.totalAmount,
                                                     locale,
+                                                    currency,
                                                 )}
                                             </AdminDataTableCell>
                                         </AdminDataTableRow>
@@ -229,6 +279,7 @@ export default function AdminDashboard({
                                         {formatCurrency(
                                             order.totalAmount,
                                             locale,
+                                            currency,
                                         )}
                                     </AdminCardListField>
                                 </AdminCardListItem>

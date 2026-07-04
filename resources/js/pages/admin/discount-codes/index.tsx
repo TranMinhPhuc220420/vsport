@@ -59,7 +59,7 @@ export default function AdminDiscountCodesIndex({
 }: AdminDiscountCodesIndexProps) {
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     setLayoutProps({
@@ -87,7 +87,7 @@ export default function AdminDiscountCodesIndex({
             return `${value}%`;
         }
 
-        return formatCurrency(value, locale);
+        return formatCurrency(value, locale, currency);
     };
 
     const formatDiscountDate = (value: string | null): string => {
@@ -188,6 +188,7 @@ export default function AdminDiscountCodesIndex({
                                                     ? formatCurrency(
                                                           code.minOrderAmount,
                                                           locale,
+                                                          currency,
                                                       )
                                                     : tCommon('emDash')}
                                             </AdminDataTableCell>
@@ -279,6 +280,7 @@ export default function AdminDiscountCodesIndex({
                                             ? formatCurrency(
                                                   code.minOrderAmount,
                                                   locale,
+                                                  currency,
                                               )
                                             : tCommon('emDash')}
                                     </AdminCardListField>

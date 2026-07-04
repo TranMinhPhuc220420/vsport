@@ -1,50 +1,63 @@
 import { Link } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
 
-import { StorefrontButton } from '@/components/storefront/Button';
 import { cn } from '@/lib/utils';
-
-const categoryImages: Record<string, string> = {
-    men: 'https://placehold.co/600x750/111111/ffffff?text=Men',
-    women: 'https://placehold.co/600x750/39393b/ffffff?text=Women',
-    kids: 'https://placehold.co/600x750/007d48/ffffff?text=Kids',
-    jordan: 'https://placehold.co/600x750/d30005/ffffff?text=Jordan',
-};
 
 type CategoryTileProps = {
     name: string;
     slug: string;
-    imageUrl?: string;
+    imageUrl?: string | null;
+    imageAlt?: string | null;
+    featured?: boolean;
     className?: string;
 };
 
-function CategoryTile({ name, slug, imageUrl, className }: CategoryTileProps) {
-    const { t } = useTranslation('storefront');
-    const src = imageUrl ?? categoryImages[slug] ?? categoryImages.men;
-
+function CategoryTile({
+    name,
+    slug,
+    imageUrl,
+    imageAlt,
+    featured = false,
+    className,
+}: CategoryTileProps) {
     return (
-        <article
+        <Link
+            href={`/${slug}`}
             data-slot="category-tile"
             className={cn(
-                'group relative aspect-[4/5] overflow-hidden',
+                'group relative block aspect-[4/5] overflow-hidden bg-soft-cloud',
                 className,
             )}
         >
-            <img
-                src={src}
-                alt={name}
-                loading="lazy"
-                className="motion-safe-hover-scale size-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
-            <div className="absolute bottom-4 left-4">
-                <StorefrontButton variant="outline-on-image" asChild>
-                    <Link href={`/${slug}`}>
-                        {t('pdp.shopCategory', { name })}
-                    </Link>
-                </StorefrontButton>
+            {imageUrl ? (
+                <>
+                    <img
+                        src={imageUrl}
+                        alt={imageAlt ?? name}
+                        loading="lazy"
+                        className="motion-safe-hover-scale size-full object-cover"
+                    />
+                    <div
+                        className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent"
+                        aria-hidden
+                    />
+                </>
+            ) : null}
+            <div className="absolute inset-x-4 bottom-4 z-10 tablet:inset-x-6 tablet:bottom-6">
+                <p
+                    className={cn(
+                        'font-[family-name:var(--font-display)] uppercase leading-[0.95] tracking-[-0.005em]',
+                        featured
+                            ? 'text-[clamp(2.5rem,5vw,5rem)]'
+                            : 'text-[clamp(2rem,3.5vw,3.25rem)]',
+                        imageUrl
+                            ? 'text-canvas drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)]'
+                            : 'text-ink',
+                    )}
+                >
+                    {name}
+                </p>
             </div>
-        </article>
+        </Link>
     );
 }
 

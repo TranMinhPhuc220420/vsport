@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\ProductColorway;
 use App\Models\ProductImage;
+use App\Models\ProductOptionValue;
 use App\Models\User;
 use Database\Seeders\CatalogSeeder;
 use Illuminate\Http\UploadedFile;
@@ -12,13 +12,21 @@ beforeEach(function () {
     $this->seed(CatalogSeeder::class);
 });
 
+function galleryOptionValueWithImages(): ProductOptionValue
+{
+    return ProductOptionValue::query()
+        ->whereHas('option', fn ($query) => $query->where('drives_gallery', true))
+        ->whereHas('images')
+        ->firstOrFail();
+}
+
 test('admin can upload a product image with storage path', function () {
     $admin = User::factory()->admin()->create();
-    $colorway = ProductColorway::query()->firstOrFail();
-    $initialCount = $colorway->images()->count();
+    $optionValue = galleryOptionValueWithImages();
+    $initialCount = $optionValue->images()->count();
 
     $response = $this->actingAs($admin)->postJson(
-        route('admin.colorways.images.store', $colorway),
+        route('admin.option-values.images.store', $optionValue),
         [
             'image' => UploadedFile::fake()->image('product.jpg'),
             'image_alt_tag' => 'Test alt',
@@ -35,34 +43,34 @@ test('admin can upload a product image with storage path', function () {
     expect($image)->not->toBeNull()
         ->and($image->storage_path)->not->toBeNull()
         ->and($image->image_alt_tag)->toBe('Test alt')
-        ->and($colorway->images()->count())->toBe($initialCount + 1);
+        ->and($optionValue->images()->count())->toBe($initialCount + 1);
 
     Storage::disk('public')->assertExists($image->storage_path);
 });
 
-test('first uploaded image for empty colorway becomes primary with sort order', function () {
+test('first uploaded image for empty option value becomes primary with sort order', function () {
     $admin = User::factory()->admin()->create();
-    $colorway = ProductColorway::query()->firstOrFail();
-    $colorway->images()->delete();
+    $optionValue = galleryOptionValueWithImages();
+    $optionValue->images()->delete();
 
     $this->actingAs($admin)->postJson(
-        route('admin.colorways.images.store', $colorway),
+        route('admin.option-values.images.store', $optionValue),
         ['image' => UploadedFile::fake()->image('first.jpg')],
     )->assertCreated();
 
-    $first = ProductImage::query()->where('colorway_id', $colorway->id)->first();
+    $first = ProductImage::query()->where('option_value_id', $optionValue->id)->first();
 
     expect($first)->not->toBeNull()
         ->and($first->is_primary)->toBeTrue()
         ->and($first->sort_order)->toBe(0);
 
     $this->actingAs($admin)->postJson(
-        route('admin.colorways.images.store', $colorway),
+        route('admin.option-values.images.store', $optionValue),
         ['image' => UploadedFile::fake()->image('second.jpg')],
     )->assertCreated();
 
     $second = ProductImage::query()
-        ->where('colorway_id', $colorway->id)
+        ->where('option_value_id', $optionValue->id)
         ->orderByDesc('id')
         ->first();
 
@@ -72,46 +80,46 @@ test('first uploaded image for empty colorway becomes primary with sort order', 
 
 test('admin can set a different primary image', function () {
     $admin = User::factory()->admin()->create();
-    $colorway = ProductColorway::query()->with('images')->firstOrFail();
+    $optionValue = galleryOptionValueWithImages()->load('images');
 
-    $target = $colorway->images->firstWhere('is_primary', false)
-        ?? $colorway->images->last();
+    $target = $optionValue->images->firstWhere('is_primary', false)
+        ?? $optionValue->images->last();
 
     $this->actingAs($admin)->patchJson(route('admin.images.update', $target), [
         'is_primary' => true,
     ])->assertOk();
 
-    $colorway->refresh()->load('images');
+    $optionValue->refresh()->load('images');
 
-    expect($colorway->images->where('is_primary', true))->toHaveCount(1)
-        ->and($colorway->images->firstWhere('id', $target->id)?->is_primary)->toBeTrue();
+    expect($optionValue->images->where('is_primary', true))->toHaveCount(1)
+        ->and($optionValue->images->firstWhere('id', $target->id)?->is_primary)->toBeTrue();
 });
 
-test('admin can reorder colorway images', function () {
+test('admin can reorder option value images', function () {
     $admin = User::factory()->admin()->create();
-    $colorway = ProductColorway::query()->with('images')->firstOrFail();
-    $images = $colorway->images->sortBy('sort_order')->values();
+    $optionValue = galleryOptionValueWithImages()->load('images');
+    $images = $optionValue->images->sortBy('sort_order')->values();
     $reversed = $images->reverse()->pluck('id')->all();
 
     $this->actingAs($admin)->postJson(
-        route('admin.colorways.images.reorder', $colorway),
+        route('admin.option-values.images.reorder', $optionValue),
         ['order' => $reversed],
     )->assertOk()
         ->assertJsonCount($images->count(), 'images');
 
-    $colorway->refresh()->load('images');
+    $optionValue->refresh()->load('images');
 
     expect(
-        $colorway->images->sortBy('sort_order')->pluck('id')->all(),
+        $optionValue->images->sortBy('sort_order')->pluck('id')->all(),
     )->toBe($reversed);
 });
 
 test('admin can delete uploaded image and remove file from storage', function () {
     $admin = User::factory()->admin()->create();
-    $colorway = ProductColorway::query()->firstOrFail();
+    $optionValue = galleryOptionValueWithImages();
 
     $this->actingAs($admin)->postJson(
-        route('admin.colorways.images.store', $colorway),
+        route('admin.option-values.images.store', $optionValue),
         ['image' => UploadedFile::fake()->image('delete-me.jpg')],
     )->assertCreated();
 
@@ -137,37 +145,37 @@ test('admin can delete seed image without storage path', function () {
 
 test('deleting primary image promotes next image by sort order', function () {
     $admin = User::factory()->admin()->create();
-    $colorway = ProductColorway::query()->with('images')->firstOrFail();
-    $primary = $colorway->images->firstWhere('is_primary', true)
-        ?? $colorway->images->sortBy('sort_order')->first();
+    $optionValue = galleryOptionValueWithImages()->load('images');
+    $primary = $optionValue->images->firstWhere('is_primary', true)
+        ?? $optionValue->images->sortBy('sort_order')->first();
 
     $this->actingAs($admin)->deleteJson(route('admin.images.destroy', $primary))
         ->assertOk();
 
-    $colorway->refresh()->load('images');
+    $optionValue->refresh()->load('images');
 
-    if ($colorway->images->isEmpty()) {
-        expect($colorway->images)->toBeEmpty();
+    if ($optionValue->images->isEmpty()) {
+        expect($optionValue->images)->toBeEmpty();
     } else {
-        expect($colorway->images->where('is_primary', true))->toHaveCount(1);
+        expect($optionValue->images->where('is_primary', true))->toHaveCount(1);
     }
 });
 
 test('customer cannot upload product images', function () {
     $user = User::factory()->create();
-    $colorway = ProductColorway::query()->firstOrFail();
+    $optionValue = galleryOptionValueWithImages();
 
     $this->actingAs($user)->postJson(
-        route('admin.colorways.images.store', $colorway),
+        route('admin.option-values.images.store', $optionValue),
         ['image' => UploadedFile::fake()->image('product.jpg')],
     )->assertForbidden();
 });
 
 test('guest cannot upload product images', function () {
-    $colorway = ProductColorway::query()->firstOrFail();
+    $optionValue = galleryOptionValueWithImages();
 
     $this->postJson(
-        route('admin.colorways.images.store', $colorway),
+        route('admin.option-values.images.store', $optionValue),
         ['image' => UploadedFile::fake()->image('product.jpg')],
     )->assertRedirect(route('login'));
 });

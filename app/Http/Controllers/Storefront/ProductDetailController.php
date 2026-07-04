@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductSummaryResource;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\Catalog\ProductCatalogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Inertia\Inertia;
@@ -40,20 +41,28 @@ class ProductDetailController extends Controller
             ],
             'seo' => PageSeo::forProduct($product, $primaryImage)->toArray(),
             'structuredData' => ProductStructuredData::forProductPage($product, $primaryImage),
+            'initialVariantId' => request()->integer('variant') ?: null,
         ]);
     }
 
     private function primaryImageUrl(Product $product): ?string
     {
-        $colorway = $product->activeColorways->first();
+        $galleryOption = $product->options->firstWhere('drives_gallery', true)
+            ?? $product->options->first(fn ($o) => $o->display_type->value === 'swatch');
 
-        if ($colorway === null) {
+        if ($galleryOption === null) {
             return null;
         }
 
-        $image = $colorway->images->firstWhere('is_primary', true)
-            ?? $colorway->images->first();
+        $value = $galleryOption->values->first();
 
-        return $image?->image_url;
+        if ($value === null) {
+            return null;
+        }
+
+        $image = $value->images->firstWhere('is_primary', true)
+            ?? $value->images->first();
+
+        return $image instanceof ProductImage ? $image->image_url : null;
     }
 }

@@ -1,9 +1,15 @@
+export type CartOption = {
+    name: string;
+    value: string;
+};
+
 export type CartItem = {
     variantId: number;
     productSlug: string;
     productName: string;
     colorName: string;
     size: string;
+    options?: CartOption[];
     unitPrice: number;
     imageUrl?: string;
     quantity: number;

@@ -4,8 +4,11 @@ namespace App\Http\Resources;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\ProductImage;
+use App\Models\ProductOptionValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 /** @mixin Cart */
 class CartResource extends JsonResource
@@ -29,31 +32,51 @@ class CartResource extends JsonResource
     private function formatItem(CartItem $item): array
     {
         $variant = $item->variant;
-        $colorway = $variant->colorway;
-        $product = $colorway->product;
-        $image = $colorway->images->first();
-        $unitPrice = (float) ($colorway->discount_price ?? $colorway->price);
+        $product = $variant->product;
+        $image = $this->primaryImageForVariant($variant->optionValues);
+        $unitPrice = $variant->unitPrice();
 
         return [
             'variantId' => $variant->id,
             'productSlug' => $product->slug,
             'productId' => $product->id,
             'productName' => $product->name,
-            'colorwayName' => $colorway->color_name,
-            'size' => $variant->size_val,
+            'options' => $variant->optionValues
+                ->sortBy(fn (ProductOptionValue $value) => $value->option->position)
+                ->map(fn (ProductOptionValue $value) => [
+                    'name' => $value->option->name,
+                    'value' => $value->value,
+                ])
+                ->values()
+                ->all(),
             'quantity' => $item->quantity,
             'unitPrice' => $unitPrice,
             'lineTotal' => round($unitPrice * $item->quantity, 2),
-            'imageUrl' => $image?->url,
+            'imageUrl' => $image?->image_url,
             'customConfiguration' => $item->custom_configuration,
         ];
     }
 
     private function lineSubtotal(CartItem $item): float
     {
-        $colorway = $item->variant->colorway;
-        $unitPrice = (float) ($colorway->discount_price ?? $colorway->price);
+        return $item->variant->unitPrice() * $item->quantity;
+    }
 
-        return $unitPrice * $item->quantity;
+    /**
+     * @param  Collection<int, ProductOptionValue>  $optionValues
+     */
+    private function primaryImageForVariant($optionValues): ?ProductImage
+    {
+        foreach ($optionValues as $value) {
+            $value->loadMissing('images');
+            $image = $value->images->firstWhere('is_primary', true)
+                ?? $value->images->first();
+
+            if ($image !== null) {
+                return $image;
+            }
+        }
+
+        return null;
     }
 }

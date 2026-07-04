@@ -3,15 +3,22 @@
 namespace App\Services\Catalog;
 
 use App\Enums\ProductGender;
+use App\Models\Category;
+use App\Models\CategoryOptionTemplate;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductColorway;
+use App\Models\ProductAttribute;
+use App\Models\ProductCustomizationOption;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductAdminService
 {
+    public function __construct(
+        private readonly ProductOptionService $options,
+    ) {}
+
     /**
      * @param  array{
      *     style_code: string,
@@ -21,30 +28,29 @@ class ProductAdminService
      *     category_id: int,
      *     sub_title?: string|null,
      *     base_price: float|string,
-     *     gender: string
+     *     gender: string,
+     *     is_customizable?: bool,
      * }  $productData
-     * @param  array{
-     *     colorway_code: string,
-     *     color_name: string,
-     *     discount_price?: float|string|null,
-     *     sizes: list<string>
-     * }  $colorwayData
+     * @param  list<array<string, mixed>>|null  $optionsPayload
      */
-    public function createProduct(array $productData, array $colorwayData): Product
+    public function createProduct(array $productData, ?array $optionsPayload = null): Product
     {
-        return DB::transaction(function () use ($productData, $colorwayData): Product {
+        return DB::transaction(function () use ($productData, $optionsPayload): Product {
             $product = Product::query()->create([
-                ...$productData,
+                ...collect($productData)->except('is_customizable')->all(),
                 'gender' => ProductGender::from($productData['gender']),
+                'is_customizable' => $productData['is_customizable'] ?? false,
             ]);
 
-            $this->createColorwayWithVariants($product, $colorwayData);
+            if ($optionsPayload !== null && $optionsPayload !== []) {
+                $this->options->syncOptions($product, $optionsPayload);
+                $this->options->generateVariants($product);
+            } else {
+                $this->applyCategoryTemplates($product);
+                $this->options->generateVariants($product);
+            }
 
-            return $product->load([
-                'category',
-                'colorways.variants.inventory',
-                'colorways.images',
-            ]);
+            return $this->loadAdminProduct($product);
         });
     }
 
@@ -57,113 +63,28 @@ class ProductAdminService
      *     category_id: int,
      *     sub_title?: string|null,
      *     base_price: float|string,
-     *     gender: string
+     *     gender: string,
+     *     is_customizable?: bool,
      * }  $productData
      */
     public function updateProduct(Product $product, array $productData): Product
     {
         $product->update([
-            ...$productData,
+            ...collect($productData)->except('is_customizable')->all(),
             'gender' => ProductGender::from($productData['gender']),
+            'is_customizable' => $productData['is_customizable'] ?? $product->is_customizable,
         ]);
 
-        return $product->fresh([
-            'category',
-            'colorways.variants.inventory',
-            'colorways.images',
-        ]);
-    }
-
-    /**
-     * @param  array{
-     *     colorway_code: string,
-     *     color_name: string,
-     *     discount_price?: float|string|null,
-     *     is_active?: bool,
-     *     sizes: list<string>
-     * }  $colorwayData
-     */
-    public function createColorway(Product $product, array $colorwayData): ProductColorway
-    {
-        return DB::transaction(function () use ($product, $colorwayData): ProductColorway {
-            return $this->createColorwayWithVariants($product, $colorwayData);
-        });
-    }
-
-    /**
-     * @param  array{
-     *     color_name: string,
-     *     discount_price?: float|string|null,
-     *     is_active?: bool
-     * }  $data
-     */
-    public function updateColorway(ProductColorway $colorway, array $data): ProductColorway
-    {
-        $colorway->update([
-            'color_name' => $data['color_name'],
-            'discount_price' => $data['discount_price'] ?? null,
-            'is_active' => $data['is_active'] ?? $colorway->is_active,
-        ]);
-
-        return $colorway->fresh(['variants.inventory', 'images']);
-    }
-
-    public function deleteColorway(ProductColorway $colorway): void
-    {
-        $colorway->delete();
-    }
-
-    /**
-     * @param  list<array{size: string, quantity: int}>  $variants
-     */
-    public function syncColorwayVariants(ProductColorway $colorway, array $variants): ProductColorway
-    {
-        return DB::transaction(function () use ($colorway, $variants): ProductColorway {
-            $colorway->loadMissing('product', 'variants.inventory');
-
-            $incomingSizes = collect($variants)->pluck('size')->all();
-            $existingBySize = $colorway->variants->keyBy('size_val');
-
-            foreach ($colorway->variants as $variant) {
-                if (! in_array($variant->size_val, $incomingSizes, true)) {
-                    $variant->delete();
-                }
-            }
-
-            foreach ($variants as $row) {
-                $variant = $existingBySize->get($row['size']);
-
-                if ($variant === null) {
-                    $variant = $this->createVariant($colorway, $row['size']);
-                }
-
-                Inventory::query()->updateOrCreate(
-                    ['variant_id' => $variant->id],
-                    ['quantity' => $row['quantity'], 'reserved_quantity' => 0],
-                );
-            }
-
-            return $colorway->fresh(['variants.inventory', 'images']);
-        });
-    }
-
-    public function updateInventoryQuantity(ProductVariant $variant, int $quantity): Inventory
-    {
-        return Inventory::query()->updateOrCreate(
-            ['variant_id' => $variant->id],
-            ['quantity' => $quantity, 'reserved_quantity' => 0],
-        );
+        return $this->loadAdminProduct($product->fresh());
     }
 
     /**
      * @param  list<array{id: int, quantity: int}>  $variants
      */
-    public function batchUpdateColorwayInventory(ProductColorway $colorway, array $variants): ProductColorway
+    public function batchUpdateInventory(Product $product, array $variants): Product
     {
-        return DB::transaction(function () use ($colorway, $variants): ProductColorway {
-            $colorway->loadMissing('variants');
-
-            $allowedIds = $colorway->variants->pluck('id')->all();
+        return DB::transaction(function () use ($product, $variants): Product {
+            $allowedIds = $product->variants()->pluck('id')->all();
 
             foreach ($variants as $row) {
                 if (! in_array($row['id'], $allowedIds, true)) {
@@ -176,57 +97,115 @@ class ProductAdminService
                 );
             }
 
-            return $colorway->fresh(['variants.inventory', 'images']);
+            return $this->loadAdminProduct($product->fresh());
+        });
+    }
+
+    public function updateInventoryQuantity(ProductVariant $variant, int $quantity): Inventory
+    {
+        return Inventory::query()->updateOrCreate(
+            ['variant_id' => $variant->id],
+            ['quantity' => $quantity, 'reserved_quantity' => 0],
+        );
+    }
+
+    /**
+     * @param  list<array{
+     *     group: string,
+     *     key: string,
+     *     label: string,
+     *     value: string,
+     *     sortOrder?: int,
+     *     optionValueId?: int|null,
+     * }>  $attributes
+     */
+    public function syncAttributes(Product $product, array $attributes): Product
+    {
+        return DB::transaction(function () use ($product, $attributes): Product {
+            $product->attributes()->delete();
+
+            foreach ($attributes as $index => $row) {
+                ProductAttribute::query()->create([
+                    'product_id' => $product->id,
+                    'group' => $row['group'],
+                    'key' => $row['key'],
+                    'label' => $row['label'],
+                    'value' => $row['value'],
+                    'sort_order' => $row['sortOrder'] ?? $index,
+                    'option_value_id' => $row['optionValueId'] ?? null,
+                ]);
+            }
+
+            return $this->loadAdminProduct($product->fresh());
         });
     }
 
     /**
-     * @param  array{
-     *     colorway_code: string,
-     *     color_name: string,
-     *     discount_price?: float|string|null,
-     *     is_active?: bool,
-     *     sizes: list<string>
-     * }  $colorwayData
+     * @param  list<array{
+     *     componentName: string,
+     *     allowedMaterials: list<string>,
+     *     allowedColors: list<array{hex: string, name: string}>,
+     * }>  $options
      */
-    private function createColorwayWithVariants(Product $product, array $colorwayData): ProductColorway
+    public function syncCustomizationOptions(Product $product, array $options): Product
     {
-        $fullStyleCode = "{$product->style_code}-{$colorwayData['colorway_code']}";
+        return DB::transaction(function () use ($product, $options): Product {
+            $product->customizationOptions()->delete();
 
-        $colorway = ProductColorway::query()->create([
-            'product_id' => $product->id,
-            'colorway_code' => $colorwayData['colorway_code'],
-            'full_style_code' => $fullStyleCode,
-            'color_name' => $colorwayData['color_name'],
-            'discount_price' => $colorwayData['discount_price'] ?? null,
-            'is_customizable' => false,
-            'is_active' => $colorwayData['is_active'] ?? true,
-        ]);
+            foreach ($options as $row) {
+                ProductCustomizationOption::query()->create([
+                    'product_id' => $product->id,
+                    'component_name' => $row['componentName'],
+                    'allowed_materials' => $row['allowedMaterials'],
+                    'allowed_colors' => $row['allowedColors'],
+                ]);
+            }
 
-        foreach ($colorwayData['sizes'] as $size) {
-            $variant = $this->createVariant($colorway, $size);
+            $product->update(['is_customizable' => $options !== []]);
 
-            Inventory::query()->create([
-                'variant_id' => $variant->id,
-                'quantity' => 0,
-                'reserved_quantity' => 0,
-            ]);
-        }
-
-        return $colorway;
+            return $this->loadAdminProduct($product->fresh());
+        });
     }
 
-    private function createVariant(ProductColorway $colorway, string $size): ProductVariant
+    public function applyCategoryTemplates(Product $product): void
     {
-        $colorway->loadMissing('product');
+        $category = Category::query()
+            ->with('optionTemplates')
+            ->find($product->category_id);
 
-        $sku = Str::slug("{$colorway->product->style_code}-{$colorway->colorway_code}-{$size}", '-');
+        if ($category === null || $category->optionTemplates->isEmpty()) {
+            return;
+        }
 
-        return ProductVariant::query()->create([
-            'colorway_id' => $colorway->id,
-            'size_val' => $size,
-            'sku' => $sku,
-            'additional_price' => 0,
+        $payload = $category->optionTemplates->map(fn (CategoryOptionTemplate $template) => [
+            'name' => $template->name,
+            'position' => $template->position,
+            'displayType' => $template->display_type->value,
+            'isRequired' => $template->is_required,
+            'drivesGallery' => $template->drives_gallery,
+            'metadata' => $template->metadata,
+            'values' => collect($template->default_values ?? [])->map(
+                fn (string $value, int $index) => [
+                    'value' => $value,
+                    'slug' => Str::slug($value),
+                    'sortOrder' => $index,
+                ],
+            )->values()->all(),
+        ])->all();
+
+        $this->options->syncOptions($product, $payload);
+    }
+
+    public function loadAdminProduct(Product $product): Product
+    {
+        return $product->load([
+            'category',
+            'options.values.images',
+            'variants.optionValues.option',
+            'variants.inventory',
+            'attributes',
+            'customizationOptions',
+            'sustainabilityMaterials',
         ]);
     }
 }

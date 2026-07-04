@@ -12,6 +12,7 @@ import {
     getStockStatus,
 } from '@/components/admin/admin-form';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { AdminBulkActionBar } from '@/components/admin/ui/admin-bulk-action-bar';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import {
     AdminCardList,
@@ -27,12 +28,16 @@ import {
     AdminDataTableHeaderCell,
     AdminDataTableHeaderRow,
     AdminDataTableRow,
+    AdminDataTableSelectCell,
 } from '@/components/admin/ui/admin-data-table';
 import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
+import { adminSelectClassName } from '@/components/admin/ui/admin-input-styles';
 import { AdminPagination } from '@/components/admin/ui/admin-pagination';
 import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
 import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
+import { useRowSelection } from '@/hooks/use-row-selection';
 
 type ProductRow = {
     id: number;
@@ -41,7 +46,7 @@ type ProductRow = {
     styleCode: string;
     category: string | null;
     categoryId: number;
-    colorwaysCount: number;
+    variantsCount: number;
     thumbnailUrl: string | null;
     totalStock: number;
     lowStock: boolean;
@@ -80,7 +85,9 @@ export default function AdminProductsIndex({
     const { t: tCommon } = useTranslation('common');
     const [search, setSearch] = useState(filters.search ?? '');
     const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
+    const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
     const { isPending, onStart, onFinish } = useAdminFilterPending();
+    const selection = useRowSelection(products.data);
 
     setLayoutProps({
         breadcrumbs: [
@@ -116,6 +123,11 @@ export default function AdminProductsIndex({
         return () => clearTimeout(timeout);
     }, [search, filters.search, applyFilters]);
 
+    useEffect(() => {
+        selection.clear();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [products.meta.current_page, filters.search, filters.category]);
+
     const destroy = () => {
         if (!deleteSlug) {
             return;
@@ -131,6 +143,44 @@ export default function AdminProductsIndex({
             `/admin/products/${slug}/featured`,
             { is_featured: !isFeatured },
             { preserveScroll: true, preserveState: true },
+        );
+    };
+
+    const selectedIds = Array.from(selection.selectedIds);
+
+    const bulkSetFeatured = (isFeatured: boolean) => {
+        router.patch(
+            '/admin/products/bulk-featured',
+            { ids: selectedIds, is_featured: isFeatured },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => selection.clear(),
+            },
+        );
+    };
+
+    const bulkAssignCategory = (categoryId: number) => {
+        router.patch(
+            '/admin/products/bulk-category',
+            { ids: selectedIds, category_id: categoryId },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => selection.clear(),
+            },
+        );
+    };
+
+    const bulkDestroy = () => {
+        router.post(
+            '/admin/products/bulk-delete',
+            { ids: selectedIds },
+            {
+                preserveScroll: true,
+                onSuccess: () => selection.clear(),
+                onFinish: () => setBulkDeleteOpen(false),
+            },
         );
     };
 
@@ -180,6 +230,60 @@ export default function AdminProductsIndex({
                     />
                 </div>
 
+                <AdminBulkActionBar
+                    selectedCount={selection.selectedCount}
+                    onClear={selection.clear}
+                    actions={
+                        <>
+                            <AdminButton
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => bulkSetFeatured(true)}
+                            >
+                                {t('bulkActions.markFeatured')}
+                            </AdminButton>
+                            <AdminButton
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => bulkSetFeatured(false)}
+                            >
+                                {t('bulkActions.unmarkFeatured')}
+                            </AdminButton>
+                            <select
+                                defaultValue=""
+                                onChange={(e) => {
+                                    if (e.target.value) {
+                                        bulkAssignCategory(
+                                            Number(e.target.value),
+                                        );
+                                        e.target.value = '';
+                                    }
+                                }}
+                                className={`${adminSelectClassName} h-8 w-auto text-xs`}
+                            >
+                                <option value="" disabled>
+                                    {t('bulkActions.assignCategory')}
+                                </option>
+                                {categories.map((category) => (
+                                    <option
+                                        key={category.id}
+                                        value={category.id}
+                                    >
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <AdminButton
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => setBulkDeleteOpen(true)}
+                            >
+                                {t('bulkActions.delete')}
+                            </AdminButton>
+                        </>
+                    }
+                />
+
                 {!isPending && products.data.length === 0 ? (
                     <AdminEmptyState
                         title={t('products.emptyTitle')}
@@ -198,6 +302,20 @@ export default function AdminProductsIndex({
                             <AdminDataTable minWidth="800px">
                                 <AdminDataTableHead>
                                     <AdminDataTableHeaderRow>
+                                        <AdminDataTableSelectCell
+                                            header
+                                            checked={
+                                                selection.allSelected
+                                                    ? true
+                                                    : selection.someSelected
+                                                      ? 'indeterminate'
+                                                      : false
+                                            }
+                                            onCheckedChange={
+                                                selection.toggleAll
+                                            }
+                                            label={t('products.selectAll')}
+                                        />
                                         <AdminDataTableHeaderCell>
                                             {t('products.name')}
                                         </AdminDataTableHeaderCell>
@@ -211,7 +329,7 @@ export default function AdminProductsIndex({
                                             {t('products.stock')}
                                         </AdminDataTableHeaderCell>
                                         <AdminDataTableHeaderCell>
-                                            {t('products.colorways')}
+                                            {t('products.tabOptions')}
                                         </AdminDataTableHeaderCell>
                                         <AdminDataTableHeaderCell>
                                             {t('products.featured')}
@@ -223,7 +341,7 @@ export default function AdminProductsIndex({
                                 </AdminDataTableHead>
                                 <AdminDataTableBody>
                                     {isPending ? (
-                                        <AdminSkeletonRows columns={7} />
+                                        <AdminSkeletonRows columns={8} />
                                     ) : (
                                         products.data.map((product) => (
                                             <AdminDataTableRow
@@ -234,6 +352,21 @@ export default function AdminProductsIndex({
                                                     )
                                                 }
                                             >
+                                                <AdminDataTableSelectCell
+                                                    checked={selection.isSelected(
+                                                        product.id,
+                                                    )}
+                                                    onCheckedChange={() =>
+                                                        selection.toggle(
+                                                            product.id,
+                                                        )
+                                                    }
+                                                    label={t(
+                                                        'products.selectRow',
+                                                        { name: product.name },
+                                                    )}
+                                                    className="cursor-default"
+                                                />
                                                 <AdminDataTableCell>
                                                     <div className="flex items-center gap-3">
                                                         <div className="border-admin flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border bg-[var(--admin-neutral)]">
@@ -278,7 +411,12 @@ export default function AdminProductsIndex({
                                                     </div>
                                                 </AdminDataTableCell>
                                                 <AdminDataTableCell className="text-admin-secondary">
-                                                    {product.colorwaysCount}
+                                                    {t(
+                                                        'products.variantsCount',
+                                                        {
+                                                            count: product.variantsCount,
+                                                        },
+                                                    )}
                                                 </AdminDataTableCell>
                                                 <AdminDataTableCell>
                                                     <div
@@ -346,6 +484,21 @@ export default function AdminProductsIndex({
                                         key={product.id}
                                         title={product.name}
                                         subtitle={product.styleCode}
+                                        leading={
+                                            <Checkbox
+                                                checked={selection.isSelected(
+                                                    product.id,
+                                                )}
+                                                onCheckedChange={() =>
+                                                    selection.toggle(product.id)
+                                                }
+                                                aria-label={t(
+                                                    'products.selectRow',
+                                                    { name: product.name },
+                                                )}
+                                                className="border-admin-strong mt-1 data-[state=checked]:border-[var(--admin-tertiary)] data-[state=checked]:bg-[var(--admin-tertiary)]"
+                                            />
+                                        }
                                         badge={
                                             <AdminStockBadge
                                                 status={getStockStatus(
@@ -390,9 +543,9 @@ export default function AdminProductsIndex({
                                             {product.totalStock}
                                         </AdminCardListField>
                                         <AdminCardListField
-                                            label={t('products.colorways')}
+                                            label={t('products.tabOptions')}
                                         >
-                                            {product.colorwaysCount}
+                                            {product.variantsCount}
                                         </AdminCardListField>
                                         <AdminCardListField
                                             label={t('products.featured')}
@@ -442,6 +595,17 @@ export default function AdminProductsIndex({
                 variant="destructive"
                 confirmLabel={tCommon('delete')}
                 onConfirm={destroy}
+            />
+
+            <AdminConfirmDialog
+                open={bulkDeleteOpen}
+                onOpenChange={setBulkDeleteOpen}
+                title={t('bulkActions.deleteConfirm', {
+                    count: selectedIds.length,
+                })}
+                variant="destructive"
+                confirmLabel={tCommon('delete')}
+                onConfirm={bulkDestroy}
             />
         </>
     );

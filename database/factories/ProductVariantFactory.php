@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\ProductColorway;
+use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,14 +18,12 @@ class ProductVariantFactory extends Factory
      */
     public function definition(): array
     {
-        $size = (string) fake()->numberBetween(8, 12);
-
         return [
-            'colorway_id' => ProductColorway::factory(),
-            'size_val' => 'US '.$size,
-            'sku' => fake()->unique()->bothify('??####-###-US#'),
+            'product_id' => Product::factory(),
+            'sku' => fake()->unique()->bothify('??####-###-VAR'),
             'upc' => null,
             'additional_price' => 0,
+            'sale_price' => null,
         ];
     }
 }

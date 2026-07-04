@@ -1,15 +1,18 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
+import { CategoryMegaNav } from '@/components/storefront/category-mega-menu';
 import { MobileNavDrawer } from '@/components/storefront/mobile-nav-drawer';
 import { SearchPill } from '@/components/storefront/SearchPill';
 import { useCart } from '@/contexts/cart-context';
 import { useWishlist } from '@/contexts/wishlist-context';
 import { home } from '@/routes';
+import type { Category } from '@/types/catalog';
+import type { StoreProfile } from '@/types/store-profile';
 
 function submitSearch(value: string): void {
     const query = value.trim();
@@ -27,7 +30,11 @@ export function PrimaryNav() {
     const { itemCount } = useCart();
     const { itemCount: wishlistCount } = useWishlist();
     const { t } = useTranslation('storefront');
-    const { name: storeName } = usePage().props;
+    const { name: storeName, navigation, storeProfile } = usePage().props as {
+        name: string;
+        navigation: { categories: Category[] };
+        storeProfile: StoreProfile;
+    };
 
     const handleSearchKeyDown = useCallback(
         (event: KeyboardEvent<HTMLInputElement>) => {
@@ -39,21 +46,19 @@ export function PrimaryNav() {
         [],
     );
 
-    const navItems = useMemo(
-        () => [
-            { label: t('nav.newFeatured'), href: '/' },
-            { label: t('nav.men'), href: '/men' },
-            { label: t('nav.women'), href: '/women' },
-            { label: t('nav.kids'), href: '/kids' },
-            { label: t('nav.jordan'), href: '/jordan' },
-        ],
-        [t],
-    );
-
     return (
         <>
-            <header className="vsport-light border-b border-hairline-soft bg-canvas text-ink">
-                <div className="storefront-container flex h-14 items-center gap-4">
+            <CategoryMegaNav
+                categories={navigation.categories}
+                staticLink={
+                    <Link
+                        href="/"
+                        className="text-body-strong hover:underline"
+                    >
+                        {t('nav.newFeatured')}
+                    </Link>
+                }
+                leading={
                     <div className="flex items-center gap-3 tablet-lg:gap-6">
                         <StorefrontButton
                             variant="icon"
@@ -68,25 +73,23 @@ export function PrimaryNav() {
                             href={home()}
                             className="text-heading-lg font-medium tracking-tight"
                         >
-                            {storeName}
+                            {storeProfile.logoWideUrl ?? storeProfile.logoUrl ? (
+                                <img
+                                    src={
+                                        storeProfile.logoWideUrl ??
+                                        storeProfile.logoUrl ??
+                                        undefined
+                                    }
+                                    alt={storeProfile.name || storeName}
+                                    className="h-[55px] w-auto"
+                                />
+                            ) : (
+                                (storeProfile.name ?? storeName)
+                            )}
                         </Link>
                     </div>
-
-                    <nav
-                        className="hidden flex-1 items-center justify-center gap-6 tablet-lg:flex"
-                        aria-label={t('nav.primary')}
-                    >
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className="text-body-strong hover:underline"
-                            >
-                                {item.label}
-                            </Link>
-                        ))}
-                    </nav>
-
+                }
+                trailing={
                     <div className="ml-auto flex items-center gap-2">
                         <div className="hidden w-56 desktop:block">
                             <SearchPill
@@ -138,23 +141,15 @@ export function PrimaryNav() {
                             </Link>
                         </StorefrontButton>
                     </div>
-                </div>
-
-                {searchOpen && (
-                    <div className="border-t border-hairline-soft px-4 py-3 desktop:hidden">
-                        <SearchPill
-                            placeholder={t('nav.search')}
-                            autoFocus
-                            onKeyDown={handleSearchKeyDown}
-                        />
-                    </div>
-                )}
-            </header>
+                }
+                searchOpen={searchOpen}
+                onSearchKeyDown={handleSearchKeyDown}
+            />
 
             <MobileNavDrawer
                 open={mobileOpen}
                 onOpenChange={setMobileOpen}
-                items={navItems}
+                categories={navigation.categories}
             />
         </>
     );

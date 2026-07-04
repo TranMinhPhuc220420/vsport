@@ -18,11 +18,9 @@ class DiscountController extends Controller
         ]);
 
         $cart = $carts->loadCartForResponse($carts->resolveCart($request));
-        $subtotal = (float) collect($cart->items)->sum(function ($item) {
-            $colorway = $item->variant->colorway;
-
-            return ((float) ($colorway->discount_price ?? $colorway->price)) * $item->quantity;
-        });
+        $subtotal = (float) collect($cart->items)->sum(
+            fn ($item) => $item->variant->unitPrice() * $item->quantity,
+        );
 
         try {
             $discount = $discounts->validate($validated['code'], $subtotal);

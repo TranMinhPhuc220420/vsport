@@ -22,25 +22,37 @@ class ProductSummaryResource extends JsonResource
         $primaryImage = null;
         $colorwaySwatches = [];
 
-        foreach ($this->activeColorways as $colorway) {
-            $prices[] = $colorway->effectivePrice();
-            $colorwaySwatches[] = ColorSwatch::fromColorName($colorway->color_name);
+        $swatchOption = $this->options->first(fn ($option) => $option->drives_gallery)
+            ?? $this->options->first(fn ($option) => $option->display_type->value === 'swatch');
 
-            foreach ($colorway->variants as $variant) {
-                $prices[] = $variant->unitPrice();
+        if ($swatchOption !== null) {
+            foreach ($swatchOption->values as $value) {
+                $colorwaySwatches[] = $value->swatch_hex ?? ColorSwatch::fromColorName($value->value);
 
-                if ($variant->inventory?->isInStock()) {
-                    $inStock = true;
+                $image = $value->images->firstWhere('is_primary', true)
+                    ?? $value->images->first();
+
+                if ($image && $primaryImage === null) {
+                    $primaryImage = ProductImageResource::make($image);
                 }
             }
+        }
 
-            $image = $colorway->images->firstWhere('is_primary', true)
-                ?? $colorway->images->first();
+        $defaultVariant = null;
 
-            if ($image && $primaryImage === null) {
-                $primaryImage = ProductImageResource::make($image);
+        foreach ($this->variants as $variant) {
+            $prices[] = $variant->unitPrice();
+
+            if ($variant->inventory?->isInStock()) {
+                $inStock = true;
+
+                if ($defaultVariant === null) {
+                    $defaultVariant = $variant;
+                }
             }
         }
+
+        $defaultVariant ??= $this->variants->first();
 
         $basePrice = (float) $this->base_price;
         $minPrice = $prices !== [] ? min($prices) : $basePrice;
@@ -61,6 +73,10 @@ class ProductSummaryResource extends JsonResource
             'maxPrice' => $prices !== [] ? max($prices) : $basePrice,
             'inStock' => $inStock,
             'colorwaySwatches' => $colorwaySwatches,
+            'defaultVariantId' => $defaultVariant?->id,
+            'defaultVariantPrice' => $defaultVariant !== null
+                ? $defaultVariant->unitPrice()
+                : null,
         ];
     }
 }

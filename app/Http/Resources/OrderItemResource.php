@@ -16,12 +16,15 @@ class OrderItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $options = $this->options_snapshot ?? [];
+
         return [
             'id' => $this->id,
             'variantId' => $this->variant_id,
             'productName' => $this->product_name,
-            'colorName' => $this->color_name,
-            'size' => $this->size_val,
+            'options' => $options,
+            'colorName' => $options[0]['value'] ?? $this->color_name,
+            'size' => $options[1]['value'] ?? $this->size_val,
             'quantity' => $this->quantity,
             'unitPrice' => (float) $this->unit_price,
             'lineTotal' => (float) $this->unit_price * $this->quantity,

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 
 type AdminDataTableProps = {
@@ -131,6 +132,36 @@ function AdminDataTableCell({
     );
 }
 
+function AdminDataTableSelectCell({
+    checked,
+    onCheckedChange,
+    header = false,
+    label,
+    className,
+}: {
+    checked: boolean | 'indeterminate';
+    onCheckedChange: (checked: boolean) => void;
+    header?: boolean;
+    label: string;
+    className?: string;
+}) {
+    const Tag = header ? 'th' : 'td';
+
+    return (
+        <Tag
+            className={cn('w-10 px-4 py-2.5', className)}
+            onClick={(e) => e.stopPropagation()}
+        >
+            <Checkbox
+                checked={checked}
+                onCheckedChange={(value) => onCheckedChange(value === true)}
+                aria-label={label}
+                className="border-admin-strong data-[state=checked]:border-[var(--admin-tertiary)] data-[state=checked]:bg-[var(--admin-tertiary)]"
+            />
+        </Tag>
+    );
+}
+
 export {
     AdminDataTable,
     AdminDataTableBody,
@@ -139,4 +170,5 @@ export {
     AdminDataTableHeaderCell,
     AdminDataTableHeaderRow,
     AdminDataTableRow,
+    AdminDataTableSelectCell,
 };

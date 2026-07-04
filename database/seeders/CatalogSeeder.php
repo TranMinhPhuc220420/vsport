@@ -2,54 +2,42 @@
 
 namespace Database\Seeders;
 
+use App\Enums\OptionDisplayType;
+use App\Enums\ProductAttributeGroup;
 use App\Enums\ProductGender;
 use App\Models\Category;
+use App\Models\CategoryOptionTemplate;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductColorway;
+use App\Models\ProductAttribute;
 use App\Models\ProductImage;
+use App\Models\ProductOption;
+use App\Models\ProductOptionValue;
 use App\Models\ProductVariant;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class CatalogSeeder extends Seeder
 {
-    /**
-     * Seed the catalog with sample Nike-style products.
-     */
     public function run(): void
     {
-        $men = Category::updateOrCreate(
-            ['slug' => 'men'],
-            ['name' => 'Men', 'parent_id' => null],
-        );
+        $men = Category::updateOrCreate(['slug' => 'men'], ['name' => 'Men', 'parent_id' => null]);
+        $menShoes = Category::updateOrCreate(['slug' => 'men-shoes'], ['name' => 'Shoes', 'parent_id' => $men->id]);
+        $women = Category::updateOrCreate(['slug' => 'women'], ['name' => 'Women', 'parent_id' => null]);
+        $womenShoes = Category::updateOrCreate(['slug' => 'women-shoes'], ['name' => 'Shoes', 'parent_id' => $women->id]);
+        Category::updateOrCreate(['slug' => 'kids'], ['name' => 'Kids', 'parent_id' => null]);
+        Category::updateOrCreate(['slug' => 'jordan'], ['name' => 'Jordan', 'parent_id' => null]);
+        $bags = Category::updateOrCreate(['slug' => 'bags'], ['name' => 'Bags', 'parent_id' => null]);
+        $paddles = Category::updateOrCreate(['slug' => 'paddles'], ['name' => 'Paddles', 'parent_id' => null]);
+        $apparel = Category::updateOrCreate(['slug' => 'apparel'], ['name' => 'Apparel', 'parent_id' => null]);
 
-        $menShoes = Category::updateOrCreate(
-            ['slug' => 'men-shoes'],
-            ['name' => 'Shoes', 'parent_id' => $men->id],
-        );
+        $this->seedShoeTemplate($menShoes);
+        $this->seedShoeTemplate($womenShoes);
+        $this->seedBagTemplate($bags);
+        $this->seedPaddleTemplate($paddles);
+        $this->seedApparelTemplate($apparel);
 
-        $women = Category::updateOrCreate(
-            ['slug' => 'women'],
-            ['name' => 'Women', 'parent_id' => null],
-        );
-
-        Category::updateOrCreate(
-            ['slug' => 'women-shoes'],
-            ['name' => 'Shoes', 'parent_id' => $women->id],
-        );
-
-        Category::updateOrCreate(
-            ['slug' => 'kids'],
-            ['name' => 'Kids', 'parent_id' => null],
-        );
-
-        Category::updateOrCreate(
-            ['slug' => 'jordan'],
-            ['name' => 'Jordan', 'parent_id' => null],
-        );
-
-        $this->seedProduct([
+        $this->seedShoeProduct([
             'style_code' => 'DD1391',
             'name' => 'Zegama 2',
             'slug' => 'zegama-2',
@@ -57,10 +45,10 @@ class CatalogSeeder extends Seeder
             'base_price' => 180.00,
             'gender' => ProductGender::Men,
             'category_id' => $menShoes->id,
-            'discount_price' => 135.00,
+            'sale_price' => 135.00,
         ]);
 
-        $this->seedProduct([
+        $this->seedShoeProduct([
             'style_code' => 'FN7454',
             'name' => 'Air Max Pulse',
             'slug' => 'air-max-pulse',
@@ -68,10 +56,9 @@ class CatalogSeeder extends Seeder
             'base_price' => 150.00,
             'gender' => ProductGender::Men,
             'category_id' => $menShoes->id,
-            'discount_price' => null,
         ]);
 
-        $this->seedProduct([
+        $this->seedShoeProduct([
             'style_code' => '553558',
             'name' => 'Jordan 1 Low',
             'slug' => 'jordan-1-low',
@@ -79,31 +66,124 @@ class CatalogSeeder extends Seeder
             'base_price' => 120.00,
             'gender' => ProductGender::Men,
             'category_id' => $menShoes->id,
-            'discount_price' => null,
             'out_of_stock_sizes' => ['US 12'],
         ]);
 
-        $this->seedProduct([
+        $this->seedShoeProduct([
             'style_code' => 'DV4023',
             'name' => 'Revolution 7',
             'slug' => 'revolution-7',
             'sub_title' => "Women's Running Shoes",
             'base_price' => 75.00,
             'gender' => ProductGender::Women,
-            'category_id' => $women->id,
-            'discount_price' => 59.00,
+            'category_id' => $womenShoes->id,
+            'sale_price' => 59.00,
         ]);
 
-        $this->seedProduct([
-            'style_code' => 'FB2207',
-            'name' => 'Air Force 1',
-            'slug' => 'air-force-1',
-            'sub_title' => "Women's Shoes",
-            'base_price' => 115.00,
-            'gender' => ProductGender::Women,
-            'category_id' => $women->id,
-            'discount_price' => null,
-        ]);
+        $this->seedBagProduct();
+        $this->seedPaddleProduct();
+    }
+
+    private function seedShoeTemplate(Category $category): void
+    {
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Color'],
+            [
+                'position' => 0,
+                'display_type' => OptionDisplayType::Swatch,
+                'is_required' => true,
+                'drives_gallery' => true,
+                'default_values' => ['Black', 'White'],
+            ],
+        );
+
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Size'],
+            [
+                'position' => 1,
+                'display_type' => OptionDisplayType::Button,
+                'is_required' => true,
+                'drives_gallery' => false,
+                'default_values' => ['US 8', 'US 9', 'US 10', 'US 11', 'US 12'],
+            ],
+        );
+    }
+
+    private function seedBagTemplate(Category $category): void
+    {
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Color'],
+            [
+                'position' => 0,
+                'display_type' => OptionDisplayType::Swatch,
+                'is_required' => true,
+                'drives_gallery' => true,
+                'default_values' => ['Black', 'Navy'],
+            ],
+        );
+    }
+
+    private function seedPaddleTemplate(Category $category): void
+    {
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Shape'],
+            [
+                'position' => 0,
+                'display_type' => OptionDisplayType::Button,
+                'is_required' => true,
+                'drives_gallery' => false,
+                'default_values' => ['Widebody', 'Elongated'],
+            ],
+        );
+
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Core'],
+            [
+                'position' => 1,
+                'display_type' => OptionDisplayType::Swatch,
+                'is_required' => true,
+                'drives_gallery' => true,
+                'default_values' => ['Chalk', 'Cosmic', 'Hydro'],
+                'metadata' => ['edition' => 'core'],
+            ],
+        );
+
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Limited'],
+            [
+                'position' => 2,
+                'display_type' => OptionDisplayType::Swatch,
+                'is_required' => false,
+                'drives_gallery' => true,
+                'default_values' => ['Canyon Clay'],
+                'metadata' => ['edition' => 'limited'],
+            ],
+        );
+    }
+
+    private function seedApparelTemplate(Category $category): void
+    {
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Color'],
+            [
+                'position' => 0,
+                'display_type' => OptionDisplayType::Swatch,
+                'is_required' => true,
+                'drives_gallery' => true,
+                'default_values' => ['Black', 'White'],
+            ],
+        );
+
+        CategoryOptionTemplate::updateOrCreate(
+            ['category_id' => $category->id, 'name' => 'Size'],
+            [
+                'position' => 1,
+                'display_type' => OptionDisplayType::Button,
+                'is_required' => true,
+                'drives_gallery' => false,
+                'default_values' => ['S', 'M', 'L', 'XL'],
+            ],
+        );
     }
 
     /**
@@ -115,11 +195,11 @@ class CatalogSeeder extends Seeder
      *     base_price: float,
      *     gender: ProductGender,
      *     category_id: int,
-     *     discount_price?: float|null,
+     *     sale_price?: float|null,
      *     out_of_stock_sizes?: list<string>
      * }  $data
      */
-    private function seedProduct(array $data): void
+    private function seedShoeProduct(array $data): void
     {
         $product = Product::updateOrCreate(
             ['style_code' => $data['style_code']],
@@ -134,77 +214,231 @@ class CatalogSeeder extends Seeder
             ],
         );
 
-        $colorways = [
-            ['code' => '100', 'name' => 'Black', 'hex' => '111111'],
-            ['code' => '200', 'name' => 'White', 'hex' => 'f5f5f5'],
+        $colors = [
+            ['name' => 'Black', 'hex' => '111111', 'sale' => $data['sale_price'] ?? null],
+            ['name' => 'White', 'hex' => 'f5f5f5', 'sale' => null],
         ];
-
         $sizes = ['US 8', 'US 9', 'US 10', 'US 11', 'US 12'];
         $outOfStock = $data['out_of_stock_sizes'] ?? [];
 
-        foreach ($colorways as $index => $colorwayData) {
-            $fullStyleCode = "{$data['style_code']}-{$colorwayData['code']}";
+        $colorOption = ProductOption::updateOrCreate(
+            ['product_id' => $product->id, 'name' => 'Color'],
+            [
+                'position' => 0,
+                'display_type' => OptionDisplayType::Swatch,
+                'is_required' => true,
+                'drives_gallery' => true,
+            ],
+        );
 
-            $colorway = ProductColorway::updateOrCreate(
-                ['full_style_code' => $fullStyleCode],
+        $sizeOption = ProductOption::updateOrCreate(
+            ['product_id' => $product->id, 'name' => 'Size'],
+            [
+                'position' => 1,
+                'display_type' => OptionDisplayType::Button,
+                'is_required' => true,
+                'drives_gallery' => false,
+            ],
+        );
+
+        $colorValues = [];
+        foreach ($colors as $index => $color) {
+            $value = ProductOptionValue::updateOrCreate(
+                ['option_id' => $colorOption->id, 'slug' => Str::slug($color['name'])],
                 [
-                    'product_id' => $product->id,
-                    'colorway_code' => $colorwayData['code'],
-                    'color_name' => $colorwayData['name'],
-                    'discount_price' => $index === 0 ? ($data['discount_price'] ?? null) : null,
-                    'is_customizable' => false,
-                    'is_active' => true,
+                    'value' => $color['name'],
+                    'swatch_hex' => "#{$color['hex']}",
+                    'sort_order' => $index,
+                    'sale_price' => $color['sale'],
                 ],
+            );
+            $colorValues[] = $value;
+
+            ProductImage::updateOrCreate(
+                ['option_value_id' => $value->id, 'is_primary' => true],
+                [
+                    'image_url' => "https://placehold.co/800x800/{$color['hex']}/111111?text=".urlencode($product->name),
+                    'image_alt_tag' => "{$product->name} - {$color['name']}",
+                    'sort_order' => 0,
+                ],
+            );
+        }
+
+        $sizeValues = [];
+        foreach ($sizes as $index => $size) {
+            $sizeValues[] = ProductOptionValue::updateOrCreate(
+                ['option_id' => $sizeOption->id, 'slug' => Str::slug($size)],
+                ['value' => $size, 'sort_order' => $index],
+            );
+        }
+
+        foreach ($colorValues as $colorValue) {
+            foreach ($sizeValues as $sizeValue) {
+                $sku = Str::upper(Str::slug("{$data['style_code']}-{$colorValue->slug}-{$sizeValue->slug}", '-'));
+                $variant = ProductVariant::updateOrCreate(
+                    ['sku' => $sku],
+                    ['product_id' => $product->id, 'additional_price' => 0],
+                );
+                $variant->optionValues()->sync([$colorValue->id, $sizeValue->id]);
+
+                $quantity = in_array($sizeValue->value, $outOfStock, true) ? 0 : random_int(5, 20);
+                Inventory::updateOrCreate(
+                    ['variant_id' => $variant->id],
+                    ['quantity' => $quantity, 'reserved_quantity' => 0],
+                );
+            }
+        }
+    }
+
+    private function seedBagProduct(): void
+    {
+        $bags = Category::where('slug', 'bags')->firstOrFail();
+
+        $product = Product::updateOrCreate(
+            ['style_code' => 'CORE-BAG'],
+            [
+                'slug' => 'core-team-bag',
+                'name' => 'Core Team Bag',
+                'description' => 'Spacious team bag with dedicated paddle pocket.',
+                'category_id' => $bags->id,
+                'sub_title' => 'Pickleball Bag',
+                'base_price' => 89.00,
+                'gender' => ProductGender::Unisex,
+            ],
+        );
+
+        $colorOption = ProductOption::updateOrCreate(
+            ['product_id' => $product->id, 'name' => 'Color'],
+            [
+                'position' => 0,
+                'display_type' => OptionDisplayType::Swatch,
+                'is_required' => true,
+                'drives_gallery' => true,
+            ],
+        );
+
+        foreach ([['Black', '111111'], ['Navy', '1a2a4a']] as $index => [$name, $hex]) {
+            $value = ProductOptionValue::updateOrCreate(
+                ['option_id' => $colorOption->id, 'slug' => Str::slug($name)],
+                ['value' => $name, 'swatch_hex' => "#{$hex}", 'sort_order' => $index],
             );
 
             ProductImage::updateOrCreate(
+                ['option_value_id' => $value->id, 'is_primary' => true],
                 [
-                    'colorway_id' => $colorway->id,
-                    'is_primary' => true,
-                ],
-                [
-                    'image_url' => "https://placehold.co/800x800/{$colorwayData['hex']}/111111?text=".urlencode($product->name),
-                    'image_alt_tag' => "{$product->name} - {$colorwayData['name']}",
+                    'image_url' => "https://placehold.co/800x800/{$hex}/ffffff?text=Bag",
+                    'image_alt_tag' => $name,
                     'sort_order' => 0,
                 ],
             );
 
+            $variant = ProductVariant::updateOrCreate(
+                ['sku' => 'CORE-BAG-'.Str::upper(Str::slug($name, ''))],
+                ['product_id' => $product->id, 'additional_price' => 0],
+            );
+            $variant->optionValues()->sync([$value->id]);
+            Inventory::updateOrCreate(
+                ['variant_id' => $variant->id],
+                ['quantity' => 15, 'reserved_quantity' => 0],
+            );
+        }
+    }
+
+    private function seedPaddleProduct(): void
+    {
+        $paddles = Category::where('slug', 'paddles')->firstOrFail();
+
+        $product = Product::updateOrCreate(
+            ['style_code' => 'OMNI'],
+            [
+                'slug' => 'selkirk-omni-paddle',
+                'name' => 'Selkirk OMNI Pickleball Paddle',
+                'description' => 'All-court paddle with ReactCore technology.',
+                'category_id' => $paddles->id,
+                'sub_title' => 'All-Court Paddle',
+                'base_price' => 300.00,
+                'gender' => ProductGender::Unisex,
+            ],
+        );
+
+        $shapeOption = ProductOption::updateOrCreate(
+            ['product_id' => $product->id, 'name' => 'Shape'],
+            ['position' => 0, 'display_type' => OptionDisplayType::Button, 'is_required' => true, 'drives_gallery' => false],
+        );
+        $coreOption = ProductOption::updateOrCreate(
+            ['product_id' => $product->id, 'name' => 'Core'],
+            ['position' => 1, 'display_type' => OptionDisplayType::Swatch, 'is_required' => false, 'drives_gallery' => true, 'metadata' => ['edition' => 'core']],
+        );
+        $limitedOption = ProductOption::updateOrCreate(
+            ['product_id' => $product->id, 'name' => 'Limited'],
+            ['position' => 2, 'display_type' => OptionDisplayType::Swatch, 'is_required' => false, 'drives_gallery' => true, 'metadata' => ['edition' => 'limited']],
+        );
+
+        $shapes = [];
+        foreach (['Widebody', 'Elongated'] as $i => $shape) {
+            $shapes[] = ProductOptionValue::updateOrCreate(
+                ['option_id' => $shapeOption->id, 'slug' => Str::slug($shape)],
+                ['value' => $shape, 'sort_order' => $i],
+            );
+        }
+
+        $coreColors = [];
+        foreach ([['Chalk', 'f5f5dc'], ['Cosmic', '2b1b4a'], ['Hydro', '1e4d6b']] as $i => [$name, $hex]) {
+            $value = ProductOptionValue::updateOrCreate(
+                ['option_id' => $coreOption->id, 'slug' => Str::slug($name)],
+                ['value' => $name, 'swatch_hex' => "#{$hex}", 'sort_order' => $i, 'metadata' => ['edition' => 'core']],
+            );
+            $coreColors[] = $value;
             ProductImage::updateOrCreate(
+                ['option_value_id' => $value->id, 'is_primary' => true],
                 [
-                    'colorway_id' => $colorway->id,
-                    'sort_order' => 1,
-                ],
-                [
-                    'image_url' => "https://placehold.co/800x800/{$colorwayData['hex']}/707072?text=Gallery",
-                    'image_alt_tag' => "{$product->name} gallery",
-                    'is_primary' => false,
+                    'image_url' => "https://placehold.co/800x800/{$hex}/ffffff?text=OMNI",
+                    'image_alt_tag' => $name,
+                    'sort_order' => 0,
                 ],
             );
-
-            foreach ($sizes as $size) {
-                $sku = Str::slug("{$fullStyleCode}-{$size}", '-');
-
-                $variant = ProductVariant::updateOrCreate(
-                    [
-                        'colorway_id' => $colorway->id,
-                        'size_val' => $size,
-                    ],
-                    [
-                        'sku' => $sku,
-                        'additional_price' => 0,
-                    ],
-                );
-
-                $quantity = in_array($size, $outOfStock, true) ? 0 : random_int(5, 20);
-
-                Inventory::updateOrCreate(
-                    ['variant_id' => $variant->id],
-                    [
-                        'quantity' => $quantity,
-                        'reserved_quantity' => 0,
-                    ],
-                );
-            }
         }
+
+        $limitedValue = ProductOptionValue::updateOrCreate(
+            ['option_id' => $limitedOption->id, 'slug' => 'canyon-clay'],
+            ['value' => 'Canyon Clay', 'swatch_hex' => '#c45c3e', 'sort_order' => 0, 'metadata' => ['edition' => 'limited']],
+        );
+        ProductImage::updateOrCreate(
+            ['option_value_id' => $limitedValue->id, 'is_primary' => true],
+            [
+                'image_url' => 'https://placehold.co/800x800/c45c3e/ffffff?text=Limited',
+                'image_alt_tag' => 'Canyon Clay',
+                'sort_order' => 0,
+            ],
+        );
+
+        foreach ($shapes as $shape) {
+            foreach ($coreColors as $core) {
+                $sku = Str::upper("OMNI-{$shape->slug}-{$core->slug}");
+                $variant = ProductVariant::updateOrCreate(
+                    ['sku' => $sku],
+                    ['product_id' => $product->id, 'additional_price' => 0],
+                );
+                $variant->optionValues()->sync([$shape->id, $core->id]);
+                Inventory::updateOrCreate(['variant_id' => $variant->id], ['quantity' => 10, 'reserved_quantity' => 0]);
+            }
+
+            $sku = Str::upper("OMNI-{$shape->slug}-{$limitedValue->slug}");
+            $variant = ProductVariant::updateOrCreate(
+                ['sku' => $sku],
+                ['product_id' => $product->id, 'additional_price' => 0],
+            );
+            $variant->optionValues()->sync([$shape->id, $limitedValue->id]);
+            Inventory::updateOrCreate(['variant_id' => $variant->id], ['quantity' => 0, 'reserved_quantity' => 0]);
+        }
+
+        ProductAttribute::updateOrCreate(
+            ['product_id' => $product->id, 'group' => ProductAttributeGroup::TechSpecs, 'key' => 'core_material'],
+            ['label' => 'Core material', 'value' => 'PureFoam', 'sort_order' => 0],
+        );
+        ProductAttribute::updateOrCreate(
+            ['product_id' => $product->id, 'group' => ProductAttributeGroup::TechSpecs, 'key' => 'thickness'],
+            ['label' => 'Core thickness', 'value' => '16mm', 'sort_order' => 1],
+        );
     }
 }

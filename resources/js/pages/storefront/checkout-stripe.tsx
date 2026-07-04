@@ -23,7 +23,7 @@ export default function CheckoutStripePage({
     seo,
 }: CheckoutStripePageProps) {
     const { t } = useTranslation('storefront');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const [error, setError] = useState<string | null>(null);
     const [processing, setProcessing] = useState(false);
 
@@ -82,7 +82,7 @@ export default function CheckoutStripePage({
                 <p className="text-caption-md mt-2 text-mute">
                     {t('stripe.orderSummary', {
                         orderNumber,
-                        total: formatCurrency(total, locale),
+                        total: formatCurrency(total, locale, currency),
                     })}
                 </p>
 

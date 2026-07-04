@@ -18,6 +18,7 @@ type AdminCardListItemProps = {
     title: ReactNode;
     subtitle?: ReactNode;
     badge?: ReactNode;
+    leading?: ReactNode;
     onClick?: () => void;
     actions?: ReactNode;
     children?: ReactNode;
@@ -28,6 +29,7 @@ function AdminCardListItem({
     title,
     subtitle,
     badge,
+    leading,
     onClick,
     actions,
     children,
@@ -44,7 +46,10 @@ function AdminCardListItem({
             )}
         >
             <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
+                {leading && (
+                    <div onClick={(e) => e.stopPropagation()}>{leading}</div>
+                )}
+                <div className="min-w-0 flex-1">
                     <p className="truncate font-medium text-[var(--admin-primary)]">
                         {title}
                     </p>

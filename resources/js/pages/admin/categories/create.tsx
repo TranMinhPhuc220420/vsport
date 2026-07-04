@@ -5,10 +5,12 @@ import { CategoryForm } from '@/components/admin/category-form';
 
 type AdminCategoriesCreateProps = {
     parentCategories: { id: number; name: string }[];
+    defaultParentId?: number | null;
 };
 
 export default function AdminCategoriesCreate({
     parentCategories,
+    defaultParentId = null,
 }: AdminCategoriesCreateProps) {
     const { t } = useTranslation('admin');
 
@@ -26,7 +28,11 @@ export default function AdminCategoriesCreate({
             action="/admin/categories"
             method="post"
             parentCategories={parentCategories}
-            initial={{ name: '', slug: '', parent_id: '' }}
+            initial={{
+                name: '',
+                slug: '',
+                parent_id: defaultParentId ?? '',
+            }}
         />
     );
 }

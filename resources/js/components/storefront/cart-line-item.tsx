@@ -21,7 +21,7 @@ function CartLineItem({
     className,
 }: CartLineItemProps) {
     const { t } = useTranslation(['storefront', 'common']);
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const lineTotal = item.unitPrice * item.quantity;
 
     return (
@@ -60,7 +60,10 @@ function CartLineItem({
                             {item.productName}
                         </Link>
                         <p className="text-caption-md text-mute">
-                            {item.colorName} / {item.size}
+                            {(item.options ?? [])
+                                .map((option) => option.value)
+                                .join(' / ') ||
+                                `${item.colorName} / ${item.size}`}
                         </p>
                     </div>
                     <button
@@ -109,7 +112,7 @@ function CartLineItem({
                         </StorefrontButton>
                     </div>
                     <span className="text-body-strong text-ink">
-                        {formatCurrency(lineTotal, locale)}
+                        {formatCurrency(lineTotal, locale, currency)}
                     </span>
                 </div>
             </div>

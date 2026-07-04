@@ -31,7 +31,7 @@ export function ProductDetailsForm({
         category_id: product.categoryId,
         sub_title: product.subTitle ?? '',
         base_price: product.basePrice.toString(),
-        gender: product.gender,
+        is_customizable: product.isCustomizable,
     });
 
     const saveProduct = (event: React.FormEvent) => {
@@ -118,6 +118,17 @@ export function ProductDetailsForm({
                         error={form.errors.base_price}
                     />
                 </div>
+
+                <label className="flex items-center gap-2 text-sm">
+                    <input
+                        type="checkbox"
+                        checked={form.data.is_customizable}
+                        onChange={(e) =>
+                            form.setData('is_customizable', e.target.checked)
+                        }
+                    />
+                    {t('products.isCustomizable')}
+                </label>
 
                 <div className="pt-2">
                     <AdminButton type="submit" disabled={form.processing}>

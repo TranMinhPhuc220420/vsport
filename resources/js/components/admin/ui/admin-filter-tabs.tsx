@@ -37,9 +37,9 @@ function AdminFilterTabs({
                         disabled={disabled}
                         onClick={() => onChange(option.value)}
                         className={cn(
-                            'rounded-admin-sm px-3 py-1.5 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+                            'rounded-admin-sm border border-transparent px-3 py-1.5 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
                             active
-                                ? 'bg-[var(--admin-surface)] text-[var(--admin-primary)] shadow-sm'
+                                ? 'border-admin bg-[var(--admin-surface)] text-[var(--admin-primary)]'
                                 : 'text-admin-secondary hover:text-[var(--admin-primary)]',
                         )}
                     >

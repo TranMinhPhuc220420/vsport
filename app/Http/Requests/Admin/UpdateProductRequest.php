@@ -39,6 +39,7 @@ class UpdateProductRequest extends FormRequest
             'sub_title' => ['nullable', 'string', 'max:255'],
             'base_price' => ['required', 'numeric', 'min:0'],
             'gender' => ['required', 'string', Rule::in(array_column(ProductGender::cases(), 'value'))],
+            'is_customizable' => ['sometimes', 'boolean'],
         ];
     }
 }

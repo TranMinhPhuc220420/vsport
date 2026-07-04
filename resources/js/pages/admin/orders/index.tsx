@@ -44,7 +44,7 @@ export default function AdminOrdersIndex({
 }: AdminOrdersPageProps) {
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const { isPending, onStart, onFinish } = useAdminFilterPending();
 
     setLayoutProps({
@@ -221,6 +221,7 @@ export default function AdminOrdersIndex({
                                                     {formatCurrency(
                                                         order.totalAmount,
                                                         locale,
+                                                        currency,
                                                     )}
                                                 </AdminDataTableCell>
                                             </AdminDataTableRow>
@@ -279,6 +280,7 @@ export default function AdminOrdersIndex({
                                             {formatCurrency(
                                                 order.totalAmount,
                                                 locale,
+                                                currency,
                                             )}
                                         </AdminCardListField>
                                     </AdminCardListItem>

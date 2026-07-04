@@ -34,29 +34,25 @@ Implement tables incrementally. Tables marked **(future)** can be deferred.
 
 ## 2. Product Hierarchy
 
-Three-layer model to handle SKU proliferation:
+Flexible option-based catalog (Selkirk-style):
 
 ```
 products (style)
-  └── product_colorways (colorway)
-        ├── product_images
-        ├── nike_by_you_options          (future)
-        ├── product_sustainability_materials (future)
-        └── product_variants (SKU = style + color + size)
-              └── inventory (1:1)
+  ├── product_options (Color, Size, Shape, Edition, …)
+  │     └── product_option_values
+  │           └── product_images (gallery per swatch value)
+  ├── product_variants (SKU = combination of option values)
+  │     └── inventory (1:1)
+  ├── product_attributes (tech specs, details, shipping groups)
+  ├── product_customization_options (nike_by_you_options table)
+  └── product_sustainability_materials
+
+category_option_templates → default options per category
 ```
 
 ### SKU Format
 
-Nike-style SKU: `{style_code}-{colorway_code}-{size}`
-
-Example: `DD1391-100-US9` → Nike Dunk Low, Panda White/Black, US 9
-
-| Layer | Table | Example |
-|-------|-------|---------|
-| Style | `products` | `DD1391` — Nike Dunk Low |
-| Colorway | `product_colorways` | `DD1391-100` — White/Black |
-| Variant (SKU) | `product_variants` | `DD1391-100-US9` |
+SKU is generated from style code and option value slugs, e.g. `DD1391-BLACK-US9`.
 
 ---
 

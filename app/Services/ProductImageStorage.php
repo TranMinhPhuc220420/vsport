@@ -18,12 +18,12 @@ class ProductImageStorage
         return 'public';
     }
 
-    public function upload(UploadedFile $file, int $colorwayId): string
+    public function upload(UploadedFile $file, int $optionValueId): string
     {
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
         $path = sprintf(
-            'colorways/%d/%s.%s',
-            $colorwayId,
+            'option-values/%d/%s.%s',
+            $optionValueId,
             Str::uuid(),
             $extension,
         );
@@ -35,6 +35,35 @@ class ProductImageStorage
     {
         $extension = $file->getClientOriginalExtension() ?: 'jpg';
         $path = sprintf('homepage/%s.%s', Str::uuid(), $extension);
+
+        return $this->storeUploadedFile($file, $path);
+    }
+
+    public function uploadStoreLogo(UploadedFile $file): string
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $path = sprintf('store/%s.%s', Str::uuid(), $extension);
+
+        return $this->storeUploadedFile($file, $path);
+    }
+
+    public function uploadStoreLogoWide(UploadedFile $file): string
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $path = sprintf('store/wide-%s.%s', Str::uuid(), $extension);
+
+        return $this->storeUploadedFile($file, $path);
+    }
+
+    public function uploadCategory(UploadedFile $file, int $categoryId): string
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $path = sprintf(
+            'categories/%d/%s.%s',
+            $categoryId,
+            Str::uuid(),
+            $extension,
+        );
 
         return $this->storeUploadedFile($file, $path);
     }

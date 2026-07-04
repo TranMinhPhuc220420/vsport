@@ -2,11 +2,17 @@ import * as React from 'react';
 
 import {
     adminInputClassName,
-    adminSelectClassName,
+    adminSelectTriggerClassName,
     adminTextareaClassName,
 } from '@/components/admin/ui/admin-input-styles';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 
 type AdminFieldProps = {
@@ -115,6 +121,14 @@ type AdminSelectFieldProps = {
     disabled?: boolean;
 };
 
+function AdminSelectOption({ label }: { label: string }) {
+    return (
+        <span className="inline-flex min-w-0 items-center gap-1.5">
+            <span className="truncate">{label}</span>
+        </span>
+    );
+}
+
 export function AdminSelectField({
     label,
     error,
@@ -126,23 +140,45 @@ export function AdminSelectField({
     disabled,
 }: AdminSelectFieldProps) {
     const fieldId = React.useId();
+    const stringValue = String(value);
+    const activeOption = options.find(
+        (option) => String(option.value) === stringValue,
+    );
 
     return (
-        <AdminField label={label} error={error} hint={hint} htmlFor={fieldId}>
-            <select
-                id={fieldId}
-                aria-invalid={error ? true : undefined}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
+        <AdminField
+            label={label}
+            error={error}
+            hint={hint}
+            htmlFor={fieldId}
+            className={className}
+        >
+            <Select
+                value={stringValue}
+                onValueChange={onChange}
                 disabled={disabled}
-                className={cn(adminSelectClassName, className)}
             >
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
-                ))}
-            </select>
+                <SelectTrigger
+                    id={fieldId}
+                    aria-invalid={error ? true : undefined}
+                    aria-label={activeOption?.label ?? label}
+                    className={adminSelectTriggerClassName}
+                >
+                    <AdminSelectOption
+                        label={activeOption?.label ?? stringValue}
+                    />
+                </SelectTrigger>
+                <SelectContent className="min-w-[var(--radix-select-trigger-width)]">
+                    {options.map((option) => (
+                        <SelectItem
+                            key={option.value}
+                            value={String(option.value)}
+                        >
+                            <AdminSelectOption label={option.label} />
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
         </AdminField>
     );
 }

@@ -25,7 +25,7 @@ function PdpStickyMobileBar({
     observeRef,
     className,
 }: PdpStickyMobileBarProps) {
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const [visible, setVisible] = useState(false);
     const barRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +104,7 @@ function PdpStickyMobileBar({
                         </p>
                     ) : null}
                     <p className="text-caption-md text-ink">
-                        {formatCurrency(price, locale)}
+                        {formatCurrency(price, locale, currency)}
                     </p>
                 </div>
                 <AddToBagButton

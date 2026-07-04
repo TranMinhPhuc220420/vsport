@@ -20,6 +20,7 @@ export {
     sizesToArray,
 } from '@/components/admin/size-chip-picker';
 export {
+    AdminBulkActionBar,
     AdminButton,
     AdminCard,
     AdminCardList,
@@ -32,6 +33,7 @@ export {
     AdminDataTableHeaderCell,
     AdminDataTableHeaderRow,
     AdminDataTableRow,
+    AdminDataTableSelectCell,
     AdminEmptyState,
     AdminFilterTabs,
     AdminPagination,

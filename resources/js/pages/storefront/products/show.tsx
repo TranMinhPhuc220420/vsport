@@ -1,17 +1,18 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { AddToBagButton } from '@/components/storefront/add-to-bag-button';
 import { StorefrontBadge } from '@/components/storefront/Badge';
 import { Breadcrumb } from '@/components/storefront/breadcrumb';
-import { ColorwayPicker } from '@/components/storefront/colorway-picker';
 import { NikeByYouCustomizer } from '@/components/storefront/nike-by-you-customizer';
+import { OptionPicker } from '@/components/storefront/option-picker';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
 import { StructuredData } from '@/components/storefront/structured-data';
 import { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
 import { PdpStickyMobileBar } from '@/components/storefront/pdp-sticky-mobile-bar';
+import { ProductAttributesSection } from '@/components/storefront/product-attributes-section';
 import { ProductGallery } from '@/components/storefront/product-gallery';
 import {
     ProductRail,
@@ -20,13 +21,20 @@ import {
 import { ProductReviewsSection } from '@/components/storefront/product-reviews-section';
 import { ProductCard } from '@/components/storefront/ProductCard';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
-import { SizePicker } from '@/components/storefront/size-picker';
 import { StarRating } from '@/components/storefront/star-rating';
 import { StockStatus } from '@/components/storefront/stock-status';
 import { SustainabilityAccordion } from '@/components/storefront/sustainability-accordion';
 import { WishlistButton } from '@/components/storefront/wishlist-button';
 import { useCart } from '@/contexts/cart-context';
 import { formatCurrency, useLocale } from '@/hooks/use-locale';
+import {
+    buildSelectionFromVariant,
+    formatOptionsLabel,
+    getAvailableValueIds,
+    getGalleryImages,
+    resolveVariant,
+    type SelectedOptions,
+} from '@/lib/variant-selection';
 import type { ProductDetail, ProductSummary } from '@/types/catalog';
 
 type ProductDetailPageProps = {
@@ -34,6 +42,7 @@ type ProductDetailPageProps = {
     relatedProducts: { data: ProductSummary[] };
     seo: SeoData;
     structuredData: Record<string, unknown>[];
+    initialVariantId?: number | null;
 };
 
 export default function ProductDetailPage({
@@ -41,45 +50,76 @@ export default function ProductDetailPage({
     relatedProducts,
     seo,
     structuredData,
+    initialVariantId = null,
 }: ProductDetailPageProps) {
     const { t } = useTranslation('storefront');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const detail = product;
     const { addItem } = useCart();
-    const [selectedColorwayId, setSelectedColorwayId] = useState(
-        detail.colorways[0]?.id ?? 0,
-    );
-    const [selectedSize, setSelectedSize] = useState<string | null>(null);
-    const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+
+    const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(() => {
+        if (initialVariantId) {
+            const variant = detail.variants.find((v) => v.id === initialVariantId);
+
+            if (variant) {
+                return buildSelectionFromVariant(variant, detail.options);
+            }
+        }
+
+        const initial: SelectedOptions = {};
+        for (const option of detail.options) {
+            if (option.values[0]) {
+                initial[option.id] = option.values[0].id;
+            }
+        }
+
+        return initial;
+    });
+
     const [customConfiguration, setCustomConfiguration] = useState<
         Record<string, { material: string; color: string }>
     >({});
 
-    const selectedColorway = useMemo(
-        () =>
-            detail.colorways.find((colorway) => colorway.id === selectedColorwayId) ??
-            detail.colorways[0],
-        [detail.colorways, selectedColorwayId],
-    );
-
     const selectedVariant = useMemo(
         () =>
-            selectedColorway?.variants.find(
-                (variant) => variant.size === selectedSize,
-            ) ?? null,
-        [selectedColorway, selectedSize],
+            resolveVariant(
+                detail.variants,
+                selectedOptions,
+                detail.options.length,
+            ),
+        [detail.variants, detail.options.length, selectedOptions],
+    );
+
+    const availableValueIds = useMemo(() => {
+        const map: Record<number, number[]> = {};
+
+        for (const option of detail.options) {
+            map[option.id] = getAvailableValueIds(
+                detail.variants,
+                selectedOptions,
+                option.id,
+                detail.options,
+            );
+        }
+
+        return map;
+    }, [detail.options, detail.variants, selectedOptions]);
+
+    const galleryImages = useMemo(
+        () => getGalleryImages(detail.options, selectedOptions),
+        [detail.options, selectedOptions],
     );
 
     const listPrice = detail.basePrice;
-    const salePrice = selectedColorway?.discountPrice;
-    const effectivePrice = selectedColorway?.effectivePrice ?? listPrice;
-    const onSale = salePrice !== null && salePrice < listPrice;
+    const effectivePrice = selectedVariant?.unitPrice ?? listPrice;
+    const onSale = effectivePrice < listPrice;
     const inStock = selectedVariant?.stock.inStock ?? false;
-    const canAddToBag = selectedSize !== null && inStock;
+    const selectionComplete =
+        Object.keys(selectedOptions).length === detail.options.length;
+    const canAddToBag = selectionComplete && inStock;
 
     const primaryImage =
-        selectedColorway?.images.find((image) => image.isPrimary) ??
-        selectedColorway?.images[0];
+        galleryImages.find((image) => image.isPrimary) ?? galleryImages[0];
 
     const addToBagRef = useRef<HTMLDivElement>(null);
 
@@ -97,16 +137,25 @@ export default function ProductDetailPage({
     ];
 
     const handleAddToBag = () => {
-        if (!canAddToBag || !selectedVariant || !selectedColorway) {
+        if (!canAddToBag || !selectedVariant) {
             return;
         }
+
+        const optionsLabel = formatOptionsLabel(detail.options, selectedOptions);
+        const parts = optionsLabel.split(' / ');
 
         addItem({
             variantId: selectedVariant.id,
             productSlug: detail.slug,
             productName: detail.name,
-            colorName: selectedColorway.colorName,
-            size: selectedVariant.size,
+            colorName: parts[0] ?? '',
+            size: parts[1] ?? parts[0] ?? '',
+            options: detail.options.map((option) => ({
+                name: option.name,
+                value:
+                    option.values.find((v) => v.id === selectedOptions[option.id])
+                        ?.value ?? '',
+            })),
             unitPrice: selectedVariant.unitPrice,
             imageUrl: primaryImage?.url,
             customConfiguration:
@@ -118,15 +167,26 @@ export default function ProductDetailPage({
         toast.success(t('pdp.addedToBag'));
     };
 
-    const handleColorwayChange = (id: number) => {
-        setSelectedColorwayId(id);
-        setSelectedSize(null);
+    const handleOptionSelect = (optionId: number, valueId: number) => {
+        setSelectedOptions((prev) => ({ ...prev, [optionId]: valueId }));
         setCustomConfiguration({});
     };
 
+    useEffect(() => {
+        if (initialVariantId) {
+            const variant = detail.variants.find((v) => v.id === initialVariantId);
+
+            if (variant) {
+                setSelectedOptions(
+                    buildSelectionFromVariant(variant, detail.options),
+                );
+            }
+        }
+    }, [initialVariantId, detail.variants, detail.options]);
+
     const showNikeByYou =
-        selectedColorway?.isCustomizable &&
-        (selectedColorway.customizationOptions?.length ?? 0) > 0;
+        detail.isCustomizable &&
+        (detail.customizationOptions?.length ?? 0) > 0;
 
     return (
         <>
@@ -141,8 +201,8 @@ export default function ProductDetailPage({
                 <div className="grid gap-8 desktop:grid-cols-2 desktop:gap-10">
                     <ScrollReveal direction="left">
                         <ProductGallery
-                            key={selectedColorway?.id}
-                            images={selectedColorway?.images ?? []}
+                            key={galleryImages.map((i) => i.url).join('-')}
+                            images={galleryImages}
                             productName={detail.name}
                         />
                     </ScrollReveal>
@@ -187,10 +247,15 @@ export default function ProductDetailPage({
                                             {formatCurrency(
                                                 effectivePrice,
                                                 locale,
+                                                currency,
                                             )}
                                         </span>
                                         <span className="text-body-strong text-mute line-through">
-                                            {formatCurrency(listPrice, locale)}
+                                            {formatCurrency(
+                                                listPrice,
+                                                locale,
+                                                currency,
+                                            )}
                                         </span>
                                         <StorefrontBadge variant="sale">
                                             {t('pdp.percentOff', {
@@ -205,34 +270,22 @@ export default function ProductDetailPage({
                                     </>
                                 ) : (
                                     <span className="text-heading-lg text-ink">
-                                        {formatCurrency(effectivePrice, locale)}
+                                        {formatCurrency(
+                                            effectivePrice,
+                                            locale,
+                                            currency,
+                                        )}
                                     </span>
                                 )}
                             </div>
 
-                            {selectedColorway ? (
-                                <ColorwayPicker
-                                    colorways={detail.colorways}
-                                    selectedId={selectedColorway.id}
-                                    onSelect={handleColorwayChange}
+                            {detail.options.length > 0 ? (
+                                <OptionPicker
+                                    options={detail.options}
+                                    selected={selectedOptions}
+                                    availableValueIds={availableValueIds}
+                                    onSelect={handleOptionSelect}
                                 />
-                            ) : null}
-
-                            {selectedColorway ? (
-                                <SizePicker
-                                    variants={selectedColorway.variants}
-                                    selectedSize={selectedSize}
-                                    onSelect={setSelectedSize}
-                                    onSizeGuideClick={() =>
-                                        setSizeGuideOpen((open) => !open)
-                                    }
-                                />
-                            ) : null}
-
-                            {sizeGuideOpen ? (
-                                <p className="text-caption-md rounded-pill-lg bg-soft-cloud px-4 py-3 text-mute">
-                                    {t('pdp.sizeGuideBody')}
-                                </p>
                             ) : null}
 
                             <div
@@ -275,21 +328,26 @@ export default function ProductDetailPage({
                                     </PdpDisclosure>
                                 ) : null}
 
+                                <ProductAttributesSection
+                                    attributes={detail.attributes}
+                                />
+
                                 <PdpDisclosure title={t('pdp.shippingReturns')}>
                                     <p className="text-caption-md text-mute">
                                         {t('pdp.shippingReturnsBody')}
                                     </p>
                                 </PdpDisclosure>
 
-                                {selectedColorway?.sustainability ? (
+                                {detail.sustainability &&
+                                (detail.sustainability.materials?.length ?? 0) >
+                                    0 ? (
                                     <SustainabilityAccordion
                                         weightedRecycledPercent={
-                                            selectedColorway.sustainability
+                                            detail.sustainability
                                                 .weightedRecycledPercent
                                         }
                                         materials={
-                                            selectedColorway.sustainability
-                                                .materials
+                                            detail.sustainability.materials
                                         }
                                     />
                                 ) : null}
@@ -298,7 +356,7 @@ export default function ProductDetailPage({
                                     <PdpDisclosure title={t('pdp.nikeByYou')}>
                                         <NikeByYouCustomizer
                                             options={
-                                                selectedColorway.customizationOptions ??
+                                                detail.customizationOptions ??
                                                 []
                                             }
                                             onChange={setCustomConfiguration}
@@ -329,12 +387,20 @@ export default function ProductDetailPage({
                                 <ProductRailItem key={item.id} index={index}>
                                     <ProductCard
                                         href={`/products/${item.slug}`}
+                                        slug={item.slug}
                                         name={item.name}
                                         subtitle={item.subTitle ?? undefined}
                                         imageUrl={item.primaryImage?.url}
                                         price={item.listPrice}
                                         salePrice={item.salePrice ?? undefined}
                                         colorways={item.colorwaySwatches}
+                                        defaultVariantId={
+                                            item.defaultVariantId ?? undefined
+                                        }
+                                        defaultVariantPrice={
+                                            item.defaultVariantPrice ?? undefined
+                                        }
+                                        inStock={item.inStock}
                                     />
                                 </ProductRailItem>
                             ))}
@@ -345,7 +411,7 @@ export default function ProductDetailPage({
 
             <PdpStickyMobileBar
                 productName={detail.name}
-                colorName={selectedColorway?.colorName}
+                colorName={formatOptionsLabel(detail.options, selectedOptions)}
                 imageUrl={primaryImage?.url}
                 price={effectivePrice}
                 disabled={!canAddToBag}

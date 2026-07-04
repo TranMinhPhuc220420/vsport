@@ -13,7 +13,7 @@ type CartSummaryProps = {
 
 function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
     const { t } = useTranslation('storefront');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const { auth } = usePage().props as {
         auth: { user: { id: number } | null };
     };
@@ -43,13 +43,13 @@ function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
                         {t('cart.subtotalWithCount', { count: itemCount })}
                     </dt>
                     <dd className="text-ink">
-                        {formatCurrency(subtotal, locale)}
+                        {formatCurrency(subtotal, locale, currency)}
                     </dd>
                 </div>
                 <div className="text-body-strong flex justify-between border-t border-hairline pt-3">
                     <dt className="text-ink">{t('cart.estimatedTotal')}</dt>
                     <dd className="text-ink">
-                        {formatCurrency(subtotal, locale)}
+                        {formatCurrency(subtotal, locale, currency)}
                     </dd>
                 </div>
             </dl>

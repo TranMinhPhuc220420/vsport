@@ -20,7 +20,7 @@ class AnalyticsSyncService
 
         Order::query()
             ->where('status', OrderStatus::Completed)
-            ->with(['items.variant.colorway.product', 'user'])
+            ->with(['items.variant.product', 'user'])
             ->orderBy('id')
             ->chunkById(100, function ($orders) use (&$count): void {
                 foreach ($orders as $order) {
@@ -44,7 +44,7 @@ class AnalyticsSyncService
             ['email' => $order->user?->email ?? 'guest'],
         );
 
-        $product = $item->variant?->colorway?->product;
+        $product = $item->variant?->product;
         $productDim = DimProduct::query()->updateOrCreate(
             ['product_id' => $product?->id ?? 0],
             [

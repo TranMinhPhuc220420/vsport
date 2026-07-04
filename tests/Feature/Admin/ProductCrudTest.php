@@ -3,7 +3,6 @@
 use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductColorway;
 use App\Models\ProductVariant;
 use App\Models\User;
 use Database\Seeders\CatalogSeeder;
@@ -12,7 +11,7 @@ beforeEach(function () {
     $this->seed(CatalogSeeder::class);
 });
 
-test('admin can create a product with colorway variants and inventory', function () {
+test('admin can create a product with category option templates and variants', function () {
     $admin = User::factory()->admin()->create();
     $category = Category::query()->where('slug', 'men-shoes')->firstOrFail();
 
@@ -25,15 +24,12 @@ test('admin can create a product with colorway variants and inventory', function
         'sub_title' => 'Test subtitle',
         'base_price' => 120,
         'gender' => 'Men',
-        'colorway_code' => '100',
-        'color_name' => 'White',
-        'sizes' => ['US 8', 'US 9'],
     ])->assertRedirect();
 
     $product = Product::query()->where('slug', 'admin-test-shoe')->firstOrFail();
 
-    expect($product->colorways)->toHaveCount(1)
-        ->and($product->colorways->first()->variants)->toHaveCount(2);
+    expect($product->options)->toHaveCount(2)
+        ->and($product->variants)->toHaveCount(10);
 
     $this->get(route('admin.products.edit', $product))->assertOk();
 });
@@ -52,13 +48,13 @@ test('admin can update inventory quantity', function () {
     expect($inventory->fresh()->quantity)->toBe(25);
 });
 
-test('admin can batch update colorway inventory', function () {
+test('admin can batch update product variant inventory', function () {
     $admin = User::factory()->admin()->create();
-    $colorway = ProductColorway::query()->with('variants.inventory')->firstOrFail();
-    $variants = $colorway->variants;
+    $product = Product::query()->with('variants.inventory')->firstOrFail();
+    $variants = $product->variants->take(2);
 
     $this->actingAs($admin)
-        ->patch(route('admin.colorways.inventory.update', $colorway), [
+        ->patch(route('admin.products.variants.inventory.update', $product), [
             'variants' => $variants->map(fn (ProductVariant $variant) => [
                 'id' => $variant->id,
                 'quantity' => 12,
@@ -91,14 +87,25 @@ test('admin product index supports search and category filter', function () {
 test('admin product index includes thumbnail url from primary image', function () {
     $admin = User::factory()->admin()->create();
     $product = Product::query()
-        ->with('colorways.images')
+        ->with('options.values.images')
         ->firstOrFail();
 
-    $expectedUrl = $product->colorways
-        ->flatMap(fn ($colorway) => $colorway->images)
-        ->firstWhere('is_primary', true)
-        ?->image_url
-        ?? $product->colorways->flatMap(fn ($colorway) => $colorway->images)->first()?->image_url;
+    $expectedUrl = null;
+    foreach ($product->options as $option) {
+        if (! $option->drives_gallery) {
+            continue;
+        }
+
+        foreach ($option->values as $value) {
+            $primary = $value->images->firstWhere('is_primary', true)
+                ?? $value->images->first();
+
+            if ($primary !== null) {
+                $expectedUrl = $primary->image_url;
+                break 2;
+            }
+        }
+    }
 
     expect($expectedUrl)->not->toBeNull();
 

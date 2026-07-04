@@ -24,7 +24,7 @@ export default function StorefrontLayout({
                     className="vsport-light flex min-h-dvh flex-col overflow-x-clip bg-canvas text-ink"
                     style={storefrontSafeAreaStyle}
                 >
-                    <header className="sticky top-0 z-40 bg-canvas pt-[var(--storefront-safe-top)]">
+                    <header className="sticky top-0 z-40 overflow-visible bg-canvas pt-[var(--storefront-safe-top)]">
                         <div className="hidden tablet-lg:block">
                             <UtilityBar />
                         </div>

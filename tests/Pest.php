@@ -94,3 +94,11 @@ function addVariantToCart(
         'quantity' => $quantity,
     ])->assertOk();
 }
+
+function variantForProductOption(string $productSlug, string $optionValue): ProductVariant
+{
+    return ProductVariant::query()
+        ->whereHas('product', fn ($query) => $query->where('slug', $productSlug))
+        ->whereHas('optionValues', fn ($query) => $query->where('value', $optionValue))
+        ->firstOrFail();
+}

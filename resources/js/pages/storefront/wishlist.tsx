@@ -13,7 +13,7 @@ type WishlistPageProps = {
 
 export default function WishlistPage({ seo }: WishlistPageProps) {
     const { t } = useTranslation('storefront');
-    const { locale } = useLocale();
+    const { locale, currency } = useLocale();
     const { items, removeItem } = useWishlist();
 
     return (
@@ -79,6 +79,7 @@ export default function WishlistPage({ seo }: WishlistPageProps) {
                                             {formatCurrency(
                                                 displayPrice,
                                                 locale,
+                                                currency,
                                             )}
                                         </p>
                                         <StorefrontButton

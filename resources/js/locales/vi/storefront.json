@@ -15,7 +15,9 @@
         "joinUs": "Đăng ký",
         "orders": "Đơn hàng",
         "account": "Tài khoản",
-        "signIn": "Đăng nhập"
+        "signIn": "Đăng nhập",
+        "shopAll": "Mua tất cả {{name}}",
+        "viewCategory": "Xem {{name}}"
     },
     "footer": {
         "resources": "Tài nguyên",
@@ -36,7 +38,9 @@
         "student": "Sinh viên",
         "military": "Quân đội",
         "offers": "Ưu đãi",
-        "copyright": "© {{year}} Zova Sport. Bảo lưu mọi quyền."
+        "copyright": "© {{year}} {{storeName}}. Bảo lưu mọi quyền.",
+        "contactTitle": "Liên hệ",
+        "followTitle": "Theo dõi chúng tôi"
     },
     "home": {
         "featured": "Nổi bật",
@@ -122,6 +126,9 @@
         "addedToBag": "Đã thêm vào giỏ",
         "percentOff": "Giảm {{percent}}%",
         "selectSize": "Chọn size",
+        "selectOption": "Chọn {{option}}",
+        "techSpecs": "Thông số kỹ thuật",
+        "detailsCare": "Chi tiết & bảo quản",
         "color": "Màu:",
         "addToBag": "Thêm vào giỏ",
         "inStock": "Còn hàng",
@@ -298,7 +305,10 @@
                 "Giờ làm việc: Thứ Hai–Thứ Sáu, 9:00–18:00. Chúng tôi phản hồi trong một ngày làm việc.",
                 "Cập nhật giao hàng: xem trạng thái đơn tại Tài khoản → Đơn hàng sau khi đăng nhập.",
                 "Yêu cầu quyền riêng tư hoặc dữ liệu: ghi \"Privacy\" trong tiêu đề email."
-            ]
+            ],
+            "emailLabel": "Email",
+            "phoneLabel": "Số điện thoại",
+            "addressLabel": "Địa chỉ"
         }
     }
 }

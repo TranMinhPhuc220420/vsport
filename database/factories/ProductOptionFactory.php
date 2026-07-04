@@ -1,0 +1,32 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Enums\OptionDisplayType;
+use App\Models\Product;
+use App\Models\ProductOption;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends Factory<ProductOption>
+ */
+class ProductOptionFactory extends Factory
+{
+    protected $model = ProductOption::class;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'product_id' => Product::factory(),
+            'name' => 'Color',
+            'position' => 0,
+            'display_type' => OptionDisplayType::Swatch,
+            'is_required' => true,
+            'drives_gallery' => true,
+            'metadata' => null,
+        ];
+    }
+}
