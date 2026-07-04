@@ -69,7 +69,7 @@ export function DiscountCodeForm({
                     title={title}
                 />
 
-                <form onSubmit={handleSubmit} className="max-w-xl">
+                <form onSubmit={handleSubmit} className="w-[600px]">
                     <AdminFormSection title={title}>
                         <AdminInputField
                             label={t('discountCodes.code')}

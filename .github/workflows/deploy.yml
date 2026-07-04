@@ -1,0 +1,51 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, pdo_mysql
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies and build
+        run: |
+          composer install --no-dev --optimize-autoloader
+          npm ci
+          npm run build
+
+      - name: Create deploy.zip
+        run: |
+          rm -rf .git .github tests node_modules
+          rm -rf storage/logs/*
+          mkdir -p deploy-bundle
+          zip -r deploy-bundle/deploy.zip . -x "deploy-bundle/*"
+
+      - name: Upload deploy.zip via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./deploy-bundle/
+          server-dir: /
