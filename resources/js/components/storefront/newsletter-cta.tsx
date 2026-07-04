@@ -40,7 +40,7 @@ function NewsletterCta({ className }: NewsletterCtaProps) {
 
                         <form
                             onSubmit={handleSubmit}
-                            className="mt-8 flex w-full max-w-md flex-col gap-3 tablet:flex-row"
+                            className="mt-8 flex w-full flex-col gap-3 tablet:flex-row"
                         >
                             <label htmlFor="newsletter-email" className="sr-only">
                                 {t('home.newsletter.emailLabel')}
