@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
+import { LanguageSwitcher } from '@/components/language-switcher';
 import { StorefrontButton } from '@/components/storefront/Button';
 import {
     Sheet,
@@ -59,6 +60,9 @@ export function MobileNavDrawer({
                 </nav>
 
                 <div className="mt-auto border-t border-hairline px-6 py-6">
+                    <div className="mb-4">
+                        <LanguageSwitcher />
+                    </div>
                     {auth.user ? (
                         <div className="flex flex-col gap-3">
                             <Link

@@ -108,7 +108,7 @@ export function AdminSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
                 <div className="px-3 pb-3">
-                    <LanguageSwitcher compact />
+                    <LanguageSwitcher compact className="w-fit" />
                 </div>
             </SidebarHeader>
 

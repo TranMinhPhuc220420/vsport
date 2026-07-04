@@ -31,7 +31,7 @@ readonly class HomepageCampaign
         return new self(
             headline: 'Trail Running',
             subtitle: 'Built for the mountains',
-            imageUrl: 'https://placehold.co/1440x600/111111/ffffff?text=VSport+Trail',
+            imageUrl: 'https://placehold.co/1440x600/111111/ffffff?text=Zova+Sport+Trail',
             ctaLabel: 'Shop Men',
             ctaHref: '/men',
         );

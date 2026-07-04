@@ -29,14 +29,14 @@
         "privacy": "Privacy Policy",
         "contactUs": "Contact Us",
         "company": "Company",
-        "about": "About VSport",
+        "about": "About Zova Sport",
         "news": "News",
         "careers": "Careers",
         "promotions": "Promotions",
         "student": "Student",
         "military": "Military",
         "offers": "Offers",
-        "copyright": "© {{year}} VSport. All rights reserved."
+        "copyright": "© {{year}} Zova Sport. All rights reserved."
     },
     "home": {
         "featured": "Featured",
@@ -69,7 +69,7 @@
                 },
                 {
                     "title": "Authentic Products",
-                    "description": "Official VSport footwear and apparel with verified quality."
+                    "description": "Official Zova Sport footwear and apparel with verified quality."
                 },
                 {
                     "title": "Easy Returns",
@@ -261,7 +261,7 @@
         "privacy": {
             "title": "Privacy Policy",
             "paragraphs": [
-                "VSport respects your privacy. This policy explains what information we collect when you shop with us and how we use it.",
+                "Zova Sport respects your privacy. This policy explains what information we collect when you shop with us and how we use it.",
                 "We collect account details (name, email), order information (shipping address, phone, items purchased), and technical data such as browser type for security and site performance.",
                 "We use your information to process orders, provide customer support, improve our services, and send transactional emails about your purchases.",
                 "We do not sell your personal data. Payment processing for card orders is handled by Stripe according to their privacy policy.",
@@ -272,7 +272,7 @@
         "shipping": {
             "title": "Shipping Policy",
             "paragraphs": [
-                "VSport delivers across supported regions using trusted courier partners.",
+                "Zova Sport delivers across supported regions using trusted courier partners.",
                 "Standard delivery typically takes 2–5 business days after your order is confirmed. Remote areas may require additional time.",
                 "Shipping fees, if any, are shown at checkout before you place your order.",
                 "Cash on delivery (COD) is available in supported areas. Card payment via Stripe is also offered where configured.",
@@ -283,7 +283,7 @@
         "returns": {
             "title": "Returns Policy",
             "paragraphs": [
-                "We want you to be satisfied with your VSport purchase. If something is not right, contact us within 14 days of delivery.",
+                "We want you to be satisfied with your Zova Sport purchase. If something is not right, contact us within 14 days of delivery.",
                 "Items must be unworn, in original packaging, and include proof of purchase. Customized Nike By You products may not be eligible for return.",
                 "To start a return, email support with your order number and reason. We will provide return instructions for your region.",
                 "Refunds are processed to your original payment method after we receive and inspect the returned items. COD orders may receive store credit or bank transfer where applicable.",

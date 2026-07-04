@@ -42,7 +42,7 @@ readonly class PageSeo
 
     public static function forHome(): self
     {
-        $app = config('app.name', 'VSport');
+        $app = config('app.name', 'Zova Sport');
 
         return new self(
             title: $app,
@@ -53,7 +53,7 @@ readonly class PageSeo
 
     public static function forCategory(string $name, string $slug): self
     {
-        $app = config('app.name', 'VSport');
+        $app = config('app.name', 'Zova Sport');
 
         return new self(
             title: __('seo.category.title', ['name' => $name, 'app' => $app]),
@@ -64,7 +64,7 @@ readonly class PageSeo
 
     public static function forSearch(string $query): self
     {
-        $app = config('app.name', 'VSport');
+        $app = config('app.name', 'Zova Sport');
 
         if ($query === '') {
             return new self(
@@ -83,7 +83,7 @@ readonly class PageSeo
 
     public static function forProduct(Product $product, ?string $ogImage = null): self
     {
-        $app = config('app.name', 'VSport');
+        $app = config('app.name', 'Zova Sport');
         $description = self::truncate($product->description)
             ?: __('seo.product.fallback_description', ['name' => $product->name, 'app' => $app]);
 
@@ -98,7 +98,7 @@ readonly class PageSeo
 
     public static function forLegal(string $page, string $routeName): self
     {
-        $app = config('app.name', 'VSport');
+        $app = config('app.name', 'Zova Sport');
 
         return new self(
             title: __('seo.legal.title', ['page' => $page, 'app' => $app]),
@@ -109,7 +109,7 @@ readonly class PageSeo
 
     public static function forPrivate(string $title, string $canonical): self
     {
-        $app = config('app.name', 'VSport');
+        $app = config('app.name', 'Zova Sport');
 
         return new self(
             title: "{$title} | {$app}",

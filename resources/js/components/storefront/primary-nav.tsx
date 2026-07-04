@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import type { KeyboardEvent } from 'react';
@@ -27,6 +27,7 @@ export function PrimaryNav() {
     const { itemCount } = useCart();
     const { itemCount: wishlistCount } = useWishlist();
     const { t } = useTranslation('storefront');
+    const { name: storeName } = usePage().props;
 
     const handleSearchKeyDown = useCallback(
         (event: KeyboardEvent<HTMLInputElement>) => {
@@ -67,7 +68,7 @@ export function PrimaryNav() {
                             href={home()}
                             className="text-heading-lg font-medium tracking-tight"
                         >
-                            VSport
+                            {storeName}
                         </Link>
                     </div>
 

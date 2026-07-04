@@ -29,14 +29,14 @@
         "privacy": "Chính sách bảo mật",
         "contactUs": "Liên hệ",
         "company": "Công ty",
-        "about": "Về VSport",
+        "about": "Về Zova Sport",
         "news": "Tin tức",
         "careers": "Tuyển dụng",
         "promotions": "Khuyến mãi",
         "student": "Sinh viên",
         "military": "Quân đội",
         "offers": "Ưu đãi",
-        "copyright": "© {{year}} VSport. Bảo lưu mọi quyền."
+        "copyright": "© {{year}} Zova Sport. Bảo lưu mọi quyền."
     },
     "home": {
         "featured": "Nổi bật",
@@ -69,7 +69,7 @@
                 },
                 {
                     "title": "Sản phẩm chính hãng",
-                    "description": "Giày và trang phục VSport chính hãng với chất lượng đảm bảo."
+                    "description": "Giày và trang phục Zova Sport chính hãng với chất lượng đảm bảo."
                 },
                 {
                     "title": "Đổi trả dễ dàng",
@@ -261,7 +261,7 @@
         "privacy": {
             "title": "Chính sách bảo mật",
             "paragraphs": [
-                "VSport tôn trọng quyền riêng tư của bạn. Chính sách này giải thích thông tin chúng tôi thu thập khi bạn mua sắm và cách sử dụng.",
+                "Zova Sport tôn trọng quyền riêng tư của bạn. Chính sách này giải thích thông tin chúng tôi thu thập khi bạn mua sắm và cách sử dụng.",
                 "Chúng tôi thu thập thông tin tài khoản (tên, email), thông tin đơn hàng (địa chỉ giao hàng, SĐT, sản phẩm) và dữ liệu kỹ thuật như loại trình duyệt để bảo mật và vận hành website.",
                 "Thông tin được dùng để xử lý đơn hàng, hỗ trợ khách hàng, cải thiện dịch vụ và gửi email giao dịch về đơn mua.",
                 "Chúng tôi không bán dữ liệu cá nhân. Thanh toán thẻ được xử lý bởi Stripe theo chính sách riêng của họ.",
@@ -272,7 +272,7 @@
         "shipping": {
             "title": "Chính sách vận chuyển",
             "paragraphs": [
-                "VSport giao hàng tại các khu vực được hỗ trợ thông qua đối tác vận chuyển.",
+                "Zova Sport giao hàng tại các khu vực được hỗ trợ thông qua đối tác vận chuyển.",
                 "Giao hàng tiêu chuẩn thường mất 2–5 ngày làm việc sau khi đơn được xác nhận. Khu vực xa có thể lâu hơn.",
                 "Phí vận chuyển (nếu có) hiển thị tại checkout trước khi đặt hàng.",
                 "Thanh toán khi nhận hàng (COD) có tại khu vực hỗ trợ. Thanh toán thẻ qua Stripe cũng được cung cấp khi đã cấu hình.",
@@ -283,7 +283,7 @@
         "returns": {
             "title": "Chính sách đổi trả",
             "paragraphs": [
-                "Chúng tôi mong bạn hài lòng với sản phẩm VSport. Nếu có vấn đề, liên hệ trong vòng 14 ngày kể từ khi nhận hàng.",
+                "Chúng tôi mong bạn hài lòng với sản phẩm Zova Sport. Nếu có vấn đề, liên hệ trong vòng 14 ngày kể từ khi nhận hàng.",
                 "Sản phẩm phải chưa qua sử dụng, còn nguyên bao bì và có chứng từ mua hàng. Sản phẩm Nike By You tùy chỉnh có thể không được đổi trả.",
                 "Để bắt đầu đổi trả, gửi email hỗ trợ kèm mã đơn hàng và lý do. Chúng tôi sẽ hướng dẫn theo khu vực của bạn.",
                 "Hoàn tiền qua phương thức thanh toán ban đầu sau khi nhận và kiểm tra hàng trả. Đơn COD có thể hoàn qua tín dụng cửa hàng hoặc chuyển khoản.",

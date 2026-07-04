@@ -1,10 +1,10 @@
-# VSport
+# Zova Sport
 
 Sports e-commerce platform inspired by Nike-style shopping — photography-first UI, fast checkout, COD and Stripe payments.
 
 ## Overview
 
-VSport is an e-commerce application focused on:
+Zova Sport is an e-commerce application focused on:
 
 - **COD + Stripe checkout** — cash on delivery by default; card payments when Stripe is configured
 - **Minimal checkout** — few steps, low friction for customers

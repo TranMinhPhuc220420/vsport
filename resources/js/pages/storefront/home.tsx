@@ -83,7 +83,7 @@ export default function HomePage({
         headline: t('home.editorial.headline'),
         subtitle: t('home.editorial.subtitle'),
         imageUrl:
-            'https://placehold.co/1440x600/111111/ffffff?text=VSport+Performance',
+            'https://placehold.co/1440x600/111111/ffffff?text=Zova+Sport+Performance',
         ctaLabel: t('home.editorial.ctaLabel'),
         ctaHref: '/women',
     };

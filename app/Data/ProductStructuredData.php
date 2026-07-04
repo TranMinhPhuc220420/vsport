@@ -22,7 +22,7 @@ readonly class ProductStructuredData
      */
     public static function product(Product $product, ?string $primaryImage = null): array
     {
-        $app = config('app.name', 'VSport');
+        $app = config('app.name', 'Zova Sport');
         $images = self::collectImages($product, $primaryImage);
         $description = PageSeo::truncate($product->description)
             ?: __('seo.product.fallback_description', ['name' => $product->name, 'app' => $app]);

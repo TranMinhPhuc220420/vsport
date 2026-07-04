@@ -59,7 +59,7 @@ export default function DesignSystemPreview() {
                         Design System
                     </h1>
                     <p className="text-body-strong mt-4 max-w-2xl text-mute">
-                        Nike-style tokens and storefront components for VSport.
+                        Nike-style tokens and storefront components for Zova Sport.
                     </p>
                 </section>
 
