@@ -31,7 +31,7 @@ function NewsletterCta({ className }: NewsletterCtaProps) {
                         <p className="text-caption-md text-canvas/70">
                             {t('home.newsletter.eyebrow')}
                         </p>
-                        <h2 className="text-display-campaign mt-2 text-canvas">
+                        <h2 className="text-display-campaign mt-15 text-canvas">
                             {t('home.newsletter.headline')}
                         </h2>
                         <p className="text-body-strong mt-4 text-canvas/80">

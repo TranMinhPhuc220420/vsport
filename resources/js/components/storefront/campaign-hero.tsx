@@ -47,7 +47,7 @@ function CampaignHero({
                     {subtitle}
                 </p>
                 <h1
-                    className="motion-hero-enter text-display-campaign mt-2 text-canvas"
+                    className="motion-hero-enter text-display-campaign mt-6 text-canvas"
                     style={{ animationDelay: '80ms' }}
                 >
                     {headline}
