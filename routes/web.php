@@ -53,10 +53,6 @@ Route::get('/products/{slug}', [ProductDetailController::class, 'show'])
 
 require __DIR__.'/admin.php';
 
-Route::get('/{category}', [ProductListingController::class, 'index'])
-    ->where('category', '[a-z0-9-]+')
-    ->name('category.show');
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/products/{slug}/reviews', [ProductReviewController::class, 'store'])
         ->name('products.reviews.store');
@@ -67,5 +63,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [AccountController::class, 'index'])->name('dashboard');
 });
+
+Route::get('/{category}', [ProductListingController::class, 'index'])
+    ->where('category', '[a-z0-9-]+')
+    ->name('category.show');
 
 require __DIR__.'/settings.php';

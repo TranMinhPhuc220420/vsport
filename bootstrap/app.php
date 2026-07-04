@@ -51,6 +51,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->encryptCookies(except: ['appearance', 'locale', 'sidebar_state', 'cart_session_id']);
 
+        $middleware->validateCsrfTokens(except: [
+            'stripe/webhook',
+        ]);
+
         $middleware->web(append: [
             HandleAppearance::class,
             HandleLocale::class,
