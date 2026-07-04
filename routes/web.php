@@ -51,6 +51,8 @@ Route::post('/stripe/webhook', StripeWebhookController::class)->name('stripe.web
 Route::get('/products/{slug}', [ProductDetailController::class, 'show'])
     ->name('products.show');
 
+require __DIR__.'/admin.php';
+
 Route::get('/{category}', [ProductListingController::class, 'index'])
     ->where('category', '[a-z0-9-]+')
     ->name('category.show');
