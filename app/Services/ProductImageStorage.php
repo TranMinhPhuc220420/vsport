@@ -59,4 +59,17 @@ class ProductImageStorage
     {
         return Storage::disk($this->disk())->url($path);
     }
+
+    public function urlFor(?string $imageUrl, ?string $storagePath): ?string
+    {
+        if ($imageUrl !== null && $imageUrl !== '' && filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+            return $imageUrl;
+        }
+
+        if ($storagePath !== null && $storagePath !== '') {
+            return $this->publicUrl($storagePath);
+        }
+
+        return $imageUrl !== '' ? $imageUrl : null;
+    }
 }

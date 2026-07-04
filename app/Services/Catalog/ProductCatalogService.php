@@ -12,14 +12,22 @@ use Illuminate\Support\Facades\Cache;
 
 class ProductCatalogService
 {
+    /**
+     * @return array<int|string, mixed>
+     */
+    private function summaryRelations(): array
+    {
+        return [
+            'category',
+            'activeColorways.images' => fn ($q) => $q->orderBy('sort_order'),
+            'activeColorways.variants.inventory',
+        ];
+    }
+
     public function paginateList(ProductListFilters $filters): LengthAwarePaginator
     {
         $query = Product::query()
-            ->with([
-                'category',
-                'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
-                'activeColorways.variants.inventory',
-            ]);
+            ->with($this->summaryRelations());
 
         if ($filters->category) {
             $category = $this->findCategoryBySlug($filters->category);
@@ -52,11 +60,7 @@ class ProductCatalogService
     public function paginateSearch(string $search, string $sort = 'newest', int $perPage = 12): LengthAwarePaginator
     {
         $query = Product::query()
-            ->with([
-                'category',
-                'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
-                'activeColorways.variants.inventory',
-            ])
+            ->with($this->summaryRelations())
             ->where(function ($query) use ($search): void {
                 $query->where('name', 'like', "%{$search}%")
                     ->orWhere('style_code', 'like', "%{$search}%")
@@ -78,11 +82,7 @@ class ProductCatalogService
      */
     public function featured(int $limit = 4): Collection
     {
-        $with = [
-            'category',
-            'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
-            'activeColorways.variants.inventory',
-        ];
+        $with = $this->summaryRelations();
 
         $featured = Product::query()
             ->where('is_featured', true)
@@ -116,11 +116,7 @@ class ProductCatalogService
     public function newArrivals(int $limit = 8): Collection
     {
         return Product::query()
-            ->with([
-                'category',
-                'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
-                'activeColorways.variants.inventory',
-            ])
+            ->with($this->summaryRelations())
             ->orderByDesc('created_at')
             ->limit($limit)
             ->get();
@@ -132,11 +128,7 @@ class ProductCatalogService
     public function bestSellers(int $limit = 8): Collection
     {
         return Product::query()
-            ->with([
-                'category',
-                'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
-                'activeColorways.variants.inventory',
-            ])
+            ->with($this->summaryRelations())
             ->orderByDesc('review_count')
             ->orderByDesc('average_rating')
             ->limit($limit)
@@ -148,11 +140,7 @@ class ProductCatalogService
      */
     public function relatedProducts(Product $product, int $limit = 8): Collection
     {
-        $with = [
-            'category',
-            'activeColorways.images' => fn ($q) => $q->where('is_primary', true),
-            'activeColorways.variants.inventory',
-        ];
+        $with = $this->summaryRelations();
 
         $related = Product::query()
             ->where('category_id', $product->category_id)

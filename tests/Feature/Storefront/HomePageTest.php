@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Resources\ProductSummaryResource;
+use App\Models\Product;
+use App\Services\Catalog\ProductCatalogService;
 use Database\Seeders\CatalogSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -48,4 +51,27 @@ test('home page featured products include catalog items', function () {
         ->pluck('slug');
 
     expect($slugs)->toContain('zegama-2');
+});
+
+test('home page product summaries include primary image urls', function () {
+    $response = $this->get(route('home'));
+
+    $product = $response->original->getData()['page']['props']['newArrivals']['data'][0];
+
+    expect($product['primaryImage'])->toBeArray()
+        ->and($product['primaryImage']['url'])->toStartWith('https://');
+});
+
+test('product summary falls back to first image when none is marked primary', function () {
+    $product = Product::query()->with('activeColorways')->firstOrFail();
+    $product->activeColorways->each(
+        fn ($colorway) => $colorway->images()->update(['is_primary' => false]),
+    );
+
+    $summary = ProductSummaryResource::make(
+        app(ProductCatalogService::class)->findBySlug($product->slug),
+    )->resolve();
+
+    expect($summary['primaryImage'])->toBeArray()
+        ->and($summary['primaryImage']['url'])->not->toBeEmpty();
 });

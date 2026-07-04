@@ -56,7 +56,7 @@ class ProductSummaryResource extends JsonResource
             'basePrice' => $basePrice,
             'listPrice' => $basePrice,
             'salePrice' => $onSale ? $minPrice : null,
-            'primaryImage' => $primaryImage,
+            'primaryImage' => $primaryImage?->resolve(),
             'minPrice' => $minPrice,
             'maxPrice' => $prices !== [] ? max($prices) : $basePrice,
             'inStock' => $inStock,
