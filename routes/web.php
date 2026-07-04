@@ -13,6 +13,7 @@ use App\Http\Controllers\Storefront\ProductListingController;
 use App\Http\Controllers\Storefront\ProductReviewController;
 use App\Http\Controllers\Storefront\ProductSearchController;
 use App\Http\Controllers\Storefront\WishlistController;
+use App\Http\Controllers\Ops\ClearCacheController;
 use App\Http\Controllers\Ops\StorageLinkController;
 use App\Http\Controllers\Storefront\RobotsController;
 use App\Http\Controllers\Storefront\SitemapController;
@@ -25,6 +26,10 @@ Route::get('/robots.txt', RobotsController::class)->name('robots');
 Route::get('/ops/storage-link', StorageLinkController::class)
     ->middleware('ops')
     ->name('ops.storage-link');
+
+Route::get('/ops/clear-cache', ClearCacheController::class)
+    ->middleware('ops')
+    ->name('ops.clear-cache');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
