@@ -4,6 +4,7 @@ use App\Exceptions\CheckoutStockException;
 use App\Exceptions\InvalidOrderTransitionException;
 use App\Exceptions\OrderConfirmStockException;
 use App\Http\Middleware\EnsureLocalEnvironment;
+use App\Http\Middleware\EnsureOpsToken;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -47,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
             'local' => EnsureLocalEnvironment::class,
+            'ops' => EnsureOpsToken::class,
         ]);
 
         $middleware->encryptCookies(except: ['appearance', 'locale', 'sidebar_state', 'cart_session_id']);

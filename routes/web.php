@@ -13,6 +13,7 @@ use App\Http\Controllers\Storefront\ProductListingController;
 use App\Http\Controllers\Storefront\ProductReviewController;
 use App\Http\Controllers\Storefront\ProductSearchController;
 use App\Http\Controllers\Storefront\WishlistController;
+use App\Http\Controllers\Ops\StorageLinkController;
 use App\Http\Controllers\Storefront\RobotsController;
 use App\Http\Controllers\Storefront\SitemapController;
 use App\Http\Controllers\StripeWebhookController;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/robots.txt', RobotsController::class)->name('robots');
+
+Route::get('/ops/storage-link', StorageLinkController::class)
+    ->middleware('ops')
+    ->name('ops.storage-link');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
