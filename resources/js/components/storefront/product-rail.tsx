@@ -21,6 +21,27 @@ type ScrollEdges = {
     canScrollRight: boolean;
 };
 
+const TABLET_MIN_WIDTH = '(min-width: 40rem)';
+const DESKTOP_MIN_WIDTH = '(min-width: 64rem)';
+const DESKTOP_LG_MIN_WIDTH = '(min-width: 75rem)';
+const MOBILE_MAX_WIDTH = '(max-width: 39.9375rem)';
+
+function visibleProductCount(): number {
+    if (window.matchMedia(DESKTOP_LG_MIN_WIDTH).matches) {
+        return 4;
+    }
+
+    if (window.matchMedia(DESKTOP_MIN_WIDTH).matches) {
+        return 3;
+    }
+
+    if (window.matchMedia(TABLET_MIN_WIDTH).matches) {
+        return 2;
+    }
+
+    return 1;
+}
+
 const railButtonClassName =
     'absolute top-[calc(var(--rail-image-center,0px)-1.375rem)] z-10 flex size-11 items-center justify-center rounded-full border border-hairline bg-canvas/95 text-ink shadow-md backdrop-blur-sm transition hover:bg-canvas disabled:pointer-events-none disabled:opacity-30';
 
@@ -36,10 +57,18 @@ function ProductRail({ children, className }: ProductRailProps) {
     const updateRailMetrics = useCallback(() => {
         const element = scrollRef.current;
         const rail = railRef.current;
+        const track = element?.firstElementChild;
 
-        if (!element || !rail) {
+        if (!element || !rail || !(track instanceof HTMLElement)) {
             return;
         }
+
+        const gap = Number.parseFloat(getComputedStyle(track).gap || '0');
+        const visibleCount = visibleProductCount();
+        const itemBasis =
+            (element.clientWidth - gap * (visibleCount - 1)) / visibleCount;
+
+        rail.style.setProperty('--rail-item-basis', `${itemBasis}px`);
 
         const maxScrollLeft = element.scrollWidth - element.clientWidth;
 
@@ -55,7 +84,7 @@ function ProductRail({ children, className }: ProductRailProps) {
         const imageHeight =
             image instanceof HTMLElement
                 ? image.getBoundingClientRect().height
-                : element.clientWidth;
+                : itemBasis;
 
         rail.style.setProperty(
             '--rail-image-center',
@@ -77,7 +106,22 @@ function ProductRail({ children, className }: ProductRailProps) {
 
         element.addEventListener('scroll', updateRailMetrics, { passive: true });
 
-        const mobileQuery = window.matchMedia('(max-width: 39.9375rem)');
+        const mobileQuery = window.matchMedia(MOBILE_MAX_WIDTH);
+        const mediaQueries = [
+            window.matchMedia(MOBILE_MAX_WIDTH),
+            window.matchMedia(TABLET_MIN_WIDTH),
+            window.matchMedia(DESKTOP_MIN_WIDTH),
+            window.matchMedia(DESKTOP_LG_MIN_WIDTH),
+        ];
+
+        const onMediaChange = () => {
+            element.scrollLeft = 0;
+            updateRailMetrics();
+        };
+
+        for (const query of mediaQueries) {
+            query.addEventListener('change', onMediaChange);
+        }
 
         let touchStartX = 0;
         let touchStartY = 0;
@@ -138,6 +182,11 @@ function ProductRail({ children, className }: ProductRailProps) {
             element.removeEventListener('touchmove', onTouchMove);
             element.removeEventListener('touchend', onTouchEnd);
             element.removeEventListener('touchcancel', onTouchEnd);
+
+            for (const query of mediaQueries) {
+                query.removeEventListener('change', onMediaChange);
+            }
+
             element.style.overflowX = '';
         };
     }, [updateRailMetrics, children]);
@@ -231,7 +280,10 @@ function ProductRailItem({
     return (
         <div
             data-slot="product-rail-item"
-            className={cn('shrink-0 basis-full snap-center tablet:snap-none', className)}
+            className={cn(
+                'shrink-0 grow-0 basis-[var(--rail-item-basis,100%)] snap-center tablet:snap-none',
+                className,
+            )}
             style={{ '--stagger-index': index } as CSSProperties}
         >
             {children}
