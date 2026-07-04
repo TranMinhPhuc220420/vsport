@@ -21,18 +21,23 @@ type ScrollEdges = {
     canScrollRight: boolean;
 };
 
+const railButtonClassName =
+    'absolute top-[calc(var(--rail-image-center,0px)-1.375rem)] z-10 flex size-11 items-center justify-center rounded-full border border-hairline bg-canvas/95 text-ink shadow-md backdrop-blur-sm transition hover:bg-canvas disabled:pointer-events-none disabled:opacity-30';
+
 function ProductRail({ children, className }: ProductRailProps) {
     const { t } = useTranslation('common');
+    const railRef = useRef<HTMLDivElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const [edges, setEdges] = useState<ScrollEdges>({
         canScrollLeft: false,
         canScrollRight: false,
     });
 
-    const updateEdges = useCallback(() => {
+    const updateRailMetrics = useCallback(() => {
         const element = scrollRef.current;
+        const rail = railRef.current;
 
-        if (!element) {
+        if (!element || !rail) {
             return;
         }
 
@@ -42,6 +47,20 @@ function ProductRail({ children, className }: ProductRailProps) {
             canScrollLeft: element.scrollLeft > 4,
             canScrollRight: element.scrollLeft < maxScrollLeft - 4,
         });
+
+        const image = element.querySelector(
+            '[data-slot="product-card"] .aspect-square',
+        );
+
+        const imageHeight =
+            image instanceof HTMLElement
+                ? image.getBoundingClientRect().height
+                : element.clientWidth;
+
+        rail.style.setProperty(
+            '--rail-image-center',
+            `${imageHeight / 2}px`,
+        );
     }, []);
 
     useEffect(() => {
@@ -51,34 +70,77 @@ function ProductRail({ children, className }: ProductRailProps) {
             return;
         }
 
-        updateEdges();
+        updateRailMetrics();
 
-        const observer = new ResizeObserver(updateEdges);
+        const observer = new ResizeObserver(updateRailMetrics);
         observer.observe(element);
 
-        element.addEventListener('scroll', updateEdges, { passive: true });
+        element.addEventListener('scroll', updateRailMetrics, { passive: true });
 
-        const handleWheel = (event: WheelEvent) => {
-            if (element.scrollWidth <= element.clientWidth) {
-                return;
-            }
+        const mobileQuery = window.matchMedia('(max-width: 39.9375rem)');
 
-            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
-                return;
-            }
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchAxis: 'x' | 'y' | null = null;
 
-            event.preventDefault();
-            element.scrollLeft += event.deltaY;
+        const resetTouchAxis = () => {
+            touchAxis = null;
         };
 
-        element.addEventListener('wheel', handleWheel, { passive: false });
+        const onTouchStart = (event: TouchEvent) => {
+            if (event.touches.length !== 1) {
+                return;
+            }
+
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+            touchAxis = null;
+        };
+
+        const onTouchMove = (event: TouchEvent) => {
+            if (!mobileQuery.matches || event.touches.length !== 1) {
+                return;
+            }
+
+            const deltaX = event.touches[0].clientX - touchStartX;
+            const deltaY = event.touches[0].clientY - touchStartY;
+
+            if (
+                touchAxis === null &&
+                (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8)
+            ) {
+                touchAxis =
+                    Math.abs(deltaX) > Math.abs(deltaY) ? 'x' : 'y';
+            }
+
+            if (touchAxis === 'y') {
+                element.style.overflowX = 'hidden';
+                return;
+            }
+
+            element.style.overflowX = '';
+        };
+
+        const onTouchEnd = () => {
+            element.style.overflowX = '';
+            resetTouchAxis();
+        };
+
+        element.addEventListener('touchstart', onTouchStart, { passive: true });
+        element.addEventListener('touchmove', onTouchMove, { passive: true });
+        element.addEventListener('touchend', onTouchEnd, { passive: true });
+        element.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
         return () => {
             observer.disconnect();
-            element.removeEventListener('scroll', updateEdges);
-            element.removeEventListener('wheel', handleWheel);
+            element.removeEventListener('scroll', updateRailMetrics);
+            element.removeEventListener('touchstart', onTouchStart);
+            element.removeEventListener('touchmove', onTouchMove);
+            element.removeEventListener('touchend', onTouchEnd);
+            element.removeEventListener('touchcancel', onTouchEnd);
+            element.style.overflowX = '';
         };
-    }, [updateEdges, children]);
+    }, [updateRailMetrics, children]);
 
     const scrollByDirection = useCallback((direction: 'prev' | 'next') => {
         const element = scrollRef.current;
@@ -111,40 +173,45 @@ function ProductRail({ children, className }: ProductRailProps) {
     const showControls = edges.canScrollLeft || edges.canScrollRight;
 
     return (
-        <div
-            data-slot="product-rail"
-            className={cn('relative', className)}
-        >
-            {showControls ? (
-                <>
-                    <button
-                        type="button"
-                        onClick={() => scrollByDirection('prev')}
-                        disabled={!edges.canScrollLeft}
-                        aria-label={t('previous')}
-                        className="absolute top-[calc(50%-3.5rem)] left-0 z-10 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full border border-hairline bg-canvas text-ink shadow-sm transition hover:bg-soft-cloud disabled:pointer-events-none disabled:opacity-30 tablet:flex"
-                    >
-                        <ChevronLeft className="size-6" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => scrollByDirection('next')}
-                        disabled={!edges.canScrollRight}
-                        aria-label={t('next')}
-                        className="absolute top-[calc(50%-3.5rem)] right-0 z-10 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full border border-hairline bg-canvas text-ink shadow-sm transition hover:bg-soft-cloud disabled:pointer-events-none disabled:opacity-30 tablet:flex"
-                    >
-                        <ChevronRight className="size-6" />
-                    </button>
-                </>
-            ) : null}
-
-            <div
-                ref={scrollRef}
-                className="-mx-4 overflow-x-auto scroll-ps-4 scroll-pe-4 pb-2 scrollbar-none [overscroll-behavior-x:contain] [touch-action:pan-x] tablet:mx-0 tablet:scroll-ps-0 tablet:scroll-pe-0"
-            >
-                <div className="flex w-max snap-x snap-mandatory gap-2 px-4 tablet:px-0 desktop:gap-3">
-                    {children}
+        <div data-slot="product-rail" className={className}>
+            <div ref={railRef} className="relative">
+                <div
+                    ref={scrollRef}
+                    className="overflow-x-auto touch-manipulation [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] snap-x snap-mandatory scrollbar-none tablet:overflow-hidden tablet:snap-none tablet:touch-auto"
+                >
+                    <div className="flex gap-2 desktop:gap-3">
+                        {children}
+                    </div>
                 </div>
+
+                {showControls ? (
+                    <>
+                        <button
+                            type="button"
+                            onClick={() => scrollByDirection('prev')}
+                            disabled={!edges.canScrollLeft}
+                            aria-label={t('previous')}
+                            className={cn(
+                                railButtonClassName,
+                                'left-[1.375rem] -translate-x-1/2',
+                            )}
+                        >
+                            <ChevronLeft className="size-6" />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => scrollByDirection('next')}
+                            disabled={!edges.canScrollRight}
+                            aria-label={t('next')}
+                            className={cn(
+                                railButtonClassName,
+                                'right-[1.375rem] translate-x-1/2',
+                            )}
+                        >
+                            <ChevronRight className="size-6" />
+                        </button>
+                    </>
+                ) : null}
             </div>
         </div>
     );
@@ -164,10 +231,7 @@ function ProductRailItem({
     return (
         <div
             data-slot="product-rail-item"
-            className={cn(
-                'w-[72vw] shrink-0 snap-start tablet:w-[45vw] desktop:w-[min(26rem,32vw)]',
-                className,
-            )}
+            className={cn('shrink-0 basis-full snap-center tablet:snap-none', className)}
             style={{ '--stagger-index': index } as CSSProperties}
         >
             {children}

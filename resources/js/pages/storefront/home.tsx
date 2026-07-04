@@ -46,7 +46,7 @@ function ProductRailSection({
     }
 
     return (
-        <section className="storefront-container storefront-section-compact">
+        <section className="storefront-container storefront-section-compact overflow-hidden">
             <ScrollReveal direction={direction}>
                 <SectionHeader title={title} href={href} />
                 <ProductRail className="mt-6">

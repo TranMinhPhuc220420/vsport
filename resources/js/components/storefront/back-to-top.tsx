@@ -23,7 +23,7 @@ function BackToTop() {
             onClick={scrollToTop}
             aria-label={t('plp.backToTop')}
             className={cn(
-                'fixed right-4 z-40 flex size-12 items-center justify-center rounded-full bg-ink text-canvas shadow-lg transition-all duration-300 bottom-[max(1.5rem,var(--storefront-sticky-bottom-inset,0px))] desktop:bottom-6',
+                'fixed right-4 z-40 flex size-12 items-center justify-center rounded-full bg-ink text-canvas shadow-lg transition-all duration-300 bottom-[max(calc(1.5rem+var(--storefront-safe-bottom,0px)),var(--storefront-sticky-bottom-inset,0px))] desktop:bottom-[calc(1.5rem+var(--storefront-safe-bottom,0px))]',
                 visible
                     ? 'translate-y-0 opacity-100'
                     : 'pointer-events-none translate-y-4 opacity-0',

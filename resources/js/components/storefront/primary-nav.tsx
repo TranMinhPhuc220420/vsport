@@ -51,7 +51,7 @@ export function PrimaryNav() {
 
     return (
         <>
-            <header className="vsport-light sticky top-0 z-40 border-b border-hairline-soft bg-canvas text-ink">
+            <header className="vsport-light border-b border-hairline-soft bg-canvas text-ink">
                 <div className="storefront-container flex h-14 items-center gap-4">
                     <div className="flex items-center gap-3 tablet-lg:gap-6">
                         <StorefrontButton

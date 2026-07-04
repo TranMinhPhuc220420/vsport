@@ -36,7 +36,7 @@ export function StorefrontFooter() {
     );
 
     return (
-        <footer className="vsport-light border-t border-hairline bg-canvas text-mute">
+        <footer className="vsport-light border-t border-hairline bg-canvas pb-[var(--storefront-safe-bottom,0px)] text-mute">
             <div className="storefront-container storefront-section">
                 <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2">
                     {footerColumns.map((column) => (

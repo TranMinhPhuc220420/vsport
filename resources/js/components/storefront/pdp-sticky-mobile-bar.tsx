@@ -79,7 +79,7 @@ function PdpStickyMobileBar({
         <div
             ref={barRef}
             className={cn(
-                'fixed inset-x-0 bottom-0 z-50 border-t border-hairline-soft bg-canvas px-4 py-3 transition-transform duration-300 ease-[var(--motion-ease)] desktop:hidden',
+                'fixed inset-x-0 bottom-0 z-50 border-t border-hairline-soft bg-canvas px-4 pt-3 pb-[calc(0.75rem+var(--storefront-safe-bottom,0px))] transition-transform duration-300 ease-[var(--motion-ease)] desktop:hidden',
                 visible ? 'translate-y-0' : 'translate-y-full',
                 className,
             )}
