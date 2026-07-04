@@ -238,7 +238,7 @@ export default function ProductDetailPage({
                                 <AddToBagButton
                                     disabled={!canAddToBag}
                                     onClick={handleAddToBag}
-                                    className="flex-1"
+                                    className="w-full flex-1"
                                 />
                                 <WishlistButton
                                     item={{

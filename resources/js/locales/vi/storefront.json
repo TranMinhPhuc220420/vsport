@@ -99,6 +99,7 @@
         "outOfStock": "Hết hàng",
         "home": "Trang chủ",
         "sortBy": "Sắp xếp theo",
+        "sortTitle": "Sắp xếp",
         "sortNewest": "Mới nhất",
         "sortPriceLow": "Giá: Thấp đến cao",
         "sortPriceHigh": "Giá: Cao đến thấp",
@@ -108,7 +109,14 @@
         "filters": "Bộ lọc",
         "gender": "Giới tính",
         "category": "Danh mục",
-        "hideFiltersAction": "Ẩn bộ lọc"
+        "hideFiltersAction": "Ẩn bộ lọc",
+        "resultCount_one": "{{count}} sản phẩm",
+        "resultCount_other": "{{count}} sản phẩm",
+        "clearAll": "Xóa tất cả",
+        "clearFilter": "Xóa {{label}}",
+        "activeFilters": "Bộ lọc đang áp dụng",
+        "loadMore": "Xem thêm",
+        "backToTop": "Về đầu trang"
     },
     "pdp": {
         "addedToBag": "Đã thêm vào giỏ",

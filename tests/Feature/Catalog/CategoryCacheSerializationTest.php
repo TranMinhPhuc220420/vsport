@@ -44,3 +44,15 @@ test('catalog cache invalidation clears slug entries', function () {
 
     expect(Cache::has(CatalogCache::SLUG_PREFIX.'men'))->toBeFalse();
 });
+
+test('findCategoryBySlug recovers from stale cached category id', function () {
+    $service = app(ProductCatalogService::class);
+    $men = Category::query()->where('slug', 'men')->firstOrFail();
+
+    Cache::put(CatalogCache::SLUG_PREFIX.'men', $men->id + 99999, 3600);
+
+    $category = $service->findCategoryBySlug('men');
+
+    expect($category)->toBeInstanceOf(Category::class)
+        ->and($category->slug)->toBe('men');
+});

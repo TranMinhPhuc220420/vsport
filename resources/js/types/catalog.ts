@@ -135,11 +135,11 @@ export type CategoryMeta = {
 
 export type ListingFilters = {
     category: string;
-    gender: string | null;
     sort: string;
+    activeDepartment: string;
 };
 
 export type FilterOptions = {
-    genders: string[];
-    childCategories: Category[];
+    departments: Category[];
+    subCategories: Category[];
 };

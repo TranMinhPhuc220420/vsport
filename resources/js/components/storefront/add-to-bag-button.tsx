@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
-import { cn } from '@/lib/utils';
 
 type AddToBagButtonProps = {
     disabled?: boolean;
@@ -15,7 +14,7 @@ function AddToBagButton({ disabled, onClick, className }: AddToBagButtonProps) {
     return (
         <StorefrontButton
             variant="primary"
-            className={cn('w-full', className)}
+            className={className}
             disabled={disabled}
             onClick={onClick}
         >

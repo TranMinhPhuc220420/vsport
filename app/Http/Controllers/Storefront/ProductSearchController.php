@@ -30,6 +30,7 @@ class ProductSearchController extends Controller
                 ? ProductSummaryResource::collection($products)
                 : null,
             'seo' => PageSeo::forSearch($query)->toArray(),
+            'sort' => $request->sort(),
         ]);
     }
 }

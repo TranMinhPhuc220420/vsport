@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { BackToTop } from '@/components/storefront/back-to-top';
 import { StorefrontFooter } from '@/components/storefront/footer';
 import { PrimaryNav } from '@/components/storefront/primary-nav';
 import { UtilityBar } from '@/components/storefront/utility-bar';
@@ -19,6 +20,7 @@ export default function StorefrontLayout({
                     <PrimaryNav />
                     <main className="flex-1">{children}</main>
                     <StorefrontFooter />
+                    <BackToTop />
                 </div>
             </WishlistProvider>
         </CartProvider>

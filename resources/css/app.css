@@ -254,11 +254,11 @@
     }
 
     .storefront-grid {
-        @apply grid grid-cols-1 gap-2 tablet:grid-cols-2 desktop:grid-cols-3 desktop-lg:grid-cols-4;
+        @apply grid grid-cols-2 gap-1.5 desktop:grid-cols-3 desktop-lg:grid-cols-4;
     }
 
     .storefront-grid-compact {
-        @apply grid grid-cols-1 gap-1.5 tablet:grid-cols-2 desktop:grid-cols-3 desktop-lg:grid-cols-4;
+        @apply grid grid-cols-2 gap-1 desktop:grid-cols-3 desktop-lg:grid-cols-4;
     }
 
     .storefront-section {

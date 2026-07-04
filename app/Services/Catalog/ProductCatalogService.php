@@ -185,15 +185,37 @@ class ProductCatalogService
     public function topLevelCategories(): Collection
     {
         /** @var list<int> $rootIds */
-        $rootIds = Cache::remember(CatalogCache::TREE_KEY, 3600, fn () => Category::query()
+        $rootIds = Cache::get(CatalogCache::TREE_KEY);
+
+        if (is_array($rootIds) && $rootIds !== []) {
+            $categories = Category::query()
+                ->whereIn('id', $rootIds)
+                ->with('children')
+                ->get();
+
+            if ($categories->count() === count($rootIds)) {
+                $order = array_flip($rootIds);
+
+                return $categories
+                    ->sortBy(fn (Category $category) => $order[$category->id] ?? PHP_INT_MAX)
+                    ->values();
+            }
+
+            Cache::forget(CatalogCache::TREE_KEY);
+        }
+
+        /** @var list<int> $rootIds */
+        $rootIds = Category::query()
             ->roots()
             ->orderBy('name')
             ->pluck('id')
-            ->all());
+            ->all();
 
         if ($rootIds === []) {
             return new Collection;
         }
+
+        Cache::put(CatalogCache::TREE_KEY, $rootIds, 3600);
 
         $order = array_flip($rootIds);
 
@@ -209,27 +231,33 @@ class ProductCatalogService
     {
         $cacheKey = CatalogCache::SLUG_PREFIX.$slug;
 
-        if (! Cache::has($cacheKey)) {
-            $category = Category::query()
-                ->where('slug', $slug)
-                ->with('children')
-                ->first();
+        if (Cache::has($cacheKey)) {
+            $categoryId = Cache::get($cacheKey);
 
-            Cache::put($cacheKey, $category?->id, 3600);
+            if (is_int($categoryId)) {
+                $category = Category::query()
+                    ->where('id', $categoryId)
+                    ->with('children')
+                    ->first();
 
-            return $category;
+                if ($category !== null) {
+                    return $category;
+                }
+            }
+
+            Cache::forget($cacheKey);
         }
 
-        $categoryId = Cache::get($cacheKey);
-
-        if ($categoryId === null) {
-            return null;
-        }
-
-        return Category::query()
-            ->where('id', $categoryId)
+        $category = Category::query()
+            ->where('slug', $slug)
             ->with('children')
             ->first();
+
+        if ($category !== null) {
+            Cache::put($cacheKey, $category->id, 3600);
+        }
+
+        return $category;
     }
 
     public function findBySlug(string $slug): Product

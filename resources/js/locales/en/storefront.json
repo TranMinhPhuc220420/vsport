@@ -99,6 +99,7 @@
         "outOfStock": "Out of Stock",
         "home": "Home",
         "sortBy": "Sort by",
+        "sortTitle": "Sort",
         "sortNewest": "Newest",
         "sortPriceLow": "Price: Low to High",
         "sortPriceHigh": "Price: High to Low",
@@ -108,7 +109,14 @@
         "filters": "Filters",
         "gender": "Gender",
         "category": "Category",
-        "hideFiltersAction": "Hide Filters"
+        "hideFiltersAction": "Hide Filters",
+        "resultCount_one": "{{count}} product",
+        "resultCount_other": "{{count}} products",
+        "clearAll": "Clear all",
+        "clearFilter": "Remove {{label}}",
+        "activeFilters": "Active filters",
+        "loadMore": "Load more",
+        "backToTop": "Back to top"
     },
     "pdp": {
         "addedToBag": "Added to bag",

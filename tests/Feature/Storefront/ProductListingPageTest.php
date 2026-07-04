@@ -14,9 +14,11 @@ test('category listing page renders products for men', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('storefront/products/index')
             ->where('categoryMeta.slug', 'men')
+            ->where('filters.activeDepartment', 'men')
             ->has('products.data')
             ->has('filters')
-            ->has('filterOptions.genders')
+            ->has('filterOptions.departments')
+            ->has('filterOptions.subCategories')
         );
 });
 
@@ -30,7 +32,40 @@ test('category listing includes men shoes products', function () {
         ->and($slugs)->not->toContain('revolution-7');
 });
 
-test('category listing filters by gender query param', function () {
+test('subcategory listing page renders men shoes products only', function () {
+    $response = $this->get(route('category.show', 'men-shoes'));
+
+    $response->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('storefront/products/index')
+            ->where('categoryMeta.slug', 'men-shoes')
+            ->where('filters.activeDepartment', 'men')
+            ->has('filterOptions.subCategories')
+        );
+
+    $slugs = collect($response->original->getData()['page']['props']['products']['data'])
+        ->pluck('slug');
+
+    expect($slugs)->toContain('zegama-2')
+        ->and($slugs)->not->toContain('revolution-7');
+});
+
+test('subcategory page still exposes sibling subcategories in filters', function () {
+    $response = $this->get(route('category.show', 'men-shoes'));
+
+    $subCategories = collect(
+        $response->original->getData()['page']['props']['filterOptions']['subCategories'],
+    )->pluck('slug');
+
+    expect($subCategories)->toContain('men-shoes');
+});
+
+test('unknown category slug returns 404', function () {
+    $this->get(route('category.show', 'invalid-slug'))
+        ->assertNotFound();
+});
+
+test('category listing ignores gender query param on web plp', function () {
     $response = $this->get(route('category.show', ['category' => 'men', 'gender' => 'Women']));
 
     $response->assertOk();
@@ -38,7 +73,8 @@ test('category listing filters by gender query param', function () {
     $slugs = collect($response->original->getData()['page']['props']['products']['data'])
         ->pluck('slug');
 
-    expect($slugs)->toBeEmpty();
+    expect($slugs)->toContain('zegama-2')
+        ->and($slugs)->not->toContain('revolution-7');
 });
 
 test('category listing supports pagination', function () {

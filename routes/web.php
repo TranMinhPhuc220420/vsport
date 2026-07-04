@@ -52,7 +52,7 @@ Route::get('/products/{slug}', [ProductDetailController::class, 'show'])
     ->name('products.show');
 
 Route::get('/{category}', [ProductListingController::class, 'index'])
-    ->where('category', 'men|women|kids|jordan')
+    ->where('category', '[a-z0-9-]+')
     ->name('category.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {

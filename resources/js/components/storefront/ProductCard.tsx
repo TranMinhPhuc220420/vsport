@@ -130,4 +130,17 @@ function ProductCard({
     );
 }
 
-export { ProductCard };
+function ProductCardSkeleton() {
+    return (
+        <div className="flex flex-col" aria-hidden>
+            <div className="aspect-square animate-pulse bg-soft-cloud" />
+            <div className="space-y-2 pt-2">
+                <div className="h-3 w-3/4 animate-pulse rounded-sm bg-soft-cloud" />
+                <div className="h-3 w-1/2 animate-pulse rounded-sm bg-soft-cloud" />
+                <div className="h-3 w-1/3 animate-pulse rounded-sm bg-soft-cloud" />
+            </div>
+        </div>
+    );
+}
+
+export { ProductCard, ProductCardSkeleton };

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Storefront;
 
 use App\Data\PageSeo;
 use App\Data\ProductListFilters;
-use App\Enums\ProductGender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductIndexRequest;
 use App\Http\Resources\CategoryResource;
@@ -13,6 +12,7 @@ use App\Models\Category;
 use App\Services\Catalog\ProductCatalogService;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductListingController extends Controller
 {
@@ -24,35 +24,51 @@ class ProductListingController extends Controller
     {
         $categoryModel = $this->catalog->findCategoryBySlug($category);
 
+        if ($categoryModel === null) {
+            throw new NotFoundHttpException;
+        }
+
+        $categoryModel->loadMissing('parent');
+
+        $rootSlug = $categoryModel->parent_id && $categoryModel->parent
+            ? $categoryModel->parent->slug
+            : $categoryModel->slug;
+
+        $root = $this->catalog->findCategoryBySlug($rootSlug);
+
+        if ($root === null) {
+            throw new NotFoundHttpException;
+        }
+
         $filters = new ProductListFilters(
             category: $category,
-            gender: $request->validated('gender'),
+            gender: null,
             sort: $request->sort(),
             perPage: $request->perPage(),
         );
 
         $products = $this->catalog->paginateList($filters);
 
-        $categoryName = $categoryModel?->name ?? ucfirst($category);
-
         return Inertia::render('storefront/products/index', [
             'products' => ProductSummaryResource::collection($products),
             'filters' => [
                 'category' => $category,
-                'gender' => $request->validated('gender'),
                 'sort' => $request->sort(),
+                'activeDepartment' => $root->slug,
             ],
             'categoryMeta' => [
-                'name' => $categoryName,
+                'name' => $categoryModel->name,
                 'slug' => $category,
                 'breadcrumb' => $this->breadcrumb($categoryModel),
             ],
-            'seo' => PageSeo::forCategory($categoryName, $category)->toArray(),
+            'seo' => PageSeo::forCategory($categoryModel->name, $category)->toArray(),
             'filterOptions' => [
-                'genders' => array_column(ProductGender::cases(), 'value'),
-                'childCategories' => CategoryResource::collection(
-                    $categoryModel?->children ?? collect(),
-                )->resolve()['data'] ?? [],
+                'departments' => CategoryResource::collection(
+                    $this->catalog->topLevelCategories(),
+                )->resolve(),
+                'subCategories' => CategoryResource::collection(
+                    $root->children,
+                )->resolve(),
             ],
         ]);
     }
@@ -60,12 +76,8 @@ class ProductListingController extends Controller
     /**
      * @return list<array{name: string, slug: string}>
      */
-    private function breadcrumb(?Category $category): array
+    private function breadcrumb(Category $category): array
     {
-        if ($category === null) {
-            return [];
-        }
-
         $trail = [];
 
         if ($category->parent_id !== null) {

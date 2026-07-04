@@ -2,7 +2,7 @@ export { StorefrontButton } from '@/components/storefront/Button';
 export { StorefrontBadge } from '@/components/storefront/Badge';
 export { FilterChip } from '@/components/storefront/FilterChip';
 export { SearchPill } from '@/components/storefront/SearchPill';
-export { ProductCard } from '@/components/storefront/ProductCard';
+export { ProductCard, ProductCardSkeleton } from '@/components/storefront/ProductCard';
 export type { ProductCardProps } from '@/components/storefront/ProductCard';
 export {
     ProductRail,
@@ -23,7 +23,10 @@ export { CampaignHero } from '@/components/storefront/campaign-hero';
 export { CampaignHeroCarousel } from '@/components/storefront/campaign-hero-carousel';
 export { CategoryTile } from '@/components/storefront/category-tile';
 export { FilterSidebar } from '@/components/storefront/filter-sidebar';
+export { FilterDrawer } from '@/components/storefront/filter-drawer';
+export { SortSheet } from '@/components/storefront/sort-sheet';
 export { PlpSubNav } from '@/components/storefront/plp-sub-nav';
+export { BackToTop } from '@/components/storefront/back-to-top';
 export { ProductGallery } from '@/components/storefront/product-gallery';
 export { ColorwayPicker } from '@/components/storefront/colorway-picker';
 export { SizePicker } from '@/components/storefront/size-picker';
