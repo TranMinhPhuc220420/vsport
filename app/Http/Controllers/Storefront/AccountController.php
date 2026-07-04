@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Storefront;
 
+use App\Data\PageSeo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -23,6 +24,10 @@ class AccountController extends Controller
 
         return Inertia::render('storefront/account/index', [
             'recentOrders' => OrderResource::collection($recentOrders)->resolve(),
+            'seo' => PageSeo::forPrivate(
+                __('seo.private.account'),
+                route('dashboard'),
+            )->toArray(),
         ]);
     }
 }

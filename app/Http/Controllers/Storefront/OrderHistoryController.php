@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Storefront;
 
+use App\Data\PageSeo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -21,6 +22,10 @@ class OrderHistoryController extends Controller
 
         return Inertia::render('storefront/orders/index', [
             'orders' => OrderResource::collection($orders),
+            'seo' => PageSeo::forPrivate(
+                __('seo.private.orders'),
+                route('orders.index'),
+            )->toArray(),
         ]);
     }
 
@@ -35,6 +40,10 @@ class OrderHistoryController extends Controller
 
         return Inertia::render('storefront/orders/show', [
             'order' => OrderResource::make($order)->resolve(),
+            'seo' => PageSeo::forPrivate(
+                __('seo.private.order_detail', ['order_number' => $orderNumber]),
+                route('orders.show', $orderNumber),
+            )->toArray(),
         ]);
     }
 }

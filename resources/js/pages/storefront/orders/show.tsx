@@ -1,25 +1,24 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
 import type { OrderDetail } from '@/types/order';
 
 type OrderShowPageProps = {
     order: OrderDetail;
+    seo: SeoData;
 };
 
-export default function OrderShowPage({ order }: OrderShowPageProps) {
+export default function OrderShowPage({ order, seo }: OrderShowPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
     const { locale } = useLocale();
 
     return (
         <>
-            <Head
-                title={t('storefront:orders.orderNumber', {
-                    orderNumber: order.orderNumber,
-                })}
-            />
+            <PageSeo seo={seo} />
 
             <div className="storefront-container storefront-section">
                 <Link

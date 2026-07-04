@@ -12,8 +12,14 @@ use App\Http\Controllers\Storefront\ProductDetailController;
 use App\Http\Controllers\Storefront\ProductListingController;
 use App\Http\Controllers\Storefront\ProductReviewController;
 use App\Http\Controllers\Storefront\ProductSearchController;
+use App\Http\Controllers\Storefront\WishlistController;
+use App\Http\Controllers\Storefront\RobotsController;
+use App\Http\Controllers\Storefront\SitemapController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -30,7 +36,7 @@ Route::get('/shipping', [LegalController::class, 'shipping'])->name('legal.shipp
 Route::get('/returns', [LegalController::class, 'returns'])->name('legal.returns');
 Route::get('/contact', [LegalController::class, 'contact'])->name('legal.contact');
 
-Route::inertia('/wishlist', 'storefront/wishlist')->name('wishlist.index');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
 Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');

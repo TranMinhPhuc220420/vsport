@@ -122,9 +122,9 @@ class CatalogSeeder extends Seeder
     private function seedProduct(array $data): void
     {
         $product = Product::updateOrCreate(
-            ['slug' => $data['slug']],
+            ['style_code' => $data['style_code']],
             [
-                'style_code' => $data['style_code'],
+                'slug' => $data['slug'],
                 'name' => $data['name'],
                 'description' => "Sample description for {$data['name']}.",
                 'category_id' => $data['category_id'],
@@ -185,10 +185,12 @@ class CatalogSeeder extends Seeder
                 $sku = Str::slug("{$fullStyleCode}-{$size}", '-');
 
                 $variant = ProductVariant::updateOrCreate(
-                    ['sku' => $sku],
                     [
                         'colorway_id' => $colorway->id,
                         'size_val' => $size,
+                    ],
+                    [
+                        'sku' => $sku,
                         'additional_price' => 0,
                     ],
                 );

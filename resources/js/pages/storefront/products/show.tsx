@@ -9,6 +9,7 @@ import { ColorwayPicker } from '@/components/storefront/colorway-picker';
 import { NikeByYouCustomizer } from '@/components/storefront/nike-by-you-customizer';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
+import { StructuredData } from '@/components/storefront/structured-data';
 import { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
 import { PdpStickyMobileBar } from '@/components/storefront/pdp-sticky-mobile-bar';
 import { ProductGallery } from '@/components/storefront/product-gallery';
@@ -32,12 +33,14 @@ type ProductDetailPageProps = {
     product: ProductDetail;
     relatedProducts: { data: ProductSummary[] };
     seo: SeoData;
+    structuredData: Record<string, unknown>[];
 };
 
 export default function ProductDetailPage({
     product,
     relatedProducts,
     seo,
+    structuredData,
 }: ProductDetailPageProps) {
     const { t } = useTranslation('storefront');
     const { locale } = useLocale();
@@ -128,6 +131,7 @@ export default function ProductDetailPage({
     return (
         <>
             <PageSeo seo={seo} />
+            <StructuredData data={structuredData} />
 
             <div className="storefront-container storefront-section-compact">
                 <ScrollReveal>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Storefront;
 
 use App\Data\PageSeo;
+use App\Data\ProductStructuredData;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductSummaryResource;
@@ -30,15 +31,15 @@ class ProductDetailController extends Controller
             $this->catalog->relatedProducts($product, 8),
         );
 
+        $primaryImage = $this->primaryImageUrl($product);
+
         return Inertia::render('storefront/products/show', [
             'product' => ProductDetailResource::make($product)->resolve(),
             'relatedProducts' => [
                 'data' => array_values($related->resolve()),
             ],
-            'seo' => PageSeo::forProduct(
-                $product,
-                $this->primaryImageUrl($product),
-            )->toArray(),
+            'seo' => PageSeo::forProduct($product, $primaryImage)->toArray(),
+            'structuredData' => ProductStructuredData::forProductPage($product, $primaryImage),
         ]);
     }
 

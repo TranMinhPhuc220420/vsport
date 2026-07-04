@@ -1,7 +1,9 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
 import { logout } from '@/routes';
 import { edit as profileEdit } from '@/routes/profile';
@@ -10,9 +12,10 @@ import type { OrderDetail } from '@/types/order';
 
 type AccountPageProps = {
     recentOrders: OrderDetail[];
+    seo: SeoData;
 };
 
-export default function AccountPage({ recentOrders }: AccountPageProps) {
+export default function AccountPage({ recentOrders, seo }: AccountPageProps) {
     const { t } = useTranslation('storefront');
     const { t: tCommon } = useTranslation('common');
     const { locale } = useLocale();
@@ -25,7 +28,7 @@ export default function AccountPage({ recentOrders }: AccountPageProps) {
 
     return (
         <>
-            <Head title={t('account.title')} />
+            <PageSeo seo={seo} />
 
             <div className="storefront-container storefront-section">
                 <h1 className="text-heading-xl text-ink">

@@ -1,18 +1,24 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { useWishlist } from '@/contexts/wishlist-context';
 import { formatCurrency, useLocale } from '@/hooks/use-locale';
 
-export default function WishlistPage() {
+type WishlistPageProps = {
+    seo: SeoData;
+};
+
+export default function WishlistPage({ seo }: WishlistPageProps) {
     const { t } = useTranslation('storefront');
     const { locale } = useLocale();
     const { items, removeItem } = useWishlist();
 
     return (
         <>
-            <Head title={t('wishlist.title')} />
+            <PageSeo seo={seo} />
 
             <div className="storefront-container storefront-section">
                 <h1 className="text-heading-xl text-ink">

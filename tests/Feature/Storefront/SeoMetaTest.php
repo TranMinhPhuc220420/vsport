@@ -18,7 +18,20 @@ test('product detail page includes seo metadata', function () {
             ->where('seo.title', fn ($title) => str_contains($title, 'Jordan'))
             ->where('seo.description', fn ($description) => is_string($description) && $description !== '')
             ->where('seo.canonical', route('products.show', 'jordan-1-low'))
+            ->where('seo.ogType', 'product')
+            ->has('structuredData', 2)
         );
+});
+
+test('product detail page renders seo metadata in html', function () {
+    $response = $this->get(route('products.show', 'jordan-1-low'));
+
+    $response->assertOk()
+        ->assertSee('name="description"', false)
+        ->assertSee('property="og:title"', false)
+        ->assertSee('property="og:type" content="product"', false)
+        ->assertSee('"@type":"Product"', false)
+        ->assertSee('"@type":"BreadcrumbList"', false);
 });
 
 test('category listing page includes seo metadata', function () {
@@ -30,6 +43,13 @@ test('category listing page includes seo metadata', function () {
         );
 });
 
+test('category listing page renders seo metadata in html', function () {
+    $this->get(route('category.show', 'men'))
+        ->assertOk()
+        ->assertSee('name="description"', false)
+        ->assertSee('rel="canonical"', false);
+});
+
 test('home page includes seo metadata', function () {
     $this->get(route('home'))
         ->assertOk()
@@ -37,6 +57,14 @@ test('home page includes seo metadata', function () {
             ->has('seo')
             ->where('seo.canonical', route('home'))
         );
+});
+
+test('home page renders seo metadata in html', function () {
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('name="description"', false)
+        ->assertSee('property="og:url"', false)
+        ->assertSee('name="twitter:card"', false);
 });
 
 test('seeded product images expose alt text in api', function () {
@@ -67,4 +95,46 @@ test('cart and checkout pages use noindex seo', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('seo.robots', 'noindex, nofollow'));
+});
+
+test('cart and checkout pages render noindex in html', function () {
+    $user = User::factory()->create();
+
+    $this->get(route('cart.index'))
+        ->assertOk()
+        ->assertSee('name="robots" content="noindex, nofollow"', false);
+
+    $this->actingAs($user)
+        ->get(route('checkout.create'))
+        ->assertOk()
+        ->assertSee('name="robots" content="noindex, nofollow"', false);
+});
+
+test('wishlist page uses noindex seo', function () {
+    $this->get(route('wishlist.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('seo.robots', 'noindex, nofollow'))
+        ->assertSee('name="robots" content="noindex, nofollow"', false);
+});
+
+test('sitemap includes public storefront urls', function () {
+    $response = $this->get(route('sitemap'));
+
+    $response->assertOk()
+        ->assertHeader('Content-Type', 'application/xml')
+        ->assertSee(route('home'), false)
+        ->assertSee(route('products.show', 'jordan-1-low'), false)
+        ->assertSee(route('category.show', 'men'), false)
+        ->assertSee(route('legal.privacy'), false);
+});
+
+test('robots.txt references sitemap and blocks private paths', function () {
+    $response = $this->get('/robots.txt');
+
+    $response->assertOk()
+        ->assertSee('Sitemap: /sitemap.xml')
+        ->assertSee('Disallow: /cart')
+        ->assertSee('Disallow: /checkout')
+        ->assertSee('Disallow: /admin');
 });

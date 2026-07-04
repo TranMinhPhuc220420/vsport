@@ -1,9 +1,11 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { CheckCircle2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { useCart } from '@/contexts/cart-context';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
@@ -11,10 +13,12 @@ import type { OrderDetail } from '@/types/order';
 
 type OrderConfirmationPageProps = {
     order: OrderDetail;
+    seo: SeoData;
 };
 
 export default function OrderConfirmationPage({
     order,
+    seo,
 }: OrderConfirmationPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
     const { locale } = useLocale();
@@ -36,7 +40,7 @@ export default function OrderConfirmationPage({
 
     return (
         <>
-            <Head title={t('storefront:orders.confirmed')} />
+            <PageSeo seo={seo} />
 
             <div className="storefront-container storefront-section">
                 <ScrollReveal>

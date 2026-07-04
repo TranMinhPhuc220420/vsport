@@ -1,8 +1,10 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { formatCurrency, useLocale } from '@/hooks/use-locale';
 
 type CheckoutStripePageProps = {
@@ -10,6 +12,7 @@ type CheckoutStripePageProps = {
     clientSecret: string;
     stripeKey?: string | null;
     total: number;
+    seo: SeoData;
 };
 
 export default function CheckoutStripePage({
@@ -17,6 +20,7 @@ export default function CheckoutStripePage({
     clientSecret,
     stripeKey,
     total,
+    seo,
 }: CheckoutStripePageProps) {
     const { t } = useTranslation('storefront');
     const { locale } = useLocale();
@@ -70,7 +74,7 @@ export default function CheckoutStripePage({
 
     return (
         <>
-            <Head title={t('stripe.title')} />
+            <PageSeo seo={seo} />
             <div className="storefront-container storefront-section max-w-lg">
                 <h1 className="text-heading-xl text-ink">
                     {t('stripe.title')}

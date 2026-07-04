@@ -12,10 +12,20 @@ readonly class PageSeo
         public string $canonical,
         public ?string $ogImage = null,
         public ?string $robots = null,
+        public string $ogType = 'website',
+        public ?string $ogUrl = null,
     ) {}
 
     /**
-     * @return array{title: string, description: string, canonical: string, ogImage: string|null, robots: string|null}
+     * @return array{
+     *     title: string,
+     *     description: string,
+     *     canonical: string,
+     *     ogImage: string|null,
+     *     robots: string|null,
+     *     ogType: string,
+     *     ogUrl: string
+     * }
      */
     public function toArray(): array
     {
@@ -25,23 +35,29 @@ readonly class PageSeo
             'canonical' => $this->canonical,
             'ogImage' => $this->ogImage,
             'robots' => $this->robots,
+            'ogType' => $this->ogType,
+            'ogUrl' => $this->ogUrl ?? $this->canonical,
         ];
     }
 
     public static function forHome(): self
     {
+        $app = config('app.name', 'VSport');
+
         return new self(
-            title: config('app.name', 'VSport'),
-            description: 'Shop sports footwear and apparel at VSport. Fast checkout with cash on delivery.',
+            title: $app,
+            description: __('seo.home.description', ['app' => $app]),
             canonical: route('home'),
         );
     }
 
     public static function forCategory(string $name, string $slug): self
     {
+        $app = config('app.name', 'VSport');
+
         return new self(
-            title: "{$name} | ".config('app.name', 'VSport'),
-            description: "Shop {$name} shoes and gear at VSport.",
+            title: __('seo.category.title', ['name' => $name, 'app' => $app]),
+            description: __('seo.category.description', ['name' => $name, 'app' => $app]),
             canonical: route('category.show', $slug),
         );
     }
@@ -52,29 +68,31 @@ readonly class PageSeo
 
         if ($query === '') {
             return new self(
-                title: "Search | {$app}",
-                description: "Search products at {$app}.",
+                title: __('seo.search.title', ['app' => $app]),
+                description: __('seo.search.description', ['app' => $app]),
                 canonical: route('search.index'),
             );
         }
 
         return new self(
-            title: "Search: {$query} | {$app}",
-            description: "Search results for \"{$query}\" at {$app}.",
+            title: __('seo.search.title_with_query', ['query' => $query, 'app' => $app]),
+            description: __('seo.search.description_with_query', ['query' => $query, 'app' => $app]),
             canonical: route('search.index', ['q' => $query]),
         );
     }
 
     public static function forProduct(Product $product, ?string $ogImage = null): self
     {
+        $app = config('app.name', 'VSport');
         $description = self::truncate($product->description)
-            ?: "Shop {$product->name} at VSport.";
+            ?: __('seo.product.fallback_description', ['name' => $product->name, 'app' => $app]);
 
         return new self(
-            title: "{$product->name} | ".config('app.name', 'VSport'),
+            title: __('seo.product.title', ['name' => $product->name, 'app' => $app]),
             description: $description,
             canonical: route('products.show', $product->slug),
             ogImage: $ogImage,
+            ogType: 'product',
         );
     }
 
@@ -83,8 +101,8 @@ readonly class PageSeo
         $app = config('app.name', 'VSport');
 
         return new self(
-            title: "{$page} | {$app}",
-            description: "{$page} — {$app}",
+            title: __('seo.legal.title', ['page' => $page, 'app' => $app]),
+            description: __('seo.legal.description', ['page' => $page, 'app' => $app]),
             canonical: route($routeName),
         );
     }

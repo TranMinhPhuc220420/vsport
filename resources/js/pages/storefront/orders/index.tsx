@@ -1,21 +1,24 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontPagination } from '@/components/storefront/pagination';
+import { PageSeo } from '@/components/storefront/page-seo';
+import type { SeoData } from '@/components/storefront/page-seo';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
 import type { PaginatedOrders } from '@/types/order';
 
 type OrderHistoryPageProps = {
     orders: PaginatedOrders;
+    seo: SeoData;
 };
 
-export default function OrderHistoryPage({ orders }: OrderHistoryPageProps) {
+export default function OrderHistoryPage({ orders, seo }: OrderHistoryPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
     const { locale } = useLocale();
 
     return (
         <>
-            <Head title={t('storefront:orders.title')} />
+            <PageSeo seo={seo} />
 
             <div className="storefront-container storefront-section">
                 <h1 className="text-heading-xl text-ink">

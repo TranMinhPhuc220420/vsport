@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Storefront;
 
+use App\Data\PageSeo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -26,6 +27,10 @@ class OrderConfirmationController extends Controller
 
         return Inertia::render('storefront/orders/confirmation', [
             'order' => OrderResource::make($order)->resolve(),
+            'seo' => PageSeo::forPrivate(
+                __('seo.private.order_confirmation'),
+                route('orders.confirmation', $orderNumber),
+            )->toArray(),
         ]);
     }
 

@@ -59,7 +59,7 @@ class CheckoutController extends Controller
             'stripeKey' => config('services.stripe.key'),
             'isGuest' => $user === null,
             'defaults' => $defaults,
-            'seo' => PageSeo::forPrivate('Checkout', route('checkout.create'))->toArray(),
+            'seo' => PageSeo::forPrivate(__('seo.private.checkout'), route('checkout.create'))->toArray(),
         ]);
     }
 
@@ -107,6 +107,10 @@ class CheckoutController extends Controller
                 'clientSecret' => $payment['clientSecret'],
                 'stripeKey' => config('services.stripe.key'),
                 'total' => (float) $order->total_amount,
+                'seo' => PageSeo::forPrivate(
+                    __('seo.private.checkout_stripe'),
+                    route('checkout.create'),
+                )->toArray(),
             ]);
         }
 
