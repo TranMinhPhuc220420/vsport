@@ -14,9 +14,15 @@ export default defineConfig({
             fonts: [
                 bunny('Inter', {
                     weights: [400, 500, 600],
+                    subsets: ['latin', 'vietnamese'],
                 }),
                 bunny('Bebas Neue', {
                     weights: [400],
+                    subsets: ['latin'],
+                }),
+                bunny('Barlow Condensed', {
+                    weights: [400, 500, 600],
+                    subsets: ['latin', 'vietnamese'],
                 }),
             ],
         }),

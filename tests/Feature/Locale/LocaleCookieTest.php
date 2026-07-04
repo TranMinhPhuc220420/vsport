@@ -44,3 +44,14 @@ test('locale cookie persists on admin pages', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page->where('locale', 'en'));
 });
+
+test('html lang attribute reflects locale', function () {
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('lang="vi"', false);
+
+    $this->withUnencryptedCookie('locale', 'en')
+        ->get(route('home'))
+        ->assertOk()
+        ->assertSee('lang="en"', false);
+});
