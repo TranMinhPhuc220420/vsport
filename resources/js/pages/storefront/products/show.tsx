@@ -13,6 +13,8 @@ import { StructuredData } from '@/components/storefront/structured-data';
 import { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
 import { PdpStickyMobileBar } from '@/components/storefront/pdp-sticky-mobile-bar';
 import { ProductAttributesSection } from '@/components/storefront/product-attributes-section';
+import { ProductContentSections } from '@/components/storefront/product-content-sections';
+import { ProductDescriptionSection } from '@/components/storefront/product-description-section';
 import { ProductGallery } from '@/components/storefront/product-gallery';
 import {
     ProductRail,
@@ -317,17 +319,6 @@ export default function ProductDetailPage({
                             ) : null}
 
                             <div className="border-t border-hairline">
-                                {detail.description ? (
-                                    <PdpDisclosure
-                                        title={t('pdp.details')}
-                                        defaultOpen
-                                    >
-                                        <p className="text-body-strong text-mute">
-                                            {detail.description}
-                                        </p>
-                                    </PdpDisclosure>
-                                ) : null}
-
                                 <ProductAttributesSection
                                     attributes={detail.attributes}
                                 />
@@ -368,12 +359,30 @@ export default function ProductDetailPage({
                     </ScrollReveal>
                 </div>
 
+                {detail.descriptionHtml || detail.description ? (
+                    <ScrollReveal className="mt-12">
+                        <ProductDescriptionSection
+                            descriptionHtml={detail.descriptionHtml}
+                            description={detail.description}
+                        />
+                    </ScrollReveal>
+                ) : null}
+
+                {(detail.contentSections?.length ?? 0) > 0 ? (
+                    <ScrollReveal className="mt-12">
+                        <ProductContentSections
+                            sections={detail.contentSections}
+                        />
+                    </ScrollReveal>
+                ) : null}
+
                 <ScrollReveal className="mt-12">
                     <ProductReviewsSection
                         productSlug={detail.slug}
                         averageRating={detail.averageRating ?? 0}
                         reviewCount={detail.reviewCount ?? 0}
                         reviews={detail.reviews}
+                        viewerReview={detail.viewerReview}
                     />
                 </ScrollReveal>
 

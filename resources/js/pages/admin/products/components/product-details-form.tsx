@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import {
     AdminInputField,
     AdminSelectField,
-    AdminTextareaField,
 } from '@/components/admin/admin-field';
 import { AdminFormSection } from '@/components/admin/admin-form-section';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import { initialHtml } from '@/lib/richtext';
 import type { AdminProduct } from '@/types/admin-product';
 
 type ProductDetailsFormProps = {
@@ -28,9 +29,14 @@ export function ProductDetailsForm({
         name: product.name,
         slug: product.slug,
         description: product.description ?? '',
+        description_html: initialHtml({
+            html: product.descriptionHtml,
+            text: product.description,
+        }),
         category_id: product.categoryId,
         sub_title: product.subTitle ?? '',
         base_price: product.basePrice.toString(),
+        gender: product.gender,
         is_customizable: product.isCustomizable,
     });
 
@@ -73,14 +79,20 @@ export function ProductDetailsForm({
                     error={form.errors.sub_title}
                 />
 
-                <AdminTextareaField
+                <RichTextEditor
+                    id="product-description-html"
                     label={t('products.descriptionLabel')}
-                    rows={4}
-                    value={form.data.description}
-                    onChange={(e) =>
-                        form.setData('description', e.target.value)
+                    value={form.data.description_html}
+                    placeholder={t('products.descriptionPlaceholder', {
+                        defaultValue: 'Describe this product…',
+                    })}
+                    error={
+                        form.errors.description_html || form.errors.description
                     }
-                    error={form.errors.description}
+                    onChange={(html) =>
+                        form.setData('description_html', html ?? '')
+                    }
+                    onTextChange={(text) => form.setData('description', text)}
                 />
 
                 <div className="grid gap-4 tablet:grid-cols-3">

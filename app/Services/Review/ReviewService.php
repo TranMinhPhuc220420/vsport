@@ -13,14 +13,31 @@ class ReviewService
      */
     public function create(User $user, Product $product, array $data): ProductReview
     {
-        return ProductReview::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'rating' => $data['rating'],
-            'title' => $data['title'] ?? null,
-            'body' => $data['body'] ?? null,
-            'is_approved' => false,
-        ]);
+        $existing = ProductReview::query()
+            ->where('user_id', $user->id)
+            ->where('product_id', $product->id)
+            ->first();
+
+        $wasApproved = $existing?->is_approved ?? false;
+
+        $review = ProductReview::query()->updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+            ],
+            [
+                'rating' => $data['rating'],
+                'title' => $data['title'] ?? null,
+                'body' => $data['body'] ?? null,
+                'is_approved' => false,
+            ],
+        );
+
+        if ($wasApproved) {
+            $this->recalculateProductAggregates($product->id);
+        }
+
+        return $review;
     }
 
     public function approve(ProductReview $review): ProductReview

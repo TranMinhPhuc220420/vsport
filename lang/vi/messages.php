@@ -9,6 +9,8 @@ return [
     'user_role_updated' => 'Đã cập nhật vai trò người dùng.',
     'review_approved' => 'Đã duyệt đánh giá.',
     'review_deleted' => 'Đã xóa đánh giá.',
+    'review_submitted' => 'Đã gửi đánh giá. Nội dung sẽ hiển thị sau khi được duyệt.',
+    'review_updated' => 'Đã cập nhật đánh giá. Nội dung sẽ hiển thị lại sau khi được duyệt.',
     'order_confirmation_subject' => 'Xác nhận đơn hàng :order_number',
     'order_confirmation_greeting' => 'Xin chào :name,',
     'order_confirmation_body' => 'Chúng tôi đã nhận đơn hàng :order_number. Tổng tiền: :total. Chúng tôi sẽ thông báo khi đơn được giao.',

@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import {
     AdminInputField,
     AdminSelectField,
-    AdminTextareaField,
 } from '@/components/admin/admin-field';
 import { AdminFormSection } from '@/components/admin/admin-form-section';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 
 type AdminProductsCreateProps = {
@@ -34,6 +34,7 @@ export default function AdminProductsCreate({
         name: '',
         slug: '',
         description: '',
+        description_html: '',
         category_id: categories[0]?.id ?? '',
         sub_title: '',
         base_price: '',
@@ -95,12 +96,21 @@ export default function AdminProductsCreate({
                             }
                         />
 
-                        <AdminTextareaField
+                        <RichTextEditor
+                            id="product-description-html"
                             label={t('products.descriptionLabel')}
-                            rows={4}
-                            value={data.description}
-                            onChange={(e) =>
-                                setData('description', e.target.value)
+                            value={data.description_html}
+                            placeholder={t('products.descriptionPlaceholder', {
+                                defaultValue: 'Describe this product…',
+                            })}
+                            error={
+                                errors.description_html || errors.description
+                            }
+                            onChange={(html) =>
+                                setData('description_html', html ?? '')
+                            }
+                            onTextChange={(text) =>
+                                setData('description', text)
                             }
                         />
 

@@ -27,6 +27,7 @@ class ProductDetailResource extends JsonResource
             'slug' => $this->slug,
             'subTitle' => $this->sub_title,
             'description' => $this->description,
+            'descriptionHtml' => $this->description_html,
             'gender' => $this->gender->value,
             'basePrice' => (float) $this->base_price,
             'isCustomizable' => $this->is_customizable,
@@ -43,6 +44,24 @@ class ProductDetailResource extends JsonResource
                     'authorName' => $review->user?->name,
                     'createdAt' => $review->created_at?->toIso8601String(),
                 ])),
+            'viewerReview' => $this->when($request->user(), function () use ($request) {
+                $review = $this->reviews()
+                    ->where('user_id', $request->user()->id)
+                    ->first();
+
+                if ($review === null) {
+                    return null;
+                }
+
+                return [
+                    'id' => $review->id,
+                    'rating' => $review->rating,
+                    'title' => $review->title,
+                    'body' => $review->body,
+                    'isApproved' => $review->is_approved,
+                    'createdAt' => $review->created_at?->toIso8601String(),
+                ];
+            }),
             'options' => $this->options->map(fn ($option) => [
                 'id' => $option->id,
                 'name' => $option->name,
@@ -79,6 +98,15 @@ class ProductDetailResource extends JsonResource
                     'value' => $attr->value,
                     'optionValueId' => $attr->option_value_id,
                 ])->values())),
+            'contentSections' => $this->whenLoaded('contentSections', fn () => $this->contentSections->map(fn ($section) => [
+                'id' => $section->id,
+                'title' => $section->title,
+                'content' => $section->content,
+                'contentHtml' => $section->content_html,
+                'images' => $section->relationLoaded('images')
+                    ? ContentSectionImageResource::collection($section->images)->resolve()
+                    : [],
+            ])),
             'sustainability' => $this->when(
                 $this->relationLoaded('sustainabilityMaterials'),
                 fn () => [

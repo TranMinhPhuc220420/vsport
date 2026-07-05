@@ -80,6 +80,23 @@ export type ProductReview = {
     body: string | null;
     authorName?: string;
     createdAt?: string;
+    isApproved?: boolean;
+};
+
+export type ProductContentSectionImage = {
+    id: number;
+    url: string;
+    alt: string | null;
+    sortOrder: number;
+};
+
+export type ProductContentSection = {
+    id: number;
+    title: string;
+    content: string | null;
+    contentHtml: string | null;
+    sortOrder?: number;
+    images?: ProductContentSectionImage[];
 };
 
 export type ProductDetail = {
@@ -89,16 +106,19 @@ export type ProductDetail = {
     slug: string;
     subTitle: string | null;
     description: string | null;
+    descriptionHtml: string | null;
     gender: string;
     basePrice: number;
     isCustomizable?: boolean;
     averageRating?: number;
     reviewCount?: number;
     reviews?: ProductReview[];
+    viewerReview?: ProductReview | null;
     category?: Category;
     options: ProductOption[];
     variants: ProductVariant[];
     attributes?: Record<string, ProductAttribute[]>;
+    contentSections?: ProductContentSection[];
     sustainability?: {
         weightedRecycledPercent: number;
         materials: Array<{

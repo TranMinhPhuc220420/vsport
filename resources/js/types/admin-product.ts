@@ -1,4 +1,7 @@
-import type { AdminProductImage } from '@/lib/admin-upload';
+import type {
+    AdminContentSectionImage,
+    AdminProductImage,
+} from '@/lib/admin-upload';
 
 export type AdminProductOptionValue = {
     id: number;
@@ -41,12 +44,22 @@ export type AdminProductAttribute = {
     optionValueId?: number | null;
 };
 
+export type AdminProductContentSection = {
+    id: number;
+    title: string;
+    content: string | null;
+    contentHtml: string | null;
+    sortOrder: number;
+    images: AdminContentSectionImage[];
+};
+
 export type AdminProduct = {
     id: number;
     styleCode: string;
     name: string;
     slug: string;
     description: string | null;
+    descriptionHtml: string | null;
     categoryId: number;
     subTitle: string | null;
     basePrice: number;
@@ -55,6 +68,7 @@ export type AdminProduct = {
     options: AdminProductOption[];
     variants: AdminProductVariant[];
     attributes: AdminProductAttribute[];
+    contentSections: AdminProductContentSection[];
     customizationOptions: Array<{
         componentName: string;
         allowedMaterials: string[];

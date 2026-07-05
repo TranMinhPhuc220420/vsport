@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Enums\ProductGender;
+use App\Support\RichTextHtml;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,6 +36,7 @@ class UpdateProductRequest extends FormRequest
                 Rule::unique('products', 'slug')->ignore($product?->id),
             ],
             'description' => ['nullable', 'string'],
+            'description_html' => ['nullable', 'string', 'max:'.RichTextHtml::MAX_LENGTH],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'sub_title' => ['nullable', 'string', 'max:255'],
             'base_price' => ['required', 'numeric', 'min:0'],

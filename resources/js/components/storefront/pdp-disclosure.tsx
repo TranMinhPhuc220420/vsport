@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react';
-import { useId, useState  } from 'react';
-import type {ReactNode} from 'react';
+import { useId, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -9,6 +9,8 @@ type PdpDisclosureProps = {
     children: ReactNode;
     defaultOpen?: boolean;
     className?: string;
+    /** Keep panel content out of the DOM until first open. */
+    lazyMount?: boolean;
 };
 
 function PdpDisclosure({
@@ -16,9 +18,40 @@ function PdpDisclosure({
     children,
     defaultOpen = false,
     className,
+    lazyMount = true,
 }: PdpDisclosureProps) {
     const [open, setOpen] = useState(defaultOpen);
+    const [showContent, setShowContent] = useState(
+        defaultOpen || !lazyMount,
+    );
     const panelId = useId();
+
+    const handleToggle = () => {
+        if (open) {
+            setOpen(false);
+            return;
+        }
+
+        if (lazyMount && !showContent) {
+            setShowContent(true);
+            requestAnimationFrame(() => setOpen(true));
+            return;
+        }
+
+        setOpen(true);
+    };
+
+    const handlePanelTransitionEnd = (
+        event: React.TransitionEvent<HTMLDivElement>,
+    ) => {
+        if (event.propertyName !== 'grid-template-rows' || open || !lazyMount) {
+            return;
+        }
+
+        setShowContent(false);
+    };
+
+    const content = lazyMount ? (showContent ? children : null) : children;
 
     return (
         <div
@@ -29,8 +62,8 @@ function PdpDisclosure({
                 type="button"
                 aria-expanded={open}
                 aria-controls={panelId}
-                onClick={() => setOpen((value) => !value)}
-                className="text-body-strong flex w-full items-center justify-between py-6 text-left text-ink"
+                onClick={handleToggle}
+                className="font-bold flex w-full items-center justify-between py-6 text-left text-ink"
             >
                 <span>{title}</span>
                 <ChevronDown
@@ -43,13 +76,15 @@ function PdpDisclosure({
             </button>
             <div
                 id={panelId}
+                aria-hidden={!open}
+                onTransitionEnd={handlePanelTransitionEnd}
                 className={cn(
                     'pdp-disclosure-panel',
                     open && 'pdp-disclosure-panel-open',
                 )}
             >
-                <div className="pdp-disclosure-panel-inner pb-6">
-                    {children}
+                <div className={`pdp-disclosure-panel-inner ${open ? 'pb-6' : ''}`}>
+                    {content}
                 </div>
             </div>
         </div>

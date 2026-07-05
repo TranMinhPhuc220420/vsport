@@ -68,6 +68,48 @@ class ProductImageStorage
         return $this->storeUploadedFile($file, $path);
     }
 
+    public function uploadRichtext(UploadedFile $file): string
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $path = sprintf('richtext/%s.%s', Str::uuid(), $extension);
+
+        return $this->storeUploadedFile($file, $path);
+    }
+
+    public function uploadContentSection(UploadedFile $file, int $contentSectionId): string
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $path = sprintf(
+            'content-sections/%d/%s.%s',
+            $contentSectionId,
+            Str::uuid(),
+            $extension,
+        );
+
+        return $this->storeUploadedFile($file, $path);
+    }
+
+    public function storeBinary(string $binary, string $mime): string
+    {
+        $extension = match ($mime) {
+            'image/jpeg', 'image/jpg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'image/webp' => 'webp',
+            default => 'jpg',
+        };
+
+        $path = sprintf('richtext/%s.%s', Str::uuid(), $extension);
+
+        $stored = Storage::disk($this->disk())->put($path, $binary, 'public');
+
+        if (! $stored) {
+            throw new RuntimeException('Failed to upload rich-text image.');
+        }
+
+        return $this->publicUrl($path);
+    }
+
     private function storeUploadedFile(UploadedFile $file, string $path): string
     {
         $stored = Storage::disk($this->disk())->put($path, $file->getContent(), 'public');

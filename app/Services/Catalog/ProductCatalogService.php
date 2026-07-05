@@ -258,6 +258,8 @@ class ProductCatalogService
                 'variants.optionValues.option',
                 'variants.inventory',
                 'attributes',
+                'contentSections',
+                'contentSections.images',
                 'customizationOptions',
                 'sustainabilityMaterials',
                 'approvedReviews.user',

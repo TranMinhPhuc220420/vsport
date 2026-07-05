@@ -7,6 +7,7 @@ import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { OptionValueImagesPanel } from '@/pages/admin/products/components/option-value-images-panel';
 import { ProductAttributesEditor } from '@/pages/admin/products/components/product-attributes-editor';
+import { ProductContentSectionsEditor } from '@/pages/admin/products/components/product-content-sections-editor';
 import { ProductDetailsForm } from '@/pages/admin/products/components/product-details-form';
 import { ProductOptionsEditor } from '@/pages/admin/products/components/product-options-editor';
 import { VariantInventoryGrid } from '@/pages/admin/products/components/variant-inventory-grid';
@@ -100,6 +101,13 @@ export default function AdminProductsEdit({
                                     categories={categories}
                                     genders={genders}
                                 />
+                            ),
+                        },
+                        {
+                            value: 'content',
+                            label: t('products.tabContent'),
+                            content: (
+                                <ProductContentSectionsEditor product={product} />
                             ),
                         },
                         {

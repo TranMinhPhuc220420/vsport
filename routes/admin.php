@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\ContentSectionImageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CategoryImageController;
 use App\Http\Controllers\Admin\CategoryOptionTemplateController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\HomepageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\Admin\RichtextImageController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\StoreSettingController;
 use App\Http\Controllers\Admin\UserController;
@@ -58,6 +60,8 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('products.variants.generate');
         Route::put('products/{product}/attributes', [ProductController::class, 'syncAttributes'])
             ->name('products.attributes.sync');
+        Route::put('products/{product}/content-sections', [ProductController::class, 'syncContentSections'])
+            ->name('products.content-sections.sync');
         Route::put('products/{product}/customization', [ProductController::class, 'syncCustomization'])
             ->name('products.customization.sync');
 
@@ -74,6 +78,18 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('images.update');
         Route::delete('images/{image}', [ProductImageController::class, 'destroy'])
             ->name('images.destroy');
+
+        Route::post('content-sections/{contentSection}/images', [ContentSectionImageController::class, 'store'])
+            ->name('content-sections.images.store');
+        Route::post('content-sections/{contentSection}/images/reorder', [ContentSectionImageController::class, 'reorder'])
+            ->name('content-sections.images.reorder');
+        Route::patch('content-section-images/{contentSectionImage}', [ContentSectionImageController::class, 'update'])
+            ->name('content-section-images.update');
+        Route::delete('content-section-images/{contentSectionImage}', [ContentSectionImageController::class, 'destroy'])
+            ->name('content-section-images.destroy');
+
+        Route::post('uploads/richtext-image', [RichtextImageController::class, 'store'])
+            ->name('uploads.richtext-image.store');
 
         Route::get('homepage', [HomepageController::class, 'edit'])->name('homepage.edit');
         Route::put('homepage', [HomepageController::class, 'update'])->name('homepage.update');

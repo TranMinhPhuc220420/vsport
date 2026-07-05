@@ -12,6 +12,13 @@ export type AdminProductImage = {
     sortOrder: number;
 };
 
+export type AdminContentSectionImage = {
+    id: number;
+    url: string;
+    alt: string | null;
+    sortOrder: number;
+};
+
 type UploadOptions = {
     alt?: string;
     isPrimary?: boolean;
@@ -233,4 +240,106 @@ export async function updateCategoryImageAlt(
     );
 
     return payload.category;
+}
+
+export async function uploadContentSectionImage(
+    contentSectionId: number,
+    file: File,
+    options: UploadOptions = {},
+): Promise<AdminContentSectionImage> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    if (options.alt !== undefined) {
+        formData.append('image_alt_tag', options.alt);
+    }
+
+    const response = await fetch(
+        `/admin/content-sections/${contentSectionId}/images`,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-XSRF-TOKEN': getCsrfToken(),
+            },
+            body: formData,
+            credentials: 'same-origin',
+        },
+    );
+
+    const payload = await parseJsonResponse<{ image: AdminContentSectionImage }>(
+        response,
+    );
+
+    return payload.image;
+}
+
+export async function updateContentSectionImage(
+    imageId: number,
+    payload: Pick<UpdatePayload, 'image_alt_tag' | 'sort_order'>,
+): Promise<AdminContentSectionImage> {
+    const response = await fetch(`/admin/content-section-images/${imageId}`, {
+        method: 'PATCH',
+        headers: jsonHeaders(),
+        body: JSON.stringify(payload),
+        credentials: 'same-origin',
+    });
+
+    const body = await parseJsonResponse<{ image: AdminContentSectionImage }>(
+        response,
+    );
+
+    return body.image;
+}
+
+export async function deleteContentSectionImage(imageId: number): Promise<void> {
+    const response = await fetch(`/admin/content-section-images/${imageId}`, {
+        method: 'DELETE',
+        headers: jsonHeaders(),
+        credentials: 'same-origin',
+    });
+
+    await parseJsonResponse<{ deleted: boolean }>(response);
+}
+
+export async function reorderContentSectionImages(
+    contentSectionId: number,
+    order: number[],
+): Promise<AdminContentSectionImage[]> {
+    const response = await fetch(
+        `/admin/content-sections/${contentSectionId}/images/reorder`,
+        {
+            method: 'POST',
+            headers: jsonHeaders(),
+            body: JSON.stringify({ order }),
+            credentials: 'same-origin',
+        },
+    );
+
+    const body = await parseJsonResponse<{ images: AdminContentSectionImage[] }>(
+        response,
+    );
+
+    return body.images;
+}
+
+export async function uploadRichtextImage(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch('/admin/uploads/richtext-image', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-XSRF-TOKEN': getCsrfToken(),
+        },
+        body: formData,
+        credentials: 'same-origin',
+    });
+
+    const payload = await parseJsonResponse<{ url: string }>(response);
+
+    return payload.url;
 }

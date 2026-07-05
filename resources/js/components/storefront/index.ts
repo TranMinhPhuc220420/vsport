@@ -11,6 +11,7 @@ export {
 export { ScrollReveal } from '@/components/storefront/scroll-reveal';
 export { Breadcrumb } from '@/components/storefront/breadcrumb';
 export { StarRating } from '@/components/storefront/star-rating';
+export { StarRatingInput } from '@/components/storefront/star-rating-input';
 export { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
 export { ProductLightbox } from '@/components/storefront/product-lightbox';
 export { SectionHeader } from '@/components/storefront/section-header';

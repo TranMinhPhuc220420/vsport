@@ -9,6 +9,8 @@ return [
     'user_role_updated' => 'User role updated.',
     'review_approved' => 'Review approved.',
     'review_deleted' => 'Review deleted.',
+    'review_submitted' => 'Review submitted. It will appear after moderation.',
+    'review_updated' => 'Review updated. It will appear again after moderation.',
     'order_confirmation_subject' => 'Order confirmation :order_number',
     'order_confirmation_greeting' => 'Hi :name,',
     'order_confirmation_body' => 'We received your order :order_number. Total: :total. We will notify you when it ships.',

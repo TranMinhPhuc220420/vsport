@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string $slug
  * @property string|null $description
+ * @property string|null $description_html
  * @property int $category_id
  * @property string|null $sub_title
  * @property string $base_price
@@ -36,6 +37,7 @@ use Illuminate\Support\Carbon;
     'name',
     'slug',
     'description',
+    'description_html',
     'category_id',
     'sub_title',
     'base_price',
@@ -76,6 +78,11 @@ class Product extends Model
     public function attributes(): HasMany
     {
         return $this->hasMany(ProductAttribute::class)->orderBy('sort_order');
+    }
+
+    public function contentSections(): HasMany
+    {
+        return $this->hasMany(ProductContentSection::class)->orderBy('sort_order');
     }
 
     public function customizationOptions(): HasMany

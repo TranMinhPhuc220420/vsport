@@ -562,16 +562,31 @@ html[lang='vi'] {
     .pdp-disclosure-panel {
         display: grid;
         grid-template-rows: 0fr;
-        transition: grid-template-rows var(--motion-duration)
-            var(--motion-ease);
+        transition:
+            grid-template-rows var(--motion-duration) var(--motion-ease),
+            opacity var(--motion-duration) var(--motion-ease);
+        opacity: 0;
     }
 
     .pdp-disclosure-panel-open {
         grid-template-rows: 1fr;
+        opacity: 1;
+    }
+
+    .pdp-disclosure-panel-open .pdp-disclosure-panel-inner {
+        overflow: visible;
+        transform: translateY(0);
+        opacity: 1;
     }
 
     .pdp-disclosure-panel-inner {
         overflow: hidden;
+        min-height: 0;
+        transform: translateY(-4px);
+        transition:
+            transform var(--motion-duration) var(--motion-ease),
+            opacity var(--motion-duration) var(--motion-ease);
+        opacity: 0;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -616,8 +631,11 @@ html[lang='vi'] {
             animation: none;
         }
 
-        .pdp-disclosure-panel {
+        .pdp-disclosure-panel,
+        .pdp-disclosure-panel-inner {
             transition: none;
+            transform: none;
+            opacity: 1;
         }
 
         .motion-gallery-zoom {

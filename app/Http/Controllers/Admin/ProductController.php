@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\BulkUpdateFeaturedProductsRequest;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\SyncCustomizationOptionsRequest;
 use App\Http\Requests\Admin\SyncProductAttributesRequest;
+use App\Http\Requests\Admin\SyncProductContentSectionsRequest;
 use App\Http\Requests\Admin\SyncProductOptionsRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Http\Resources\AdminProductResource;
@@ -109,6 +110,7 @@ class ProductController extends Controller
                 'name',
                 'slug',
                 'description',
+                'description_html',
                 'category_id',
                 'sub_title',
                 'base_price',
@@ -242,6 +244,13 @@ class ProductController extends Controller
         $this->products->syncAttributes($product, $request->validated('attributes'));
 
         return redirect()->route('admin.products.edit', ['product' => $product, 'tab' => 'attributes']);
+    }
+
+    public function syncContentSections(SyncProductContentSectionsRequest $request, Product $product): RedirectResponse
+    {
+        $this->products->syncContentSections($product, $request->validated('sections'));
+
+        return redirect()->route('admin.products.edit', ['product' => $product, 'tab' => 'content']);
     }
 
     public function syncCustomization(SyncCustomizationOptionsRequest $request, Product $product): RedirectResponse

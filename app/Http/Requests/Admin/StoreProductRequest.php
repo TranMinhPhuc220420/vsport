@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Enums\ProductGender;
+use App\Support\RichTextHtml;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,6 +24,7 @@ class StoreProductRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'unique:products,slug'],
             'description' => ['nullable', 'string'],
+            'description_html' => ['nullable', 'string', 'max:'.RichTextHtml::MAX_LENGTH],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'sub_title' => ['nullable', 'string', 'max:255'],
             'base_price' => ['required', 'numeric', 'min:0'],

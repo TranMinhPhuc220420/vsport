@@ -22,6 +22,7 @@ class AdminProductResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
+            'descriptionHtml' => $this->description_html,
             'categoryId' => $this->category_id,
             'category' => CategoryResource::make($this->whenLoaded('category')),
             'subTitle' => $this->sub_title,
@@ -68,6 +69,18 @@ class AdminProductResource extends JsonResource
                 'sortOrder' => $attr->sort_order,
                 'optionValueId' => $attr->option_value_id,
             ])),
+            'contentSections' => $this->relationLoaded('contentSections')
+                ? $this->contentSections->map(fn ($section) => [
+                    'id' => $section->id,
+                    'title' => $section->title,
+                    'content' => $section->content,
+                    'contentHtml' => $section->content_html,
+                    'sortOrder' => $section->sort_order,
+                    'images' => $section->relationLoaded('images')
+                        ? ContentSectionImageResource::collection($section->images)->resolve()
+                        : [],
+                ])->values()->all()
+                : [],
             'customizationOptions' => $this->whenLoaded('customizationOptions', fn () => $this->customizationOptions->map(fn ($option) => [
                 'componentName' => $option->component_name,
                 'allowedMaterials' => $option->allowed_materials,

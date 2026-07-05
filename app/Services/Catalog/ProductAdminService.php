@@ -8,8 +8,11 @@ use App\Models\CategoryOptionTemplate;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAttribute;
+use App\Models\ProductContentSection;
 use App\Models\ProductCustomizationOption;
 use App\Models\ProductVariant;
+use App\Support\HtmlText;
+use App\Support\RichTextHtml;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -25,6 +28,7 @@ class ProductAdminService
      *     name: string,
      *     slug: string,
      *     description?: string|null,
+     *     description_html?: string|null,
      *     category_id: int,
      *     sub_title?: string|null,
      *     base_price: float|string,
@@ -36,6 +40,8 @@ class ProductAdminService
     public function createProduct(array $productData, ?array $optionsPayload = null): Product
     {
         return DB::transaction(function () use ($productData, $optionsPayload): Product {
+            $productData = $this->withRichTextDescription($productData);
+
             $product = Product::query()->create([
                 ...collect($productData)->except('is_customizable')->all(),
                 'gender' => ProductGender::from($productData['gender']),
@@ -60,6 +66,7 @@ class ProductAdminService
      *     name: string,
      *     slug: string,
      *     description?: string|null,
+     *     description_html?: string|null,
      *     category_id: int,
      *     sub_title?: string|null,
      *     base_price: float|string,
@@ -69,6 +76,8 @@ class ProductAdminService
      */
     public function updateProduct(Product $product, array $productData): Product
     {
+        $productData = $this->withRichTextDescription($productData);
+
         $product->update([
             ...collect($productData)->except('is_customizable')->all(),
             'gender' => ProductGender::from($productData['gender']),
@@ -107,6 +116,63 @@ class ProductAdminService
             ['variant_id' => $variant->id],
             ['quantity' => $quantity, 'reserved_quantity' => 0],
         );
+    }
+
+    /**
+     * @param  list<array{
+     *     id?: int|null,
+     *     title: string,
+     *     content_html?: string|null,
+     *     sortOrder?: int,
+     * }>  $sections
+     */
+    public function syncContentSections(Product $product, array $sections): Product
+    {
+        return DB::transaction(function () use ($product, $sections): Product {
+            $keptIds = [];
+
+            foreach ($sections as $index => $row) {
+                $html = RichTextHtml::prepareForStorage($row['content_html'] ?? null);
+                $data = [
+                    'title' => $row['title'],
+                    'content_html' => $html,
+                    'content' => $html !== null
+                        ? HtmlText::extract($html)
+                        : null,
+                    'sort_order' => $row['sortOrder'] ?? $index,
+                ];
+
+                $section = null;
+
+                if (! empty($row['id'])) {
+                    $section = ProductContentSection::query()
+                        ->where('product_id', $product->id)
+                        ->whereKey($row['id'])
+                        ->first();
+                }
+
+                if ($section !== null) {
+                    $section->update($data);
+                } else {
+                    $section = ProductContentSection::query()->create([
+                        'product_id' => $product->id,
+                        ...$data,
+                    ]);
+                }
+
+                $keptIds[] = $section->id;
+            }
+
+            $deleteQuery = $product->contentSections();
+
+            if ($keptIds !== []) {
+                $deleteQuery->whereNotIn('id', $keptIds);
+            }
+
+            $deleteQuery->delete();
+
+            return $this->loadAdminProduct($product->fresh());
+        });
     }
 
     /**
@@ -204,8 +270,29 @@ class ProductAdminService
             'variants.optionValues.option',
             'variants.inventory',
             'attributes',
+            'contentSections',
+            'contentSections.images',
             'customizationOptions',
             'sustainabilityMaterials',
         ]);
+    }
+
+    /**
+     * @param  array<string, mixed>  $productData
+     * @return array<string, mixed>
+     */
+    private function withRichTextDescription(array $productData): array
+    {
+        if (! array_key_exists('description_html', $productData)) {
+            return $productData;
+        }
+
+        $html = RichTextHtml::prepareForStorage($productData['description_html'] ?? null);
+        $productData['description_html'] = $html;
+        $productData['description'] = $html !== null
+            ? HtmlText::extract($html)
+            : (string) ($productData['description'] ?? '');
+
+        return $productData;
     }
 }

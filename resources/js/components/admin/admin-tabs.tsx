@@ -31,7 +31,7 @@ export function AdminTabs({
             onValueChange={onValueChange}
             className={cn('w-full', className)}
         >
-            <TabsList className="rounded-admin-md border-admin inline-flex h-auto w-full justify-start gap-1 border bg-[var(--admin-neutral)] p-1">
+            <TabsList className="rounded-admin-md border-admin inline-flex h-auto w-full max-w-full justify-start gap-1 overflow-x-auto border bg-[var(--admin-neutral)] p-1">
                 {tabs.map((tab) => (
                     <TabsTrigger
                         key={tab.value}

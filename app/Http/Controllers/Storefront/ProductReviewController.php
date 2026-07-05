@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductReviewRequest;
 use App\Services\Catalog\ProductCatalogService;
 use App\Services\Review\ReviewService;
 use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
 
 class ProductReviewController extends Controller
 {
@@ -19,8 +20,15 @@ class ProductReviewController extends Controller
     {
         $product = $this->catalog->findBySlug($slug);
 
-        $this->reviews->create($request->user(), $product, $request->validated());
+        $review = $this->reviews->create($request->user(), $product, $request->validated());
 
-        return back()->with('success', 'Review submitted for moderation.');
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => $review->wasRecentlyCreated
+                ? __('messages.review_submitted')
+                : __('messages.review_updated'),
+        ]);
+
+        return back();
     }
 }
