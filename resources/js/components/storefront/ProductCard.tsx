@@ -9,8 +9,7 @@ import { StorefrontBadge } from '@/components/storefront/Badge';
 import { StorefrontButton } from '@/components/storefront/Button';
 import { useCart } from '@/contexts/cart-context';
 import { useWishlist } from '@/contexts/wishlist-context';
-import { localeToIntl, useLocale } from '@/hooks/use-locale';
-import type { AppLocale } from '@/i18n';
+import { formatCurrency, useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
 
 export type ProductCardProps = {
@@ -28,19 +27,6 @@ export type ProductCardProps = {
     inStock?: boolean;
     className?: string;
 };
-
-function formatPrice(
-    amount: number,
-    locale: AppLocale,
-    currency: string,
-): string {
-    return new Intl.NumberFormat(localeToIntl(locale), {
-        style: 'currency',
-        currency,
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(amount);
-}
 
 function ProductCardQuickActions({
     slug,
@@ -206,10 +192,10 @@ function ProductCard({
                 {onSale ? (
                     <>
                         <span className="text-body-strong text-sale">
-                            {formatPrice(salePrice, locale, currency)}
+                            {formatCurrency(salePrice, locale, currency)}
                         </span>
                         <span className="text-caption-md text-mute line-through">
-                            {formatPrice(price, locale, currency)}
+                            {formatCurrency(price, locale, currency)}
                         </span>
                         <StorefrontBadge variant="sale">
                             {discountPercent}% off
@@ -217,7 +203,7 @@ function ProductCard({
                     </>
                 ) : (
                     <span className="text-body-strong text-ink">
-                        {formatPrice(price, locale, currency)}
+                        {formatCurrency(price, locale, currency)}
                     </span>
                 )}
             </div>

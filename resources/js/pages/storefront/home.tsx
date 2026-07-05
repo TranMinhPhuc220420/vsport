@@ -98,7 +98,7 @@ export default function HomePage({
         headline: t('home.editorial.headline'),
         subtitle: t('home.editorial.subtitle'),
         imageUrl:
-            'https://placehold.co/1440x600/111111/ffffff?text=Zova+Sport+Performance',
+            'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1440&h=600&fit=crop&auto=format',
         ctaLabel: t('home.editorial.ctaLabel'),
         ctaHref: '/women',
     };

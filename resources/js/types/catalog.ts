@@ -99,6 +99,22 @@ export type ProductContentSection = {
     images?: ProductContentSectionImage[];
 };
 
+export type SizeGuideRow = {
+    id: number;
+    position: number;
+    values: string[];
+};
+
+export type SizeGuide = {
+    id: number;
+    name: string;
+    columns: string[];
+    rows: SizeGuideRow[];
+    measureContentHtml: string | null;
+    measureImageUrl?: string | null;
+    measureImageAlt?: string | null;
+};
+
 export type ProductDetail = {
     id: number;
     styleCode: string;
@@ -119,6 +135,7 @@ export type ProductDetail = {
     variants: ProductVariant[];
     attributes?: Record<string, ProductAttribute[]>;
     contentSections?: ProductContentSection[];
+    sizeGuide?: SizeGuide | null;
     sustainability?: {
         weightedRecycledPercent: number;
         materials: Array<{

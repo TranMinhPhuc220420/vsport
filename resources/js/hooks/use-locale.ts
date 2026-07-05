@@ -45,6 +45,15 @@ export function formatCurrency(
     locale: AppLocale,
     currency = 'USD',
 ): string {
+    if (currency.toUpperCase() === 'VND') {
+        const formatted = new Intl.NumberFormat(localeToIntl(locale), {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(amount);
+
+        return `${formatted}đ`;
+    }
+
     return new Intl.NumberFormat(localeToIntl(locale), {
         style: 'currency',
         currency,

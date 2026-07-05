@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogFeaturedImageController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\BlogTagController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CategoryImageController;
 use App\Http\Controllers\Admin\CategoryOptionTemplateController;
@@ -18,6 +19,10 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RichtextImageController;
+use App\Http\Controllers\Admin\SizeGuideController;
+use App\Http\Controllers\Admin\SizeGuideImageController;
+use App\Http\Controllers\Admin\SizeGuideMeasureController;
+use App\Http\Controllers\Admin\SizeGuideRowController;
 use App\Http\Controllers\Admin\StoreSettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
@@ -38,6 +43,8 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::patch('orders/{orderNumber}/status', [OrderController::class, 'updateStatus'])
             ->name('orders.status.update');
 
+        Route::resource('brands', BrandController::class)->except(['show']);
+
         Route::resource('categories', CategoryController::class)->except(['show']);
         Route::post('categories/{category}/image', [CategoryImageController::class, 'store'])
             ->name('categories.image.store');
@@ -47,6 +54,18 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('categories.image.destroy');
         Route::put('categories/{category}/option-templates', [CategoryOptionTemplateController::class, 'sync'])
             ->name('categories.option-templates.sync');
+
+        Route::resource('size-guides', SizeGuideController::class)->except(['show']);
+        Route::put('size-guides/{sizeGuide}/rows', [SizeGuideRowController::class, 'sync'])
+            ->name('size-guides.rows.sync');
+        Route::put('size-guides/{sizeGuide}/measure', [SizeGuideMeasureController::class, 'update'])
+            ->name('size-guides.measure.update');
+        Route::post('size-guides/{sizeGuide}/image', [SizeGuideImageController::class, 'store'])
+            ->name('size-guides.image.store');
+        Route::patch('size-guides/{sizeGuide}/image-alt', [SizeGuideImageController::class, 'updateAlt'])
+            ->name('size-guides.image-alt.update');
+        Route::delete('size-guides/{sizeGuide}/image', [SizeGuideImageController::class, 'destroy'])
+            ->name('size-guides.image.destroy');
 
         Route::post('products/bulk-delete', [ProductController::class, 'bulkDestroy'])
             ->name('products.bulk-delete');

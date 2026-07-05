@@ -7,8 +7,10 @@ use App\Data\ProductStructuredData;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductSummaryResource;
+use App\Http\Resources\SizeGuideResource;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\SizeGuide;
 use App\Services\Catalog\ProductCatalogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Inertia\Inertia;
@@ -35,7 +37,10 @@ class ProductDetailController extends Controller
         $primaryImage = $this->primaryImageUrl($product);
 
         return Inertia::render('storefront/products/show', [
-            'product' => ProductDetailResource::make($product)->resolve(),
+            'product' => [
+                ...ProductDetailResource::make($product)->resolve(),
+                'sizeGuide' => $this->resolveSizeGuide($product),
+            ],
             'relatedProducts' => [
                 'data' => array_values($related->resolve()),
             ],
@@ -43,6 +48,42 @@ class ProductDetailController extends Controller
             'structuredData' => ProductStructuredData::forProductPage($product, $primaryImage),
             'initialVariantId' => request()->integer('variant') ?: null,
         ]);
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function resolveSizeGuide(Product $product): ?array
+    {
+        $hasSizeOption = $product->options->contains(fn ($option) => $option->name === 'Size');
+
+        if (! $hasSizeOption) {
+            return null;
+        }
+
+        $query = fn () => SizeGuide::query()->with('rows');
+
+        $sizeGuide = null;
+
+        if ($product->brand_id !== null) {
+            $sizeGuide = $query()
+                ->where('brand_id', $product->brand_id)
+                ->where('category_id', $product->category_id)
+                ->first()
+                ?? $query()
+                    ->where('brand_id', $product->brand_id)
+                    ->whereNull('category_id')
+                    ->first();
+        }
+
+        $sizeGuide ??= $query()
+            ->whereNull('brand_id')
+            ->where('category_id', $product->category_id)
+            ->first();
+
+        $sizeGuide ??= $query()->where('is_default', true)->first();
+
+        return $sizeGuide !== null ? SizeGuideResource::make($sizeGuide)->resolve() : null;
     }
 
     private function primaryImageUrl(Product $product): ?string

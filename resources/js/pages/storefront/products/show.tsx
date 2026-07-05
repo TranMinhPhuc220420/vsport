@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { AddToBagButton } from '@/components/storefront/add-to-bag-button';
-import { StorefrontBadge } from '@/components/storefront/Badge';
 import { Breadcrumb } from '@/components/storefront/breadcrumb';
 import { NikeByYouCustomizer } from '@/components/storefront/nike-by-you-customizer';
 import { OptionPicker } from '@/components/storefront/option-picker';
@@ -23,6 +22,7 @@ import {
 import { ProductReviewsSection } from '@/components/storefront/product-reviews-section';
 import { ProductCard } from '@/components/storefront/ProductCard';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
+import { SizeGuideDisclosure } from '@/components/storefront/size-guide-disclosure';
 import { StarRating } from '@/components/storefront/star-rating';
 import { StockStatus } from '@/components/storefront/stock-status';
 import { SustainabilityAccordion } from '@/components/storefront/sustainability-accordion';
@@ -115,6 +115,7 @@ export default function ProductDetailPage({
     const listPrice = detail.basePrice;
     const effectivePrice = selectedVariant?.unitPrice ?? listPrice;
     const onSale = effectivePrice < listPrice;
+    const savingsAmount = onSale ? listPrice - effectivePrice : 0;
     const inStock = selectedVariant?.stock.inStock ?? false;
     const selectionComplete =
         Object.keys(selectedOptions).length === detail.options.length;
@@ -242,7 +243,11 @@ export default function ProductDetailPage({
                                 </div>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-2">
+                            <div
+                                role="group"
+                                aria-label={t('pdp.priceLabel')}
+                                className="flex flex-wrap items-center gap-2"
+                            >
                                 {onSale ? (
                                     <>
                                         <span className="text-heading-lg text-sale">
@@ -259,16 +264,15 @@ export default function ProductDetailPage({
                                                 currency,
                                             )}
                                         </span>
-                                        <StorefrontBadge variant="sale">
-                                            {t('pdp.percentOff', {
-                                                percent: Math.round(
-                                                    ((listPrice -
-                                                        effectivePrice) /
-                                                        listPrice) *
-                                                        100,
+                                        <span className="text-caption-md text-sale">
+                                            {t('pdp.savingsAmount', {
+                                                amount: formatCurrency(
+                                                    savingsAmount,
+                                                    locale,
+                                                    currency,
                                                 ),
                                             })}
-                                        </StorefrontBadge>
+                                        </span>
                                     </>
                                 ) : (
                                     <span className="text-heading-lg text-ink">
@@ -322,6 +326,14 @@ export default function ProductDetailPage({
                                 <ProductAttributesSection
                                     attributes={detail.attributes}
                                 />
+
+                                {detail.sizeGuide ? (
+                                    <PdpDisclosure title={t('pdp.sizeGuide')}>
+                                        <SizeGuideDisclosure
+                                            sizeGuide={detail.sizeGuide}
+                                        />
+                                    </PdpDisclosure>
+                                ) : null}
 
                                 <PdpDisclosure title={t('pdp.shippingReturns')}>
                                     <p className="text-caption-md text-mute">
@@ -423,6 +435,7 @@ export default function ProductDetailPage({
                 colorName={formatOptionsLabel(detail.options, selectedOptions)}
                 imageUrl={primaryImage?.url}
                 price={effectivePrice}
+                listPrice={onSale ? listPrice : undefined}
                 disabled={!canAddToBag}
                 onAddToBag={handleAddToBag}
                 observeRef={addToBagRef}

@@ -242,6 +242,84 @@ export async function updateCategoryImageAlt(
     return payload.category;
 }
 
+export type AdminSizeGuideImage = {
+    id: number;
+    name: string;
+    measureImageUrl: string | null;
+    measureImageAlt: string | null;
+};
+
+type SizeGuideImageUploadOptions = {
+    imageAlt?: string;
+};
+
+export async function uploadSizeGuideImage(
+    sizeGuideId: number,
+    file: File,
+    options: SizeGuideImageUploadOptions = {},
+): Promise<AdminSizeGuideImage> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    if (options.imageAlt !== undefined) {
+        formData.append('image_alt', options.imageAlt);
+    }
+
+    const response = await fetch(`/admin/size-guides/${sizeGuideId}/image`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-XSRF-TOKEN': getCsrfToken(),
+        },
+        body: formData,
+        credentials: 'same-origin',
+    });
+
+    const payload = await parseJsonResponse<{ sizeGuide: AdminSizeGuideImage }>(
+        response,
+    );
+
+    return payload.sizeGuide;
+}
+
+export async function deleteSizeGuideImage(sizeGuideId: number): Promise<void> {
+    const response = await fetch(`/admin/size-guides/${sizeGuideId}/image`, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-XSRF-TOKEN': getCsrfToken(),
+        },
+        credentials: 'same-origin',
+    });
+
+    if (!response.ok && response.status !== 204) {
+        await parseJsonResponse(response);
+    }
+}
+
+export async function updateSizeGuideImageAlt(
+    sizeGuideId: number,
+    imageAlt: string,
+): Promise<AdminSizeGuideImage> {
+    const response = await fetch(
+        `/admin/size-guides/${sizeGuideId}/image-alt`,
+        {
+            method: 'PATCH',
+            headers: jsonHeaders(),
+            body: JSON.stringify({ image_alt: imageAlt }),
+            credentials: 'same-origin',
+        },
+    );
+
+    const payload = await parseJsonResponse<{ sizeGuide: AdminSizeGuideImage }>(
+        response,
+    );
+
+    return payload.sizeGuide;
+}
+
 export async function uploadContentSectionImage(
     contentSectionId: number,
     file: File,

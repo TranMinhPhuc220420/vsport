@@ -25,9 +25,10 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'parentId' => $this->parent_id,
-            'imageUrl' => $this->image_path !== null
-                ? $storage->publicUrl($this->image_path)
-                : null,
+            'imageUrl' => $storage->urlFor(
+                filter_var($this->image_path, FILTER_VALIDATE_URL) ? $this->image_path : null,
+                filter_var($this->image_path, FILTER_VALIDATE_URL) ? null : $this->image_path,
+            ),
             'imageAlt' => $this->image_alt,
             'children' => $this->when(
                 $this->relationLoaded('children'),

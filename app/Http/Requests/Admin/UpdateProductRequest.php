@@ -38,6 +38,7 @@ class UpdateProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'description_html' => ['nullable', 'string', 'max:'.RichTextHtml::MAX_LENGTH],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'brand_id' => ['nullable', 'integer', 'exists:brands,id'],
             'sub_title' => ['nullable', 'string', 'max:255'],
             'base_price' => ['required', 'numeric', 'min:0'],
             'gender' => ['required', 'string', Rule::in(array_column(ProductGender::cases(), 'value'))],

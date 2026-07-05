@@ -30,7 +30,6 @@ export { PlpSubNav } from '@/components/storefront/plp-sub-nav';
 export { BackToTop } from '@/components/storefront/back-to-top';
 export { ProductGallery } from '@/components/storefront/product-gallery';
 export { ColorwayPicker } from '@/components/storefront/colorway-picker';
-export { SizePicker } from '@/components/storefront/size-picker';
 export { StockStatus } from '@/components/storefront/stock-status';
 export { AddToBagButton } from '@/components/storefront/add-to-bag-button';
 export { StorefrontPagination } from '@/components/storefront/pagination';

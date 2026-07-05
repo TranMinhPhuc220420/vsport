@@ -68,6 +68,19 @@ class ProductImageStorage
         return $this->storeUploadedFile($file, $path);
     }
 
+    public function uploadSizeGuide(UploadedFile $file, int $sizeGuideId): string
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $path = sprintf(
+            'size-guides/%d/%s.%s',
+            $sizeGuideId,
+            Str::uuid(),
+            $extension,
+        );
+
+        return $this->storeUploadedFile($file, $path);
+    }
+
     public function uploadRichtext(UploadedFile $file): string
     {
         $extension = $file->getClientOriginalExtension() ?: 'jpg';

@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property string|null $description_html
  * @property int $category_id
+ * @property int|null $brand_id
  * @property string|null $sub_title
  * @property string $base_price
  * @property ProductGender $gender
@@ -39,6 +40,7 @@ use Illuminate\Support\Carbon;
     'description',
     'description_html',
     'category_id',
+    'brand_id',
     'sub_title',
     'base_price',
     'gender',
@@ -63,6 +65,11 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function options(): HasMany

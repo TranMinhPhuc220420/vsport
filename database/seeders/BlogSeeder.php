@@ -11,6 +11,16 @@ use Illuminate\Database\Seeder;
 
 class BlogSeeder extends Seeder
 {
+    /** @var array<string, mixed> */
+    private array $seedImages;
+
+    public function __construct()
+    {
+        /** @var array<string, mixed> $images */
+        $images = require __DIR__.'/data/seed_images.php';
+        $this->seedImages = $images;
+    }
+
     public function run(): void
     {
         $categories = collect([
@@ -28,12 +38,13 @@ class BlogSeeder extends Seeder
             ['name' => 'Size', 'slug' => 'size'],
             ['name' => 'Mua sắm', 'slug' => 'mua-sam'],
             ['name' => 'Chạy bộ', 'slug' => 'chay-bo'],
-            ['name' => 'Beginner', 'slug' => 'beginner'],
+            ['name' => 'Người mới', 'slug' => 'beginner'],
             ['name' => 'Gym', 'slug' => 'gym'],
-            ['name' => 'Sustainability', 'slug' => 'sustainability'],
-        ])->map(fn (array $data) => BlogTag::query()->firstOrCreate(
+            ['name' => 'Bền vững', 'slug' => 'sustainability'],
+            ['name' => 'Pickleball', 'slug' => 'pickleball'],
+        ])->map(fn (array $data) => BlogTag::query()->updateOrCreate(
             ['slug' => $data['slug']],
-            $data,
+            ['name' => $data['name']],
         ));
 
         $product = Product::query()->orderByDesc('is_featured')->first();
@@ -113,9 +124,13 @@ class BlogSeeder extends Seeder
             ],
         ];
 
+        /** @var array<string, array{url: string, alt: string}> $blogImages */
+        $blogImages = $this->seedImages['blog'];
+
         foreach ($posts as $index => $postData) {
             $plain = trim(strip_tags($postData['body_html']));
             $category = $categories->firstWhere('slug', $postData['category']);
+            $featured = $blogImages[$postData['slug']] ?? null;
 
             $post = BlogPost::query()->updateOrCreate(
                 ['slug' => $postData['slug']],
@@ -126,6 +141,9 @@ class BlogSeeder extends Seeder
                     'body' => $plain,
                     'body_html' => $postData['body_html'],
                     'meta_description' => $postData['excerpt'],
+                    'featured_image_url' => $featured['url'] ?? null,
+                    'featured_image_path' => null,
+                    'featured_image_alt' => $featured['alt'] ?? $postData['title'],
                     'status' => BlogPostStatus::Published,
                     'is_featured' => $postData['is_featured'],
                     'published_at' => now()->subDays(max(0, count($posts) - 1 - $index)),

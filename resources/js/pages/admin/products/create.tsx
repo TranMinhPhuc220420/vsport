@@ -12,11 +12,13 @@ import { AdminButton } from '@/components/admin/ui/admin-button';
 
 type AdminProductsCreateProps = {
     categories: { id: number; name: string }[];
+    brands: { id: number; name: string }[];
     genders: string[];
 };
 
 export default function AdminProductsCreate({
     categories,
+    brands,
     genders,
 }: AdminProductsCreateProps) {
     const { t } = useTranslation('admin');
@@ -29,13 +31,14 @@ export default function AdminProductsCreate({
         ],
     });
 
-    const { data, setData, processing, errors, post } = useForm({
+    const { data, setData, processing, errors, post, transform } = useForm({
         style_code: '',
         name: '',
         slug: '',
         description: '',
         description_html: '',
         category_id: categories[0]?.id ?? '',
+        brand_id: '' as number | '',
         sub_title: '',
         base_price: '',
         gender: genders[0] ?? 'Men',
@@ -44,6 +47,12 @@ export default function AdminProductsCreate({
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+
+        transform((formData) => ({
+            ...formData,
+            brand_id: formData.brand_id === '' ? null : formData.brand_id,
+        }));
+
         post('/admin/products');
     };
 
@@ -126,6 +135,27 @@ export default function AdminProductsCreate({
                                     label: category.name,
                                 }))}
                                 error={errors.category_id}
+                            />
+                            <AdminSelectField
+                                label={t('products.brand')}
+                                value={data.brand_id}
+                                onChange={(value) =>
+                                    setData(
+                                        'brand_id',
+                                        value === '' ? '' : Number(value),
+                                    )
+                                }
+                                options={[
+                                    {
+                                        value: '',
+                                        label: t('products.noneBrand'),
+                                    },
+                                    ...brands.map((brand) => ({
+                                        value: brand.id,
+                                        label: brand.name,
+                                    })),
+                                ]}
+                                error={errors.brand_id}
                             />
                             <AdminSelectField
                                 label={t('products.gender')}

@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\SyncProductContentSectionsRequest;
 use App\Http\Requests\Admin\SyncProductOptionsRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Http\Resources\AdminProductResource;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -96,6 +97,7 @@ class ProductController extends Controller
     {
         return Inertia::render('admin/products/create', [
             'categories' => $this->categoryOptions(),
+            'brands' => $this->brandOptions(),
             'genders' => ['Men', 'Women', 'Kids', 'Unisex'],
         ]);
     }
@@ -112,6 +114,7 @@ class ProductController extends Controller
                 'description',
                 'description_html',
                 'category_id',
+                'brand_id',
                 'sub_title',
                 'base_price',
                 'gender',
@@ -138,6 +141,7 @@ class ProductController extends Controller
                 $this->products->loadAdminProduct($product),
             )->resolve(),
             'categories' => $this->categoryOptions(),
+            'brands' => $this->brandOptions(),
             'genders' => ['Men', 'Women', 'Kids', 'Unisex'],
             'activeTab' => $request->string('tab')->toString() ?: 'details',
         ]);
@@ -327,6 +331,21 @@ class ProductController extends Controller
             ->map(fn (Category $category) => [
                 'id' => $category->id,
                 'name' => $category->name,
+            ])
+            ->all();
+    }
+
+    /**
+     * @return list<array{id: int, name: string}>
+     */
+    private function brandOptions(): array
+    {
+        return Brand::query()
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->map(fn (Brand $brand) => [
+                'id' => $brand->id,
+                'name' => $brand->name,
             ])
             ->all();
     }

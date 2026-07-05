@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\OptionDisplayType;
 use App\Enums\ProductAttributeGroup;
 use App\Enums\ProductGender;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryOptionTemplate;
 use App\Models\Inventory;
@@ -19,17 +20,28 @@ use Illuminate\Support\Str;
 
 class CatalogSeeder extends Seeder
 {
+    /** @var array<string, mixed> */
+    private array $seedImages;
+
+    public function __construct()
+    {
+        /** @var array<string, mixed> $images */
+        $images = require __DIR__.'/data/seed_images.php';
+        $this->seedImages = $images;
+    }
+
     public function run(): void
     {
-        $men = Category::updateOrCreate(['slug' => 'men'], ['name' => 'Men', 'parent_id' => null]);
-        $menShoes = Category::updateOrCreate(['slug' => 'men-shoes'], ['name' => 'Shoes', 'parent_id' => $men->id]);
-        $women = Category::updateOrCreate(['slug' => 'women'], ['name' => 'Women', 'parent_id' => null]);
-        $womenShoes = Category::updateOrCreate(['slug' => 'women-shoes'], ['name' => 'Shoes', 'parent_id' => $women->id]);
-        Category::updateOrCreate(['slug' => 'kids'], ['name' => 'Kids', 'parent_id' => null]);
-        Category::updateOrCreate(['slug' => 'jordan'], ['name' => 'Jordan', 'parent_id' => null]);
-        $bags = Category::updateOrCreate(['slug' => 'bags'], ['name' => 'Bags', 'parent_id' => null]);
-        $paddles = Category::updateOrCreate(['slug' => 'paddles'], ['name' => 'Paddles', 'parent_id' => null]);
-        $apparel = Category::updateOrCreate(['slug' => 'apparel'], ['name' => 'Apparel', 'parent_id' => null]);
+        $categories = $this->seedCategories();
+
+        $menShoes = $categories['men-shoes'];
+        $womenShoes = $categories['women-shoes'];
+        $bags = $categories['bags'];
+        $paddles = $categories['paddles'];
+        $apparel = $categories['apparel'];
+
+        $nike = Brand::query()->where('slug', 'nike')->first();
+        $hoka = Brand::query()->where('slug', 'hoka')->first();
 
         $this->seedShoeTemplate($menShoes);
         $this->seedShoeTemplate($womenShoes);
@@ -45,6 +57,7 @@ class CatalogSeeder extends Seeder
             'base_price' => 180.00,
             'gender' => ProductGender::Men,
             'category_id' => $menShoes->id,
+            'brand_id' => $hoka?->id,
             'sale_price' => 135.00,
         ]);
 
@@ -56,6 +69,7 @@ class CatalogSeeder extends Seeder
             'base_price' => 150.00,
             'gender' => ProductGender::Men,
             'category_id' => $menShoes->id,
+            'brand_id' => $nike?->id,
         ]);
 
         $this->seedShoeProduct([
@@ -66,6 +80,7 @@ class CatalogSeeder extends Seeder
             'base_price' => 120.00,
             'gender' => ProductGender::Men,
             'category_id' => $menShoes->id,
+            'brand_id' => $nike?->id,
             'out_of_stock_sizes' => ['US 12'],
         ]);
 
@@ -77,6 +92,7 @@ class CatalogSeeder extends Seeder
             'base_price' => 75.00,
             'gender' => ProductGender::Women,
             'category_id' => $womenShoes->id,
+            'brand_id' => $nike?->id,
             'sale_price' => 59.00,
         ]);
 
@@ -195,6 +211,7 @@ class CatalogSeeder extends Seeder
      *     base_price: float,
      *     gender: ProductGender,
      *     category_id: int,
+     *     brand_id?: int|null,
      *     sale_price?: float|null,
      *     out_of_stock_sizes?: list<string>
      * }  $data
@@ -208,6 +225,7 @@ class CatalogSeeder extends Seeder
                 'name' => $data['name'],
                 'description' => "Sample description for {$data['name']}.",
                 'category_id' => $data['category_id'],
+                'brand_id' => $data['brand_id'] ?? null,
                 'sub_title' => $data['sub_title'],
                 'base_price' => $data['base_price'],
                 'gender' => $data['gender'],
@@ -257,7 +275,12 @@ class CatalogSeeder extends Seeder
             ProductImage::updateOrCreate(
                 ['option_value_id' => $value->id, 'is_primary' => true],
                 [
-                    'image_url' => "https://placehold.co/800x800/{$color['hex']}/111111?text=".urlencode($product->name),
+                    'image_url' => $this->productImageUrl(
+                        $data['style_code'],
+                        $color['name'],
+                        $color['hex'],
+                        $product->name,
+                    ),
                     'image_alt_tag' => "{$product->name} - {$color['name']}",
                     'sort_order' => 0,
                 ],
@@ -326,7 +349,7 @@ class CatalogSeeder extends Seeder
             ProductImage::updateOrCreate(
                 ['option_value_id' => $value->id, 'is_primary' => true],
                 [
-                    'image_url' => "https://placehold.co/800x800/{$hex}/ffffff?text=Bag",
+                    'image_url' => $this->bagImageUrl('CORE-BAG', $name, $hex),
                     'image_alt_tag' => $name,
                     'sort_order' => 0,
                 ],
@@ -392,7 +415,7 @@ class CatalogSeeder extends Seeder
             ProductImage::updateOrCreate(
                 ['option_value_id' => $value->id, 'is_primary' => true],
                 [
-                    'image_url' => "https://placehold.co/800x800/{$hex}/ffffff?text=OMNI",
+                    'image_url' => $this->paddleImageUrl('OMNI', $name, $hex),
                     'image_alt_tag' => $name,
                     'sort_order' => 0,
                 ],
@@ -406,7 +429,7 @@ class CatalogSeeder extends Seeder
         ProductImage::updateOrCreate(
             ['option_value_id' => $limitedValue->id, 'is_primary' => true],
             [
-                'image_url' => 'https://placehold.co/800x800/c45c3e/ffffff?text=Limited',
+                'image_url' => $this->paddleImageUrl('OMNI', 'Canyon Clay', 'c45c3e'),
                 'image_alt_tag' => 'Canyon Clay',
                 'sort_order' => 0,
             ],
@@ -439,6 +462,76 @@ class CatalogSeeder extends Seeder
         ProductAttribute::updateOrCreate(
             ['product_id' => $product->id, 'group' => ProductAttributeGroup::TechSpecs, 'key' => 'thickness'],
             ['label' => 'Core thickness', 'value' => '16mm', 'sort_order' => 1],
+        );
+    }
+
+    private function productImageUrl(
+        string $styleCode,
+        string $colorName,
+        string $hexFallback,
+        string $productName,
+    ): string {
+        /** @var array<string, array<string, string>> $products */
+        $products = $this->seedImages['products'];
+
+        return $products[$styleCode][$colorName]
+            ?? "https://placehold.co/800x800/{$hexFallback}/111111?text=".urlencode($productName);
+    }
+
+    private function bagImageUrl(string $styleCode, string $colorName, string $hexFallback): string
+    {
+        /** @var array<string, array<string, string>> $bags */
+        $bags = $this->seedImages['bags'];
+
+        return $bags[$styleCode][$colorName]
+            ?? "https://placehold.co/800x800/{$hexFallback}/ffffff?text=Bag";
+    }
+
+    private function paddleImageUrl(string $styleCode, string $colorName, string $hexFallback): string
+    {
+        /** @var array<string, array<string, string>> $paddles */
+        $paddles = $this->seedImages['paddles'];
+
+        return $paddles[$styleCode][$colorName]
+            ?? "https://placehold.co/800x800/{$hexFallback}/ffffff?text=OMNI";
+    }
+
+    /**
+     * @return array<string, Category>
+     */
+    private function seedCategories(): array
+    {
+        /** @var list<array{slug: string, name: string, image_url?: string, image_alt?: string, children?: list<array{slug: string, name: string, image_url?: string, image_alt?: string}>}> $tree */
+        $tree = require __DIR__.'/data/categories.php';
+
+        $bySlug = [];
+
+        foreach ($tree as $root) {
+            $category = $this->upsertCategory($root, null);
+            $bySlug[$root['slug']] = $category;
+
+            foreach ($root['children'] ?? [] as $child) {
+                $childCategory = $this->upsertCategory($child, $category->id);
+                $bySlug[$child['slug']] = $childCategory;
+            }
+        }
+
+        return $bySlug;
+    }
+
+    /**
+     * @param  array{slug: string, name: string, image_url?: string, image_alt?: string}  $data
+     */
+    private function upsertCategory(array $data, ?int $parentId): Category
+    {
+        return Category::updateOrCreate(
+            ['slug' => $data['slug']],
+            [
+                'name' => $data['name'],
+                'parent_id' => $parentId,
+                'image_path' => $data['image_url'] ?? null,
+                'image_alt' => $data['image_alt'] ?? $data['name'],
+            ],
         );
     }
 }

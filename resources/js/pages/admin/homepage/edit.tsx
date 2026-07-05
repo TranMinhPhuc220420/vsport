@@ -60,7 +60,12 @@ export default function AdminHomepageEdit({
     });
 
     const submit = () => {
-        transform((current) => ({ ...current, _method: 'put' }));
+        transform((current) => ({
+            _method: 'put',
+            campaigns: current.campaigns.map(({ image, ...rest }) =>
+                image instanceof File ? { ...rest, image } : rest,
+            ),
+        }));
         post('/admin/homepage', { forceFormData: true });
     };
 

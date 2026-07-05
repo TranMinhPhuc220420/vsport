@@ -25,6 +25,7 @@ class AdminProductResource extends JsonResource
             'descriptionHtml' => $this->description_html,
             'categoryId' => $this->category_id,
             'category' => CategoryResource::make($this->whenLoaded('category')),
+            'brandId' => $this->brand_id,
             'subTitle' => $this->sub_title,
             'basePrice' => (float) $this->base_price,
             'gender' => $this->gender->value,

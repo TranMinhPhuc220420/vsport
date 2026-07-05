@@ -61,6 +61,7 @@ export type AdminProduct = {
     description: string | null;
     descriptionHtml: string | null;
     categoryId: number;
+    brandId: number | null;
     subTitle: string | null;
     basePrice: number;
     gender: string;

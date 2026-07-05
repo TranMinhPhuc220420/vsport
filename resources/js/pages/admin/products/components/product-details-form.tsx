@@ -14,12 +14,14 @@ import type { AdminProduct } from '@/types/admin-product';
 type ProductDetailsFormProps = {
     product: AdminProduct;
     categories: { id: number; name: string }[];
+    brands: { id: number; name: string }[];
     genders: string[];
 };
 
 export function ProductDetailsForm({
     product,
     categories,
+    brands,
     genders,
 }: ProductDetailsFormProps) {
     const { t } = useTranslation('admin');
@@ -34,6 +36,7 @@ export function ProductDetailsForm({
             text: product.description,
         }),
         category_id: product.categoryId,
+        brand_id: product.brandId ?? ('' as number | ''),
         sub_title: product.subTitle ?? '',
         base_price: product.basePrice.toString(),
         gender: product.gender,
@@ -42,6 +45,12 @@ export function ProductDetailsForm({
 
     const saveProduct = (event: React.FormEvent) => {
         event.preventDefault();
+
+        form.transform((data) => ({
+            ...data,
+            brand_id: data.brand_id === '' ? null : data.brand_id,
+        }));
+
         form.put(`/admin/products/${product.slug}`);
     };
 
@@ -107,6 +116,24 @@ export function ProductDetailsForm({
                             label: category.name,
                         }))}
                         error={form.errors.category_id}
+                    />
+                    <AdminSelectField
+                        label={t('products.brand')}
+                        value={form.data.brand_id}
+                        onChange={(value) =>
+                            form.setData(
+                                'brand_id',
+                                value === '' ? '' : Number(value),
+                            )
+                        }
+                        options={[
+                            { value: '', label: t('products.noneBrand') },
+                            ...brands.map((brand) => ({
+                                value: brand.id,
+                                label: brand.name,
+                            })),
+                        ]}
+                        error={form.errors.brand_id}
                     />
                     <AdminSelectField
                         label={t('products.gender')}

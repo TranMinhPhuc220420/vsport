@@ -20,7 +20,7 @@ class ProductImageFactory extends Factory
     {
         return [
             'option_value_id' => ProductOptionValue::factory(),
-            'image_url' => 'https://placehold.co/800x800/f5f5f5/111111?text=Product',
+            'image_url' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop&auto=format',
             'image_alt_tag' => fake()->sentence(3),
             'is_primary' => true,
             'sort_order' => 0,

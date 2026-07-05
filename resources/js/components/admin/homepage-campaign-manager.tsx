@@ -27,6 +27,8 @@ type HomepageCampaignManagerProps = {
     onSubmit: () => void;
 };
 
+const CAMPAIGN_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
+
 const CTA_LINK_PRESETS = [
     { value: '/men', labelKey: 'homepage.ctaLinkMen' },
     { value: '/women', labelKey: 'homepage.ctaLinkWomen' },
@@ -127,6 +129,7 @@ function CampaignEditor({
     const [uploadPreviewUrl, setUploadPreviewUrl] = useState<string | null>(
         null,
     );
+    const [localImageError, setLocalImageError] = useState<string | null>(null);
 
     useEffect(() => {
         return () => {
@@ -141,6 +144,15 @@ function CampaignEditor({
             URL.revokeObjectURL(uploadPreviewUrl);
         }
 
+        if (file && file.size > CAMPAIGN_IMAGE_MAX_BYTES) {
+            setLocalImageError(t('homepage.imageTooLarge'));
+            setUploadPreviewUrl(null);
+            onChange('image', null);
+
+            return;
+        }
+
+        setLocalImageError(null);
         setUploadPreviewUrl(file ? URL.createObjectURL(file) : null);
         onChange('image', file);
 
@@ -265,6 +277,9 @@ function CampaignEditor({
                 )}
                 {errorFor('image') && (
                     <p className="text-sm text-red-600">{errorFor('image')}</p>
+                )}
+                {localImageError && (
+                    <p className="text-sm text-red-600">{localImageError}</p>
                 )}
             </div>
 

@@ -20,6 +20,7 @@ import type { AdminProduct } from '@/types/admin-product';
 type AdminProductsEditProps = {
     product: AdminProduct;
     categories: { id: number; name: string }[];
+    brands: { id: number; name: string }[];
     genders: string[];
     activeTab?: string;
 };
@@ -27,6 +28,7 @@ type AdminProductsEditProps = {
 export default function AdminProductsEdit({
     product,
     categories,
+    brands,
     genders,
     activeTab = 'details',
 }: AdminProductsEditProps) {
@@ -99,6 +101,7 @@ export default function AdminProductsEdit({
                                 <ProductDetailsForm
                                     product={product}
                                     categories={categories}
+                                    brands={brands}
                                     genders={genders}
                                 />
                             ),

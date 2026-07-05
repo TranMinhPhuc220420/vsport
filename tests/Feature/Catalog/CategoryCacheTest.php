@@ -16,7 +16,7 @@ test('storefront reflects category updates after cache invalidation', function (
     $this->get(route('home'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('categories.data', fn ($categories) => collect($categories)->firstWhere('slug', 'men')['name'] === 'Men')
+            ->where('categories.data', fn ($categories) => collect($categories)->firstWhere('slug', 'men')['name'] === 'Nam')
         );
 
     $this->actingAs($admin)->put(route('admin.categories.update', $category), [

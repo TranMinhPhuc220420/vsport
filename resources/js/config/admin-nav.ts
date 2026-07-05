@@ -1,5 +1,6 @@
 import type { InertiaLinkProps } from '@inertiajs/react';
 import {
+    Award,
     BarChart3,
     FileText,
     FolderTree,
@@ -7,6 +8,7 @@ import {
     LayoutGrid,
     MessageSquare,
     Package,
+    Ruler,
     ScrollText,
     Settings,
     ShoppingCart,
@@ -44,11 +46,21 @@ export const adminNavGroups: AdminNavGroup[] = [
         items: [
             { titleKey: 'nav.products', href: '/admin/products', icon: Package },
             {
+                titleKey: 'nav.brands',
+                href: '/admin/brands',
+                icon: Award,
+            },
+            {
                 titleKey: 'nav.categories',
                 href: '/admin/categories',
                 icon: FolderTree,
             },
             { titleKey: 'nav.homepage', href: '/admin/homepage', icon: Image },
+            {
+                titleKey: 'nav.sizeGuides',
+                href: '/admin/size-guides',
+                icon: Ruler,
+            },
         ],
     },
     {

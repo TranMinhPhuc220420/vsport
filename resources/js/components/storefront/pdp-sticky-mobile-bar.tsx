@@ -9,6 +9,7 @@ type PdpStickyMobileBarProps = {
     colorName?: string;
     imageUrl?: string;
     price: number;
+    listPrice?: number;
     disabled: boolean;
     onAddToBag: () => void;
     observeRef: React.RefObject<HTMLElement | null>;
@@ -20,12 +21,15 @@ function PdpStickyMobileBar({
     colorName,
     imageUrl,
     price,
+    listPrice,
     disabled,
     onAddToBag,
     observeRef,
     className,
 }: PdpStickyMobileBarProps) {
     const { locale, currency } = useLocale();
+    const onSale =
+        listPrice !== undefined && listPrice > price;
     const [visible, setVisible] = useState(false);
     const barRef = useRef<HTMLDivElement>(null);
 
@@ -103,8 +107,20 @@ function PdpStickyMobileBar({
                             {colorName}
                         </p>
                     ) : null}
-                    <p className="text-caption-md text-ink">
-                        {formatCurrency(price, locale, currency)}
+                    <p className="flex flex-wrap items-center gap-1.5">
+                        <span
+                            className={cn(
+                                'text-caption-md',
+                                onSale ? 'text-sale' : 'text-ink',
+                            )}
+                        >
+                            {formatCurrency(price, locale, currency)}
+                        </span>
+                        {onSale ? (
+                            <span className="text-caption-md text-mute line-through">
+                                {formatCurrency(listPrice, locale, currency)}
+                            </span>
+                        ) : null}
                     </p>
                 </div>
                 <AddToBagButton

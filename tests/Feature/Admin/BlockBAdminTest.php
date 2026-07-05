@@ -49,6 +49,69 @@ test('admin can update homepage campaigns', function () {
             ->where('campaigns.1.headline', 'Winter Drop'));
 });
 
+test('admin can upload homepage hero image via method spoofed post', function () {
+    Storage::fake('public');
+
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->post(route('admin.homepage.update'), [
+            '_method' => 'put',
+            'campaigns' => [
+                [
+                    'headline' => 'Trail Season',
+                    'subtitle' => 'New arrivals',
+                    'ctaLabel' => 'Shop now',
+                    'ctaHref' => '/men',
+                    'image' => UploadedFile::fake()->image('hero.jpg', 1440, 600),
+                ],
+                [
+                    'headline' => 'Winter Drop',
+                    'subtitle' => 'New season',
+                    'imageUrl' => 'https://example.com/hero-2.jpg',
+                    'ctaLabel' => 'Explore',
+                    'ctaHref' => '/women',
+                ],
+            ],
+        ])
+        ->assertRedirect(route('admin.homepage.edit'));
+
+    expect(app(HomepageSettingsService::class)->campaign()->imageUrl)
+        ->toContain('/storage/homepage/');
+});
+
+test('admin homepage campaign upload shows helpful message when file exceeds php limit', function () {
+    Storage::fake('public');
+
+    $admin = User::factory()->admin()->create();
+    $path = tempnam(sys_get_temp_dir(), 'hero');
+    file_put_contents($path, str_repeat('x', 100));
+
+    $file = new UploadedFile(
+        $path,
+        'hero.jpg',
+        'image/jpeg',
+        UPLOAD_ERR_INI_SIZE,
+        true,
+    );
+
+    $this->actingAs($admin)
+        ->put(route('admin.homepage.update'), [
+            'campaigns' => [
+                [
+                    'headline' => 'Trail Season',
+                    'subtitle' => 'New arrivals',
+                    'ctaLabel' => 'Shop now',
+                    'ctaHref' => '/men',
+                    'image' => $file,
+                ],
+            ],
+        ])
+        ->assertSessionHasErrors([
+            'campaigns.0.image' => __('messages.campaign_image_too_large'),
+        ]);
+});
+
 test('admin can upload homepage hero image', function () {
     Storage::fake('public');
 
