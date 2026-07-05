@@ -103,15 +103,16 @@ test('admin category index supports search filter', function () {
     $admin = User::factory()->admin()->create();
     $this->actingAs($admin);
 
-    $men = Category::query()->where('slug', 'men')->firstOrFail();
-    $menShoes = Category::query()->where('slug', 'men-shoes')->firstOrFail();
+    $menTree = Category::query()
+        ->where(fn ($query) => $query->where('slug', 'men')->orWhere('slug', 'like', 'men-%'))
+        ->get();
 
     $response = $this->get(route('admin.categories.index', ['search' => 'men']));
 
     $response->assertOk();
     $response->assertInertia(fn ($page) => $page
         ->where('filters.search', 'men')
-        ->has('categories.data', 2)
+        ->has('categories.data', $menTree->count())
     );
 
     $ids = collect($response->original->getData()['page']['props']['categories']['data'])
@@ -120,7 +121,7 @@ test('admin category index supports search filter', function () {
         ->values()
         ->all();
 
-    expect($ids)->toBe(collect([$men->id, $menShoes->id])->sort()->values()->all());
+    expect($ids)->toBe($menTree->pluck('id')->sort()->values()->all());
 });
 
 test('admin category create preselects parent from query string', function () {
