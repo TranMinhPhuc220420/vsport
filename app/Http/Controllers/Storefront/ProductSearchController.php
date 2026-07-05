@@ -20,6 +20,8 @@ class ProductSearchController extends Controller
     {
         $query = $request->searchQuery();
 
+        $page = $request->integer('page', 1);
+
         $products = $query === ''
             ? null
             : $this->catalog->paginateSearch($query, $request->sort(), $request->perPage());
@@ -29,7 +31,12 @@ class ProductSearchController extends Controller
             'products' => $products !== null
                 ? ProductSummaryResource::collection($products)
                 : null,
-            'seo' => PageSeo::forSearch($query)->toArray(),
+            'seo' => PageSeo::forSearch(
+                $query,
+                $page,
+                $products?->previousPageUrl(),
+                $products?->nextPageUrl(),
+            )->toArray(),
             'sort' => $request->sort(),
         ]);
     }

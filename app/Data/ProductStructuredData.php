@@ -3,6 +3,7 @@
 namespace App\Data;
 
 use App\Models\Product;
+use App\Services\Admin\StoreSettingsService;
 
 readonly class ProductStructuredData
 {
@@ -23,6 +24,9 @@ readonly class ProductStructuredData
     public static function product(Product $product, ?string $primaryImage = null): array
     {
         $app = config('app.name', 'Zova Sport');
+        $currency = strtoupper(
+            (string) (app(StoreSettingsService::class)->profile()['currency'] ?? 'USD'),
+        );
         $images = self::collectImages($product, $primaryImage);
         $description = PageSeo::truncate($product->description)
             ?: __('seo.product.fallback_description', ['name' => $product->name, 'app' => $app]);
@@ -35,10 +39,14 @@ readonly class ProductStructuredData
             'sku' => $product->style_code,
             'url' => route('products.show', $product->slug),
             'image' => $images,
+            'brand' => [
+                '@type' => 'Brand',
+                'name' => $app,
+            ],
             'offers' => [
                 '@type' => 'Offer',
                 'url' => route('products.show', $product->slug),
-                'priceCurrency' => 'USD',
+                'priceCurrency' => $currency,
                 'price' => (float) $product->base_price,
                 'availability' => self::isInStock($product)
                     ? 'https://schema.org/InStock'

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlogPost;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Response;
@@ -44,6 +45,22 @@ class SitemapController extends Controller
                 'lastmod' => null,
             ];
         }
+
+        $urls[] = [
+            'loc' => route('blog.index'),
+            'lastmod' => now()->toAtomString(),
+        ];
+
+        BlogPost::query()
+            ->published()
+            ->orderByDesc('published_at')
+            ->get(['slug', 'updated_at'])
+            ->each(function (BlogPost $post) use (&$urls): void {
+                $urls[] = [
+                    'loc' => route('blog.show', $post->slug),
+                    'lastmod' => $post->updated_at?->toAtomString(),
+                ];
+            });
 
         return response()->view('sitemap', ['urls' => $urls], 200, [
             'Content-Type' => 'application/xml',

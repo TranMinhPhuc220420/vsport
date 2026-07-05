@@ -1,22 +1,25 @@
 <?php
 
 use App\Http\Controllers\Api\DiscountController;
+use App\Http\Controllers\Ops\ClearCacheController;
+use App\Http\Controllers\Ops\StorageLinkController;
 use App\Http\Controllers\Storefront\AccountController;
+use App\Http\Controllers\Storefront\BlogController;
+use App\Http\Controllers\Storefront\BlogRssController;
 use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
 use App\Http\Controllers\Storefront\HomeController;
 use App\Http\Controllers\Storefront\LegalController;
+use App\Http\Controllers\Storefront\NewsletterController;
 use App\Http\Controllers\Storefront\OrderConfirmationController;
 use App\Http\Controllers\Storefront\OrderHistoryController;
 use App\Http\Controllers\Storefront\ProductDetailController;
 use App\Http\Controllers\Storefront\ProductListingController;
 use App\Http\Controllers\Storefront\ProductReviewController;
 use App\Http\Controllers\Storefront\ProductSearchController;
-use App\Http\Controllers\Storefront\WishlistController;
-use App\Http\Controllers\Ops\ClearCacheController;
-use App\Http\Controllers\Ops\StorageLinkController;
 use App\Http\Controllers\Storefront\RobotsController;
 use App\Http\Controllers\Storefront\SitemapController;
+use App\Http\Controllers\Storefront\WishlistController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -66,6 +69,12 @@ Route::post('/stripe/webhook', StripeWebhookController::class)->name('stripe.web
 
 Route::get('/products/{slug}', [ProductDetailController::class, 'show'])
     ->name('products.show');
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/feed.xml', BlogRssController::class)->name('blog.feed');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])
+    ->name('newsletter.subscribe');
 
 require __DIR__.'/admin.php';
 

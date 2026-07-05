@@ -2,18 +2,22 @@
 
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AnalyticsController;
-use App\Http\Controllers\Admin\ContentSectionImageController;
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogFeaturedImageController;
+use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\BlogTagController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CategoryImageController;
 use App\Http\Controllers\Admin\CategoryOptionTemplateController;
+use App\Http\Controllers\Admin\ContentSectionImageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiscountCodeController;
 use App\Http\Controllers\Admin\HomepageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
-use App\Http\Controllers\Admin\RichtextImageController;
 use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\RichtextImageController;
 use App\Http\Controllers\Admin\StoreSettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
@@ -95,6 +99,14 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::put('homepage', [HomepageController::class, 'update'])->name('homepage.update');
 
         Route::resource('discount-codes', DiscountCodeController::class)->except(['show']);
+
+        Route::resource('blog-posts', BlogPostController::class)->except(['show']);
+        Route::post('blog-posts/{blog_post}/featured-image', [BlogFeaturedImageController::class, 'store'])
+            ->name('blog-posts.featured-image.store');
+        Route::delete('blog-posts/{blog_post}/featured-image', [BlogFeaturedImageController::class, 'destroy'])
+            ->name('blog-posts.featured-image.destroy');
+        Route::resource('blog-categories', BlogCategoryController::class)->except(['show']);
+        Route::resource('blog-tags', BlogTagController::class)->except(['show']);
 
         Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
         Route::patch('reviews/{review}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');

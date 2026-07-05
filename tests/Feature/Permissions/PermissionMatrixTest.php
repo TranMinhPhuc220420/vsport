@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\OrderStatus;
+use App\Models\BlogPost;
 use App\Models\Order;
 use App\Models\ProductVariant;
 use App\Models\User;
@@ -74,4 +75,30 @@ test('admin can update order status and manage products', function () {
     $this->actingAs($admin)
         ->get(route('admin.products.index'))
         ->assertOk();
+});
+
+test('guests cannot access blog admin routes', function () {
+    $this->get(route('admin.blog-posts.index'))->assertRedirect(route('login'));
+    $this->get(route('admin.blog-categories.index'))->assertRedirect(route('login'));
+    $this->get(route('admin.blog-tags.index'))->assertRedirect(route('login'));
+});
+
+test('customers cannot access blog admin routes', function () {
+    $customer = User::factory()->create();
+    $post = BlogPost::factory()->create();
+
+    $this->actingAs($customer)->get(route('admin.blog-posts.index'))->assertForbidden();
+    $this->actingAs($customer)->post(route('admin.blog-posts.store'), [])->assertForbidden();
+    $this->actingAs($customer)->get(route('admin.blog-categories.index'))->assertForbidden();
+    $this->actingAs($customer)->post(route('admin.blog-tags.store'), [])->assertForbidden();
+    $this->actingAs($customer)->post(route('admin.blog-posts.featured-image.store', $post), [])
+        ->assertForbidden();
+});
+
+test('admins can access blog admin routes', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->get(route('admin.blog-posts.index'))->assertOk();
+    $this->actingAs($admin)->get(route('admin.blog-categories.index'))->assertOk();
+    $this->actingAs($admin)->get(route('admin.blog-tags.index'))->assertOk();
 });

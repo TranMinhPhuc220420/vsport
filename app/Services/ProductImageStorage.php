@@ -89,6 +89,19 @@ class ProductImageStorage
         return $this->storeUploadedFile($file, $path);
     }
 
+    public function uploadBlogFeatured(UploadedFile $file, int $blogPostId): string
+    {
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $path = sprintf(
+            'blog/%d/%s.%s',
+            $blogPostId,
+            Str::uuid(),
+            $extension,
+        );
+
+        return $this->storeUploadedFile($file, $path);
+    }
+
     public function storeBinary(string $binary, string $mime): string
     {
         $extension = match ($mime) {

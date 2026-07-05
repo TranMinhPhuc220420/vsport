@@ -48,6 +48,7 @@ class ProductListingController extends Controller
         );
 
         $products = $this->catalog->paginateList($filters);
+        $page = $request->integer('page', 1);
 
         return Inertia::render('storefront/products/index', [
             'products' => ProductSummaryResource::collection($products),
@@ -61,7 +62,13 @@ class ProductListingController extends Controller
                 'slug' => $category,
                 'breadcrumb' => $this->breadcrumb($categoryModel),
             ],
-            'seo' => PageSeo::forCategory($categoryModel->name, $category)->toArray(),
+            'seo' => PageSeo::forCategory(
+                $categoryModel->name,
+                $category,
+                $page,
+                $products->previousPageUrl(),
+                $products->nextPageUrl(),
+            )->toArray(),
             'filterOptions' => [
                 'departments' => CategoryResource::collection(
                     $this->catalog->topLevelCategories(),

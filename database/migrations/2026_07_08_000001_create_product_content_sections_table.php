@@ -23,6 +23,7 @@ return new class extends Migration
 
     public function down(): void
     {
+        Schema::dropIfExists('product_content_section_images');
         Schema::dropIfExists('product_content_sections');
     }
 };

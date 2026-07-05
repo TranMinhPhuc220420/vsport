@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
 
-            $table->index(['content_section_id', 'sort_order']);
+            $table->index(['content_section_id', 'sort_order'], 'pcs_images_section_sort_idx');
         });
     }
 

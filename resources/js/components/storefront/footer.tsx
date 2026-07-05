@@ -37,7 +37,10 @@ export function StorefrontFooter() {
             },
             {
                 title: t('footer.company'),
-                links: [{ label: t('footer.about'), href: '/contact' }],
+                links: [
+                    { label: t('footer.about'), href: '/contact' },
+                    { label: t('footer.news'), href: '/blog' },
+                ],
             },
         ],
         [t],

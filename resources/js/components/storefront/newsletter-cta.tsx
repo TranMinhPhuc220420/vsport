@@ -1,6 +1,5 @@
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import type { FormEvent} from 'react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
@@ -8,16 +7,28 @@ import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { cn } from '@/lib/utils';
 import { register } from '@/routes';
 
+type NewsletterSource = 'homepage' | 'blog';
+
 type NewsletterCtaProps = {
     className?: string;
+    source?: NewsletterSource;
 };
 
-function NewsletterCta({ className }: NewsletterCtaProps) {
+function NewsletterCta({ className, source = 'homepage' }: NewsletterCtaProps) {
     const { t } = useTranslation('storefront');
-    const [email, setEmail] = useState('');
+    const inputId =
+        source === 'blog' ? 'newsletter-email-blog' : 'newsletter-email';
+    const { data, setData, processing, errors, post } = useForm({
+        email: '',
+        source,
+    });
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        post('/newsletter/subscribe', {
+            preserveScroll: true,
+            onSuccess: () => setData('email', ''),
+        });
     };
 
     return (
@@ -42,15 +53,15 @@ function NewsletterCta({ className }: NewsletterCtaProps) {
                             onSubmit={handleSubmit}
                             className="mt-8 flex w-full flex-col gap-3 tablet:flex-row"
                         >
-                            <label htmlFor="newsletter-email" className="sr-only">
+                            <label htmlFor={inputId} className="sr-only">
                                 {t('home.newsletter.emailLabel')}
                             </label>
                             <input
-                                id="newsletter-email"
+                                id={inputId}
                                 type="email"
-                                value={email}
+                                value={data.email}
                                 onChange={(event) =>
-                                    setEmail(event.target.value)
+                                    setData('email', event.target.value)
                                 }
                                 placeholder={t('home.newsletter.emailPlaceholder')}
                                 className="text-body-strong h-12 flex-1 rounded-pill-lg border border-canvas/20 bg-canvas/10 px-6 text-canvas outline-none placeholder:text-canvas/50 focus:border-canvas"
@@ -59,10 +70,16 @@ function NewsletterCta({ className }: NewsletterCtaProps) {
                                 type="submit"
                                 variant="secondary"
                                 className="shrink-0 bg-canvas text-ink"
+                                disabled={processing}
                             >
                                 {t('home.newsletter.submit')}
                             </StorefrontButton>
                         </form>
+                        {errors.email && (
+                            <p className="text-caption-md mt-2 text-accent-pink-soft">
+                                {errors.email}
+                            </p>
+                        )}
 
                         <p className="text-caption-md mt-4 text-canvas/60">
                             {t('home.newsletter.or')}{' '}

@@ -1,6 +1,7 @@
 import type { InertiaLinkProps } from '@inertiajs/react';
 import {
     BarChart3,
+    FileText,
     FolderTree,
     Image,
     LayoutGrid,
@@ -10,6 +11,7 @@ import {
     Settings,
     ShoppingCart,
     Tag,
+    Tags,
     Users,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -78,6 +80,27 @@ export const adminNavGroups: AdminNavGroup[] = [
         ],
     },
     {
+        key: 'content',
+        titleKey: 'nav.groups.content',
+        items: [
+            {
+                titleKey: 'nav.blogPosts',
+                href: '/admin/blog-posts',
+                icon: FileText,
+            },
+            {
+                titleKey: 'nav.blogCategories',
+                href: '/admin/blog-categories',
+                icon: FolderTree,
+            },
+            {
+                titleKey: 'nav.blogTags',
+                href: '/admin/blog-tags',
+                icon: Tags,
+            },
+        ],
+    },
+    {
         key: 'insights',
         titleKey: 'nav.groups.insights',
         items: [
@@ -117,5 +140,10 @@ export const adminQuickCreateItems: AdminNavItem[] = [
         titleKey: 'commandPalette.newDiscountCode',
         href: '/admin/discount-codes/create',
         icon: Tag,
+    },
+    {
+        titleKey: 'commandPalette.newBlogPost',
+        href: '/admin/blog-posts/create',
+        icon: FileText,
     },
 ];

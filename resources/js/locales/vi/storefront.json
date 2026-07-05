@@ -42,6 +42,36 @@
         "contactTitle": "Liên hệ",
         "followTitle": "Theo dõi chúng tôi"
     },
+    "blog": {
+        "eyebrow": "Tin tức",
+        "title": "Tin tức",
+        "description": "Hướng dẫn, xu hướng và câu chuyện thể thao từ Zova Sport.",
+        "allCategories": "Tất cả",
+        "postCount_one": "{{count}} bài viết",
+        "postCount_other": "{{count}} bài viết",
+        "empty": "Chưa có bài viết nào.",
+        "readingTime": "{{minutes}} phút đọc",
+        "relatedProducts": "Sản phẩm liên quan",
+        "relatedPosts": "Bài viết liên quan",
+        "viewAll": "Xem tất cả tin tức",
+        "readArticle": "Đọc bài viết",
+        "backToBlog": "← Tất cả tin tức",
+        "tableOfContents": "Mục lục",
+        "share": "Chia sẻ bài viết",
+        "shareMore": "Thêm tùy chọn chia sẻ",
+        "shareOn": "Chia sẻ lên {{platform}}",
+        "sharePlatforms": {
+            "facebook": "Facebook",
+            "x": "X",
+            "linkedin": "LinkedIn",
+            "zalo": "Zalo",
+            "email": "Email"
+        },
+        "copyLink": "Sao chép liên kết",
+        "linkCopied": "Đã sao chép liên kết",
+        "tagFilterEyebrow": "Thẻ",
+        "clearTagFilter": "Xóa bộ lọc thẻ"
+    },
     "home": {
         "featured": "Nổi bật",
         "newArrivals": "Hàng mới về",

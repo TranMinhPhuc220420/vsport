@@ -51,12 +51,20 @@ export function PrimaryNav() {
             <CategoryMegaNav
                 categories={navigation.categories}
                 staticLink={
-                    <Link
-                        href="/"
-                        className="text-body-strong hover:underline"
-                    >
-                        {t('nav.newFeatured')}
-                    </Link>
+                    <div className="flex items-center gap-6">
+                        <Link
+                            href="/"
+                            className="text-body-strong hover:underline"
+                        >
+                            {t('nav.newFeatured')}
+                        </Link>
+                        <Link
+                            href="/blog"
+                            className="text-body-strong hover:underline"
+                        >
+                            {t('footer.news')}
+                        </Link>
+                    </div>
                 }
                 leading={
                     <div className="flex items-center gap-3 tablet-lg:gap-6">

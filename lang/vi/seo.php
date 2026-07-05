@@ -34,5 +34,17 @@ return [
     ],
     'breadcrumb' => [
         'home' => 'Trang chủ',
+        'blog' => 'Tin tức',
+    ],
+    'blog' => [
+        'index_title' => 'Tin tức | :app',
+        'index_description' => 'Tin tức, hướng dẫn và bài viết thể thao tại :app.',
+        'post_title' => ':title | :app',
+        'category_title' => ':name | :app',
+        'category_description' => 'Bài viết trong :name tại :app.',
+        'tag_title' => ':name | :app',
+        'tag_description' => 'Bài viết gắn thẻ :name tại :app.',
+        'feed_title' => ':app — Tin tức',
+        'feed_description' => 'Tin tức, hướng dẫn và bài viết thể thao từ :app.',
     ],
 ];

@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Resources\ProductSummaryResource;
+use App\Enums\BlogPostStatus;
+use App\Models\BlogPost;
 use App\Models\Product;
 use App\Services\Catalog\ProductCatalogService;
+use Database\Seeders\BlogSeeder;
 use Database\Seeders\CatalogSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -61,6 +64,63 @@ test('home page product summaries include primary image urls', function () {
 
     expect($product['primaryImage'])->toBeArray()
         ->and($product['primaryImage']['url'])->toStartWith('https://');
+});
+
+test('home page includes featured blog posts', function () {
+    $this->seed(BlogSeeder::class);
+
+    $response = $this->get(route('home'));
+
+    $response->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('storefront/home')
+            ->has('featuredPosts.data', 8)
+        );
+
+    $featuredPosts = collect(
+        $response->original->getData()['page']['props']['featuredPosts']['data'],
+    );
+
+    expect($featuredPosts->pluck('slug'))->toContain('cach-chon-size-giay-chay-dung');
+    expect($featuredPosts->every(fn ($post) => $post['isFeatured'] === true))->toBeTrue();
+});
+
+test('home page excludes non featured blog posts', function () {
+    $this->seed(BlogSeeder::class);
+
+    BlogPost::factory()->published()->create([
+        'title' => 'Non Featured Post',
+        'slug' => 'non-featured-post',
+        'is_featured' => false,
+    ]);
+
+    $response = $this->get(route('home'));
+
+    $slugs = collect(
+        $response->original->getData()['page']['props']['featuredPosts']['data'],
+    )->pluck('slug');
+
+    expect($slugs)->not->toContain('non-featured-post');
+});
+
+test('home page excludes scheduled blog posts', function () {
+    $this->seed(BlogSeeder::class);
+
+    BlogPost::factory()->create([
+        'title' => 'Scheduled Home Post',
+        'slug' => 'scheduled-home-post',
+        'status' => BlogPostStatus::Published,
+        'is_featured' => true,
+        'published_at' => now()->addWeek(),
+    ]);
+
+    $response = $this->get(route('home'));
+
+    $slugs = collect(
+        $response->original->getData()['page']['props']['featuredPosts']['data'],
+    )->pluck('slug');
+
+    expect($slugs)->not->toContain('scheduled-home-post');
 });
 
 test('product summary falls back to first image when none is marked primary', function () {

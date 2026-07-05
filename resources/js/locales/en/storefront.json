@@ -42,6 +42,36 @@
         "contactTitle": "Contact",
         "followTitle": "Follow us"
     },
+    "blog": {
+        "eyebrow": "News",
+        "title": "News",
+        "description": "Guides, trends, and sports stories from Zova Sport.",
+        "allCategories": "All",
+        "postCount_one": "{{count}} article",
+        "postCount_other": "{{count}} articles",
+        "empty": "No posts yet.",
+        "readingTime": "{{minutes}} min read",
+        "relatedProducts": "Related products",
+        "relatedPosts": "Related posts",
+        "viewAll": "View all news",
+        "readArticle": "Read article",
+        "backToBlog": "← All news",
+        "tableOfContents": "Table of contents",
+        "share": "Share article",
+        "shareMore": "More share options",
+        "shareOn": "Share on {{platform}}",
+        "sharePlatforms": {
+            "facebook": "Facebook",
+            "x": "X",
+            "linkedin": "LinkedIn",
+            "zalo": "Zalo",
+            "email": "Email"
+        },
+        "copyLink": "Copy link",
+        "linkCopied": "Link copied",
+        "tagFilterEyebrow": "Tagged",
+        "clearTagFilter": "Clear tag filter"
+    },
     "home": {
         "featured": "Featured",
         "newArrivals": "New Arrivals",

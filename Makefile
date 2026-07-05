@@ -37,6 +37,10 @@ migrate:
 seed:
 	php artisan db:seed
 
+migrate_and_seed:
+	make clear
+	php artisan migrate:refresh --seed 
+
 # Deploy the application
 deploy:
 	php artisan deploy

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Storefront;
 
+use App\Data\HomeStructuredData;
 use App\Data\PageSeo;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BlogPostSummaryResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductSummaryResource;
+use App\Services\Blog\BlogCatalogService;
 use App\Services\Catalog\ProductCatalogService;
 use App\Services\Site\HomepageSettingsService;
 use Inertia\Inertia;
@@ -16,6 +19,7 @@ class HomeController extends Controller
     public function __construct(
         private readonly ProductCatalogService $catalog,
         private readonly HomepageSettingsService $homepage,
+        private readonly BlogCatalogService $blogCatalog,
     ) {}
 
     public function index(): Response
@@ -44,7 +48,13 @@ class HomeController extends Controller
                 fn ($campaign) => $campaign->toArray(),
                 $this->homepage->campaigns(),
             ),
+            'featuredPosts' => [
+                'data' => BlogPostSummaryResource::collection(
+                    $this->blogCatalog->featuredForHomepage(),
+                )->resolve(),
+            ],
             'seo' => PageSeo::forHome()->toArray(),
+            'structuredData' => HomeStructuredData::schemas(),
         ]);
     }
 }

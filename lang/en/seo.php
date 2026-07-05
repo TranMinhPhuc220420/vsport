@@ -34,5 +34,17 @@ return [
     ],
     'breadcrumb' => [
         'home' => 'Home',
+        'blog' => 'News',
+    ],
+    'blog' => [
+        'index_title' => 'News | :app',
+        'index_description' => 'Sports news, guides, and articles from :app.',
+        'post_title' => ':title | :app',
+        'category_title' => ':name | :app',
+        'category_description' => 'Articles in :name from :app.',
+        'tag_title' => ':name | :app',
+        'tag_description' => 'Articles tagged :name from :app.',
+        'feed_title' => ':app — News',
+        'feed_description' => 'Sports news, guides, and articles from :app.',
     ],
 ];

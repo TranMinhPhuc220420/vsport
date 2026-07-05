@@ -66,6 +66,13 @@ export function MobileNavDrawer({
                     >
                         {t('nav.newFeatured')}
                     </Link>
+                    <Link
+                        href="/blog"
+                        className="text-body-strong py-3 text-ink"
+                        onClick={() => onOpenChange(false)}
+                    >
+                        {t('footer.news')}
+                    </Link>
 
                     {categories.map((category) => {
                         const children = getCategoryChildren(category);

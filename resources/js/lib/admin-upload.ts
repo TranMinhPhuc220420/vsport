@@ -343,3 +343,67 @@ export async function uploadRichtextImage(file: File): Promise<string> {
 
     return payload.url;
 }
+
+export type AdminBlogPostImage = {
+    id: number;
+    title: string;
+    slug: string;
+    featuredImageUrl: string | null;
+    featuredImageAlt: string | null;
+};
+
+type BlogFeaturedImageUploadOptions = {
+    imageAlt?: string;
+};
+
+export async function uploadBlogFeaturedImage(
+    postSlug: string,
+    file: File,
+    options: BlogFeaturedImageUploadOptions = {},
+): Promise<AdminBlogPostImage> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    if (options.imageAlt !== undefined) {
+        formData.append('image_alt', options.imageAlt);
+    }
+
+    const response = await fetch(
+        `/admin/blog-posts/${encodeURIComponent(postSlug)}/featured-image`,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-XSRF-TOKEN': getCsrfToken(),
+            },
+            body: formData,
+            credentials: 'same-origin',
+        },
+    );
+
+    const payload = await parseJsonResponse<{ post: AdminBlogPostImage }>(
+        response,
+    );
+
+    return payload.post;
+}
+
+export async function deleteBlogFeaturedImage(postSlug: string): Promise<void> {
+    const response = await fetch(
+        `/admin/blog-posts/${encodeURIComponent(postSlug)}/featured-image`,
+        {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-XSRF-TOKEN': getCsrfToken(),
+            },
+            credentials: 'same-origin',
+        },
+    );
+
+    if (!response.ok && response.status !== 204) {
+        await parseJsonResponse(response);
+    }
+}

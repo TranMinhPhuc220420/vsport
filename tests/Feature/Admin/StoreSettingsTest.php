@@ -29,6 +29,10 @@ test('admin can update store settings and regenerate favicon from a png logo', f
     $admin = User::factory()->admin()->create();
 
     $originalFavicon = file_get_contents(public_path('favicon.ico'));
+    // Seed a known placeholder so the test does not depend on whatever favicon.ico
+    // happens to be on disk (a prior run may have left it identical to the fake image output).
+    $placeholderFavicon = "\x00\x00\x01\x00".str_repeat("\x00", 100);
+    file_put_contents(public_path('favicon.ico'), $placeholderFavicon);
 
     try {
         $response = $this->actingAs($admin)->put(
@@ -45,7 +49,7 @@ test('admin can update store settings and regenerate favicon from a png logo', f
             ->and($profile['logoUrl'])->not->toBeNull();
 
         expect(file_get_contents(public_path('favicon.ico')))
-            ->not->toBe($originalFavicon);
+            ->not->toBe($placeholderFavicon);
 
         expect(file_get_contents(public_path('favicon.ico')))
             ->toStartWith("\x00\x00\x01\x00");

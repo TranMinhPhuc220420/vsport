@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { BlogFeaturedRail } from '@/components/storefront/blog-featured-rail';
 import { BrandMarquee } from '@/components/storefront/brand-marquee';
 import { CampaignHeroCarousel } from '@/components/storefront/campaign-hero-carousel';
 import { EditorialBanner } from '@/components/storefront/editorial-banner';
@@ -7,6 +8,7 @@ import { EditorialCategoryShowcase } from '@/components/storefront/editorial-cat
 import { NewsletterCta } from '@/components/storefront/newsletter-cta';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
+import { StructuredData } from '@/components/storefront/structured-data';
 import {
     ProductRail,
     ProductRailItem,
@@ -16,6 +18,7 @@ import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { SectionHeader } from '@/components/storefront/section-header';
 import { TrustBar } from '@/components/storefront/trust-bar';
 import type { Campaign, Category, ProductSummary } from '@/types/catalog';
+import type { BlogPostCardData } from '@/components/storefront/blog-post-card';
 
 type ProductCollection = {
     data: ProductSummary[];
@@ -27,7 +30,9 @@ type HomePageProps = {
     bestSellers: ProductCollection;
     categories: { data: Category[] };
     campaigns: Campaign[];
+    featuredPosts: { data: BlogPostCardData[] };
     seo: SeoData;
+    structuredData: Record<string, unknown>[];
 };
 
 function ProductRailSection({
@@ -83,7 +88,9 @@ export default function HomePage({
     bestSellers,
     categories,
     campaigns,
+    featuredPosts,
     seo,
+    structuredData,
 }: HomePageProps) {
     const { t } = useTranslation('storefront');
 
@@ -99,6 +106,7 @@ export default function HomePage({
     return (
         <>
             <PageSeo seo={seo} />
+            <StructuredData data={structuredData} />
 
             <CampaignHeroCarousel campaigns={campaigns} />
 
@@ -136,6 +144,8 @@ export default function HomePage({
             />
 
             <TrustBar />
+
+            <BlogFeaturedRail posts={featuredPosts.data} />
 
             <NewsletterCta />
         </>

@@ -4,6 +4,7 @@ Disallow: /cart
 Disallow: /checkout
 Disallow: /dashboard
 Disallow: /orders
+Disallow: /orders/confirmation
 Disallow: /admin
 Disallow: /wishlist
 

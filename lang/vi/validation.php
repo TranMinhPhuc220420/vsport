@@ -179,8 +179,12 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'slug' => [
+            'regex' => 'Slug chỉ được dùng chữ thường, số và dấu gạch ngang.',
+            'unique' => 'Slug này đã được sử dụng.',
+        ],
+        'bodyHtml' => [
+            'max' => 'Nội dung bài viết quá dài.',
         ],
     ],
 
@@ -195,6 +199,25 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'title' => 'tiêu đề',
+        'slug' => 'slug',
+        'excerpt' => 'tóm tắt',
+        'bodyHtml' => 'nội dung bài viết',
+        'blogCategoryId' => 'danh mục',
+        'tagIds' => 'thẻ',
+        'productIds' => 'sản phẩm liên quan',
+        'metaTitle' => 'meta title',
+        'metaDescription' => 'meta description',
+        'status' => 'trạng thái',
+        'isFeatured' => 'nổi bật trên trang chủ',
+        'publishedAt' => 'ngày xuất bản',
+        'authorName' => 'tác giả',
+        'name' => 'tên',
+        'description' => 'mô tả',
+        'sortOrder' => 'thứ tự sắp xếp',
+        'image' => 'ảnh',
+        'image_alt' => 'alt text ảnh',
+    ],
 
 ];
