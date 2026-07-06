@@ -28,6 +28,7 @@ export default function Login({ status, canResetPassword }: Props) {
         title: t('login.pageTitle'),
         description: t('login.description'),
         editorialHeadline: t('login.editorialHeadline'),
+        editorialImage: '/images/bg-login.jpg',
     });
 
     return (
@@ -108,6 +109,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
+                                data-testid="login-submit"
                             >
                                 {processing && (
                                     <LoaderCircle className="size-4 animate-spin" />

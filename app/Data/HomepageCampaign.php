@@ -31,7 +31,7 @@ readonly class HomepageCampaign
         return new self(
             headline: 'Trail Running',
             subtitle: 'Built for the mountains',
-            imageUrl: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1440&h=600&fit=crop&auto=format',
+            imageUrl: 'https://images.pexels.com/photos/47354/the-ball-stadion-football-the-pitch-47354.jpeg',
             ctaLabel: 'Shop Men',
             ctaHref: '/men',
         );

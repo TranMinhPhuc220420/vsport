@@ -205,3 +205,9 @@ See `docs/phase/post-mvp/01-extensions.md`.
 **Features:** Server cart with reservation, discount codes, COD + Stripe checkout, reviews, sustainability PDP, Nike By You, analytics ETL, admin panel, i18n (en/vi).
 
 **Ops:** `php artisan vsport:deploy-check` validates env, DB, build assets, Stripe, and scheduler heartbeats. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+### Post-release roadmap (July 2026)
+
+Sequential hardening plan after MVP launch: UX consistency, documentation sync, CI/ops, customer experience, payment ops, E2E, and optional returns.
+
+→ [docs/phase-060760/00-overview.md](docs/phase-060760/00-overview.md)

@@ -31,6 +31,10 @@ function writeLocalWishlist(state: WishlistState): void {
     window.localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(state));
 }
 
+function clearLocalWishlist(): void {
+    window.localStorage.removeItem(WISHLIST_STORAGE_KEY);
+}
+
 function useWishlistStorage() {
     const [items, setItems] = useState<WishlistItem[]>(
         () => readLocalWishlist().items,
@@ -80,4 +84,4 @@ function useWishlistStorage() {
     };
 }
 
-export { useWishlistStorage };
+export { useWishlistStorage, readLocalWishlist, clearLocalWishlist };

@@ -97,8 +97,7 @@ export default function HomePage({
     const editorialCampaign = campaigns[1] ?? {
         headline: t('home.editorial.headline'),
         subtitle: t('home.editorial.subtitle'),
-        imageUrl:
-            'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1440&h=600&fit=crop&auto=format',
+        imageUrl: 'https://images.pexels.com/photos/47354/the-ball-stadion-football-the-pitch-47354.jpeg',
         ctaLabel: t('home.editorial.ctaLabel'),
         ctaHref: '/women',
     };

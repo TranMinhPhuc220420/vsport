@@ -9,6 +9,8 @@ use App\Exceptions\InvalidDiscountCodeException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckoutRequest;
 use App\Models\Order;
+use App\Models\ShippingAddress;
+use App\Models\User;
 use App\Services\Cart\CartService;
 use App\Services\Order\OrderCheckoutService;
 use App\Services\Payment\StripeCheckoutService;
@@ -35,6 +37,7 @@ class CheckoutController extends Controller
             'customerPhone' => '',
             'shippingAddress' => '',
         ];
+        $savedAddresses = [];
 
         if ($user !== null) {
             $defaults['customerName'] = $user->name;
@@ -53,12 +56,29 @@ class CheckoutController extends Controller
                     $defaults['shippingAddress'] = $shipping['address'] ?? '';
                 }
             }
+
+            $savedAddresses = $user->addresses->map(fn (ShippingAddress $address) => [
+                'id' => $address->id,
+                'label' => $address->label,
+                'recipientName' => $address->recipient_name,
+                'phone' => $address->phone,
+                'addressLine' => $address->address_line,
+                'isDefault' => $address->is_default,
+            ])->values()->all();
+
+            $defaultAddress = $user->addresses->firstWhere('is_default', true);
+
+            if ($defaultAddress !== null) {
+                $defaults['customerPhone'] = $defaultAddress->phone;
+                $defaults['shippingAddress'] = $defaultAddress->address_line;
+            }
         }
 
         return Inertia::render('storefront/checkout', [
             'stripeKey' => config('services.stripe.key'),
             'isGuest' => $user === null,
             'defaults' => $defaults,
+            'savedAddresses' => $savedAddresses,
             'seo' => PageSeo::forPrivate(__('seo.private.checkout'), route('checkout.create'))->toArray(),
         ]);
     }
@@ -89,6 +109,10 @@ class CheckoutController extends Controller
                 ->withInput();
         }
 
+        if ($user !== null && ! empty($payload['saveAddress'])) {
+            $this->saveAddressFromPayload($user, $payload);
+        }
+
         if ($user === null) {
             $request->session()->push('guest_order_access', $order->order_number);
         }
@@ -115,5 +139,22 @@ class CheckoutController extends Controller
         }
 
         return redirect()->route('orders.confirmation', $order->order_number);
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    private function saveAddressFromPayload(User $user, array $payload): void
+    {
+        if ($user->addresses()->count() >= 10) {
+            return;
+        }
+
+        $user->addresses()->create([
+            'recipient_name' => $payload['customerName'],
+            'phone' => $payload['customerPhone'],
+            'address_line' => $payload['shippingAddress'],
+            'is_default' => $user->addresses()->count() === 0,
+        ]);
     }
 }

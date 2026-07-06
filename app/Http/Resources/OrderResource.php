@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Order;
+use App\Support\OrderTrackingUrl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,6 +34,9 @@ class OrderResource extends JsonResource
                 'address' => (string) $this->shipping_address,
             ],
             'createdAt' => $this->created_at?->toIso8601String(),
+            'trackingNumber' => $this->tracking_number,
+            'shippingCarrier' => $this->shipping_carrier?->value,
+            'trackingUrl' => OrderTrackingUrl::forOrder($this->resource),
             'customer' => $this->whenLoaded('user', fn () => $this->user ? [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
@@ -46,6 +50,9 @@ class OrderResource extends JsonResource
             ),
             'paymentMethod' => $this->payment_method->value,
             'paymentIntentId' => $this->payment_intent_id,
+            'refundStatus' => $this->refund_status?->value,
+            'refundId' => $this->refund_id,
+            'refundedAt' => $this->refunded_at?->toIso8601String(),
             'discountAmount' => (float) $this->discount_amount,
             'discountCode' => $this->whenLoaded(
                 'discountCode',

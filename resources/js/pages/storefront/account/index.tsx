@@ -7,6 +7,7 @@ import type { SeoData } from '@/components/storefront/page-seo';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
 import { logout } from '@/routes';
 import { edit as profileEdit } from '@/routes/profile';
+import { edit as securityEdit } from '@/routes/security';
 import type { User } from '@/types/auth';
 import type { OrderDetail } from '@/types/order';
 
@@ -43,6 +44,11 @@ export default function AccountPage({ recentOrders, seo }: AccountPageProps) {
                     <StorefrontButton variant="secondary" asChild>
                         <Link href={profileEdit()}>
                             {t('account.settings')}
+                        </Link>
+                    </StorefrontButton>
+                    <StorefrontButton variant="secondary" asChild>
+                        <Link href={securityEdit()}>
+                            {t('settings.nav.security')}
                         </Link>
                     </StorefrontButton>
                     <StorefrontButton variant="secondary" asChild>

@@ -42,7 +42,7 @@ test('cod checkout sends order confirmation email', function () {
         checkoutShippingPayload(),
     );
 
-    Mail::assertSent(OrderConfirmationMail::class, function (OrderConfirmationMail $mail) use ($user) {
+    Mail::assertQueued(OrderConfirmationMail::class, function (OrderConfirmationMail $mail) use ($user) {
         return $mail->hasTo($user->email);
     });
 });

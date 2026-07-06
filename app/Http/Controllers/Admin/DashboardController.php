@@ -42,15 +42,17 @@ class DashboardController extends Controller
             ->where('is_approved', false)
             ->count();
 
+        $lowStockThreshold = (int) config('inventory.low_stock_threshold');
+
         $lowStockProducts = Product::query()
             ->with(['variants.inventory'])
             ->get()
-            ->map(function (Product $product): ?array {
+            ->map(function (Product $product) use ($lowStockThreshold): ?array {
                 $totalStock = (int) $product->variants->sum(
                     fn ($variant) => $variant->inventory?->availableQuantity() ?? 0,
                 );
 
-                if ($totalStock <= 0 || $totalStock >= 5) {
+                if ($totalStock <= 0 || $totalStock > $lowStockThreshold) {
                     return null;
                 }
 

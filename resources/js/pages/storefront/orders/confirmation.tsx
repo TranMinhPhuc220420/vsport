@@ -204,6 +204,15 @@ export default function OrderConfirmationPage({
                         </Link>
                     </StorefrontButton>
                 </div>
+
+                <p className="text-caption-md mt-6 text-center text-mute">
+                    <Link
+                        href="/orders/lookup"
+                        className="underline underline-offset-4"
+                    >
+                        {t('storefront:orders.lookup.lostLink')}
+                    </Link>
+                </p>
             </div>
         </>
     );

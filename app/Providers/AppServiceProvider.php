@@ -4,7 +4,11 @@ namespace App\Providers;
 
 use App\Listeners\MergeCartOnLogin;
 use App\Models\Order;
+use App\Models\ReturnRequest;
+use App\Models\ShippingAddress;
 use App\Policies\OrderPolicy;
+use App\Policies\ReturnRequestPolicy;
+use App\Policies\ShippingAddressPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Date;
@@ -30,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(Order::class, OrderPolicy::class);
+        Gate::policy(ReturnRequest::class, ReturnRequestPolicy::class);
+        Gate::policy(ShippingAddress::class, ShippingAddressPolicy::class);
 
         Event::listen(Login::class, MergeCartOnLogin::class);
 

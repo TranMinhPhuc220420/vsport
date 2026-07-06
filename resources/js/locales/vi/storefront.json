@@ -26,6 +26,8 @@
         "membership": "Thành viên",
         "help": "Trợ giúp",
         "orderStatus": "Trạng thái đơn hàng",
+        "orderLookup": "Tìm đơn hàng của bạn",
+        "trackOrder": "Theo dõi vận chuyển",
         "shipping": "Vận chuyển",
         "returns": "Đổi trả",
         "privacy": "Chính sách bảo mật",
@@ -242,6 +244,9 @@
         "email": "Email",
         "phone": "Số điện thoại",
         "shippingAddress": "Địa chỉ giao hàng",
+        "savedAddress": "Địa chỉ đã lưu",
+        "savedAddressNew": "Dùng địa chỉ mới",
+        "saveAddress": "Lưu địa chỉ này cho lần sau",
         "promoCode": "Mã giảm giá",
         "paymentMethod": "Phương thức thanh toán",
         "cod": "Thanh toán khi nhận hàng",
@@ -286,6 +291,55 @@
             "delivered": "Đã giao",
             "completed": "Hoàn tất",
             "cancelled": "Đã hủy"
+        },
+        "lookup": {
+            "title": "Tìm đơn hàng của bạn",
+            "description": "Mất liên kết xác nhận? Nhập mã đơn hàng và email để xem lại.",
+            "orderNumber": "Mã đơn hàng",
+            "orderNumberPlaceholder": "VS-XXXXXXXX",
+            "email": "Địa chỉ email",
+            "emailPlaceholder": "Email đã dùng khi đặt hàng",
+            "submit": "Tìm đơn hàng",
+            "backToOrders": "Quay lại đơn hàng",
+            "lostLink": "Mất liên kết? Tìm đơn hàng của bạn"
+        },
+        "backToOrder": "Quay lại đơn hàng",
+        "returns": {
+            "request": "Yêu cầu đổi trả",
+            "title": "Yêu cầu đổi trả",
+            "subtitle": "Đơn {{orderNumber}}",
+            "notEligible": "Đơn hàng này không đủ điều kiện đổi trả trực tuyến.",
+            "selectItems": "Chọn sản phẩm cần trả",
+            "quantity": "SL",
+            "reason": "Lý do đổi trả",
+            "submit": "Gửi yêu cầu",
+            "ineligible": {
+                "disabled": "Hiện không nhận yêu cầu đổi trả trực tuyến.",
+                "status": "Chỉ đơn đã giao hoặc hoàn tất mới được đổi trả.",
+                "window": "Đã hết thời hạn đổi trả cho đơn này.",
+                "existing": "Đơn này đã có yêu cầu đổi trả đang xử lý."
+            }
+        },
+        "tracking": {
+            "title": "Theo dõi vận chuyển",
+            "lookupTitle": "Theo dõi đơn hàng",
+            "lookupDescription": "Nhập mã đơn và email để xem trạng thái giao hàng và mã vận đơn.",
+            "lookupSubmit": "Theo dõi",
+            "detailTitle": "Trạng thái giao hàng",
+            "backToLookup": "Quay lại tra cứu",
+            "notShipped": "Thông tin vận chuyển sẽ hiển thị khi đơn được giao cho đơn vị vận chuyển.",
+            "pending": "Đơn đang trên đường giao. Mã vận đơn sẽ được cập nhật sớm.",
+            "carrier": "Đơn vị vận chuyển",
+            "number": "Mã vận đơn",
+            "trackExternal": "Theo dõi trên website đơn vị",
+            "carriers": {
+                "ghtk": "GHTK",
+                "ghn": "GHN",
+                "viettel_post": "Viettel Post",
+                "vnpost": "VNPost",
+                "jt_express": "J&T Express",
+                "other": "Khác"
+            }
         }
     },
     "wishlist": {
@@ -311,6 +365,86 @@
         "settings": "Cài đặt",
         "recentOrders": "Đơn hàng gần đây",
         "viewAllOrders": "Xem tất cả đơn hàng"
+    },
+    "settings": {
+        "title": "Cài đặt tài khoản",
+        "description": "Quản lý hồ sơ và thông tin cá nhân",
+        "nav": {
+            "aria": "Cài đặt tài khoản",
+            "profile": "Hồ sơ",
+            "addresses": "Địa chỉ",
+            "security": "Bảo mật",
+            "appearance": "Giao diện",
+            "backToAccount": "Quay lại tài khoản"
+        },
+        "profile": {
+            "pageTitle": "Cài đặt hồ sơ",
+            "sectionTitle": "Thông tin cá nhân",
+            "name": "Tên",
+            "email": "Địa chỉ email",
+            "namePlaceholder": "Họ và tên",
+            "emailPlaceholder": "Địa chỉ email",
+            "save": "Lưu",
+            "unverified": "Email của bạn chưa được xác minh.",
+            "resendLink": "Nhấn vào đây để gửi lại email xác minh.",
+            "sent": "Liên kết xác minh mới đã được gửi đến email của bạn."
+        },
+        "addresses": {
+            "pageTitle": "Địa chỉ đã lưu",
+            "sectionTitle": "Địa chỉ đã lưu",
+            "sectionDescription": "Lưu thông tin giao hàng để thanh toán nhanh hơn.",
+            "empty": "Bạn chưa lưu địa chỉ nào.",
+            "add": "Thêm địa chỉ",
+            "edit": "Sửa",
+            "delete": "Xóa",
+            "makeDefault": "Đặt làm mặc định",
+            "default": "Mặc định",
+            "limitReached": "Bạn đã đạt giới hạn 10 địa chỉ.",
+            "label": "Nhãn (tùy chọn)",
+            "labelPlaceholder": "Nhà riêng, Công ty…",
+            "recipientName": "Tên người nhận",
+            "recipientNamePlaceholder": "Họ và tên",
+            "phone": "Số điện thoại",
+            "phonePlaceholder": "Số điện thoại",
+            "addressLine": "Địa chỉ",
+            "addressLinePlaceholder": "Số nhà, phường/xã, quận/huyện, thành phố",
+            "setAsDefault": "Đặt làm địa chỉ mặc định",
+            "save": "Lưu địa chỉ",
+            "cancel": "Hủy",
+            "deleteConfirmTitle": "Xóa địa chỉ này?",
+            "deleteConfirmDescription": "Địa chỉ sẽ bị xóa vĩnh viễn khỏi tài khoản của bạn."
+        },
+        "security": {
+            "pageTitle": "Cài đặt bảo mật",
+            "sectionTitle": "Cập nhật mật khẩu",
+            "sectionDescription": "Sử dụng mật khẩu dài và ngẫu nhiên để bảo vệ tài khoản",
+            "currentPassword": "Mật khẩu hiện tại",
+            "newPassword": "Mật khẩu mới",
+            "confirmPassword": "Xác nhận mật khẩu",
+            "currentPlaceholder": "Mật khẩu hiện tại",
+            "newPlaceholder": "Mật khẩu mới",
+            "confirmPlaceholder": "Xác nhận mật khẩu",
+            "save": "Lưu"
+        },
+        "appearance": {
+            "pageTitle": "Cài đặt giao diện",
+            "sectionTitle": "Giao diện",
+            "sectionDescription": "Cập nhật giao diện hiển thị của Zova Sport trên thiết bị này",
+            "light": "Sáng",
+            "dark": "Tối",
+            "system": "Hệ thống"
+        },
+        "deleteAccount": {
+            "title": "Xóa tài khoản",
+            "description": "Xóa vĩnh viễn tài khoản và toàn bộ dữ liệu liên quan",
+            "warning": "Cảnh báo",
+            "caution": "Hãy cẩn thận, thao tác này không thể hoàn tác.",
+            "delete": "Xóa tài khoản",
+            "dialogTitle": "Bạn có chắc muốn xóa tài khoản?",
+            "dialogDescription": "Sau khi xóa, toàn bộ dữ liệu sẽ bị xóa vĩnh viễn. Nhập mật khẩu để xác nhận.",
+            "password": "Mật khẩu",
+            "passwordPlaceholder": "Mật khẩu"
+        }
     },
     "error": {
         "forbidden": "Không có quyền truy cập",
@@ -346,9 +480,9 @@
         "returns": {
             "title": "Chính sách đổi trả",
             "paragraphs": [
-                "Chúng tôi mong bạn hài lòng với sản phẩm Zova Sport. Nếu có vấn đề, liên hệ trong vòng 14 ngày kể từ khi nhận hàng.",
+                "Chúng tôi mong bạn hài lòng với sản phẩm Zova Sport. Đơn đủ điều kiện có thể yêu cầu đổi trả trực tuyến tại Tài khoản → Đơn hàng trong vòng 30 ngày kể từ khi đặt.",
                 "Sản phẩm phải chưa qua sử dụng, còn nguyên bao bì và có chứng từ mua hàng. Sản phẩm Nike By You tùy chỉnh có thể không được đổi trả.",
-                "Để bắt đầu đổi trả, gửi email hỗ trợ kèm mã đơn hàng và lý do. Chúng tôi sẽ hướng dẫn theo khu vực của bạn.",
+                "Sau khi gửi yêu cầu, chúng tôi sẽ xem xét và email khi được duyệt. Vui lòng gửi hàng trả theo hướng dẫn.",
                 "Hoàn tiền qua phương thức thanh toán ban đầu sau khi nhận và kiểm tra hàng trả. Đơn COD có thể hoàn qua tín dụng cửa hàng hoặc chuyển khoản.",
                 "Hàng lỗi hoặc giao sai được hỗ trợ miễn phí. Phí vận chuyển đổi trả tự nguyện có thể áp dụng trừ khi lỗi thuộc về chúng tôi."
             ]

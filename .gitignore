@@ -18,6 +18,10 @@
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 Homestead.yaml
 npm-debug.log
 yarn-error.log

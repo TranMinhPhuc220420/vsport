@@ -9,7 +9,21 @@ test('profile page is displayed', function () {
         ->actingAs($user)
         ->get(route('profile.edit'));
 
-    $response->assertOk();
+    $response
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('storefront/settings/profile'));
+});
+
+test('profile page uses admin component for admin users', function () {
+    $user = User::factory()->admin()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->get(route('profile.edit'));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('settings/profile'));
 });
 
 test('profile information can be updated', function () {

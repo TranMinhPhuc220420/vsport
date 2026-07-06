@@ -10,11 +10,16 @@ import {
 import { AdminFormSection } from '@/components/admin/admin-form-section';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { LogoUploadField } from '@/pages/admin/settings/components/logo-upload-field';
 import type { StoreProfile } from '@/types/store-profile';
 
 type AdminSettingsEditProps = {
     profile: StoreProfile;
+    returnPolicy: {
+        returnsEnabled: boolean;
+        returnsWindowDays: number;
+    };
 };
 
 type StoreProfileForm = Omit<StoreProfile, 'logoUrl' | 'logoWideUrl'> & {
@@ -22,9 +27,14 @@ type StoreProfileForm = Omit<StoreProfile, 'logoUrl' | 'logoWideUrl'> & {
     logo: File | null;
     logoWideUrl: string;
     logoWide: File | null;
+    returnsEnabled: boolean;
+    returnsWindowDays: number;
 };
 
-export default function AdminSettingsEdit({ profile }: AdminSettingsEditProps) {
+export default function AdminSettingsEdit({
+    profile,
+    returnPolicy,
+}: AdminSettingsEditProps) {
     const { t } = useTranslation('admin');
     const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
     const [logoWidePreviewUrl, setLogoWidePreviewUrl] = useState<
@@ -39,6 +49,8 @@ export default function AdminSettingsEdit({ profile }: AdminSettingsEditProps) {
             logoWideUrl: profile.logoWideUrl ?? '',
             logoWide: null,
             currency: profile.currency || 'USD',
+            returnsEnabled: returnPolicy.returnsEnabled,
+            returnsWindowDays: returnPolicy.returnsWindowDays,
         });
 
     setLayoutProps({
@@ -211,6 +223,41 @@ export default function AdminSettingsEdit({ profile }: AdminSettingsEditProps) {
                                     placeholder="https://youtube.com/@…"
                                 />
                             </div>
+                        </AdminFormSection>
+
+                        <AdminFormSection
+                            title={t('settings.returnsSection')}
+                            description={t(
+                                'settings.returnsSectionDescription',
+                            )}
+                        >
+                            <label className="flex items-center gap-3">
+                                <Checkbox
+                                    checked={data.returnsEnabled}
+                                    onCheckedChange={(checked) =>
+                                        setData(
+                                            'returnsEnabled',
+                                            checked === true,
+                                        )
+                                    }
+                                />
+                                <span>{t('settings.returnsEnabled')}</span>
+                            </label>
+                            <AdminInputField
+                                className="mt-4"
+                                label={t('settings.returnsWindowDays')}
+                                type="number"
+                                min={1}
+                                max={365}
+                                value={String(data.returnsWindowDays)}
+                                onChange={(e) =>
+                                    setData(
+                                        'returnsWindowDays',
+                                        Number(e.target.value),
+                                    )
+                                }
+                                error={errors.returnsWindowDays}
+                            />
                         </AdminFormSection>
                     </div>
 

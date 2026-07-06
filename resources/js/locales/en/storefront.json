@@ -26,6 +26,8 @@
         "membership": "Membership",
         "help": "Help",
         "orderStatus": "Order Status",
+        "orderLookup": "Find your order",
+        "trackOrder": "Track shipment",
         "shipping": "Shipping",
         "returns": "Returns",
         "privacy": "Privacy Policy",
@@ -242,6 +244,9 @@
         "email": "Email",
         "phone": "Phone",
         "shippingAddress": "Shipping address",
+        "savedAddress": "Saved address",
+        "savedAddressNew": "Use a new address",
+        "saveAddress": "Save this address for next time",
         "promoCode": "Promo code",
         "paymentMethod": "Payment method",
         "cod": "Cash on delivery",
@@ -286,6 +291,55 @@
             "delivered": "Delivered",
             "completed": "Completed",
             "cancelled": "Cancelled"
+        },
+        "lookup": {
+            "title": "Find your order",
+            "description": "Lost your confirmation link? Enter your order number and email to view it again.",
+            "orderNumber": "Order number",
+            "orderNumberPlaceholder": "VS-XXXXXXXX",
+            "email": "Email address",
+            "emailPlaceholder": "Email address used at checkout",
+            "submit": "Find order",
+            "backToOrders": "Back to orders",
+            "lostLink": "Lost your link? Find your order"
+        },
+        "backToOrder": "Back to order",
+        "returns": {
+            "request": "Request a return",
+            "title": "Request a return",
+            "subtitle": "Order {{orderNumber}}",
+            "notEligible": "This order is not eligible for an online return.",
+            "selectItems": "Select items to return",
+            "quantity": "Qty",
+            "reason": "Reason for return",
+            "submit": "Submit return request",
+            "ineligible": {
+                "disabled": "Online returns are currently unavailable.",
+                "status": "Only delivered or completed orders can be returned.",
+                "window": "The return window for this order has expired.",
+                "existing": "A return request is already in progress for this order."
+            }
+        },
+        "tracking": {
+            "title": "Shipment tracking",
+            "lookupTitle": "Track your shipment",
+            "lookupDescription": "Enter your order number and email to see delivery status and tracking details.",
+            "lookupSubmit": "Track shipment",
+            "detailTitle": "Shipment status",
+            "backToLookup": "Back to tracking lookup",
+            "notShipped": "Tracking will appear here once your order ships.",
+            "pending": "Your order is on the way. Tracking details will be added shortly.",
+            "carrier": "Carrier",
+            "number": "Tracking number",
+            "trackExternal": "Track on carrier website",
+            "carriers": {
+                "ghtk": "GHTK",
+                "ghn": "GHN",
+                "viettel_post": "Viettel Post",
+                "vnpost": "VNPost",
+                "jt_express": "J&T Express",
+                "other": "Other"
+            }
         }
     },
     "wishlist": {
@@ -311,6 +365,86 @@
         "settings": "Settings",
         "recentOrders": "Recent orders",
         "viewAllOrders": "View all orders"
+    },
+    "settings": {
+        "title": "Account settings",
+        "description": "Manage your profile and personal information",
+        "nav": {
+            "aria": "Account settings",
+            "profile": "Profile",
+            "addresses": "Addresses",
+            "security": "Security",
+            "appearance": "Appearance",
+            "backToAccount": "Back to account"
+        },
+        "profile": {
+            "pageTitle": "Profile settings",
+            "sectionTitle": "Personal information",
+            "name": "Name",
+            "email": "Email address",
+            "namePlaceholder": "Full name",
+            "emailPlaceholder": "Email address",
+            "save": "Save",
+            "unverified": "Your email address is unverified.",
+            "resendLink": "Click here to resend the verification email.",
+            "sent": "A new verification link has been sent to your email address."
+        },
+        "addresses": {
+            "pageTitle": "Saved addresses",
+            "sectionTitle": "Saved addresses",
+            "sectionDescription": "Save shipping details so checkout only takes a few clicks.",
+            "empty": "You have not saved any addresses yet.",
+            "add": "Add address",
+            "edit": "Edit",
+            "delete": "Delete",
+            "makeDefault": "Make default",
+            "default": "Default",
+            "limitReached": "You've reached the 10 address limit.",
+            "label": "Label (optional)",
+            "labelPlaceholder": "Home, Office…",
+            "recipientName": "Recipient name",
+            "recipientNamePlaceholder": "Full name",
+            "phone": "Phone",
+            "phonePlaceholder": "Phone number",
+            "addressLine": "Address",
+            "addressLinePlaceholder": "Street, ward, district, city",
+            "setAsDefault": "Set as default address",
+            "save": "Save address",
+            "cancel": "Cancel",
+            "deleteConfirmTitle": "Delete this address?",
+            "deleteConfirmDescription": "This address will be permanently removed from your account."
+        },
+        "security": {
+            "pageTitle": "Security settings",
+            "sectionTitle": "Update password",
+            "sectionDescription": "Ensure your account is using a long, random password to stay secure",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "confirmPassword": "Confirm password",
+            "currentPlaceholder": "Current password",
+            "newPlaceholder": "New password",
+            "confirmPlaceholder": "Confirm password",
+            "save": "Save"
+        },
+        "appearance": {
+            "pageTitle": "Appearance settings",
+            "sectionTitle": "Appearance",
+            "sectionDescription": "Update how Zova Sport looks on this device",
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        },
+        "deleteAccount": {
+            "title": "Delete account",
+            "description": "Permanently remove your account and all associated data",
+            "warning": "Warning",
+            "caution": "Please proceed with caution, this action cannot be undone.",
+            "delete": "Delete account",
+            "dialogTitle": "Are you sure you want to delete your account?",
+            "dialogDescription": "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.",
+            "password": "Password",
+            "passwordPlaceholder": "Password"
+        }
     },
     "error": {
         "forbidden": "Access denied",
@@ -346,9 +480,9 @@
         "returns": {
             "title": "Returns Policy",
             "paragraphs": [
-                "We want you to be satisfied with your Zova Sport purchase. If something is not right, contact us within 14 days of delivery.",
+                "We want you to be satisfied with your Zova Sport purchase. Eligible orders can request a return online from Account → Orders within 30 days of purchase.",
                 "Items must be unworn, in original packaging, and include proof of purchase. Customized Nike By You products may not be eligible for return.",
-                "To start a return, email support with your order number and reason. We will provide return instructions for your region.",
+                "After you submit a return request, we will review it and email you when it is approved. Ship items back using the instructions we provide.",
                 "Refunds are processed to your original payment method after we receive and inspect the returned items. COD orders may receive store credit or bank transfer where applicable.",
                 "Defective or incorrect items are covered at no extra cost. Shipping fees for discretionary returns may apply unless the error was ours."
             ]

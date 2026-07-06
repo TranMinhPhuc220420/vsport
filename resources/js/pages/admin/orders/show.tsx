@@ -1,8 +1,18 @@
-import { Head, router, setLayoutProps, usePage } from '@inertiajs/react';
+import {
+    Head,
+    router,
+    setLayoutProps,
+    useForm,
+    usePage,
+} from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
+import {
+    AdminInputField,
+    AdminSelectField,
+} from '@/components/admin/admin-field';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { OrderStatusStepper } from '@/components/admin/order-status-stepper';
 import { AdminButton } from '@/components/admin/ui/admin-button';
@@ -52,11 +62,45 @@ export default function AdminOrderShow({
         ],
     });
 
+    const [retryingRefund, setRetryingRefund] = useState(false);
+
+    const trackingForm = useForm({
+        trackingNumber: order.trackingNumber ?? '',
+        shippingCarrier: order.shippingCarrier ?? '',
+    });
+
+    const carrierOptions = [
+        'ghtk',
+        'ghn',
+        'viettel_post',
+        'vnpost',
+        'jt_express',
+        'other',
+    ].map((value) => ({
+        value,
+        label: t(`orders.carriers.${value}`, { defaultValue: value }),
+    }));
+
+    const saveTracking = () => {
+        trackingForm.patch(`/admin/orders/${order.orderNumber}/tracking`, {
+            preserveScroll: true,
+        });
+    };
+
     const updateStatus = (status: string) => {
         router.patch(
             `/admin/orders/${order.orderNumber}/status`,
             { status },
             { onFinish: () => setPendingStatus(null) },
+        );
+    };
+
+    const retryRefund = () => {
+        setRetryingRefund(true);
+        router.patch(
+            `/admin/orders/${order.orderNumber}/refund/retry`,
+            {},
+            { onFinish: () => setRetryingRefund(false) },
         );
     };
 
@@ -164,6 +208,52 @@ export default function AdminOrderShow({
                                     </dd>
                                 </div>
                             )}
+                            {order.refundStatus && (
+                                <div>
+                                    <dt className="admin-label">
+                                        {t('orders.refundStatus')}
+                                    </dt>
+                                    <dd className="mt-0.5">
+                                        <span
+                                            className={
+                                                order.refundStatus ===
+                                                'refunded'
+                                                    ? 'text-[var(--admin-success)]'
+                                                    : 'text-[var(--admin-danger)]'
+                                            }
+                                        >
+                                            {t(
+                                                `orders.refundStatuses.${order.refundStatus}`,
+                                                {
+                                                    defaultValue:
+                                                        order.refundStatus,
+                                                },
+                                            )}
+                                        </span>
+                                        {order.refundedAt && (
+                                            <span className="text-admin-secondary ml-2">
+                                                {formatDateTime(
+                                                    order.refundedAt,
+                                                    locale,
+                                                )}
+                                            </span>
+                                        )}
+                                        {order.refundStatus === 'failed' && (
+                                            <div className="mt-2">
+                                                <AdminButton
+                                                    type="button"
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    disabled={retryingRefund}
+                                                    onClick={retryRefund}
+                                                >
+                                                    {t('orders.retryRefund')}
+                                                </AdminButton>
+                                            </div>
+                                        )}
+                                    </dd>
+                                </div>
+                            )}
                             {hasDiscount && (
                                 <div>
                                     <dt className="admin-label">
@@ -223,6 +313,46 @@ export default function AdminOrderShow({
                         </dl>
                     </AdminCard>
                 </div>
+
+                <AdminCard>
+                    <h2 className="admin-section-title">
+                        {t('orders.tracking')}
+                    </h2>
+                    <div className="mt-4 grid gap-4 tablet:grid-cols-2">
+                        <AdminInputField
+                            label={t('orders.trackingNumber')}
+                            value={trackingForm.data.trackingNumber}
+                            onChange={(e) =>
+                                trackingForm.setData(
+                                    'trackingNumber',
+                                    e.target.value,
+                                )
+                            }
+                            error={trackingForm.errors.trackingNumber}
+                        />
+                        <AdminSelectField
+                            label={t('orders.shippingCarrier')}
+                            value={trackingForm.data.shippingCarrier}
+                            onChange={(value) =>
+                                trackingForm.setData('shippingCarrier', value)
+                            }
+                            options={[
+                                { value: '', label: tCommon('none') },
+                                ...carrierOptions,
+                            ]}
+                            error={trackingForm.errors.shippingCarrier}
+                        />
+                    </div>
+                    <div className="mt-4">
+                        <AdminButton
+                            type="button"
+                            onClick={saveTracking}
+                            disabled={trackingForm.processing}
+                        >
+                            {t('orders.saveTracking')}
+                        </AdminButton>
+                    </div>
+                </AdminCard>
 
                 <AdminCard className="p-0">
                     <h2 className="admin-section-title border-admin border-b px-6 py-4">
@@ -336,6 +466,11 @@ export default function AdminOrderShow({
                                               : 'secondary'
                                     }
                                     onClick={() => requestStatusChange(status)}
+                                    data-testid={
+                                        status === 'confirmed'
+                                            ? 'admin-order-confirm'
+                                            : undefined
+                                    }
                                 >
                                     {t(statusActionKeys[status] ?? status, {
                                         defaultValue: status,

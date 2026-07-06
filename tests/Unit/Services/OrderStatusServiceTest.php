@@ -5,6 +5,7 @@ use App\Exceptions\InvalidOrderTransitionException;
 use App\Models\Order;
 use App\Services\Order\OrderNotificationService;
 use App\Services\Order\OrderStatusService;
+use App\Services\Payment\StripeRefundService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,7 +15,10 @@ beforeEach(function () {
     $this->notifications = Mockery::mock(OrderNotificationService::class);
     $this->notifications->shouldReceive('sendStatusUpdate')->andReturnNull();
 
-    $this->service = new OrderStatusService($this->notifications);
+    $refunds = Mockery::mock(StripeRefundService::class);
+    $refunds->shouldReceive('refundOrder')->andReturnNull();
+
+    $this->service = new OrderStatusService($this->notifications, $refunds);
 });
 
 afterEach(function () {

@@ -10,9 +10,11 @@
         "brands": "Brands",
         "categories": "Categories",
         "orders": "Orders",
+        "returnRequests": "Return requests",
         "users": "Users",
         "discountCodes": "Discount Codes",
         "reviews": "Reviews",
+        "newsletter": "Newsletter",
         "analytics": "Analytics",
         "homepage": "Homepage",
         "sizeGuides": "Size Guides",
@@ -301,6 +303,29 @@
             "stripe": "Card (Stripe)"
         },
         "paymentIntent": "Payment reference",
+        "refundStatus": "Refund",
+        "refundStatuses": {
+            "refunded": "Refunded",
+            "failed": "Refund failed"
+        },
+        "retryRefund": "Retry refund",
+        "tracking": "Shipment tracking",
+        "trackingNumber": "Tracking number",
+        "shippingCarrier": "Carrier",
+        "saveTracking": "Save tracking",
+        "bulkStatus": "Bulk status",
+        "chooseStatus": "Choose status…",
+        "applyBulkStatus": "Apply to selected",
+        "selectAll": "Select all orders on this page",
+        "selectOrder": "Select order {{orderNumber}}",
+        "carriers": {
+            "ghtk": "GHTK",
+            "ghn": "GHN",
+            "viettel_post": "Viettel Post",
+            "vnpost": "VNPost",
+            "jt_express": "J&T Express",
+            "other": "Other"
+        },
         "discount": "Discount",
         "subtotal": "Subtotal",
         "statusError": "Could not update order status.",
@@ -313,6 +338,40 @@
             "delivered": "Delivered",
             "completed": "Completed",
             "cancelled": "Cancelled"
+        }
+    },
+    "returnRequests": {
+        "title": "Return requests",
+        "description": "Review customer return requests and process refunds.",
+        "detailTitle": "Return request",
+        "back": "Back to return requests",
+        "order": "Order",
+        "orderNumber": "Order {{orderNumber}}",
+        "customer": "Customer",
+        "requested": "Requested",
+        "reason": "Customer reason",
+        "adminNotes": "Admin notes",
+        "items": "Return items",
+        "returnQty": "Return qty",
+        "filterAll": "All statuses",
+        "exportCsv": "Export CSV",
+        "emptyTitle": "No return requests",
+        "emptyDescription": "Return requests from customers will appear here.",
+        "approve": "Approve",
+        "reject": "Reject",
+        "markReceived": "Mark received",
+        "markRefunded": "Mark refunded",
+        "close": "Close",
+        "rejectTitle": "Reject return request",
+        "rejectDescription": "Provide a reason the customer will see in their notification.",
+        "rejectNotesPlaceholder": "Reason for rejection…",
+        "statuses": {
+            "pending": "Pending",
+            "approved": "Approved",
+            "rejected": "Rejected",
+            "received": "Received",
+            "refunded": "Refunded",
+            "closed": "Closed"
         }
     },
     "users": {
@@ -352,6 +411,21 @@
         "approve": "Approve",
         "deleteConfirm": "Delete this review?",
         "ratingOf": "{{rating}} / 5"
+    },
+    "newsletter": {
+        "title": "Newsletter subscribers",
+        "description": "Everyone who signed up for the newsletter from the storefront.",
+        "email": "Email",
+        "source": "Source",
+        "subscribedAt": "Subscribed",
+        "exportCsv": "Export CSV",
+        "filterAll": "All",
+        "sources": {
+            "blog": "Blog",
+            "homepage": "Homepage"
+        },
+        "emptyTitle": "No subscribers",
+        "emptyDescription": "Subscribers will appear here as they sign up from the storefront."
     },
     "homepage": {
         "title": "Homepage",
@@ -455,6 +529,7 @@
         "actions": {
             "orders.export": "Exported orders (CSV)",
             "orders.status.update": "Updated order status",
+            "orders.refund.retry": "Retried order refund",
             "products.featured.update": "Updated featured product",
             "products.bulk_delete": "Bulk deleted products",
             "products.bulk_featured_update": "Bulk updated featured products",
@@ -464,6 +539,7 @@
             "users.role.update": "Updated user role",
             "reviews.approve": "Approved review",
             "reviews.destroy": "Deleted review",
+            "newsletter_subscribers.export": "Exported newsletter subscribers (CSV)",
             "discount_codes.store": "Created discount code",
             "discount_codes.update": "Updated discount code",
             "discount_codes.destroy": "Deleted discount code"
@@ -499,6 +575,10 @@
         "regionalSection": "Regional",
         "regionalSectionDescription": "Display preferences for prices and checkout.",
         "currency": "Display currency",
+        "returnsSection": "Returns",
+        "returnsSectionDescription": "Configure online return requests from the storefront.",
+        "returnsEnabled": "Allow customers to request returns online",
+        "returnsWindowDays": "Return window (days after order)",
         "envManagedNotice": "Payments, tax, and shipping are configured on the server and are not editable here.",
         "save": "Save changes"
     },
@@ -517,8 +597,10 @@
         "brands": "Brands",
         "categories": "Categories",
         "orders": "Orders",
+        "returnRequests": "Return requests",
         "users": "Users",
         "reviews": "Reviews",
+        "newsletter": "Newsletter subscribers",
         "analytics": "Analytics",
         "discountCodes": "Discount codes",
         "activityLogs": "Activity log",

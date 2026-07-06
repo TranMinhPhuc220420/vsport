@@ -7,12 +7,14 @@ use App\Exceptions\InvalidOrderTransitionException;
 use App\Exceptions\OrderConfirmStockException;
 use App\Models\Inventory;
 use App\Models\Order;
+use App\Services\Payment\StripeRefundService;
 use Illuminate\Support\Facades\DB;
 
 class OrderStatusService
 {
     public function __construct(
         private readonly OrderNotificationService $notifications,
+        private readonly StripeRefundService $refunds,
     ) {}
 
     /**
@@ -64,6 +66,7 @@ class OrderStatusService
 
             if ($newStatus === OrderStatus::Cancelled && $this->shouldRestoreStock($current)) {
                 $this->restoreStockForOrder($order);
+                $this->refunds->refundOrder($order);
             }
 
             $order->update(['status' => $newStatus]);

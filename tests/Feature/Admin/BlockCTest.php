@@ -23,7 +23,11 @@ test('admin can export orders as csv', function () {
 
     $response->assertOk();
     expect($response->headers->get('content-type'))->toContain('text/csv');
-    expect($response->streamedContent())->toContain('order_number');
+
+    $content = $response->streamedContent();
+    expect($content)->toContain('order_number')
+        ->and($content)->toContain('payment_method')
+        ->and($content)->toContain('refund_status');
 });
 
 test('order export creates activity log entry', function () {
@@ -71,4 +75,27 @@ test('guest can place checkout order with email', function () {
 
 test('wishlist page is accessible to guests', function () {
     $this->get(route('wishlist.index'))->assertOk();
+});
+
+test('guest can access order lookup page', function () {
+    $this->get(route('orders.lookup.create'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('storefront/orders/lookup'));
+});
+
+test('admin can access newsletter subscribers index', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->get(route('admin.newsletter-subscribers.index'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('admin/newsletter-subscribers/index'));
+});
+
+test('customer cannot access newsletter subscribers admin page', function () {
+    $customer = User::factory()->create();
+
+    $this->actingAs($customer)
+        ->get(route('admin.newsletter-subscribers.index'))
+        ->assertForbidden();
 });

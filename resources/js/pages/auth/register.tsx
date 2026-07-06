@@ -30,6 +30,7 @@ export default function Register({ passwordRules }: Props) {
         title: t('register.pageTitle'),
         description: t('register.description'),
         editorialHeadline: t('register.editorialHeadline'),
+        editorialImage: '/images/bg-register.jpg',
         editorialBenefits: [
             t('register.benefit1'),
             t('register.benefit2'),

@@ -1,7 +1,10 @@
+import { usePage } from '@inertiajs/react';
 import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 
+import { useServerWishlist } from '@/hooks/use-server-wishlist';
 import { useWishlistStorage } from '@/hooks/use-wishlist-storage';
+import type { User } from '@/types/auth';
 import type { WishlistItem } from '@/types/wishlist';
 
 type WishlistContextValue = {
@@ -15,7 +18,12 @@ type WishlistContextValue = {
 const WishlistContext = createContext<WishlistContextValue | null>(null);
 
 function WishlistProvider({ children }: { children: ReactNode }) {
-    const wishlist = useWishlistStorage();
+    const { auth } = usePage<{ auth: { user: User | null } }>().props;
+    const isAuthenticated = auth.user !== null;
+
+    const local = useWishlistStorage();
+    const server = useServerWishlist(isAuthenticated);
+    const wishlist = isAuthenticated ? server : local;
 
     return (
         <WishlistContext.Provider value={wishlist}>

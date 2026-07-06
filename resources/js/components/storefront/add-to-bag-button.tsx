@@ -17,6 +17,7 @@ function AddToBagButton({ disabled, onClick, className }: AddToBagButtonProps) {
             className={className}
             disabled={disabled}
             onClick={onClick}
+            data-testid="add-to-bag"
         >
             {t('pdp.addToBag')}
         </StorefrontButton>

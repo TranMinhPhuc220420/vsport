@@ -18,6 +18,7 @@ class DeployCheckService
         $this->checkDatabase($items);
         $this->checkMigrations($items);
         $this->checkMail($items);
+        $this->checkQueue($items);
         $this->checkStripe($items);
         $this->checkStorage($items);
         $this->checkSchedulerHeartbeats($items);
@@ -188,6 +189,30 @@ class DeployCheckService
     /**
      * @param  list<array{level: string, message: string}>  $items
      */
+    private function checkQueue(array &$items): void
+    {
+        if (! app()->environment('production')) {
+            return;
+        }
+
+        if (config('queue.default') === 'sync') {
+            $items[] = [
+                'level' => 'warn',
+                'message' => 'QUEUE_CONNECTION is sync — queued order emails will send inline and block requests. Use database or redis and run a queue worker.',
+            ];
+
+            return;
+        }
+
+        $items[] = [
+            'level' => 'pass',
+            'message' => 'Queue connection is '.config('queue.default').'.',
+        ];
+    }
+
+    /**
+     * @param  list<array{level: string, message: string}>  $items
+     */
     private function checkStripe(array &$items): void
     {
         $secret = (string) config('services.stripe.secret');
@@ -273,6 +298,13 @@ class DeployCheckService
             $items,
             OpsHeartbeat::ANALYTICS_SYNC,
             'analytics:sync',
+            hours: 26,
+        );
+
+        $this->checkHeartbeat(
+            $items,
+            OpsHeartbeat::INVENTORY_LOW_STOCK_CHECK,
+            'inventory:check-low-stock',
             hours: 26,
         );
     }

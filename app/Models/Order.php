@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
+use App\Enums\RefundStatus;
+use App\Enums\ShippingCarrier;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,8 +23,13 @@ use Illuminate\Support\Carbon;
  * @property string $shipping_address
  * @property string|null $payment_intent_id
  * @property PaymentMethod $payment_method
+ * @property string|null $refund_id
+ * @property RefundStatus|null $refund_status
+ * @property Carbon|null $refunded_at
  * @property int|null $discount_code_id
  * @property string $discount_amount
+ * @property string|null $tracking_number
+ * @property ShippingCarrier|null $shipping_carrier
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -32,8 +39,13 @@ use Illuminate\Support\Carbon;
     'status',
     'total_amount',
     'shipping_address',
+    'tracking_number',
+    'shipping_carrier',
     'payment_intent_id',
     'payment_method',
+    'refund_id',
+    'refund_status',
+    'refunded_at',
     'discount_code_id',
     'discount_amount',
 ])]
@@ -57,6 +69,11 @@ class Order extends Model
         return $this->belongsTo(DiscountCode::class);
     }
 
+    public function returnRequests(): HasMany
+    {
+        return $this->hasMany(ReturnRequest::class);
+    }
+
     /**
      * @return array<string, string>
      */
@@ -65,6 +82,9 @@ class Order extends Model
         return [
             'status' => OrderStatus::class,
             'payment_method' => PaymentMethod::class,
+            'shipping_carrier' => ShippingCarrier::class,
+            'refund_status' => RefundStatus::class,
+            'refunded_at' => 'datetime',
             'total_amount' => 'decimal:2',
             'discount_amount' => 'decimal:2',
         ];

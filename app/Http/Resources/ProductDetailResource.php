@@ -34,6 +34,7 @@ class ProductDetailResource extends JsonResource
             'averageRating' => (float) $this->average_rating,
             'reviewCount' => $this->review_count,
             'category' => CategoryResource::make($this->whenLoaded('category')),
+            'brandName' => $this->whenLoaded('brand', fn () => $this->brand?->name),
             'reviews' => $this->whenLoaded('approvedReviews', fn () => $this->approvedReviews
                 ->take(10)
                 ->map(fn ($review) => [

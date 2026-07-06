@@ -65,6 +65,7 @@ class ProductSummaryResource extends JsonResource
             'subTitle' => $this->sub_title,
             'gender' => $this->gender->value,
             'category' => CategoryResource::make($this->whenLoaded('category')),
+            'brandName' => $this->whenLoaded('brand', fn () => $this->brand?->name),
             'basePrice' => $basePrice,
             'listPrice' => $basePrice,
             'salePrice' => $onSale ? $minPrice : null,

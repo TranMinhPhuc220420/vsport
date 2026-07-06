@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
+import { OrderTrackingPanel } from '@/components/storefront/order-tracking-panel';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
@@ -9,10 +10,18 @@ import type { OrderDetail } from '@/types/order';
 
 type OrderShowPageProps = {
     order: OrderDetail;
+    returnEligibility?: {
+        eligible: boolean;
+        reason: string | null;
+    };
     seo: SeoData;
 };
 
-export default function OrderShowPage({ order, seo }: OrderShowPageProps) {
+export default function OrderShowPage({
+    order,
+    returnEligibility,
+    seo,
+}: OrderShowPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
     const { locale, currency } = useLocale();
 
@@ -136,6 +145,18 @@ export default function OrderShowPage({ order, seo }: OrderShowPageProps) {
                         ))}
                     </ul>
                 </section>
+
+                <div className="mt-8">
+                    <OrderTrackingPanel order={order} />
+                </div>
+
+                {returnEligibility?.eligible ? (
+                    <StorefrontButton className="mt-8" asChild>
+                        <Link href={`/orders/${order.orderNumber}/returns`}>
+                            {t('storefront:orders.returns.request')}
+                        </Link>
+                    </StorefrontButton>
+                ) : null}
 
                 <StorefrontButton variant="secondary" className="mt-8" asChild>
                     <Link href="/men">

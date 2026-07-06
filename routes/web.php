@@ -13,10 +13,13 @@ use App\Http\Controllers\Storefront\LegalController;
 use App\Http\Controllers\Storefront\NewsletterController;
 use App\Http\Controllers\Storefront\OrderConfirmationController;
 use App\Http\Controllers\Storefront\OrderHistoryController;
+use App\Http\Controllers\Storefront\OrderLookupController;
+use App\Http\Controllers\Storefront\OrderTrackingController;
 use App\Http\Controllers\Storefront\ProductDetailController;
 use App\Http\Controllers\Storefront\ProductListingController;
 use App\Http\Controllers\Storefront\ProductReviewController;
 use App\Http\Controllers\Storefront\ProductSearchController;
+use App\Http\Controllers\Storefront\ReturnRequestController;
 use App\Http\Controllers\Storefront\RobotsController;
 use App\Http\Controllers\Storefront\SitemapController;
 use App\Http\Controllers\Storefront\WishlistController;
@@ -57,12 +60,31 @@ Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.s
 Route::get('/orders/confirmation/{orderNumber}', [OrderConfirmationController::class, 'show'])
     ->name('orders.confirmation');
 
+Route::get('/orders/lookup', [OrderLookupController::class, 'create'])->name('orders.lookup.create');
+Route::post('/orders/lookup', [OrderLookupController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('orders.lookup.store');
+
+Route::get('/orders/track', [OrderTrackingController::class, 'create'])->name('orders.track.create');
+Route::post('/orders/track', [OrderTrackingController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('orders.track.store');
+Route::get('/orders/{orderNumber}/track', [OrderTrackingController::class, 'show'])
+    ->name('orders.track.show');
+
 Route::prefix('api')->group(function () {
     Route::get('/cart', [App\Http\Controllers\Api\CartController::class, 'show']);
     Route::post('/cart/items', [App\Http\Controllers\Api\CartController::class, 'storeItem']);
     Route::patch('/cart/items/{variant}', [App\Http\Controllers\Api\CartController::class, 'updateItem']);
     Route::delete('/cart/items/{variant}', [App\Http\Controllers\Api\CartController::class, 'destroyItem']);
     Route::post('/discount/validate', [DiscountController::class, 'validateCode']);
+});
+
+Route::middleware(['auth'])->prefix('api/wishlist')->group(function () {
+    Route::get('/', [App\Http\Controllers\Api\WishlistController::class, 'index']);
+    Route::post('/items', [App\Http\Controllers\Api\WishlistController::class, 'store']);
+    Route::delete('/items/{product}', [App\Http\Controllers\Api\WishlistController::class, 'destroy']);
+    Route::post('/merge', [App\Http\Controllers\Api\WishlistController::class, 'merge']);
 });
 
 Route::post('/stripe/webhook', StripeWebhookController::class)->name('stripe.webhook');
@@ -85,6 +107,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders', [OrderHistoryController::class, 'index'])->name('orders.index');
     Route::get('/orders/{orderNumber}', [OrderHistoryController::class, 'show'])
         ->name('orders.show');
+    Route::get('/orders/{orderNumber}/returns', [ReturnRequestController::class, 'create'])
+        ->name('orders.returns.create');
+    Route::post('/orders/{orderNumber}/returns', [ReturnRequestController::class, 'store'])
+        ->name('orders.returns.store');
 
     Route::get('/dashboard', [AccountController::class, 'index'])->name('dashboard');
 });

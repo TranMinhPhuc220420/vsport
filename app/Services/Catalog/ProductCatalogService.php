@@ -19,6 +19,7 @@ class ProductCatalogService
     {
         return [
             'category',
+            'brand',
             'options.values.images' => fn ($q) => $q->orderBy('sort_order'),
             'variants.inventory',
         ];
@@ -254,6 +255,7 @@ class ProductCatalogService
             ->where('slug', $slug)
             ->with([
                 'category',
+                'brand',
                 'options.values.images' => fn ($q) => $q->orderBy('sort_order'),
                 'variants.optionValues.option',
                 'variants.inventory',

@@ -31,6 +31,8 @@ class UpdateStoreSettingsRequest extends FormRequest
             'tiktokUrl' => ['nullable', 'string', 'url', 'max:500'],
             'youtubeUrl' => ['nullable', 'string', 'url', 'max:500'],
             'currency' => ['required', 'string', 'in:USD,VND'],
+            'returnsEnabled' => ['sometimes', 'boolean'],
+            'returnsWindowDays' => ['required', 'integer', 'min:1', 'max:365'],
         ];
     }
 }

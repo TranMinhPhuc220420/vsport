@@ -1,94 +1,106 @@
 # PERMISSIONS.md
 
+Authorization model for Zova Sport. All enforcement is in the Laravel application layer (middleware + policies) — there is **no database-level RLS** (no Supabase, no Postgres row security). This doc supersedes any earlier Supabase-era design notes.
+
+---
+
 ## 1. Roles
 
-### Guest
+Single `role` column on `users` (`App\Enums\UserRole`): `customer` (default) or `admin`. Checked via `$user->isAdmin()` / `$user->isCustomer()` (`App\Models\User`) — never trust a client-supplied role.
 
-* View products
-* View product details
+### Guest (no session / not logged in)
 
----
+* Browse PLP/PDP, search, blog, legal pages
+* Add to cart, checkout (COD or Stripe) with a required email
+* View **only** the order(s) just placed, via `guest_order_access` (see §4)
+* Cannot view `/orders` (order history), `/dashboard`, or any `/admin` route
 
-### User
+### Customer (`role = customer`)
 
-* All Guest permissions
-* Create orders
-* View own orders
+* Everything a guest can do, plus:
+* View own order history and detail (`/orders`, `/orders/{orderNumber}`)
+* Leave one review per product, manage profile/security/appearance settings
+* Cannot access `/admin/*` (blocked by the `admin` middleware, `403`)
+* Cannot view or modify another user's orders (`OrderPolicy`, `403`)
 
----
+### Admin (`role = admin`)
 
-### Admin
-
-* Full access
-* Manage products
-* Manage orders
-* View all users
-
----
-
-## 2. Supabase RLS Policies
-
-### Products
-
-* Public read
-* Admin write
+* Full access to `/admin/*`: products, categories, brands, size guides, orders (view + status transitions), discount codes, reviews (approve), blog, homepage CMS, newsletter subscriber list, analytics, store settings, activity log
+* Every mutating admin action is written to `admin_activity_logs`
 
 ---
 
-### Orders
+## 2. Enforcement Map
 
-User:
+### Middleware (`bootstrap/app.php` aliases)
 
-* Can create order
-* Can view own orders
+| Alias | Class | Used for |
+|-------|-------|----------|
+| `auth` | Laravel built-in | Any route requiring a logged-in user |
+| `verified` | Laravel built-in | Routes requiring a verified email (all authenticated storefront + admin routes) |
+| `admin` | `App\Http\Middleware\EnsureUserIsAdmin` | Aborts `403` unless `$user->isAdmin()` |
+| `ops` | `App\Http\Middleware\EnsureOpsToken` | Token-gated ops endpoints (`/ops/storage-link`, `/ops/clear-cache`) — compares `X-Ops-Token` header/`?token=` against `OPS_TOKEN` env, constant-time |
+| `local` | `App\Http\Middleware\EnsureLocalEnvironment` | Non-production-only routes (e.g. `/preview/design-system`) |
+| `RequirePassword` (Fortify) | — | `settings/security` requires a recently-confirmed password before viewing (redirects to `password.confirm`) |
 
-Admin:
+### Route groups
 
-* Can view all orders
-* Can update order status
+| Group | File | Middleware | Notes |
+|-------|------|-----------|-------|
+| Public storefront | `routes/web.php` | `web` (session, CSRF) only | PLP/PDP, cart, checkout, blog, legal — no auth required |
+| `/api/*` (cart, discount validate) | `routes/web.php` | `web` only | Guest-accessible; cart resolves by session, not user |
+| Authenticated storefront | `routes/web.php` | `auth`, `verified` | `/orders`, `/orders/{orderNumber}`, `/dashboard`, review submission |
+| Settings | `routes/settings.php` | `auth` (profile), `auth`+`verified` (security/appearance/delete) | `security.edit` additionally requires `RequirePassword` |
+| Admin | `routes/admin.php` | `auth`, `verified`, `admin` | Every route under `/admin` prefix |
+| Stripe webhook | `routes/web.php` | none (verified by Stripe signature inside the controller) | `POST /stripe/webhook` |
 
----
+### Policies
 
-### Order Items
+| Policy | Model | Rules |
+|--------|-------|-------|
+| `OrderPolicy` | `Order` | `viewAny`: admin only. `view`: admin, or `order.user_id === $user->id`. `update` (status transitions): admin only. |
 
-* Same as Orders
+No other model policies exist yet — admin-only resources (products, categories, brands, discount codes, blog, etc.) are protected entirely by the route-level `admin` middleware, not per-model policies.
 
----
-
-## 3. Auth Rules
-
-* All sensitive actions require authentication
-* Admin routes must be protected
-
----
-
-## 4. Admin Detection
-
-* Use role field in database (e.g., `role = 'admin'`)
-* Never trust client role
-
----
-
-## 5. API Access Control
-
-* Server Actions must validate:
-
-  * user session
-  * role
+No `Gate::define`/`AuthServiceProvider` custom gates are used; policies are resolved by Laravel's model-name convention (`Order` → `OrderPolicy`).
 
 ---
 
-## 6. Forbidden Actions
+## 3. Guest Checkout & Order Recovery
 
-User CANNOT:
+Guests can complete checkout without an account (email is required in the checkout form and stored in the JSON `shipping_address` snapshot on the order).
 
-* Modify product
-* Access other users' orders
-* Change order status
+Immediately after a guest places an order, `CheckoutController::store()` pushes the new `order_number` into the `guest_order_access` session array. `OrderConfirmationController::show()` (`GET /orders/confirmation/{orderNumber}`) allows viewing if either:
+
+* the request is authenticated and `OrderPolicy::view` passes, or
+* the request is a guest and the requested order number is present in `session('guest_order_access', [])`
+
+This is **session-scoped only** — a guest who loses their session (different browser/device, cleared cookies) cannot currently recover their order. A durable guest lookup (order number + email) is planned in [Phase 4](./phase-060760/04-customer-experience.md) and is not yet implemented.
+
+The full authenticated order history (`/orders`, `/orders/{orderNumber}` via `OrderHistoryController`) is behind `auth`+`verified` and always uses `OrderPolicy`, regardless of session grants.
 
 ---
 
-## 7. Security Notes
+## 4. Forbidden Actions (verified by tests)
 
-* RLS is mandatory
-* Always test policies manually
+Customer **cannot**:
+
+* Access any `/admin/*` route or perform admin actions (`403`)
+* View or update another customer's order (`403` via `OrderPolicy`)
+* Update any order's status (admin-only, `403`)
+
+Guest **cannot**:
+
+* View `/orders` or `/dashboard` (redirected to `login`)
+* View an order that isn't in their `guest_order_access` session grant (`403`)
+
+See [`tests/Feature/Permissions/PermissionMatrixTest.php`](../tests/Feature/Permissions/PermissionMatrixTest.php) for the executable spec of the above (guest checkout vs. order history, customer vs. admin route access, cross-user order access, blog admin routes).
+
+---
+
+## 5. Security Notes
+
+* Never trust a client-supplied role or ID — always re-check `$user->isAdmin()`/policy on the server for every mutating action.
+* `EnsureOpsToken` uses `hash_equals()` for constant-time comparison — do not change to `===`.
+* Session cookies (`cart_session_id`, `appearance`, `locale`, `sidebar_state`) are explicitly excluded from encryption (`bootstrap/app.php`) because they're read by client JS; they carry no sensitive data. Everything else is encrypted per Laravel defaults.
+* CSRF is enforced by the `web` middleware group on all state-changing routes except the Stripe webhook (verified by Stripe's own signature, not CSRF) — see `validateCsrfTokens(except:)` in `bootstrap/app.php`.

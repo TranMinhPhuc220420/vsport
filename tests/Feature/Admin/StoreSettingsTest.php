@@ -22,6 +22,8 @@ function storeSettingsPayload(array $overrides = []): array
         'tiktokUrl' => null,
         'youtubeUrl' => null,
         'currency' => 'USD',
+        'returnsEnabled' => true,
+        'returnsWindowDays' => 30,
     ], $overrides);
 }
 

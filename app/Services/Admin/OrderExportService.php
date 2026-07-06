@@ -36,6 +36,9 @@ class OrderExportService
                 'total_amount',
                 'discount_amount',
                 'payment_method',
+                'tracking_number',
+                'shipping_carrier',
+                'refund_status',
                 'created_at',
             ]);
 
@@ -54,6 +57,9 @@ class OrderExportService
                         (float) $order->total_amount,
                         (float) $order->discount_amount,
                         $order->payment_method->value,
+                        $order->tracking_number ?? '',
+                        $order->shipping_carrier?->value ?? '',
+                        $order->refund_status?->value ?? '',
                         $order->created_at?->toIso8601String() ?? '',
                     ]);
                 }

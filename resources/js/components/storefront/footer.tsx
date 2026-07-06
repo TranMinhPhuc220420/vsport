@@ -29,6 +29,14 @@ export function StorefrontFooter() {
                 title: t('footer.help'),
                 links: [
                     { label: t('footer.orderStatus'), href: '/orders' },
+                    {
+                        label: t('footer.orderLookup'),
+                        href: '/orders/lookup',
+                    },
+                    {
+                        label: t('footer.trackOrder'),
+                        href: '/orders/track',
+                    },
                     { label: t('footer.shipping'), href: '/shipping' },
                     { label: t('footer.returns'), href: '/returns' },
                     { label: t('footer.privacy'), href: '/privacy' },

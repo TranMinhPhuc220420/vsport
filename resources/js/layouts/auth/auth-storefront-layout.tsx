@@ -39,23 +39,24 @@ export default function AuthStorefrontLayout({
                             <img
                                 src={editorialImage}
                                 alt=""
-                                className="absolute inset-0 size-full object-cover"
+                                className="absolute inset-0 size-full object-cover object-center"
                             />
-                            <div className="absolute inset-0 bg-ink/40" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/15" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-ink/25 to-transparent" />
                         </>
                     ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-ink via-charcoal to-ash" />
                     )}
 
                     <div className="relative z-10 w-full min-w-0 p-10 desktop:p-16">
-                        <p className="text-display-campaign text-balance text-canvas">
-                            {headline}
-                        </p>
                         {description && (
-                            <p className="text-body-strong mt-4 text-balance text-canvas/80">
+                            <p className="text-caption-md text-balance text-canvas/85 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
                                 {description}
                             </p>
                         )}
+                        <h2 className="text-display-campaign mt-3 text-balance text-canvas drop-shadow-[0_2px_20px_rgba(0,0,0,0.55)]">
+                            {headline}
+                        </h2>
                         <AuthBenefitsList benefits={editorialBenefits} />
                     </div>
                 </aside>

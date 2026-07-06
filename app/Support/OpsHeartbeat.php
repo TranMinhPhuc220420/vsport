@@ -11,6 +11,8 @@ class OpsHeartbeat
 
     public const ANALYTICS_SYNC = 'ops.scheduler.analytics-sync';
 
+    public const INVENTORY_LOW_STOCK_CHECK = 'ops.scheduler.inventory-low-stock-check';
+
     public static function record(string $key): void
     {
         Cache::put($key, now()->toIso8601String(), now()->addDays(14));

@@ -238,7 +238,7 @@ test('admin order status update sends email to customer', function () {
         ['status' => 'confirmed'],
     );
 
-    Mail::assertSent(OrderStatusUpdatedMail::class, function (OrderStatusUpdatedMail $mail) use ($customer) {
+    Mail::assertQueued(OrderStatusUpdatedMail::class, function (OrderStatusUpdatedMail $mail) use ($customer) {
         return $mail->hasTo($customer->email);
     });
 });

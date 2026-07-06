@@ -6,12 +6,17 @@ use App\Data\PageSeo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Services\Order\ReturnRequestService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class OrderHistoryController extends Controller
 {
+    public function __construct(
+        private readonly ReturnRequestService $returnRequests,
+    ) {}
+
     public function index(Request $request): Response
     {
         $orders = Order::query()
@@ -40,6 +45,7 @@ class OrderHistoryController extends Controller
 
         return Inertia::render('storefront/orders/show', [
             'order' => OrderResource::make($order)->resolve(),
+            'returnEligibility' => $this->returnRequests->eligibility($order),
             'seo' => PageSeo::forPrivate(
                 __('seo.private.order_detail', ['order_number' => $orderNumber]),
                 route('orders.show', $orderNumber),

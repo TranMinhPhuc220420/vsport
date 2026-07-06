@@ -19,6 +19,15 @@ function getCsrfToken(): string {
     return match ? decodeURIComponent(match[1]) : '';
 }
 
+type SavedAddress = {
+    id: number;
+    label: string | null;
+    recipientName: string;
+    phone: string;
+    addressLine: string;
+    isDefault: boolean;
+};
+
 type CheckoutPageProps = {
     stripeKey?: string | null;
     isGuest?: boolean;
@@ -30,6 +39,7 @@ type CheckoutPageProps = {
         customerPhone: string;
         shippingAddress: string;
     };
+    savedAddresses?: SavedAddress[];
 };
 
 export default function CheckoutPage(props: CheckoutPageProps) {
@@ -40,18 +50,21 @@ export default function CheckoutPage(props: CheckoutPageProps) {
         stripeKey: pageStripeKey,
         isGuest: pageIsGuest,
         defaults: pageDefaults,
+        savedAddresses: pageSavedAddresses,
         seo: pageSeo,
     } = usePage().props as {
         errors?: Record<string, string>;
         stripeKey?: string | null;
         isGuest?: boolean;
         defaults?: CheckoutPageProps['defaults'];
+        savedAddresses?: SavedAddress[];
         seo?: SeoData;
     };
     const errors = { ...pageErrors, ...props.errors };
     const stripeKey = props.stripeKey ?? pageStripeKey;
     const isGuest = props.isGuest ?? pageIsGuest ?? false;
     const defaults = props.defaults ?? pageDefaults;
+    const savedAddresses = props.savedAddresses ?? pageSavedAddresses ?? [];
     const seo = props.seo ?? pageSeo;
     const { items, subtotal, itemCount } = useCart();
     const [customerName, setCustomerName] = useState(
@@ -66,12 +79,29 @@ export default function CheckoutPage(props: CheckoutPageProps) {
     const [shippingAddress, setShippingAddress] = useState(
         defaults?.shippingAddress ?? '',
     );
+    const [selectedAddressId, setSelectedAddressId] = useState(
+        () => savedAddresses.find((address) => address.isDefault)?.id ?? '',
+    );
+    const [saveAddress, setSaveAddress] = useState(false);
     const [discountCode, setDiscountCode] = useState('');
     const [discountAmount, setDiscountAmount] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState<'cod' | 'stripe'>('cod');
     const [processing, setProcessing] = useState(false);
     const [applyingCode, setApplyingCode] = useState(false);
     const [discountError, setDiscountError] = useState<string | null>(null);
+
+    const applySavedAddress = (addressId: string) => {
+        setSelectedAddressId(addressId);
+
+        const address = savedAddresses.find(
+            (item) => String(item.id) === addressId,
+        );
+
+        if (address) {
+            setCustomerPhone(address.phone);
+            setShippingAddress(address.addressLine);
+        }
+    };
 
     const total = Math.max(0, subtotal - discountAmount);
 
@@ -131,6 +161,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                 shippingAddress,
                 discountCode: discountCode.trim() || undefined,
                 paymentMethod,
+                saveAddress: !isGuest && saveAddress ? true : undefined,
             },
             {
                 onFinish: () => setProcessing(false),
@@ -214,6 +245,35 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                             </CheckoutField>
                         )}
 
+                        {!isGuest && savedAddresses.length > 0 && (
+                            <CheckoutField
+                                id="savedAddress"
+                                label={t('checkout.savedAddress')}
+                            >
+                                <select
+                                    id="savedAddress"
+                                    value={selectedAddressId}
+                                    onChange={(e) =>
+                                        applySavedAddress(e.target.value)
+                                    }
+                                    className={checkoutInputClassName}
+                                >
+                                    <option value="">
+                                        {t('checkout.savedAddressNew')}
+                                    </option>
+                                    {savedAddresses.map((address) => (
+                                        <option
+                                            key={address.id}
+                                            value={address.id}
+                                        >
+                                            {address.label ||
+                                                address.recipientName}
+                                        </option>
+                                    ))}
+                                </select>
+                            </CheckoutField>
+                        )}
+
                         <CheckoutField
                             id="customerPhone"
                             label={t('checkout.phone')}
@@ -249,6 +309,19 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                                 className={checkoutInputClassName}
                             />
                         </CheckoutField>
+
+                        {!isGuest && (
+                            <label className="text-caption-md flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    checked={saveAddress}
+                                    onChange={(e) =>
+                                        setSaveAddress(e.target.checked)
+                                    }
+                                />
+                                {t('checkout.saveAddress')}
+                            </label>
+                        )}
 
                         <CheckoutField
                             id="discountCode"
@@ -378,6 +451,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                             variant="primary"
                             className="mt-6 w-full"
                             disabled={processing}
+                            data-testid="checkout-submit"
                         >
                             {t('checkout.placeOrder')}
                         </StorefrontButton>

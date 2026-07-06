@@ -29,6 +29,7 @@ class CheckoutRequest extends FormRequest
             ],
             'discountCode' => ['nullable', 'string', 'max:50'],
             'paymentMethod' => ['nullable', 'string', 'in:cod,stripe'],
+            'saveAddress' => ['nullable', 'boolean'],
         ];
     }
 }

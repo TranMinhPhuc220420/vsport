@@ -22,7 +22,7 @@ return [
             [
                 'slug' => 'men-running',
                 'name' => 'Giày chạy bộ',
-                'image_url' => 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&h=600&fit=crop&auto=format',
+                'image_url' => 'https://images.pexels.com/photos/47354/the-ball-stadion-football-the-pitch-47354.jpeg',
                 'image_alt' => 'Giày chạy bộ nam',
             ],
             [

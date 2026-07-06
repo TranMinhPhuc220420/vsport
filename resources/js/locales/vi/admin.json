@@ -10,9 +10,11 @@
         "brands": "Nhãn hàng",
         "categories": "Danh mục",
         "orders": "Đơn hàng",
+        "returnRequests": "Yêu cầu đổi trả",
         "users": "Người dùng",
         "discountCodes": "Mã giảm giá",
         "reviews": "Đánh giá",
+        "newsletter": "Bản tin",
         "analytics": "Phân tích",
         "homepage": "Trang chủ",
         "sizeGuides": "Bảng size",
@@ -274,6 +276,29 @@
             "stripe": "Thẻ (Stripe)"
         },
         "paymentIntent": "Mã thanh toán",
+        "refundStatus": "Hoàn tiền",
+        "refundStatuses": {
+            "refunded": "Đã hoàn tiền",
+            "failed": "Hoàn tiền thất bại"
+        },
+        "retryRefund": "Thử hoàn tiền lại",
+        "tracking": "Theo dõi vận chuyển",
+        "trackingNumber": "Mã vận đơn",
+        "shippingCarrier": "Đơn vị vận chuyển",
+        "saveTracking": "Lưu thông tin vận chuyển",
+        "bulkStatus": "Trạng thái hàng loạt",
+        "chooseStatus": "Chọn trạng thái…",
+        "applyBulkStatus": "Áp dụng cho đã chọn",
+        "selectAll": "Chọn tất cả đơn trên trang",
+        "selectOrder": "Chọn đơn {{orderNumber}}",
+        "carriers": {
+            "ghtk": "GHTK",
+            "ghn": "GHN",
+            "viettel_post": "Viettel Post",
+            "vnpost": "VNPost",
+            "jt_express": "J&T Express",
+            "other": "Khác"
+        },
         "discount": "Giảm giá",
         "subtotal": "Tạm tính",
         "statusError": "Không thể cập nhật trạng thái đơn hàng.",
@@ -286,6 +311,40 @@
             "delivered": "Đã giao",
             "completed": "Hoàn tất",
             "cancelled": "Đã hủy"
+        }
+    },
+    "returnRequests": {
+        "title": "Yêu cầu đổi trả",
+        "description": "Xem xét yêu cầu đổi trả và xử lý hoàn tiền.",
+        "detailTitle": "Yêu cầu đổi trả",
+        "back": "Quay lại danh sách",
+        "order": "Đơn hàng",
+        "orderNumber": "Đơn {{orderNumber}}",
+        "customer": "Khách hàng",
+        "requested": "Yêu cầu lúc",
+        "reason": "Lý do của khách",
+        "adminNotes": "Ghi chú quản trị",
+        "items": "Sản phẩm trả",
+        "returnQty": "SL trả",
+        "filterAll": "Tất cả trạng thái",
+        "exportCsv": "Xuất CSV",
+        "emptyTitle": "Chưa có yêu cầu đổi trả",
+        "emptyDescription": "Yêu cầu từ khách hàng sẽ hiển thị tại đây.",
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "markReceived": "Đã nhận hàng trả",
+        "markRefunded": "Đã hoàn tiền",
+        "close": "Đóng",
+        "rejectTitle": "Từ chối yêu cầu đổi trả",
+        "rejectDescription": "Nhập lý do khách hàng sẽ thấy trong email thông báo.",
+        "rejectNotesPlaceholder": "Lý do từ chối…",
+        "statuses": {
+            "pending": "Chờ duyệt",
+            "approved": "Đã duyệt",
+            "rejected": "Đã từ chối",
+            "received": "Đã nhận hàng",
+            "refunded": "Đã hoàn tiền",
+            "closed": "Đã đóng"
         }
     },
     "users": {
@@ -325,6 +384,21 @@
         "approve": "Duyệt",
         "deleteConfirm": "Xóa đánh giá này?",
         "ratingOf": "{{rating}} / 5"
+    },
+    "newsletter": {
+        "title": "Người đăng ký bản tin",
+        "description": "Tất cả người đã đăng ký nhận bản tin từ cửa hàng.",
+        "email": "Email",
+        "source": "Nguồn",
+        "subscribedAt": "Ngày đăng ký",
+        "exportCsv": "Xuất CSV",
+        "filterAll": "Tất cả",
+        "sources": {
+            "blog": "Blog",
+            "homepage": "Trang chủ"
+        },
+        "emptyTitle": "Chưa có người đăng ký",
+        "emptyDescription": "Người đăng ký sẽ hiển thị ở đây khi họ đăng ký từ cửa hàng."
     },
     "homepage": {
         "title": "Trang chủ",
@@ -428,6 +502,7 @@
         "actions": {
             "orders.export": "Xuất đơn hàng (CSV)",
             "orders.status.update": "Cập nhật trạng thái đơn",
+            "orders.refund.retry": "Thử hoàn tiền lại",
             "products.featured.update": "Cập nhật sản phẩm nổi bật",
             "products.bulk_delete": "Xóa hàng loạt sản phẩm",
             "products.bulk_featured_update": "Cập nhật nổi bật hàng loạt",
@@ -437,6 +512,7 @@
             "users.role.update": "Cập nhật vai trò người dùng",
             "reviews.approve": "Duyệt đánh giá",
             "reviews.destroy": "Xóa đánh giá",
+            "newsletter_subscribers.export": "Xuất danh sách đăng ký bản tin (CSV)",
             "discount_codes.store": "Tạo mã giảm giá",
             "discount_codes.update": "Cập nhật mã giảm giá",
             "discount_codes.destroy": "Xóa mã giảm giá"
@@ -472,6 +548,10 @@
         "regionalSection": "Khu vực",
         "regionalSectionDescription": "Tùy chọn hiển thị giá và checkout.",
         "currency": "Đơn vị tiền tệ hiển thị",
+        "returnsSection": "Đổi trả",
+        "returnsSectionDescription": "Cấu hình yêu cầu đổi trả trực tuyến từ cửa hàng.",
+        "returnsEnabled": "Cho phép khách yêu cầu đổi trả trực tuyến",
+        "returnsWindowDays": "Thời hạn đổi trả (ngày kể từ khi đặt)",
         "envManagedNotice": "Thanh toán, thuế và vận chuyển được cấu hình trên máy chủ và không thể chỉnh sửa tại đây.",
         "save": "Lưu thay đổi"
     },
@@ -490,8 +570,10 @@
         "brands": "Nhãn hàng",
         "categories": "Danh mục",
         "orders": "Đơn hàng",
+        "returnRequests": "Yêu cầu đổi trả",
         "users": "Người dùng",
         "reviews": "Đánh giá",
+        "newsletter": "Người đăng ký bản tin",
         "analytics": "Phân tích",
         "discountCodes": "Mã giảm giá",
         "activityLogs": "Nhật ký",

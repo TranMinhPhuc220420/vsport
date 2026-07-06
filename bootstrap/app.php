@@ -10,14 +10,15 @@ use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\HandleLocale;
 use App\Support\ApiErrorResponse;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schedule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +43,12 @@ return Application::configure(basePath: dirname(__DIR__))
             ->daily()
             ->onFailure(function () {
                 Log::error('scheduler.analytics.sync failed');
+            });
+
+        $schedule->command('inventory:check-low-stock')
+            ->dailyAt('08:00')
+            ->onFailure(function () {
+                Log::error('scheduler.inventory.check-low-stock failed');
             });
     })
     ->withMiddleware(function (Middleware $middleware): void {
@@ -122,9 +129,12 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
-            $status = $exception instanceof HttpExceptionInterface
-                ? $exception->getStatusCode()
-                : 500;
+            $status = match (true) {
+                $exception instanceof AuthenticationException => 401,
+                $exception instanceof AuthorizationException => 403,
+                $exception instanceof HttpExceptionInterface => $exception->getStatusCode(),
+                default => 500,
+            };
 
             $message = $status === 500 && ! config('app.debug')
                 ? 'Server error.'

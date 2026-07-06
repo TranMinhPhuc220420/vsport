@@ -13,7 +13,7 @@
  */
 
 return [
-    'homepage_hero' => 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1440&h=600&fit=crop&auto=format',
+    'homepage_hero' => 'https://images.pexels.com/photos/47354/the-ball-stadion-football-the-pitch-47354.jpeg',
 
     'products' => [
         // Zegama 2 — men's trail running

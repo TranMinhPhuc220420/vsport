@@ -1,8 +1,13 @@
 import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AdminInputField } from '@/components/admin/admin-field';
+import {
+    AdminInputField,
+    AdminSelectField,
+} from '@/components/admin/admin-field';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { AdminBulkActionBar } from '@/components/admin/ui/admin-bulk-action-bar';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import {
     AdminCardList,
@@ -18,6 +23,7 @@ import {
     AdminDataTableHeaderCell,
     AdminDataTableHeaderRow,
     AdminDataTableRow,
+    AdminDataTableSelectCell,
 } from '@/components/admin/ui/admin-data-table';
 import { AdminEmptyState } from '@/components/admin/ui/admin-empty-state';
 import { AdminFilterTabs } from '@/components/admin/ui/admin-filter-tabs';
@@ -25,6 +31,7 @@ import { AdminPagination } from '@/components/admin/ui/admin-pagination';
 import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
 import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
 import { formatCurrency, formatDateTime, useLocale } from '@/hooks/use-locale';
+import { useRowSelection } from '@/hooks/use-row-selection';
 import type { PaginatedOrders } from '@/types/order';
 
 type AdminOrdersPageProps = {
@@ -46,6 +53,8 @@ export default function AdminOrdersIndex({
     const { t: tCommon } = useTranslation('common');
     const { locale, currency } = useLocale();
     const { isPending, onStart, onFinish } = useAdminFilterPending();
+    const selection = useRowSelection(orders.data);
+    const [bulkStatus, setBulkStatus] = useState('');
 
     setLayoutProps({
         breadcrumbs: [
@@ -109,6 +118,26 @@ export default function AdminOrdersIndex({
         exportParams.toString() ? `?${exportParams.toString()}` : ''
     }`;
 
+    const selectedIds = Array.from(selection.selectedIds);
+
+    const bulkUpdateStatus = () => {
+        if (!bulkStatus) {
+            return;
+        }
+
+        router.patch(
+            '/admin/orders/bulk-status',
+            { ids: selectedIds, status: bulkStatus },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    selection.clear();
+                    setBulkStatus('');
+                },
+            },
+        );
+    };
+
     return (
         <>
             <Head title={t('orders.title')} />
@@ -144,6 +173,41 @@ export default function AdminOrdersIndex({
                     disabled={isPending}
                 />
 
+                <AdminBulkActionBar
+                    selectedCount={selection.selectedCount}
+                    onClear={selection.clear}
+                    actions={
+                        <>
+                            <AdminSelectField
+                                label={t('orders.bulkStatus')}
+                                value={bulkStatus}
+                                onChange={setBulkStatus}
+                                options={[
+                                    {
+                                        value: '',
+                                        label: t('orders.chooseStatus'),
+                                    },
+                                    ...statusOptions.map((status) => ({
+                                        value: status,
+                                        label: t(orderStatusKey(status), {
+                                            defaultValue: status,
+                                        }),
+                                    })),
+                                ]}
+                                className="min-w-[180px]"
+                            />
+                            <AdminButton
+                                variant="secondary"
+                                size="sm"
+                                disabled={!bulkStatus}
+                                onClick={bulkUpdateStatus}
+                            >
+                                {t('orders.applyBulkStatus')}
+                            </AdminButton>
+                        </>
+                    }
+                />
+
                 {!isPending && orders.data.length === 0 ? (
                     <AdminEmptyState
                         title={t('orders.emptyTitle')}
@@ -155,6 +219,20 @@ export default function AdminOrdersIndex({
                             <AdminDataTable minWidth="720px">
                                 <AdminDataTableHead>
                                     <AdminDataTableHeaderRow>
+                                        <AdminDataTableSelectCell
+                                            header
+                                            label={t('orders.selectAll')}
+                                            checked={
+                                                selection.allSelected
+                                                    ? true
+                                                    : selection.someSelected
+                                                      ? 'indeterminate'
+                                                      : false
+                                            }
+                                            onCheckedChange={() =>
+                                                selection.toggleAll()
+                                            }
+                                        />
                                         <AdminDataTableHeaderCell>
                                             {t('dashboard.order')}
                                         </AdminDataTableHeaderCell>
@@ -174,10 +252,27 @@ export default function AdminOrdersIndex({
                                 </AdminDataTableHead>
                                 <AdminDataTableBody>
                                     {isPending ? (
-                                        <AdminSkeletonRows columns={5} />
+                                        <AdminSkeletonRows columns={6} />
                                     ) : (
                                         orders.data.map((order) => (
                                             <AdminDataTableRow key={order.id}>
+                                                <AdminDataTableSelectCell
+                                                    label={t(
+                                                        'orders.selectOrder',
+                                                        {
+                                                            orderNumber:
+                                                                order.orderNumber,
+                                                        },
+                                                    )}
+                                                    checked={selection.isSelected(
+                                                        order.id,
+                                                    )}
+                                                    onCheckedChange={() =>
+                                                        selection.toggle(
+                                                            order.id,
+                                                        )
+                                                    }
+                                                />
                                                 <AdminDataTableCell>
                                                     <Link
                                                         href={`/admin/orders/${order.orderNumber}`}

@@ -32,6 +32,12 @@ export type OrderDetail = {
     discountCode?: string | null;
     paymentMethod?: string;
     paymentIntentId?: string | null;
+    refundStatus?: string | null;
+    refundId?: string | null;
+    refundedAt?: string | null;
+    trackingNumber?: string | null;
+    shippingCarrier?: string | null;
+    trackingUrl?: string | null;
     shippingAddress: ShippingAddress;
     createdAt: string | null;
     customer?: OrderCustomer | null;

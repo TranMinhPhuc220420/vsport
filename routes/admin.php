@@ -14,9 +14,11 @@ use App\Http\Controllers\Admin\ContentSectionImageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiscountCodeController;
 use App\Http\Controllers\Admin\HomepageController;
+use App\Http\Controllers\Admin\NewsletterSubscriberController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\Admin\ReturnRequestController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RichtextImageController;
 use App\Http\Controllers\Admin\SizeGuideController;
@@ -39,9 +41,24 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
+        Route::patch('orders/bulk-status', [OrderController::class, 'bulkUpdateStatus'])
+            ->name('orders.status.bulk-update');
         Route::get('orders/{orderNumber}', [OrderController::class, 'show'])->name('orders.show');
         Route::patch('orders/{orderNumber}/status', [OrderController::class, 'updateStatus'])
             ->name('orders.status.update');
+        Route::patch('orders/{orderNumber}/tracking', [OrderController::class, 'updateTracking'])
+            ->name('orders.tracking.update');
+        Route::patch('orders/{orderNumber}/refund/retry', [OrderController::class, 'retryRefund'])
+            ->name('orders.refund.retry');
+
+        Route::get('return-requests', [ReturnRequestController::class, 'index'])
+            ->name('return-requests.index');
+        Route::get('return-requests/export', [ReturnRequestController::class, 'export'])
+            ->name('return-requests.export');
+        Route::get('return-requests/{returnRequest}', [ReturnRequestController::class, 'show'])
+            ->name('return-requests.show');
+        Route::patch('return-requests/{returnRequest}/status', [ReturnRequestController::class, 'updateStatus'])
+            ->name('return-requests.status.update');
 
         Route::resource('brands', BrandController::class)->except(['show']);
 
@@ -130,6 +147,11 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
         Route::patch('reviews/{review}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
         Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+        Route::get('newsletter-subscribers', [NewsletterSubscriberController::class, 'index'])
+            ->name('newsletter-subscribers.index');
+        Route::get('newsletter-subscribers/export', [NewsletterSubscriberController::class, 'export'])
+            ->name('newsletter-subscribers.export');
 
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
 

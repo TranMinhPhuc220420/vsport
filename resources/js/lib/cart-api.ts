@@ -1,6 +1,10 @@
 import type { CartItem } from '@/types/cart';
 
 function getCsrfToken(): string {
+    if (typeof document === 'undefined') {
+        return '';
+    }
+
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
 
     return match ? decodeURIComponent(match[1]) : '';
@@ -66,22 +70,24 @@ async function parseCartResponse(response: Response): Promise<{
     };
 }
 
-const cartFetchInit: RequestInit = {
-    credentials: 'same-origin',
-    headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-XSRF-TOKEN': getCsrfToken(),
-    },
-};
+function cartFetchInit(): RequestInit {
+    return {
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-XSRF-TOKEN': getCsrfToken(),
+        },
+    };
+}
 
 export async function fetchServerCart(): Promise<{
     items: CartItem[];
     itemCount: number;
     subtotal: number;
 }> {
-    const response = await fetch('/api/cart', cartFetchInit);
+    const response = await fetch('/api/cart', cartFetchInit());
 
     return parseCartResponse(response);
 }
@@ -96,7 +102,7 @@ export async function addServerCartItem(payload: {
     subtotal: number;
 }> {
     const response = await fetch('/api/cart/items', {
-        ...cartFetchInit,
+        ...cartFetchInit(),
         method: 'POST',
         body: JSON.stringify(payload),
     });
@@ -113,7 +119,7 @@ export async function updateServerCartItem(
     subtotal: number;
 }> {
     const response = await fetch(`/api/cart/items/${variantId}`, {
-        ...cartFetchInit,
+        ...cartFetchInit(),
         method: 'PATCH',
         body: JSON.stringify({ quantity }),
     });
@@ -127,7 +133,7 @@ export async function removeServerCartItem(variantId: number): Promise<{
     subtotal: number;
 }> {
     const response = await fetch(`/api/cart/items/${variantId}`, {
-        ...cartFetchInit,
+        ...cartFetchInit(),
         method: 'DELETE',
     });
 

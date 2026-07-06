@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateStoreSettingsRequest;
 use App\Services\Admin\AdminActivityService;
+use App\Services\Admin\ReturnPolicySettingsService;
 use App\Services\Admin\StoreSettingsService;
 use App\Services\FaviconGenerator;
 use App\Services\ProductImageStorage;
@@ -20,16 +21,20 @@ class StoreSettingController extends Controller
         private readonly FaviconGenerator $favicon,
     ) {}
 
-    public function edit(StoreSettingsService $settings): Response
-    {
+    public function edit(
+        StoreSettingsService $settings,
+        ReturnPolicySettingsService $returnPolicy,
+    ): Response {
         return Inertia::render('admin/settings/edit', [
             'profile' => $settings->profile(),
+            'returnPolicy' => $returnPolicy->settings(),
         ]);
     }
 
     public function update(
         UpdateStoreSettingsRequest $request,
         StoreSettingsService $settings,
+        ReturnPolicySettingsService $returnPolicy,
     ): RedirectResponse {
         $validated = $request->validated();
 
@@ -61,6 +66,11 @@ class StoreSettingController extends Controller
             'tiktokUrl' => $validated['tiktokUrl'] ?? null,
             'youtubeUrl' => $validated['youtubeUrl'] ?? null,
             'currency' => $validated['currency'],
+        ]);
+
+        $returnPolicy->update([
+            'returnsEnabled' => $validated['returnsEnabled'] ?? false,
+            'returnsWindowDays' => $validated['returnsWindowDays'] ?? 30,
         ]);
 
         $this->activity->log(
