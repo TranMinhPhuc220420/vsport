@@ -26,10 +26,10 @@ export default function AuthStorefrontLayout({
 
     return (
         <div className="vsport-light min-h-dvh bg-canvas text-ink">
-            <div className="tablet-lg:grid tablet-lg:min-h-dvh tablet-lg:grid-cols-2">
+            <div className="tablet-lg:grid tablet-lg:min-h-dvh tablet-lg:grid-cols-2 tablet-lg:[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)]">
                 <aside
                     className={cn(
-                        'relative hidden overflow-hidden tablet-lg:flex tablet-lg:flex-col tablet-lg:justify-end',
+                        'relative hidden min-w-0 overflow-hidden tablet-lg:flex tablet-lg:flex-col tablet-lg:justify-end',
                         !editorialImage && 'bg-ink',
                     )}
                     aria-hidden
@@ -47,12 +47,12 @@ export default function AuthStorefrontLayout({
                         <div className="absolute inset-0 bg-gradient-to-br from-ink via-charcoal to-ash" />
                     )}
 
-                    <div className="relative z-10 p-10 desktop:p-16">
-                        <p className="text-display-campaign max-w-lg text-canvas">
+                    <div className="relative z-10 w-full min-w-0 p-10 desktop:p-16">
+                        <p className="text-display-campaign text-balance text-canvas">
                             {headline}
                         </p>
                         {description && (
-                            <p className="text-body-strong mt-4 max-w-md text-canvas/80">
+                            <p className="text-body-strong mt-4 text-balance text-canvas/80">
                                 {description}
                             </p>
                         )}
@@ -60,8 +60,8 @@ export default function AuthStorefrontLayout({
                     </div>
                 </aside>
 
-                <div className="flex min-h-dvh flex-col">
-                    <header className="storefront-container flex h-16 items-center justify-between py-4">
+                <div className="flex min-h-dvh min-w-0 flex-col">
+                    <header className="storefront-container flex h-16 min-w-0 items-center justify-between py-4">
                         <Link
                             href={home()}
                             className="inline-flex items-center"
@@ -70,7 +70,7 @@ export default function AuthStorefrontLayout({
                                 <img
                                     src={logoUrl}
                                     alt={storeProfile.name}
-                                    className="h-8 w-auto max-w-[8rem] object-contain"
+                                    className="h-8 w-auto object-contain"
                                 />
                             ) : (
                                 <span className="text-heading-md text-ink">
@@ -88,8 +88,8 @@ export default function AuthStorefrontLayout({
                         </Link>
                     </header>
 
-                    <main className="flex flex-1 items-center justify-center px-4 pb-10 tablet-lg:px-10">
-                        <div className="w-full max-w-[26.25rem]">
+                    <main className="flex min-w-0 flex-1 items-center px-6 pb-10 tablet-lg:px-12 desktop:px-16">
+                        <div className="w-full min-w-0">
                             <div className="mb-8 space-y-2 tablet-lg:mb-10">
                                 <h1 className="text-heading-xl text-ink">
                                     {title}

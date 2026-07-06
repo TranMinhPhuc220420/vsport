@@ -45,7 +45,7 @@ export function UtilityBar() {
                 <span className="text-mute" aria-hidden>
                     ·
                 </span>
-                <LanguageSwitcher compact />
+                <LanguageSwitcher variant="utility" />
                 <span className="text-mute" aria-hidden>
                     ·
                 </span>
