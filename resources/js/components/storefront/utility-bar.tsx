@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import { LanguageSwitcher } from '@/components/language-switcher';
+import { StorefrontLanguageSwitcher } from '@/components/storefront/language-switcher';
 import { useScrollDirection } from '@/hooks/use-scroll-direction';
 import { cn } from '@/lib/utils';
 import { login, register } from '@/routes';
@@ -45,7 +45,7 @@ export function UtilityBar() {
                 <span className="text-mute" aria-hidden>
                     ·
                 </span>
-                <LanguageSwitcher variant="utility" />
+                <StorefrontLanguageSwitcher variant="utility" />
                 <span className="text-mute" aria-hidden>
                     ·
                 </span>
