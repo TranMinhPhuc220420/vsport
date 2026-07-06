@@ -51,13 +51,15 @@ test('deploy check passes in local environment', function () {
         ->expectsOutputToContain('Deploy check passed.');
 });
 
-test('deploy check fails when build manifest is missing', function () {
+test('deploy check fails when build manifest is missing in production', function () {
     $manifest = public_path('build/manifest.json');
     $backup = $manifest.'.bak';
 
     if (! file_exists($manifest)) {
         $this->markTestSkipped('Build manifest not present.');
     }
+
+    app()->instance('env', 'production');
 
     rename($manifest, $backup);
 
