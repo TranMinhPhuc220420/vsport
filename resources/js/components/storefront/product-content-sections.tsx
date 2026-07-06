@@ -1,5 +1,5 @@
-import { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
 import { RichTextRenderer } from '@/components/rich-text-renderer';
+import { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
 import type { ProductContentSection } from '@/types/catalog';
 
 type ProductContentSectionsProps = {
@@ -25,9 +25,7 @@ export function ProductContentSections({
                                         <img
                                             key={image.id}
                                             src={image.url}
-                                            alt={
-                                                image.alt ?? section.title
-                                            }
+                                            alt={image.alt ?? section.title}
                                             className="w-full rounded-lg object-cover"
                                         />
                                     ))}

@@ -27,6 +27,7 @@ function escapeHtml(value: string): string {
 
 export function plainTextToHtml(text: string): string {
     const trimmed = String(text || '').trim();
+
     if (!trimmed) {
         return '';
     }
@@ -42,6 +43,7 @@ export function initialHtml({
     text?: string | null;
 }): string {
     const direct = String(html || '').trim();
+
     if (direct) {
         return sanitizeHtml(direct);
     }

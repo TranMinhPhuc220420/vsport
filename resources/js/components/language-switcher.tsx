@@ -17,13 +17,7 @@ type LanguageSwitcherProps = {
     className?: string;
 };
 
-function LocaleOption({
-    code,
-    label,
-}: {
-    code: AppLocale;
-    label: string;
-}) {
+function LocaleOption({ code, label }: { code: AppLocale; label: string }) {
     return (
         <span className="inline-flex min-w-0 items-center gap-1.5">
             <span className="text-base leading-none" aria-hidden>
@@ -47,7 +41,10 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
             onValueChange={(value) => updateLocale(value as AppLocale)}
         >
             <SelectTrigger
-                className={cn('text-caption-sm h-8 w-fit shrink-0 gap-1', className)}
+                className={cn(
+                    'text-caption-sm h-8 w-fit shrink-0 gap-1',
+                    className,
+                )}
                 aria-label={activeLocale?.label ?? 'Language'}
             >
                 <LocaleOption

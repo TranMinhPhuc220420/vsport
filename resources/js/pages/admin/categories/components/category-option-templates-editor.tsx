@@ -51,6 +51,7 @@ export function CategoryOptionTemplatesEditor({
         form.setData('templates', [
             ...form.data.templates,
             {
+                id: undefined,
                 name: 'Color',
                 position: form.data.templates.length,
                 displayType: 'swatch',
@@ -76,7 +77,7 @@ export function CategoryOptionTemplatesEditor({
                 {form.data.templates.map((template, index) => (
                     <div
                         key={template.id ?? `template-${index}`}
-                        className="border-admin space-y-3 rounded-admin-lg border p-4"
+                        className="border-admin rounded-admin-lg space-y-3 border p-4"
                     >
                         <div className="grid gap-3 tablet:grid-cols-2">
                             <AdminInputField
@@ -115,7 +116,11 @@ export function CategoryOptionTemplatesEditor({
                 ))}
 
                 <div className="flex gap-3">
-                    <AdminButton type="button" variant="secondary" onClick={addTemplate}>
+                    <AdminButton
+                        type="button"
+                        variant="secondary"
+                        onClick={addTemplate}
+                    >
                         {t('categories.addTemplate')}
                     </AdminButton>
                     <AdminButton type="submit" disabled={form.processing}>

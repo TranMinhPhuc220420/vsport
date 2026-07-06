@@ -78,14 +78,19 @@ export type AdminProduct = {
 };
 
 export function getProductTotalStock(product: AdminProduct): number {
-    return product.variants.reduce((sum, variant) => sum + variant.available, 0);
+    return product.variants.reduce(
+        (sum, variant) => sum + variant.available,
+        0,
+    );
 }
 
 export function productHasActiveVariants(product: AdminProduct): boolean {
     return product.variants.length > 0;
 }
 
-export function getGalleryOptionValues(product: AdminProduct): AdminProductOptionValue[] {
+export function getGalleryOptionValues(
+    product: AdminProduct,
+): AdminProductOptionValue[] {
     const galleryOption =
         product.options.find((option) => option.drivesGallery) ??
         product.options.find((option) => option.displayType === 'swatch');

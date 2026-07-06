@@ -33,7 +33,9 @@ export default function StorefrontSettingsLayout({
             />
 
             <header className="mb-8 space-y-2">
-                <h1 className="text-heading-xl text-ink">{t('settings.title')}</h1>
+                <h1 className="text-heading-xl text-ink">
+                    {t('settings.title')}
+                </h1>
                 <p className="text-body-strong text-mute">
                     {t('settings.description')}
                 </p>

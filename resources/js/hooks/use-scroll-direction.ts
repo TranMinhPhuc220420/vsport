@@ -73,7 +73,8 @@ export function useScrollDirection(
                             accumulatedRef.current = delta;
                         }
 
-                        const canToggle = now - lastToggleRef.current >= cooldownMs;
+                        const canToggle =
+                            now - lastToggleRef.current >= cooldownMs;
 
                         if (canToggle) {
                             if (

@@ -208,9 +208,7 @@ export function SizeGuideMeasureEditor({
                                 <div className="text-admin-secondary flex size-full flex-col items-center justify-center gap-2 p-4 text-center">
                                     <ImageIcon className="size-8 opacity-40" />
                                     <p className="text-xs">
-                                        {t(
-                                            'sizeGuides.noMeasureImagePreview',
-                                        )}
+                                        {t('sizeGuides.noMeasureImagePreview')}
                                     </p>
                                 </div>
                             )}

@@ -104,7 +104,7 @@ export function BlogPostCard({
                     )}
                     <p
                         className={cn(
-                            'font-[family-name:var(--font-display)] mt-2 uppercase leading-[0.95] tracking-[-0.005em]',
+                            'mt-2 font-[family-name:var(--font-display)] leading-[0.95] tracking-[-0.005em] uppercase',
                             titleSizeClass,
                             hasImage
                                 ? 'text-canvas drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)]'

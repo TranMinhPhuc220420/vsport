@@ -32,7 +32,8 @@ export default function ProductSearchPage({
     ];
 
     const currentSortLabel =
-        sortOptions.find((o) => o.value === sort)?.label ?? sortOptions[0].label;
+        sortOptions.find((o) => o.value === sort)?.label ??
+        sortOptions[0].label;
 
     const handleSortChange = (newSort: string) => {
         router.get(
@@ -88,7 +89,9 @@ export default function ProductSearchPage({
                                 <span className="text-mute">
                                     {t('plp.sortTitle')}:
                                 </span>
-                                <span className="text-ink">{currentSortLabel}</span>
+                                <span className="text-ink">
+                                    {currentSortLabel}
+                                </span>
                             </button>
 
                             {/* Desktop sort */}

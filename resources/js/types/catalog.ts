@@ -47,6 +47,13 @@ export type ProductVariant = {
     };
 };
 
+export type ProductColorway = {
+    id: number;
+    colorName: string;
+    swatchColor: string;
+    images: ProductImage[];
+};
+
 export type ProductAttribute = {
     key: string;
     label: string;

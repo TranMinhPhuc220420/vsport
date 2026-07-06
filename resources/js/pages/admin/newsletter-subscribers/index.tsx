@@ -149,7 +149,9 @@ export default function AdminNewsletterSubscribersIndex({
                                         <AdminSkeletonRows columns={3} />
                                     ) : (
                                         subscribers.data.map((subscriber) => (
-                                            <AdminDataTableRow key={subscriber.id}>
+                                            <AdminDataTableRow
+                                                key={subscriber.id}
+                                            >
                                                 <AdminDataTableCell className="font-medium text-[var(--admin-primary)]">
                                                     {subscriber.email}
                                                 </AdminDataTableCell>

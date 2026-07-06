@@ -34,7 +34,9 @@ function mapApiItem(item: ApiWishlistItem): WishlistItem {
     };
 }
 
-async function parseWishlistResponse(response: Response): Promise<WishlistItem[]> {
+async function parseWishlistResponse(
+    response: Response,
+): Promise<WishlistItem[]> {
     if (!response.ok) {
         const body = await response.json().catch(() => ({}));
         const message =

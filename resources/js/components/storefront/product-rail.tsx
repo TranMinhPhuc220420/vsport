@@ -1,12 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-    type CSSProperties,
-    type ReactNode,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/utils';
@@ -86,10 +80,7 @@ function ProductRail({ children, className }: ProductRailProps) {
                 ? image.getBoundingClientRect().height
                 : itemBasis;
 
-        rail.style.setProperty(
-            '--rail-image-center',
-            `${imageHeight / 2}px`,
-        );
+        rail.style.setProperty('--rail-image-center', `${imageHeight / 2}px`);
     }, []);
 
     useEffect(() => {
@@ -104,7 +95,9 @@ function ProductRail({ children, className }: ProductRailProps) {
         const observer = new ResizeObserver(updateRailMetrics);
         observer.observe(element);
 
-        element.addEventListener('scroll', updateRailMetrics, { passive: true });
+        element.addEventListener('scroll', updateRailMetrics, {
+            passive: true,
+        });
 
         const mobileQuery = window.matchMedia(MOBILE_MAX_WIDTH);
         const mediaQueries = [
@@ -153,12 +146,12 @@ function ProductRail({ children, className }: ProductRailProps) {
                 touchAxis === null &&
                 (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8)
             ) {
-                touchAxis =
-                    Math.abs(deltaX) > Math.abs(deltaY) ? 'x' : 'y';
+                touchAxis = Math.abs(deltaX) > Math.abs(deltaY) ? 'x' : 'y';
             }
 
             if (touchAxis === 'y') {
                 element.style.overflowX = 'hidden';
+
                 return;
             }
 
@@ -204,7 +197,9 @@ function ProductRail({ children, className }: ProductRailProps) {
             return;
         }
 
-        const firstItem = track.querySelector('[data-slot="product-rail-item"]');
+        const firstItem = track.querySelector(
+            '[data-slot="product-rail-item"]',
+        );
 
         if (!(firstItem instanceof HTMLElement)) {
             return;
@@ -226,11 +221,9 @@ function ProductRail({ children, className }: ProductRailProps) {
             <div ref={railRef} className="relative">
                 <div
                     ref={scrollRef}
-                    className="overflow-x-auto touch-manipulation [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] snap-x snap-mandatory scrollbar-none tablet:overflow-hidden tablet:snap-none tablet:touch-auto"
+                    className="touch-manipulation snap-x snap-mandatory scrollbar-none overflow-x-auto [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] tablet:touch-auto tablet:snap-none tablet:overflow-hidden"
                 >
-                    <div className="flex gap-2 desktop:gap-3">
-                        {children}
-                    </div>
+                    <div className="flex gap-2 desktop:gap-3">{children}</div>
                 </div>
 
                 {showControls ? (

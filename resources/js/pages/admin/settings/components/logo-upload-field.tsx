@@ -32,7 +32,9 @@ export function LogoUploadField({
             <div
                 className={cn(
                     'rounded-admin-lg border-admin overflow-hidden border bg-[var(--admin-neutral)]',
-                    variant === 'wide' ? 'aspect-[3/1]' : 'aspect-square max-w-[8rem]',
+                    variant === 'wide'
+                        ? 'aspect-[3/1]'
+                        : 'aspect-square max-w-[8rem]',
                 )}
             >
                 {previewUrl ? (
@@ -41,7 +43,9 @@ export function LogoUploadField({
                         alt=""
                         className={cn(
                             'size-full',
-                            variant === 'wide' ? 'object-contain p-2' : 'object-cover',
+                            variant === 'wide'
+                                ? 'object-contain p-2'
+                                : 'object-cover',
                         )}
                     />
                 ) : (
@@ -71,6 +75,7 @@ export function LogoUploadField({
                         size="sm"
                         onClick={() => {
                             onChange(null);
+
                             if (fileInputRef.current) {
                                 fileInputRef.current.value = '';
                             }
@@ -86,17 +91,13 @@ export function LogoUploadField({
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/svg+xml"
                 className="hidden"
-                onChange={(event) =>
-                    onChange(event.target.files?.[0] ?? null)
-                }
+                onChange={(event) => onChange(event.target.files?.[0] ?? null)}
             />
 
             {hint && (
                 <p className="admin-caption text-admin-secondary">{hint}</p>
             )}
-            {error && (
-                <p className="admin-caption text-red-600">{error}</p>
-            )}
+            {error && <p className="admin-caption text-red-600">{error}</p>}
         </div>
     );
 }

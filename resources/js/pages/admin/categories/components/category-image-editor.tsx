@@ -27,9 +27,7 @@ export function CategoryImageEditor({
     const { t } = useTranslation('admin');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [imageUrl, setImageUrl] = useState(initialImageUrl);
-    const [imageAlt, setImageAlt] = useState(
-        initialImageAlt ?? categoryName,
-    );
+    const [imageAlt, setImageAlt] = useState(initialImageAlt ?? categoryName);
     const [savedImageAlt, setSavedImageAlt] = useState(
         initialImageAlt ?? categoryName,
     );

@@ -153,9 +153,7 @@ export default function StorefrontAddressesSettings({
                                             type="button"
                                             variant="secondary"
                                             className="text-sale"
-                                            onClick={() =>
-                                                setDeleting(address)
-                                            }
+                                            onClick={() => setDeleting(address)}
                                         >
                                             {t('settings.addresses.delete')}
                                         </StorefrontButton>

@@ -26,7 +26,8 @@ function AuthInput({
             )}
             aria-invalid={error ? true : undefined}
             aria-describedby={
-                [ariaDescribedBy, errorId].filter(Boolean).join(' ') || undefined
+                [ariaDescribedBy, errorId].filter(Boolean).join(' ') ||
+                undefined
             }
             {...props}
         />

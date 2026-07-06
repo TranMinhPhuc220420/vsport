@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AdminTabs } from '@/components/admin/admin-form';
-import { CategoryFormFields } from '@/components/admin/category-form-fields';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { CategoryFormFields } from '@/components/admin/category-form-fields';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { CategoryChildrenPanel } from '@/pages/admin/categories/components/category-children-panel';
 import { CategoryImageEditor } from '@/pages/admin/categories/components/category-image-editor';
@@ -153,8 +153,7 @@ export default function AdminCategoriesEdit({
                                         initial={{
                                             name: category.name,
                                             slug: category.slug,
-                                            parent_id:
-                                                category.parentId ?? '',
+                                            parent_id: category.parentId ?? '',
                                         }}
                                         submitLabel={t('categories.save')}
                                     />
@@ -173,12 +172,8 @@ export default function AdminCategoriesEdit({
                             content: (
                                 <CategoryImageEditor
                                     categoryId={category.id}
-                                    initialImageUrl={
-                                        category.imageUrl ?? null
-                                    }
-                                    initialImageAlt={
-                                        category.imageAlt ?? null
-                                    }
+                                    initialImageUrl={category.imageUrl ?? null}
+                                    initialImageAlt={category.imageAlt ?? null}
                                     categoryName={category.name}
                                 />
                             ),

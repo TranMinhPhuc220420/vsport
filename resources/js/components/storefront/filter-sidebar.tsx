@@ -2,8 +2,8 @@ import { Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { FilterChip } from '@/components/storefront/FilterChip';
-import { cn } from '@/lib/utils';
 import { plpUrl } from '@/lib/plp-navigation';
+import { cn } from '@/lib/utils';
 import type { Category } from '@/types/catalog';
 
 type FilterSidebarProps = {
@@ -23,17 +23,19 @@ function FilterSidebar({
     sort,
     departments,
     subCategories,
-    visible,
-    onToggle,
     className,
 }: FilterSidebarProps) {
     const { t } = useTranslation(['storefront', 'common']);
 
     const navigate = (slug: string) => {
-        router.get(plpUrl(slug, sort), {}, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        router.get(
+            plpUrl(slug, sort),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
     };
 
     return (

@@ -67,9 +67,7 @@ function ProductCardQuickActions({
 
         setHeartPop(true);
         event.currentTarget.blur();
-        toast.success(
-            wishlisted ? t('wishlist.removed') : t('wishlist.added'),
-        );
+        toast.success(wishlisted ? t('wishlist.removed') : t('wishlist.added'));
     };
 
     const handleAddToCartClick = (

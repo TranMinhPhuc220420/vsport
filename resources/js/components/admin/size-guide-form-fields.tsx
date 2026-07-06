@@ -94,10 +94,7 @@ export function SizeGuideFormFields({
                     label={t('sizeGuides.brand')}
                     value={data.brand_id}
                     onChange={(value) =>
-                        setData(
-                            'brand_id',
-                            value === '' ? '' : Number(value),
-                        )
+                        setData('brand_id', value === '' ? '' : Number(value))
                     }
                     options={[
                         { value: '', label: t('sizeGuides.noneBrand') },

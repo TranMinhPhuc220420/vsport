@@ -72,11 +72,7 @@ export default function AdminAnalyticsIndex({
 
                 <AdminStatCard
                     label={t('analytics.avgOrder')}
-                    value={formatCurrency(
-                        averageOrderValue,
-                        locale,
-                        currency,
-                    )}
+                    value={formatCurrency(averageOrderValue, locale, currency)}
                 />
 
                 <section className="space-y-4">

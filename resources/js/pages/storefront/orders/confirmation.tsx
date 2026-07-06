@@ -46,7 +46,10 @@ export default function OrderConfirmationPage({
                 <ScrollReveal>
                     <div className="flex flex-col items-center text-center">
                         <span className="flex size-16 items-center justify-center rounded-full bg-success/10 text-success">
-                            <CheckCircle2 className="size-9" strokeWidth={1.5} />
+                            <CheckCircle2
+                                className="size-9"
+                                strokeWidth={1.5}
+                            />
                         </span>
                         <h1 className="text-heading-xl mt-6 text-ink">
                             {t('storefront:orders.confirmed')}
@@ -98,8 +101,7 @@ export default function OrderConfirmationPage({
                                                 .map((option) => option.value)
                                                 .join(' / ') ||
                                                 `${item.colorName} / ${item.size}`}{' '}
-                                            ×{' '}
-                                            {item.quantity}
+                                            × {item.quantity}
                                         </p>
                                     </div>
                                     <span className="text-body-strong shrink-0 text-ink">
@@ -177,7 +179,7 @@ export default function OrderConfirmationPage({
                             <h2 className="text-heading-md text-ink">
                                 {t('storefront:orders.shipping')}
                             </h2>
-                            <address className="text-caption-md mt-4 space-y-1 not-italic text-mute">
+                            <address className="text-caption-md mt-4 space-y-1 text-mute not-italic">
                                 <p className="text-body-strong text-ink">
                                     {order.shippingAddress.name}
                                 </p>

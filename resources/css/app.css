@@ -428,7 +428,8 @@ html[lang='vi'] {
     }
 
     .motion-hero-progress {
-        animation: motion-hero-progress var(--hero-progress-duration, 6s) linear forwards;
+        animation: motion-hero-progress var(--hero-progress-duration, 6s) linear
+            forwards;
     }
 
     @keyframes motion-hero-progress {

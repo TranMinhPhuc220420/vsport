@@ -5,15 +5,15 @@ import { toast } from 'sonner';
 
 import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
 import { AdminButton } from '@/components/admin/ui/admin-button';
-import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
 import { adminInputClassName } from '@/components/admin/ui/admin-input-styles';
+import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
 import {
     deleteContentSectionImage,
     reorderContentSectionImages,
     updateContentSectionImage,
     uploadContentSectionImage,
-    type AdminContentSectionImage,
 } from '@/lib/admin-upload';
+import type { AdminContentSectionImage } from '@/lib/admin-upload';
 import { cn } from '@/lib/utils';
 
 type ContentSectionImageManagerProps = {
@@ -23,7 +23,9 @@ type ContentSectionImageManagerProps = {
     initialImages: AdminContentSectionImage[];
 };
 
-function sortImages(images: AdminContentSectionImage[]): AdminContentSectionImage[] {
+function sortImages(
+    images: AdminContentSectionImage[],
+): AdminContentSectionImage[] {
     return [...images].sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
@@ -192,7 +194,7 @@ export function ContentSectionImageManager({
                     {images.map((image, index) => (
                         <div
                             key={image.id}
-                            className="border-admin overflow-hidden rounded-admin-lg border"
+                            className="border-admin rounded-admin-lg overflow-hidden border"
                         >
                             <img
                                 src={image.url}
@@ -204,7 +206,10 @@ export function ContentSectionImageManager({
                                     type="text"
                                     value={image.alt ?? ''}
                                     placeholder={t('products.imageAlt')}
-                                    className={cn(adminInputClassName, 'w-full')}
+                                    className={cn(
+                                        adminInputClassName,
+                                        'w-full',
+                                    )}
                                     disabled={busyImageId === image.id}
                                     onChange={(event) => {
                                         const alt = event.target.value;
@@ -225,7 +230,6 @@ export function ContentSectionImageManager({
                                 />
                                 <div className="flex flex-wrap items-center gap-2">
                                     <AdminRowActionLink
-                                        type="button"
                                         disabled={
                                             index === 0 ||
                                             busyImageId === image.id
@@ -238,7 +242,6 @@ export function ContentSectionImageManager({
                                         {t('products.moveUp')}
                                     </AdminRowActionLink>
                                     <AdminRowActionLink
-                                        type="button"
                                         disabled={
                                             index === images.length - 1 ||
                                             busyImageId === image.id
@@ -251,7 +254,6 @@ export function ContentSectionImageManager({
                                         {t('products.moveDown')}
                                     </AdminRowActionLink>
                                     <AdminRowActionLink
-                                        type="button"
                                         className="text-red-600"
                                         disabled={busyImageId === image.id}
                                         onClick={() =>
@@ -278,7 +280,9 @@ export function ContentSectionImageManager({
                 title={t('products.deleteImageConfirm')}
                 variant="destructive"
                 confirmLabel={t('products.deleteImage')}
-                loading={deleteImageId !== null && busyImageId === deleteImageId}
+                loading={
+                    deleteImageId !== null && busyImageId === deleteImageId
+                }
                 onConfirm={() => void handleDelete()}
             />
         </div>

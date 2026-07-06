@@ -12,7 +12,7 @@ import { send } from '@/routes/verification';
 import type { Auth } from '@/types';
 
 type PageProps = {
-    auth: Auth;
+    auth: Auth & { user: NonNullable<Auth['user']> };
 };
 
 export default function Profile({

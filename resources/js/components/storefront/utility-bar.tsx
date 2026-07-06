@@ -6,9 +6,10 @@ import { useScrollDirection } from '@/hooks/use-scroll-direction';
 import { cn } from '@/lib/utils';
 import { login, register } from '@/routes';
 import { dashboard } from '@/routes';
+import type { Auth } from '@/types/auth';
 
 export function UtilityBar() {
-    const { auth } = usePage().props;
+    const { auth } = usePage().props as unknown as { auth: Auth };
     const { t } = useTranslation('storefront');
     const scrollDirection = useScrollDirection();
     const hidden = scrollDirection === 'down';
@@ -33,36 +34,39 @@ export function UtilityBar() {
                 )}
             >
                 <div className="storefront-container text-caption-sm flex h-9 items-center justify-end gap-4">
-                {utilityLinks.map((link) => (
-                    <Link
-                        key={link.label}
-                        href={link.href}
-                        className="hover:underline"
-                    >
-                        {link.label}
-                    </Link>
-                ))}
-                <span className="text-mute" aria-hidden>
-                    ·
-                </span>
-                <StorefrontLanguageSwitcher variant="utility" />
-                <span className="text-mute" aria-hidden>
-                    ·
-                </span>
-                {auth.user ? (
-                    <>
-                        <Link href="/orders" className="hover:underline">
-                            {t('nav.orders')}
+                    {utilityLinks.map((link) => (
+                        <Link
+                            key={link.label}
+                            href={link.href}
+                            className="hover:underline"
+                        >
+                            {link.label}
                         </Link>
-                        <Link href={dashboard()} className="hover:underline">
-                            {t('nav.account')}
+                    ))}
+                    <span className="text-mute" aria-hidden>
+                        ·
+                    </span>
+                    <StorefrontLanguageSwitcher variant="utility" />
+                    <span className="text-mute" aria-hidden>
+                        ·
+                    </span>
+                    {auth.user ? (
+                        <>
+                            <Link href="/orders" className="hover:underline">
+                                {t('nav.orders')}
+                            </Link>
+                            <Link
+                                href={dashboard()}
+                                className="hover:underline"
+                            >
+                                {t('nav.account')}
+                            </Link>
+                        </>
+                    ) : (
+                        <Link href={login()} className="hover:underline">
+                            {t('nav.signIn')}
                         </Link>
-                    </>
-                ) : (
-                    <Link href={login()} className="hover:underline">
-                        {t('nav.signIn')}
-                    </Link>
-                )}
+                    )}
                 </div>
             </div>
         </div>

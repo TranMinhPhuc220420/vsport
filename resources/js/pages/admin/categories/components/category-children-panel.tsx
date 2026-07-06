@@ -46,13 +46,13 @@ export function CategoryChildrenPanel({
             <p className="admin-caption text-admin-secondary -mt-2">
                 {t('categories.subcategoriesHint')}
             </p>
-            <ul className="divide-admin divide-y rounded-admin-lg border-admin overflow-hidden border">
+            <ul className="divide-admin rounded-admin-lg border-admin divide-y overflow-hidden border">
                 {children.map((child) => (
                     <li
                         key={child.id}
                         className="flex items-center gap-4 bg-[var(--admin-surface)] px-4 py-3"
                     >
-                        <div className="size-12 shrink-0 overflow-hidden rounded-admin-md bg-[var(--admin-neutral)]">
+                        <div className="rounded-admin-md size-12 shrink-0 overflow-hidden bg-[var(--admin-neutral)]">
                             {child.imageUrl ? (
                                 <img
                                     src={child.imageUrl}

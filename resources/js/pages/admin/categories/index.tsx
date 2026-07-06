@@ -15,9 +15,8 @@ import {
     filterCategoryTree,
     flattenCategoryTree,
     getDefaultExpandedIds,
-    type CategoryScope,
-    type CategoryTreeRow,
 } from '@/lib/category-tree';
+import type { CategoryScope, CategoryTreeRow } from '@/lib/category-tree';
 import {
     CategoryTreeCards,
     CategoryTreeTable,
@@ -57,17 +56,8 @@ export default function AdminCategoriesIndex({
         getDefaultExpandedIds(tree),
     );
 
-    useEffect(() => {
-        setExpandedIds(getDefaultExpandedIds(tree));
-    }, [tree, filters.search, filters.scope]);
-
     const { roots: filteredRoots, expandedIds: filterExpandedIds } = useMemo(
-        () =>
-            filterCategoryTree(
-                tree,
-                filters.search,
-                filters.scope,
-            ),
+        () => filterCategoryTree(tree, filters.search, filters.scope),
         [tree, filters.search, filters.scope],
     );
 
@@ -193,7 +183,9 @@ export default function AdminCategoriesIndex({
                             disabled={isPending}
                         />
                         <div className="space-y-1.5">
-                            <p className="admin-label">{t('categories.filterLabel')}</p>
+                            <p className="admin-label">
+                                {t('categories.filterLabel')}
+                            </p>
                             <AdminFilterTabs
                                 value={filters.scope}
                                 onChange={(value) =>

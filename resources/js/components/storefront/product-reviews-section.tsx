@@ -242,10 +242,7 @@ function ProductReviewsSection({
 }: ProductReviewsSectionProps) {
     const { t } = useTranslation('storefront');
     const { auth } = usePage().props as { auth?: { user?: unknown } };
-    const distribution = useMemo(
-        () => buildDistribution(reviews),
-        [reviews],
-    );
+    const distribution = useMemo(() => buildDistribution(reviews), [reviews]);
 
     return (
         <section id="reviews" className="border-hairline pt-10">

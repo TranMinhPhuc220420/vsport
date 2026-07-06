@@ -5,8 +5,8 @@ import { toast } from 'sonner';
 
 import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
 import { AdminButton } from '@/components/admin/ui/admin-button';
-import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
 import { adminInputClassName } from '@/components/admin/ui/admin-input-styles';
+import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link';
 import {
     deleteProductImage,
     reorderColorwayImages,
@@ -320,7 +320,9 @@ export function ColorwayImageManager({
                 title={t('products.deleteImageConfirm')}
                 variant="destructive"
                 confirmLabel={t('products.deleteImage')}
-                loading={deleteImageId !== null && busyImageId === deleteImageId}
+                loading={
+                    deleteImageId !== null && busyImageId === deleteImageId
+                }
                 onConfirm={() => void confirmDeleteImage()}
             />
         </div>

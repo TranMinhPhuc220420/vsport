@@ -1,10 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { BlogBentoGrid } from '@/components/storefront/blog-bento-grid';
-import {
-    BlogPostCard,
-    type BlogPostCardData,
-} from '@/components/storefront/blog-post-card';
+import { BlogPostCard } from '@/components/storefront/blog-post-card';
+import type { BlogPostCardData } from '@/components/storefront/blog-post-card';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { SectionHeader } from '@/components/storefront/section-header';
 import { splitPostsForBentoGrid } from '@/lib/blog-editorial-layout';

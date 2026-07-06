@@ -61,7 +61,7 @@ export default function PasskeyVerify({
                 {error && (
                     <p
                         role="alert"
-                        className="text-center text-caption-sm text-sale"
+                        className="text-caption-sm text-center text-sale"
                     >
                         {error}
                     </p>

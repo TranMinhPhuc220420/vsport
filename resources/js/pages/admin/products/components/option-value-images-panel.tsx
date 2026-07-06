@@ -1,26 +1,28 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ColorwayImageManager } from '@/components/admin/colorway-image-manager';
-import { AdminFormSection } from '@/components/admin/admin-form-section';
 import { AdminSelectField } from '@/components/admin/admin-field';
-import {
-    getGalleryOptionValues,
-    type AdminProduct,
-} from '@/types/admin-product';
+import { AdminFormSection } from '@/components/admin/admin-form-section';
+import { ColorwayImageManager } from '@/components/admin/colorway-image-manager';
+import { getGalleryOptionValues } from '@/types/admin-product';
+import type { AdminProduct } from '@/types/admin-product';
 
 type OptionValueImagesPanelProps = {
     product: AdminProduct;
 };
 
-export function OptionValueImagesPanel({ product }: OptionValueImagesPanelProps) {
+export function OptionValueImagesPanel({
+    product,
+}: OptionValueImagesPanelProps) {
     const { t } = useTranslation('admin');
     const galleryValues = getGalleryOptionValues(product);
     const [activeValueId, setActiveValueId] = useState(
         galleryValues[0]?.id ?? 0,
     );
 
-    const activeValue = galleryValues.find((value) => value.id === activeValueId);
+    const activeValue = galleryValues.find(
+        (value) => value.id === activeValueId,
+    );
 
     if (galleryValues.length === 0) {
         return (

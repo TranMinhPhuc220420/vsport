@@ -1,11 +1,9 @@
 import { Head, Link, useForm, setLayoutProps } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import {
-    HomepageCampaignManager,
-    type CampaignForm,
-} from '@/components/admin/homepage-campaign-manager';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { HomepageCampaignManager } from '@/components/admin/homepage-campaign-manager';
+import type { CampaignForm } from '@/components/admin/homepage-campaign-manager';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { AdminCard } from '@/components/admin/ui/admin-card';
 

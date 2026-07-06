@@ -7,7 +7,11 @@ import type { Props as ManagePasskeysProps } from '@/components/manage-passkeys'
 import ManagePasskeys from '@/components/manage-passkeys';
 import type { Props as ManageTwoFactorProps } from '@/components/manage-two-factor';
 import ManageTwoFactor from '@/components/manage-two-factor';
-import { AuthField, AuthPasswordInput, StorefrontButton } from '@/components/storefront';
+import {
+    AuthField,
+    AuthPasswordInput,
+    StorefrontButton,
+} from '@/components/storefront';
 
 type Props = {
     passwordRules: string;
@@ -66,7 +70,9 @@ export default function StorefrontSecuritySettings(props: Props) {
                             <>
                                 <AuthField
                                     id="current_password"
-                                    label={t('settings.security.currentPassword')}
+                                    label={t(
+                                        'settings.security.currentPassword',
+                                    )}
                                     error={errors.current_password}
                                 >
                                     <AuthPasswordInput
@@ -101,7 +107,9 @@ export default function StorefrontSecuritySettings(props: Props) {
 
                                 <AuthField
                                     id="password_confirmation"
-                                    label={t('settings.security.confirmPassword')}
+                                    label={t(
+                                        'settings.security.confirmPassword',
+                                    )}
                                     error={errors.password_confirmation}
                                 >
                                     <AuthPasswordInput

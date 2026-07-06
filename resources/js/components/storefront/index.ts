@@ -3,7 +3,10 @@ export { StorefrontButton } from '@/components/storefront/Button';
 export { StorefrontBadge } from '@/components/storefront/Badge';
 export { FilterChip } from '@/components/storefront/FilterChip';
 export { SearchPill } from '@/components/storefront/SearchPill';
-export { ProductCard, ProductCardSkeleton } from '@/components/storefront/ProductCard';
+export {
+    ProductCard,
+    ProductCardSkeleton,
+} from '@/components/storefront/ProductCard';
 export type { ProductCardProps } from '@/components/storefront/ProductCard';
 export {
     ProductRail,
@@ -41,7 +44,10 @@ export {
     checkoutInputClassName,
 } from '@/components/storefront/checkout-form';
 export { AuthField } from '@/components/storefront/auth/auth-field';
-export { AuthInput, authInputClassName } from '@/components/storefront/auth/auth-input';
+export {
+    AuthInput,
+    authInputClassName,
+} from '@/components/storefront/auth/auth-input';
 export { AuthPasswordInput } from '@/components/storefront/auth/auth-password-input';
 export { AuthCheckbox } from '@/components/storefront/auth/auth-checkbox';
 export { AuthDivider } from '@/components/storefront/auth/auth-divider';

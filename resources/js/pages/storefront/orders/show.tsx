@@ -130,8 +130,7 @@ export default function OrderShowPage({
                                             .map((option) => option.value)
                                             .join(' / ') ||
                                             `${item.colorName} / ${item.size}`}{' '}
-                                        ×{' '}
-                                        {item.quantity}
+                                        × {item.quantity}
                                     </p>
                                 </div>
                                 <span className="text-body-strong text-ink">

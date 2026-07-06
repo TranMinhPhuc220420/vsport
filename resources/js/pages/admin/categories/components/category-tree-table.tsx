@@ -42,13 +42,13 @@ function CategoryThumbnail({
             <img
                 src={imageUrl}
                 alt={imageAlt ?? name}
-                className="size-10 shrink-0 rounded-admin-sm border-admin border object-cover"
+                className="rounded-admin-sm border-admin size-10 shrink-0 border object-cover"
             />
         );
     }
 
     return (
-        <div className="border-admin flex size-10 shrink-0 items-center justify-center rounded-admin-sm border bg-[var(--admin-neutral)]">
+        <div className="border-admin rounded-admin-sm flex size-10 shrink-0 items-center justify-center border bg-[var(--admin-neutral)]">
             <ImageIcon
                 className="text-admin-secondary size-4"
                 aria-hidden="true"
@@ -101,9 +101,7 @@ function ImageStatusBadge({ hasImage }: { hasImage: boolean }) {
                         : 'bg-[var(--admin-warning)]',
                 )}
             />
-            {hasImage
-                ? t('categories.hasImage')
-                : t('categories.missingImage')}
+            {hasImage ? t('categories.hasImage') : t('categories.missingImage')}
         </span>
     );
 }
@@ -141,9 +139,7 @@ function CategoryRowActions({
 
     return (
         <div className="flex justify-end gap-2">
-            <AdminRowActionLink
-                href={`/admin/categories/${row.id}/edit`}
-            >
+            <AdminRowActionLink href={`/admin/categories/${row.id}/edit`}>
                 {tCommon('edit')}
             </AdminRowActionLink>
             {row.depth === 0 && (
@@ -214,10 +210,8 @@ export function CategoryTreeTable({
                                 {row.hasChildren ? (
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            onToggleExpand(row.id)
-                                        }
-                                        className="text-admin-secondary hover:text-[var(--admin-primary)] shrink-0 rounded p-0.5"
+                                        onClick={() => onToggleExpand(row.id)}
+                                        className="text-admin-secondary shrink-0 rounded p-0.5 hover:text-[var(--admin-primary)]"
                                         aria-expanded={row.isExpanded}
                                         aria-label={
                                             row.isExpanded
@@ -285,10 +279,7 @@ export function CategoryTreeTable({
                             />
                         </AdminDataTableCell>
                         <AdminDataTableCell className="text-right">
-                            <CategoryRowActions
-                                row={row}
-                                onDelete={onDelete}
-                            />
+                            <CategoryRowActions row={row} onDelete={onDelete} />
                         </AdminDataTableCell>
                     </AdminDataTableRow>
                 ))}
@@ -324,7 +315,7 @@ function CategoryTreeCardRow({
     return (
         <div
             className={cn(
-                'border-admin space-y-3 rounded-admin-md border p-4',
+                'border-admin rounded-admin-md space-y-3 border p-4',
                 depth > 0 && 'ml-4',
             )}
         >
@@ -366,9 +357,7 @@ function CategoryTreeCardRow({
                 </AdminCardListField>
             )}
             <div className="flex flex-wrap gap-2">
-                <AdminRowActionLink
-                    href={`/admin/categories/${row.id}/edit`}
-                >
+                <AdminRowActionLink href={`/admin/categories/${row.id}/edit`}>
                     {tCommon('edit')}
                 </AdminRowActionLink>
                 {depth === 0 && (

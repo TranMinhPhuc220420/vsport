@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp, ImageIcon, Plus } from 'lucide-react';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -53,20 +53,19 @@ function campaignPlacementKey(index: number): string {
 
 function CampaignPreview({ campaign }: { campaign: CampaignForm }) {
     const { t } = useTranslation('admin');
-    const [previewUrl, setPreviewUrl] = useState<string | null>(
-        campaign.imageUrl || null,
-    );
-
-    useEffect(() => {
+    const previewUrl = useMemo(() => {
         if (campaign.image instanceof File) {
-            const url = URL.createObjectURL(campaign.image);
-            setPreviewUrl(url);
-
-            return () => URL.revokeObjectURL(url);
+            return URL.createObjectURL(campaign.image);
         }
 
-        setPreviewUrl(campaign.imageUrl || null);
+        return campaign.imageUrl || null;
     }, [campaign.image, campaign.imageUrl]);
+
+    useEffect(() => {
+        if (campaign.image instanceof File && previewUrl) {
+            return () => URL.revokeObjectURL(previewUrl);
+        }
+    }, [campaign.image, previewUrl]);
 
     return (
         <div className="rounded-admin-lg border-admin overflow-hidden border">
@@ -347,18 +346,19 @@ function CampaignListItem({
     canRemove,
 }: CampaignListItemProps) {
     const { t } = useTranslation('admin');
-    const [uploadThumbnail, setUploadThumbnail] = useState<string | null>(null);
-
-    useEffect(() => {
+    const uploadThumbnail = useMemo(() => {
         if (campaign.image instanceof File) {
-            const url = URL.createObjectURL(campaign.image);
-            setUploadThumbnail(url);
-
-            return () => URL.revokeObjectURL(url);
+            return URL.createObjectURL(campaign.image);
         }
 
-        setUploadThumbnail(null);
+        return null;
     }, [campaign.image]);
+
+    useEffect(() => {
+        if (campaign.image instanceof File && uploadThumbnail) {
+            return () => URL.revokeObjectURL(uploadThumbnail);
+        }
+    }, [campaign.image, uploadThumbnail]);
 
     const thumbnail = uploadThumbnail ?? campaign.imageUrl;
     const hasErrors = Object.keys(errors).some((key) =>

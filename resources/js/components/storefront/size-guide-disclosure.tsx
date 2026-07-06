@@ -30,7 +30,7 @@ function SizeGuideDisclosure({ sizeGuide }: SizeGuideDisclosureProps) {
 
             <TabsContent value="conversion">
                 <div className="overflow-x-auto">
-                    <table className="w-full border-collapse text-left text-caption-md">
+                    <table className="text-caption-md w-full border-collapse text-left">
                         <thead>
                             <tr className="border-b border-hairline">
                                 {sizeGuide.columns.map((column) => (

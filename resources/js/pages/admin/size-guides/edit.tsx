@@ -67,8 +67,7 @@ export default function AdminSizeGuidesEdit({
                                             name: sizeGuide.name,
                                             category_id:
                                                 sizeGuide.categoryId ?? '',
-                                            brand_id:
-                                                sizeGuide.brandId ?? '',
+                                            brand_id: sizeGuide.brandId ?? '',
                                             is_default: sizeGuide.isDefault,
                                         }}
                                         submitLabel={t('sizeGuides.save')}

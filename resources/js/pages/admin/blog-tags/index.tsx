@@ -30,9 +30,7 @@ type AdminBlogTagsIndexProps = {
     };
 };
 
-export default function AdminBlogTagsIndex({
-    tags,
-}: AdminBlogTagsIndexProps) {
+export default function AdminBlogTagsIndex({ tags }: AdminBlogTagsIndexProps) {
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
     const [deleteSlug, setDeleteSlug] = useState<string | null>(null);

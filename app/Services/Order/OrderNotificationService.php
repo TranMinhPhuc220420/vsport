@@ -6,7 +6,6 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Mail\OrderConfirmationMail;
 use App\Mail\OrderStatusUpdatedMail;
-use App\Mail\OrderTrackingUpdatedMail;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
 

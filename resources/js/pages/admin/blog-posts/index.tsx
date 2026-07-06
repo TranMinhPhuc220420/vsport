@@ -4,10 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { AdminConfirmDialog } from '@/components/admin/admin-confirm-dialog';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import {
-    BlogPostStatusBadge,
-    type BlogPostStatus,
-} from '@/components/admin/blog-post-status-badge';
+import { BlogPostStatusBadge } from '@/components/admin/blog-post-status-badge';
+import type { BlogPostStatus } from '@/components/admin/blog-post-status-badge';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import {
     AdminCardList,
@@ -31,6 +29,7 @@ import { AdminRowActionLink } from '@/components/admin/ui/admin-row-action-link'
 import { AdminSkeletonRows } from '@/components/admin/ui/admin-skeleton-rows';
 import { useAdminFilterPending } from '@/hooks/use-admin-filter-pending';
 import { formatDateTime, useLocale } from '@/hooks/use-locale';
+import type { AppLocale } from '@/i18n';
 
 type BlogPostRow = {
     id: number;
@@ -71,10 +70,7 @@ function BlogPostThumbnail({
     post,
     className,
 }: {
-    post: Pick<
-        BlogPostRow,
-        'featuredImageUrl' | 'featuredImageAlt' | 'title'
-    >;
+    post: Pick<BlogPostRow, 'featuredImageUrl' | 'featuredImageAlt' | 'title'>;
     className?: string;
 }) {
     const { t: tCommon } = useTranslation('common');
@@ -131,7 +127,7 @@ function BlogPostDateCell({
     locale,
 }: {
     post: BlogPostRow;
-    locale: string;
+    locale: AppLocale;
 }) {
     const { t } = useTranslation('admin');
     const { t: tCommon } = useTranslation('common');
@@ -169,9 +165,7 @@ function BlogPostRowActions({
 
     return (
         <div className="flex justify-end gap-2">
-            <AdminRowActionLink
-                href={`/admin/blog-posts/${post.slug}/edit`}
-            >
+            <AdminRowActionLink href={`/admin/blog-posts/${post.slug}/edit`}>
                 {tCommon('edit')}
             </AdminRowActionLink>
             {post.status === 'published' && (
@@ -387,9 +381,7 @@ export default function AdminBlogPostsIndex({
                                         <div className="border-admin overflow-hidden rounded-md border">
                                             {post.featuredImageUrl ? (
                                                 <img
-                                                    src={
-                                                        post.featuredImageUrl
-                                                    }
+                                                    src={post.featuredImageUrl}
                                                     alt={
                                                         post.featuredImageAlt ??
                                                         post.title

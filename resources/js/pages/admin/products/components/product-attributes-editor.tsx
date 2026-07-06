@@ -62,13 +62,15 @@ export function ProductAttributesEditor({
                     {form.data.attributes.map((attr, index) => (
                         <div
                             key={`attr-${index}`}
-                            className="border-admin grid gap-3 rounded-admin-lg border p-4 tablet:grid-cols-2"
+                            className="border-admin rounded-admin-lg grid gap-3 border p-4 tablet:grid-cols-2"
                         >
                             <AdminSelectField
                                 label={t('products.attributeGroup')}
                                 value={attr.group}
                                 onChange={(value) => {
-                                    const attributes = [...form.data.attributes];
+                                    const attributes = [
+                                        ...form.data.attributes,
+                                    ];
                                     attributes[index].group = value;
                                     form.setData('attributes', attributes);
                                 }}
@@ -78,7 +80,9 @@ export function ProductAttributesEditor({
                                 label={t('products.attributeKey')}
                                 value={attr.key}
                                 onChange={(e) => {
-                                    const attributes = [...form.data.attributes];
+                                    const attributes = [
+                                        ...form.data.attributes,
+                                    ];
                                     attributes[index].key = e.target.value;
                                     form.setData('attributes', attributes);
                                 }}
@@ -87,7 +91,9 @@ export function ProductAttributesEditor({
                                 label={t('products.attributeLabel')}
                                 value={attr.label}
                                 onChange={(e) => {
-                                    const attributes = [...form.data.attributes];
+                                    const attributes = [
+                                        ...form.data.attributes,
+                                    ];
                                     attributes[index].label = e.target.value;
                                     form.setData('attributes', attributes);
                                 }}
@@ -97,7 +103,9 @@ export function ProductAttributesEditor({
                                 rows={2}
                                 value={attr.value}
                                 onChange={(e) => {
-                                    const attributes = [...form.data.attributes];
+                                    const attributes = [
+                                        ...form.data.attributes,
+                                    ];
                                     attributes[index].value = e.target.value;
                                     form.setData('attributes', attributes);
                                 }}
@@ -107,7 +115,11 @@ export function ProductAttributesEditor({
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-3">
-                    <AdminButton type="button" variant="secondary" onClick={addRow}>
+                    <AdminButton
+                        type="button"
+                        variant="secondary"
+                        onClick={addRow}
+                    >
                         {t('products.addAttribute')}
                     </AdminButton>
                     <AdminButton type="submit" disabled={form.processing}>

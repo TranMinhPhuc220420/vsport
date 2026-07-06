@@ -122,7 +122,7 @@ function ProductGallery({
                             alt={sorted[activeIndex].alt || productName}
                             loading="eager"
                             className={cn(
-                                'size-full object-cover transition-transform duration-300 ease-[var(--motion-ease)] motion-gallery-zoom',
+                                'motion-gallery-zoom size-full object-cover transition-transform duration-300 ease-[var(--motion-ease)]',
                                 isZooming && 'scale-150',
                             )}
                             style={
@@ -137,7 +137,7 @@ function ProductGallery({
                         <div
                             ref={mobileScrollRef}
                             onScroll={handleMobileScroll}
-                            className="-mx-4 flex snap-x snap-mandatory overflow-x-auto px-4 pb-2 scrollbar-none"
+                            className="-mx-4 flex snap-x snap-mandatory scrollbar-none overflow-x-auto px-4 pb-2"
                         >
                             {sorted.map((image, index) => (
                                 <button

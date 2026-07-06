@@ -1,9 +1,9 @@
 import { useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import { ContentSectionImageManager } from '@/components/admin/content-section-image-manager';
 import { AdminInputField } from '@/components/admin/admin-field';
 import { AdminFormSection } from '@/components/admin/admin-form-section';
+import { ContentSectionImageManager } from '@/components/admin/content-section-image-manager';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { AdminButton } from '@/components/admin/ui/admin-button';
 import { initialHtml } from '@/lib/richtext';
@@ -76,7 +76,7 @@ export function ProductContentSectionsEditor({
                         return (
                             <div
                                 key={section.id ?? `new-section-${index}`}
-                                className="border-admin space-y-4 rounded-admin-lg border p-4"
+                                className="border-admin rounded-admin-lg space-y-4 border p-4"
                             >
                                 <div className="flex items-start justify-between gap-3">
                                     <AdminInputField

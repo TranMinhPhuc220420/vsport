@@ -110,7 +110,9 @@ export default function AdminProductsEdit({
                             value: 'content',
                             label: t('products.tabContent'),
                             content: (
-                                <ProductContentSectionsEditor product={product} />
+                                <ProductContentSectionsEditor
+                                    product={product}
+                                />
                             ),
                         },
                         {
@@ -121,7 +123,9 @@ export default function AdminProductsEdit({
                         {
                             value: 'images',
                             label: t('products.tabImages'),
-                            content: <OptionValueImagesPanel product={product} />,
+                            content: (
+                                <OptionValueImagesPanel product={product} />
+                            ),
                         },
                         {
                             value: 'attributes',

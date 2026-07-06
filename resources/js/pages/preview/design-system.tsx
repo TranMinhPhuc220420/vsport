@@ -65,7 +65,8 @@ export default function DesignSystemPreview() {
                         Design System
                     </h1>
                     <p className="text-body-strong mt-4 max-w-2xl text-mute">
-                        Nike-style tokens and storefront components for Zova Sport.
+                        Nike-style tokens and storefront components for Zova
+                        Sport.
                     </p>
                 </section>
 
@@ -227,7 +228,10 @@ export default function DesignSystemPreview() {
                                 label="Remember me"
                                 readOnly
                             />
-                            <StorefrontButton variant="primary" className="w-full">
+                            <StorefrontButton
+                                variant="primary"
+                                className="w-full"
+                            >
                                 Log in
                             </StorefrontButton>
                         </div>

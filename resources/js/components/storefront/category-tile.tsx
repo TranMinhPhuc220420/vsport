@@ -45,7 +45,7 @@ function CategoryTile({
             <div className="absolute inset-x-4 bottom-4 z-10 tablet:inset-x-6 tablet:bottom-6">
                 <p
                     className={cn(
-                        'font-[family-name:var(--font-display)] uppercase leading-[0.95] tracking-[-0.005em]',
+                        'font-[family-name:var(--font-display)] leading-[0.95] tracking-[-0.005em] uppercase',
                         featured
                             ? 'text-[clamp(2.5rem,5vw,5rem)]'
                             : 'text-[clamp(2rem,3.5vw,3.25rem)]',

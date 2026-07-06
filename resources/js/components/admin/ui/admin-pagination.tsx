@@ -1,10 +1,9 @@
 import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
+import { adminActionButtonClass } from '@/components/admin/ui/admin-button';
 import { cn } from '@/lib/utils';
 import type { PaginationMeta } from '@/types/catalog';
-
-import { adminActionButtonClass } from '@/components/admin/ui/admin-button';
 
 type AdminPaginationProps = {
     links: {

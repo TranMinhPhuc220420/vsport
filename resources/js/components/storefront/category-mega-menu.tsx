@@ -1,13 +1,6 @@
 import { Link, router } from '@inertiajs/react';
-import {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-    type KeyboardEvent,
-    type ReactNode,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { KeyboardEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SearchPill } from '@/components/storefront/SearchPill';
@@ -92,7 +85,7 @@ function CategoryPreview({
             <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
             <p
                 key={`label-${previewCategory.id}`}
-                className="mega-menu-label-in absolute bottom-3 left-3 text-body-strong text-canvas"
+                className="mega-menu-label-in text-body-strong absolute bottom-3 left-3 text-canvas"
             >
                 {previewCategory.name}
             </p>
@@ -287,70 +280,70 @@ export function CategoryMegaNav({
                         >
                             <div
                                 key={activeParent.id}
-                                className="animate-in fade-in-0 slide-in-from-top-2 duration-200 ease-out"
+                                className="animate-in duration-200 ease-out fade-in-0 slide-in-from-top-2"
                             >
                                 <div className="flex items-stretch justify-between gap-8 border border-hairline-soft bg-canvas p-6 shadow-md desktop:gap-12 desktop:p-8">
-                                <nav
-                                    className="min-w-[10rem] shrink-0 desktop:min-w-[12rem]"
-                                    aria-label={activeParent.name}
-                                >
-                                    <ul
-                                        className="flex flex-col gap-2.5"
-                                        role="list"
+                                    <nav
+                                        className="min-w-[10rem] shrink-0 desktop:min-w-[12rem]"
+                                        aria-label={activeParent.name}
                                     >
-                                        <li>
-                                            <Link
-                                                href={`/${activeParent.slug}`}
-                                                className="text-body-strong hover:underline"
-                                                onClick={closePanel}
-                                                onMouseEnter={() =>
-                                                    setPreviewCategoryId(
-                                                        activeParent.id,
-                                                    )
-                                                }
-                                            >
-                                                {t('nav.shopAll', {
-                                                    name: activeParent.name,
-                                                })}
-                                            </Link>
-                                        </li>
-                                        {activeChildren.map((child) => (
-                                            <li key={child.id}>
+                                        <ul
+                                            className="flex flex-col gap-2.5"
+                                            role="list"
+                                        >
+                                            <li>
                                                 <Link
-                                                    href={`/${child.slug}`}
-                                                    className={cn(
-                                                        'text-body-md text-mute hover:text-ink hover:underline',
-                                                        previewCategoryId ===
-                                                            child.id &&
-                                                            'text-ink underline',
-                                                    )}
+                                                    href={`/${activeParent.slug}`}
+                                                    className="text-body-strong hover:underline"
                                                     onClick={closePanel}
                                                     onMouseEnter={() =>
                                                         setPreviewCategoryId(
-                                                            child.id,
+                                                            activeParent.id,
                                                         )
                                                     }
                                                 >
-                                                    {child.name}
+                                                    {t('nav.shopAll', {
+                                                        name: activeParent.name,
+                                                    })}
                                                 </Link>
                                             </li>
-                                        ))}
-                                    </ul>
-                                </nav>
+                                            {activeChildren.map((child) => (
+                                                <li key={child.id}>
+                                                    <Link
+                                                        href={`/${child.slug}`}
+                                                        className={cn(
+                                                            'text-body-md text-mute hover:text-ink hover:underline',
+                                                            previewCategoryId ===
+                                                                child.id &&
+                                                                'text-ink underline',
+                                                        )}
+                                                        onClick={closePanel}
+                                                        onMouseEnter={() =>
+                                                            setPreviewCategoryId(
+                                                                child.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        {child.name}
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </nav>
 
-                                <div className="w-44 shrink-0 self-stretch desktop:w-56">
-                                    <CategoryPreview
-                                        previewCategory={previewCategory}
-                                        previewImage={previewImage}
-                                        viewCategoryLabel={t(
-                                            'nav.viewCategory',
-                                            {
-                                                name: previewCategory.name,
-                                            },
-                                        )}
-                                        onNavigate={closePanel}
-                                    />
-                                </div>
+                                    <div className="w-44 shrink-0 self-stretch desktop:w-56">
+                                        <CategoryPreview
+                                            previewCategory={previewCategory}
+                                            previewImage={previewImage}
+                                            viewCategoryLabel={t(
+                                                'nav.viewCategory',
+                                                {
+                                                    name: previewCategory.name,
+                                                },
+                                            )}
+                                            onNavigate={closePanel}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

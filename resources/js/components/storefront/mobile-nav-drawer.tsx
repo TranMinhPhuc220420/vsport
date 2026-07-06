@@ -3,8 +3,8 @@ import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StorefrontLanguageSwitcher } from '@/components/storefront/language-switcher';
 import { StorefrontButton } from '@/components/storefront/Button';
+import { StorefrontLanguageSwitcher } from '@/components/storefront/language-switcher';
 import {
     Sheet,
     SheetContent,
@@ -93,10 +93,13 @@ export function MobileNavDrawer({
                         }
 
                         return (
-                            <div key={category.id} className="border-b border-hairline-soft pb-2">
+                            <div
+                                key={category.id}
+                                className="border-b border-hairline-soft pb-2"
+                            >
                                 <button
                                     type="button"
-                                    className="flex w-full items-center justify-between py-3 text-left text-body-strong text-ink"
+                                    className="text-body-strong flex w-full items-center justify-between py-3 text-left text-ink"
                                     aria-expanded={isExpanded}
                                     onClick={() => toggleParent(category.id)}
                                 >
@@ -124,7 +127,7 @@ export function MobileNavDrawer({
                                             <Link
                                                 key={child.id}
                                                 href={`/${child.slug}`}
-                                                className="flex items-center gap-3 py-2 text-body-md text-mute"
+                                                className="text-body-md flex items-center gap-3 py-2 text-mute"
                                                 onClick={() =>
                                                     onOpenChange(false)
                                                 }

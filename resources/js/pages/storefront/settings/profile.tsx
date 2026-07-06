@@ -13,7 +13,7 @@ import { send } from '@/routes/verification';
 import type { Auth } from '@/types';
 
 type PageProps = {
-    auth: Auth;
+    auth: Auth & { user: NonNullable<Auth['user']> };
 };
 
 function getInitials(name: string): string {
@@ -48,7 +48,7 @@ export default function StorefrontProfileSettings({
                     <div className="flex items-center gap-4">
                         <div
                             aria-hidden
-                            className="flex size-14 shrink-0 items-center justify-center rounded-full bg-soft-cloud text-heading-md text-ink"
+                            className="text-heading-md flex size-14 shrink-0 items-center justify-center rounded-full bg-soft-cloud text-ink"
                         >
                             {getInitials(user.name)}
                         </div>

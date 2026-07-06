@@ -41,7 +41,9 @@ function Breadcrumb({ items, className, tone = 'default' }: BreadcrumbProps) {
                                 <span
                                     aria-hidden
                                     className={
-                                        inverse ? 'text-canvas/50' : 'text-stone'
+                                        inverse
+                                            ? 'text-canvas/50'
+                                            : 'text-stone'
                                     }
                                 >
                                     /
@@ -70,9 +72,7 @@ function Breadcrumb({ items, className, tone = 'default' }: BreadcrumbProps) {
                                               ? 'text-ink'
                                               : 'text-mute',
                                     )}
-                                    aria-current={
-                                        isLast ? 'page' : undefined
-                                    }
+                                    aria-current={isLast ? 'page' : undefined}
                                 >
                                     {item.label}
                                 </span>

@@ -21,20 +21,20 @@ function PdpDisclosure({
     lazyMount = true,
 }: PdpDisclosureProps) {
     const [open, setOpen] = useState(defaultOpen);
-    const [showContent, setShowContent] = useState(
-        defaultOpen || !lazyMount,
-    );
+    const [showContent, setShowContent] = useState(defaultOpen || !lazyMount);
     const panelId = useId();
 
     const handleToggle = () => {
         if (open) {
             setOpen(false);
+
             return;
         }
 
         if (lazyMount && !showContent) {
             setShowContent(true);
             requestAnimationFrame(() => setOpen(true));
+
             return;
         }
 
@@ -63,7 +63,7 @@ function PdpDisclosure({
                 aria-expanded={open}
                 aria-controls={panelId}
                 onClick={handleToggle}
-                className="font-bold flex w-full items-center justify-between py-6 text-left text-ink"
+                className="flex w-full items-center justify-between py-6 text-left font-bold text-ink"
             >
                 <span>{title}</span>
                 <ChevronDown
@@ -83,7 +83,9 @@ function PdpDisclosure({
                     open && 'pdp-disclosure-panel-open',
                 )}
             >
-                <div className={`pdp-disclosure-panel-inner ${open ? 'pb-6' : ''}`}>
+                <div
+                    className={`pdp-disclosure-panel-inner ${open ? 'pb-6' : ''}`}
+                >
                     {content}
                 </div>
             </div>

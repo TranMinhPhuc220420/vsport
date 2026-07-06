@@ -2,8 +2,8 @@
 
 namespace App\Support;
 
-use App\Support\RichText\HtmlImageExternalizer;
 use App\Services\ProductImageStorage;
+use App\Support\RichText\HtmlImageExternalizer;
 
 /**
  * Prepare rich-text HTML for MySQL TEXT columns: externalize embedded images, enforce size limits.

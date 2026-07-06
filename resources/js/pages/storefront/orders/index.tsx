@@ -1,9 +1,9 @@
 import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import { StorefrontPagination } from '@/components/storefront/pagination';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
+import { StorefrontPagination } from '@/components/storefront/pagination';
 import { formatCurrency, formatDate, useLocale } from '@/hooks/use-locale';
 import type { PaginatedOrders } from '@/types/order';
 
@@ -12,7 +12,10 @@ type OrderHistoryPageProps = {
     seo: SeoData;
 };
 
-export default function OrderHistoryPage({ orders, seo }: OrderHistoryPageProps) {
+export default function OrderHistoryPage({
+    orders,
+    seo,
+}: OrderHistoryPageProps) {
     const { t } = useTranslation(['storefront', 'common']);
     const { locale, currency } = useLocale();
 

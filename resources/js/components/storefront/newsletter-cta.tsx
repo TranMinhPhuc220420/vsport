@@ -1,5 +1,5 @@
 import { Link, useForm } from '@inertiajs/react';
-import type { FormEvent} from 'react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
@@ -63,7 +63,9 @@ function NewsletterCta({ className, source = 'homepage' }: NewsletterCtaProps) {
                                 onChange={(event) =>
                                     setData('email', event.target.value)
                                 }
-                                placeholder={t('home.newsletter.emailPlaceholder')}
+                                placeholder={t(
+                                    'home.newsletter.emailPlaceholder',
+                                )}
                                 className="text-body-strong h-12 flex-1 rounded-pill-lg border border-canvas/20 bg-canvas/10 px-6 text-canvas outline-none placeholder:text-canvas/50 focus:border-canvas"
                             />
                             <StorefrontButton
@@ -76,7 +78,7 @@ function NewsletterCta({ className, source = 'homepage' }: NewsletterCtaProps) {
                             </StorefrontButton>
                         </form>
                         {errors.email && (
-                            <p className="text-caption-md mt-2 text-accent-pink-soft">
+                            <p className="text-caption-md text-accent-pink-soft mt-2">
                                 {errors.email}
                             </p>
                         )}

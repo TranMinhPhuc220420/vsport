@@ -33,10 +33,14 @@ function FilterDrawer({
     const { t } = useTranslation(['storefront', 'common']);
 
     const navigate = (slug: string) => {
-        router.get(plpUrl(slug, sort), {}, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        router.get(
+            plpUrl(slug, sort),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
         onOpenChange(false);
     };
 
@@ -63,8 +67,13 @@ function FilterDrawer({
                                     {departments.map((department) => (
                                         <FilterChip
                                             key={department.id}
-                                            active={activeDepartment === department.slug}
-                                            onClick={() => navigate(department.slug)}
+                                            active={
+                                                activeDepartment ===
+                                                department.slug
+                                            }
+                                            onClick={() =>
+                                                navigate(department.slug)
+                                            }
                                         >
                                             {department.name}
                                         </FilterChip>

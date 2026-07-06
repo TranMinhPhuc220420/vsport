@@ -1,5 +1,5 @@
 import { Monitor, Moon, Search, Sun } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Breadcrumbs } from '@/components/breadcrumbs';
@@ -11,7 +11,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { type Appearance, useAppearance } from '@/hooks/use-appearance';
+import { useAppearance } from '@/hooks/use-appearance';
+import type { Appearance } from '@/hooks/use-appearance';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
 
 export function AdminSidebarHeader({
@@ -22,11 +23,11 @@ export function AdminSidebarHeader({
     const { t } = useTranslation('admin');
     const { appearance, resolvedAppearance, updateAppearance } =
         useAppearance();
-    const [macLike, setMacLike] = useState(false);
-
-    useEffect(() => {
-        setMacLike(/Mac|iPod|iPhone|iPad/.test(navigator.platform));
-    }, []);
+    const [macLike] = useState(
+        () =>
+            typeof navigator !== 'undefined' &&
+            /Mac|iPod|iPhone|iPad/.test(navigator.platform),
+    );
 
     const appearanceOptions: { value: Appearance; icon: typeof Sun }[] = [
         { value: 'light', icon: Sun },
@@ -66,9 +67,7 @@ export function AdminSidebarHeader({
                     </kbd>
                 </button>
 
-                <LanguageSwitcher
-                    className="border-admin text-admin-secondary rounded-admin-md h-8 min-w-[7.5rem] max-w-[9.5rem] gap-1.5 border bg-[var(--admin-neutral)] px-2.5 shadow-none transition-colors hover:bg-[var(--admin-surface)]"
-                />
+                <LanguageSwitcher className="border-admin text-admin-secondary rounded-admin-md h-8 max-w-[9.5rem] min-w-[7.5rem] gap-1.5 border bg-[var(--admin-neutral)] px-2.5 shadow-none transition-colors hover:bg-[var(--admin-surface)]" />
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

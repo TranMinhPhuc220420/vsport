@@ -7,17 +7,12 @@ type AuthCheckboxProps = Omit<ComponentProps<'input'>, 'type'> & {
     label: string;
 };
 
-function AuthCheckbox({
-    id,
-    label,
-    className,
-    ...props
-}: AuthCheckboxProps) {
+function AuthCheckbox({ id, label, className, ...props }: AuthCheckboxProps) {
     return (
         <label
             htmlFor={id}
             className={cn(
-                'flex cursor-pointer items-center gap-3 text-body-strong text-ink',
+                'text-body-strong flex cursor-pointer items-center gap-3 text-ink',
                 className,
             )}
         >

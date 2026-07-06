@@ -1,5 +1,6 @@
 import { Facebook, Link2, Linkedin, Mail, Share2 } from 'lucide-react';
-import { useEffect, useMemo, useState, type ComponentType } from 'react';
+import { useMemo, useState } from 'react';
+import type { ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { XIcon } from '@/components/icons/x-icon';
@@ -45,12 +46,10 @@ export function BlogShareActions({
 }: BlogShareActionsProps) {
     const { t } = useTranslation('storefront');
     const [copied, setCopied] = useState(false);
-    const [shareUrl, setShareUrl] = useState('');
+    const [shareUrl] = useState(() =>
+        typeof window !== 'undefined' ? window.location.href : '',
+    );
     const onImage = tone === 'on-image';
-
-    useEffect(() => {
-        setShareUrl(window.location.href);
-    }, []);
 
     const shareButtonClassName = cn(
         'flex size-10 items-center justify-center rounded-full border transition',
@@ -76,7 +75,11 @@ export function BlogShareActions({
                 label: t('blog.sharePlatforms.linkedin'),
                 Icon: Linkedin,
             },
-            { id: 'zalo', label: t('blog.sharePlatforms.zalo'), Icon: ZaloIcon },
+            {
+                id: 'zalo',
+                label: t('blog.sharePlatforms.zalo'),
+                Icon: ZaloIcon,
+            },
             { id: 'email', label: t('blog.sharePlatforms.email'), Icon: Mail },
         ],
         [t],
@@ -103,6 +106,7 @@ export function BlogShareActions({
 
         if (typeof navigator.share !== 'function') {
             await handleCopyLink();
+
             return;
         }
 
@@ -116,7 +120,9 @@ export function BlogShareActions({
         }
     };
 
-    const canNativeShare = typeof navigator.share === 'function';
+    const canNativeShare =
+        typeof navigator !== 'undefined' &&
+        typeof navigator.share === 'function';
 
     return (
         <div

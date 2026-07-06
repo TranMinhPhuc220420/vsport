@@ -138,6 +138,7 @@ export function RichTextEditor({
         }
 
         const next = String(value || '');
+
         if (htmlForCompare(editor.getHTML()) !== htmlForCompare(next)) {
             editor.commands.setContent(next || '', { emitUpdate: false });
         }
@@ -163,12 +164,14 @@ export function RichTextEditor({
 
         input.onchange = async () => {
             const file = input.files?.[0];
+
             if (!file) {
                 return;
             }
 
             if (file.size > MAX_IMAGE_BYTES) {
                 window.alert('Image must be 2 MB or smaller.');
+
                 return;
             }
 
@@ -195,6 +198,7 @@ export function RichTextEditor({
         }
 
         const src = window.prompt('Image URL');
+
         if (!src?.trim()) {
             return;
         }
@@ -209,12 +213,14 @@ export function RichTextEditor({
 
         const previous = editor.getAttributes('link')?.href || '';
         const href = window.prompt('Link URL', previous);
+
         if (href === null) {
             return;
         }
 
         if (href.trim() === '') {
             editor.chain().focus().unsetLink().run();
+
             return;
         }
 
@@ -297,14 +303,20 @@ export function RichTextEditor({
                                 defaultValue="p"
                                 onChange={(event) => {
                                     const level = event.target.value;
+
                                     if (level === 'p') {
-                                        editor.chain().focus().setParagraph().run();
+                                        editor
+                                            .chain()
+                                            .focus()
+                                            .setParagraph()
+                                            .run();
                                     } else {
                                         editor
                                             .chain()
                                             .focus()
                                             .toggleHeading({
-                                                level: Number(level) as 1 | 2 | 3 | 4,
+                                                level: Number(level) as
+                                                    1 | 2 | 3 | 4,
                                             })
                                             .run();
                                     }
@@ -322,7 +334,9 @@ export function RichTextEditor({
                             <button
                                 type="button"
                                 title="Bold"
-                                className={editor.isActive('bold') ? 'active' : ''}
+                                className={
+                                    editor.isActive('bold') ? 'active' : ''
+                                }
                                 onClick={() =>
                                     editor.chain().focus().toggleBold().run()
                                 }
@@ -332,7 +346,9 @@ export function RichTextEditor({
                             <button
                                 type="button"
                                 title="Italic"
-                                className={editor.isActive('italic') ? 'active' : ''}
+                                className={
+                                    editor.isActive('italic') ? 'active' : ''
+                                }
                                 onClick={() =>
                                     editor.chain().focus().toggleItalic().run()
                                 }
@@ -346,7 +362,11 @@ export function RichTextEditor({
                                     editor.isActive('underline') ? 'active' : ''
                                 }
                                 onClick={() =>
-                                    editor.chain().focus().toggleUnderline().run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .toggleUnderline()
+                                        .run()
                                 }
                             >
                                 <u>U</u>
@@ -354,7 +374,9 @@ export function RichTextEditor({
                             <button
                                 type="button"
                                 title="Strike"
-                                className={editor.isActive('strike') ? 'active' : ''}
+                                className={
+                                    editor.isActive('strike') ? 'active' : ''
+                                }
                                 onClick={() =>
                                     editor.chain().focus().toggleStrike().run()
                                 }
@@ -364,7 +386,9 @@ export function RichTextEditor({
                             <button
                                 type="button"
                                 title="Code"
-                                className={editor.isActive('code') ? 'active' : ''}
+                                className={
+                                    editor.isActive('code') ? 'active' : ''
+                                }
                                 onClick={() =>
                                     editor.chain().focus().toggleCode().run()
                                 }
@@ -406,7 +430,11 @@ export function RichTextEditor({
                                         type="button"
                                         className="rt-unset"
                                         onClick={() => {
-                                            editor.chain().focus().unsetColor().run();
+                                            editor
+                                                .chain()
+                                                .focus()
+                                                .unsetColor()
+                                                .run();
                                             setShowColors(false);
                                         }}
                                     >
@@ -468,7 +496,11 @@ export function RichTextEditor({
                                         : ''
                                 }
                                 onClick={() =>
-                                    editor.chain().focus().setTextAlign('left').run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .setTextAlign('left')
+                                        .run()
                                 }
                             >
                                 ⬤⬤
@@ -500,7 +532,11 @@ export function RichTextEditor({
                                         : ''
                                 }
                                 onClick={() =>
-                                    editor.chain().focus().setTextAlign('right').run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .setTextAlign('right')
+                                        .run()
                                 }
                             >
                                 ⬤⬤
@@ -530,10 +566,16 @@ export function RichTextEditor({
                                 type="button"
                                 title="Bullet list"
                                 className={
-                                    editor.isActive('bulletList') ? 'active' : ''
+                                    editor.isActive('bulletList')
+                                        ? 'active'
+                                        : ''
                                 }
                                 onClick={() =>
-                                    editor.chain().focus().toggleBulletList().run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .toggleBulletList()
+                                        .run()
                                 }
                             >
                                 • ≡
@@ -542,10 +584,16 @@ export function RichTextEditor({
                                 type="button"
                                 title="Ordered list"
                                 className={
-                                    editor.isActive('orderedList') ? 'active' : ''
+                                    editor.isActive('orderedList')
+                                        ? 'active'
+                                        : ''
                                 }
                                 onClick={() =>
-                                    editor.chain().focus().toggleOrderedList().run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .toggleOrderedList()
+                                        .run()
                                 }
                             >
                                 1.≡
@@ -554,10 +602,16 @@ export function RichTextEditor({
                                 type="button"
                                 title="Blockquote"
                                 className={
-                                    editor.isActive('blockquote') ? 'active' : ''
+                                    editor.isActive('blockquote')
+                                        ? 'active'
+                                        : ''
                                 }
                                 onClick={() =>
-                                    editor.chain().focus().toggleBlockquote().run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .toggleBlockquote()
+                                        .run()
                                 }
                             >
                                 &quot; &quot;
@@ -569,7 +623,11 @@ export function RichTextEditor({
                                     editor.isActive('codeBlock') ? 'active' : ''
                                 }
                                 onClick={() =>
-                                    editor.chain().focus().toggleCodeBlock().run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .toggleCodeBlock()
+                                        .run()
                                 }
                             >
                                 ⌨
@@ -602,7 +660,9 @@ export function RichTextEditor({
                                                 className="rt-num-input"
                                                 onChange={(event) =>
                                                     setTableRows(
-                                                        Number(event.target.value),
+                                                        Number(
+                                                            event.target.value,
+                                                        ),
                                                     )
                                                 }
                                             />
@@ -617,7 +677,9 @@ export function RichTextEditor({
                                                 className="rt-num-input"
                                                 onChange={(event) =>
                                                     setTableCols(
-                                                        Number(event.target.value),
+                                                        Number(
+                                                            event.target.value,
+                                                        ),
                                                     )
                                                 }
                                             />
@@ -653,7 +715,11 @@ export function RichTextEditor({
                                     type="button"
                                     title="Delete column"
                                     onClick={() =>
-                                        editor.chain().focus().deleteColumn().run()
+                                        editor
+                                            .chain()
+                                            .focus()
+                                            .deleteColumn()
+                                            .run()
                                     }
                                 >
                                     -Col
@@ -662,7 +728,11 @@ export function RichTextEditor({
                                     type="button"
                                     title="Add row after"
                                     onClick={() =>
-                                        editor.chain().focus().addRowAfter().run()
+                                        editor
+                                            .chain()
+                                            .focus()
+                                            .addRowAfter()
+                                            .run()
                                     }
                                 >
                                     +Row
@@ -680,7 +750,11 @@ export function RichTextEditor({
                                     type="button"
                                     title="Delete table"
                                     onClick={() =>
-                                        editor.chain().focus().deleteTable().run()
+                                        editor
+                                            .chain()
+                                            .focus()
+                                            .deleteTable()
+                                            .run()
                                     }
                                 >
                                     ✕ Tbl
@@ -710,7 +784,9 @@ export function RichTextEditor({
                             <button
                                 type="button"
                                 title="Link"
-                                className={editor.isActive('link') ? 'active' : ''}
+                                className={
+                                    editor.isActive('link') ? 'active' : ''
+                                }
                                 onClick={toggleLink}
                             >
                                 🔗 Link
@@ -719,7 +795,11 @@ export function RichTextEditor({
                                 type="button"
                                 title="Horizontal rule"
                                 onClick={() =>
-                                    editor.chain().focus().setHorizontalRule().run()
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .setHorizontalRule()
+                                        .run()
                                 }
                             >
                                 ― HR

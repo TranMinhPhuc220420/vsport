@@ -15,18 +15,16 @@ import {
 } from '@/components/admin/admin-form-error-summary';
 import { AdminFormSection } from '@/components/admin/admin-form-section';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import {
-    BlogPostStatusBadge,
-    type BlogPostStatus,
-} from '@/components/admin/blog-post-status-badge';
+import { BlogPostStatusBadge } from '@/components/admin/blog-post-status-badge';
+import type { BlogPostStatus } from '@/components/admin/blog-post-status-badge';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { AdminButton } from '@/components/admin/ui/admin-button';
-import { BlogFeaturedImageCreateField } from '@/pages/admin/blog-posts/components/blog-featured-image-create-field';
-import { BlogFeaturedImageEditor } from '@/pages/admin/blog-posts/components/blog-featured-image-editor';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
 import { uploadBlogFeaturedImage } from '@/lib/admin-upload';
+import { cn } from '@/lib/utils';
+import { BlogFeaturedImageCreateField } from '@/pages/admin/blog-posts/components/blog-featured-image-create-field';
+import { BlogFeaturedImageEditor } from '@/pages/admin/blog-posts/components/blog-featured-image-editor';
 
 type BlogPostFormProps = {
     mode: 'create' | 'edit';
@@ -281,7 +279,7 @@ export function BlogPostForm({
                                     label={t('blogPosts.body')}
                                     value={data.bodyHtml}
                                     onChange={(html) =>
-                                        setData('bodyHtml', html)
+                                        setData('bodyHtml', html ?? '')
                                     }
                                     error={errors.bodyHtml}
                                 />
@@ -323,7 +321,7 @@ export function BlogPostForm({
                                                         'rounded-admin-md px-3 py-1.5 text-sm transition-colors',
                                                         selected
                                                             ? 'bg-[var(--admin-tertiary)] font-medium text-white'
-                                                            : 'border-admin text-[var(--admin-secondary)] border bg-white hover:border-[var(--admin-tertiary)] hover:text-[var(--admin-primary)]',
+                                                            : 'border-admin border bg-white text-[var(--admin-secondary)] hover:border-[var(--admin-tertiary)] hover:text-[var(--admin-primary)]',
                                                     )}
                                                 >
                                                     {tag.name}
@@ -370,7 +368,7 @@ export function BlogPostForm({
                                                 <label
                                                     key={product.id}
                                                     className={cn(
-                                                        'flex items-center gap-2 rounded-admin-md px-2 py-1.5',
+                                                        'rounded-admin-md flex items-center gap-2 px-2 py-1.5',
                                                         atLimit &&
                                                             'cursor-not-allowed opacity-50',
                                                         selected &&
@@ -408,7 +406,9 @@ export function BlogPostForm({
                                 <summary className="admin-section-title cursor-pointer list-none px-6 py-4 [&::-webkit-details-marker]:hidden">
                                     <div className="flex items-center justify-between gap-3">
                                         <div>
-                                            <span>{t('blogPosts.seoSection')}</span>
+                                            <span>
+                                                {t('blogPosts.seoSection')}
+                                            </span>
                                             <p className="admin-caption mt-1 font-normal">
                                                 {t(
                                                     'blogPosts.seoSectionDescription',
@@ -486,7 +486,7 @@ export function BlogPostForm({
                                     }
                                     error={errors.publishedAt}
                                 />
-                                <div className="flex items-start gap-2 rounded-admin-md bg-[var(--admin-neutral)] px-3 py-2.5">
+                                <div className="rounded-admin-md flex items-start gap-2 bg-[var(--admin-neutral)] px-3 py-2.5">
                                     <Checkbox
                                         id="isFeatured"
                                         checked={data.isFeatured}
@@ -552,9 +552,7 @@ export function BlogPostForm({
                                     onChange={(value) =>
                                         setData(
                                             'blogCategoryId',
-                                            value === ''
-                                                ? ''
-                                                : Number(value),
+                                            value === '' ? '' : Number(value),
                                         )
                                     }
                                     options={[

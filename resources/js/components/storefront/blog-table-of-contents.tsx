@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
@@ -59,7 +59,9 @@ function TocNav({
 
     return (
         <nav aria-label={t('blog.tableOfContents')} className={className}>
-            <p className="text-caption-md text-mute">{t('blog.tableOfContents')}</p>
+            <p className="text-caption-md text-mute">
+                {t('blog.tableOfContents')}
+            </p>
             <ul className="mt-3 space-y-1">
                 {headings.map((heading) => (
                     <TocLink
@@ -82,7 +84,10 @@ export function BlogTableOfContents({
     const { t } = useTranslation('storefront');
     const [activeId, setActiveId] = useState<string | null>(null);
 
-    const visibleHeadings = headings.length >= MIN_HEADINGS ? headings : [];
+    const visibleHeadings = useMemo(
+        () => (headings.length >= MIN_HEADINGS ? headings : []),
+        [headings],
+    );
 
     useEffect(() => {
         if (visibleHeadings.length === 0) {
@@ -103,8 +108,7 @@ export function BlogTableOfContents({
                     .filter((entry) => entry.isIntersecting)
                     .sort(
                         (a, b) =>
-                            a.boundingClientRect.top -
-                            b.boundingClientRect.top,
+                            a.boundingClientRect.top - b.boundingClientRect.top,
                     );
 
                 if (visible[0]?.target.id) {
@@ -137,7 +141,10 @@ export function BlogTableOfContents({
     if (variant === 'mobile') {
         return (
             <div className={cn('mb-8 border-b border-hairline', className)}>
-                <PdpDisclosure title={t('blog.tableOfContents')} defaultOpen={false}>
+                <PdpDisclosure
+                    title={t('blog.tableOfContents')}
+                    defaultOpen={false}
+                >
                     <TocNav
                         headings={visibleHeadings}
                         activeId={activeId}

@@ -107,7 +107,7 @@ export default function AdminReturnRequestShow({
             <div className="admin-page">
                 <AdminPageHeader
                     title={t('returnRequests.detailTitle')}
-                    description={
+                    subtitle={
                         order
                             ? t('returnRequests.orderNumber', {
                                   orderNumber: order.orderNumber,

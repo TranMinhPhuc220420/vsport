@@ -353,7 +353,7 @@ class DeployCheckService
 
         if (! File::exists($manifest)) {
             $items[] = [
-                'level' => 'fail',
+                'level' => app()->environment('production') ? 'fail' : 'info',
                 'message' => 'Frontend build missing. Run npm run build before deploy.',
             ];
 

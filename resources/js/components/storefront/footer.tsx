@@ -18,7 +18,7 @@ type FooterColumn = {
 
 export function StorefrontFooter() {
     const { t } = useTranslation('storefront');
-    const { storeProfile, name: storeName } = usePage().props as {
+    const { storeProfile, name: storeName } = usePage().props as unknown as {
         storeProfile: StoreProfile;
         name: string;
     };

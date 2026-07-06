@@ -1,4 +1,8 @@
-import type { ProductImage, ProductOption, ProductVariant } from '@/types/catalog';
+import type {
+    ProductImage,
+    ProductOption,
+    ProductVariant,
+} from '@/types/catalog';
 
 export type SelectedOptions = Record<number, number>;
 

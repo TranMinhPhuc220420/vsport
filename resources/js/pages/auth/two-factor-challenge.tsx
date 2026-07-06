@@ -105,7 +105,7 @@ export default function TwoFactorChallenge() {
                                                         key={index}
                                                         index={index}
                                                         className={cn(
-                                                            'size-12 rounded-pill-md border-hairline text-body-strong',
+                                                            'text-body-strong size-12 rounded-pill-md border-hairline',
                                                             errors.code &&
                                                                 'border-sale',
                                                         )}
@@ -137,7 +137,7 @@ export default function TwoFactorChallenge() {
                                 {t('twoFactor.continue')}
                             </StorefrontButton>
 
-                            <p className="text-center text-caption-md text-mute">
+                            <p className="text-caption-md text-center text-mute">
                                 {t('twoFactor.orYouCan')}{' '}
                                 <button
                                     type="button"

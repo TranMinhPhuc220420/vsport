@@ -46,7 +46,11 @@ export const adminNavGroups: AdminNavGroup[] = [
         key: 'catalog',
         titleKey: 'nav.groups.catalog',
         items: [
-            { titleKey: 'nav.products', href: '/admin/products', icon: Package },
+            {
+                titleKey: 'nav.products',
+                href: '/admin/products',
+                icon: Package,
+            },
             {
                 titleKey: 'nav.brands',
                 href: '/admin/brands',
@@ -144,7 +148,11 @@ export const adminNavGroups: AdminNavGroup[] = [
         key: 'settings',
         titleKey: 'nav.groups.settings',
         items: [
-            { titleKey: 'nav.settings', href: '/admin/settings', icon: Settings },
+            {
+                titleKey: 'nav.settings',
+                href: '/admin/settings',
+                icon: Settings,
+            },
         ],
     },
 ];

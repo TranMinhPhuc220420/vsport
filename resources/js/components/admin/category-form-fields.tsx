@@ -48,7 +48,9 @@ export function CategoryFormFields({
 
     return (
         <form onSubmit={handleSubmit}>
-            <AdminFormSection title={sectionTitle ?? t('categories.detailsTitle')}>
+            <AdminFormSection
+                title={sectionTitle ?? t('categories.detailsTitle')}
+            >
                 <AdminInputField
                     label={t('products.name')}
                     value={data.name}
@@ -66,10 +68,7 @@ export function CategoryFormFields({
                     label={t('categories.parentCategory')}
                     value={data.parent_id}
                     onChange={(value) =>
-                        setData(
-                            'parent_id',
-                            value === '' ? '' : Number(value),
-                        )
+                        setData('parent_id', value === '' ? '' : Number(value))
                     }
                     options={[
                         {

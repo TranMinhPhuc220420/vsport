@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { StorefrontButton } from '@/components/storefront/Button';
 import { SortSheet } from '@/components/storefront/sort-sheet';
-import { cn } from '@/lib/utils';
 import { plpUrl } from '@/lib/plp-navigation';
+import { cn } from '@/lib/utils';
 import type { CategoryMeta, ListingFilters } from '@/types/catalog';
 
 type PlpSubNavProps = {
@@ -34,10 +34,14 @@ function PlpSubNav({
     ];
 
     const handleSortChange = (sort: string) => {
-        router.get(plpUrl(categoryMeta.slug, sort), {}, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        router.get(
+            plpUrl(categoryMeta.slug, sort),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
     };
 
     const currentSortLabel =
@@ -77,7 +81,9 @@ function PlpSubNav({
                                 key={item.slug}
                                 className="flex items-center gap-2"
                             >
-                                <span className="text-caption-md text-mute">/</span>
+                                <span className="text-caption-md text-mute">
+                                    /
+                                </span>
                                 <Link
                                     href={plpUrl(item.slug, filters.sort)}
                                     className="text-caption-md text-ink hover:underline"
@@ -108,7 +114,9 @@ function PlpSubNav({
                             onClick={() => setSortSheetOpen(true)}
                             className="text-caption-md flex items-center gap-1 tablet-lg:hidden"
                         >
-                            <span className="text-mute">{t('plp.sortTitle')}:</span>
+                            <span className="text-mute">
+                                {t('plp.sortTitle')}:
+                            </span>
                             <span className="text-ink">{currentSortLabel}</span>
                         </button>
 
@@ -118,11 +126,16 @@ function PlpSubNav({
                             </span>
                             <select
                                 value={filters.sort}
-                                onChange={(e) => handleSortChange(e.target.value)}
+                                onChange={(e) =>
+                                    handleSortChange(e.target.value)
+                                }
                                 className="text-button-md h-10 rounded-pill-md border border-hairline bg-canvas px-3"
                             >
                                 {sortOptions.map((option) => (
-                                    <option key={option.value} value={option.value}>
+                                    <option
+                                        key={option.value}
+                                        value={option.value}
+                                    >
                                         {option.label}
                                     </option>
                                 ))}

@@ -118,7 +118,7 @@ export default function Login({ status, canResetPassword }: Props) {
                             </StorefrontButton>
                         </div>
 
-                        <p className="text-center text-caption-md text-mute">
+                        <p className="text-caption-md text-center text-mute">
                             {t('login.noAccount')}{' '}
                             <AuthTextLink href={register()} tabIndex={5}>
                                 {t('login.signUp')}

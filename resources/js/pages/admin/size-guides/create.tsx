@@ -18,7 +18,10 @@ export default function AdminSizeGuidesCreate({
         breadcrumbs: [
             { title: t('breadcrumb.admin'), href: '/admin' },
             { title: t('breadcrumb.sizeGuides'), href: '/admin/size-guides' },
-            { title: t('breadcrumb.create'), href: '/admin/size-guides/create' },
+            {
+                title: t('breadcrumb.create'),
+                href: '/admin/size-guides/create',
+            },
         ],
     });
 

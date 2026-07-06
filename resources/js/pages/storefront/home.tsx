@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { BlogFeaturedRail } from '@/components/storefront/blog-featured-rail';
+import type { BlogPostCardData } from '@/components/storefront/blog-post-card';
 import { BrandMarquee } from '@/components/storefront/brand-marquee';
 import { CampaignHeroCarousel } from '@/components/storefront/campaign-hero-carousel';
 import { EditorialBanner } from '@/components/storefront/editorial-banner';
@@ -8,7 +9,6 @@ import { EditorialCategoryShowcase } from '@/components/storefront/editorial-cat
 import { NewsletterCta } from '@/components/storefront/newsletter-cta';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
-import { StructuredData } from '@/components/storefront/structured-data';
 import {
     ProductRail,
     ProductRailItem,
@@ -16,9 +16,9 @@ import {
 import { ProductCard } from '@/components/storefront/ProductCard';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { SectionHeader } from '@/components/storefront/section-header';
+import { StructuredData } from '@/components/storefront/structured-data';
 import { TrustBar } from '@/components/storefront/trust-bar';
 import type { Campaign, Category, ProductSummary } from '@/types/catalog';
-import type { BlogPostCardData } from '@/components/storefront/blog-post-card';
 
 type ProductCollection = {
     data: ProductSummary[];
@@ -97,7 +97,8 @@ export default function HomePage({
     const editorialCampaign = campaigns[1] ?? {
         headline: t('home.editorial.headline'),
         subtitle: t('home.editorial.subtitle'),
-        imageUrl: 'https://images.pexels.com/photos/47354/the-ball-stadion-football-the-pitch-47354.jpeg',
+        imageUrl:
+            'https://images.pexels.com/photos/47354/the-ball-stadion-football-the-pitch-47354.jpeg',
         ctaLabel: t('home.editorial.ctaLabel'),
         ctaHref: '/women',
     };

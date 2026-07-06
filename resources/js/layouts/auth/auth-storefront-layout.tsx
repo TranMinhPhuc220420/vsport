@@ -3,10 +3,10 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { AuthBenefitsList } from '@/components/storefront/auth/auth-benefits-list';
+import { cn } from '@/lib/utils';
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 import type { StoreProfile } from '@/types/store-profile';
-import { cn } from '@/lib/utils';
 
 export default function AuthStorefrontLayout({
     children,
@@ -17,7 +17,7 @@ export default function AuthStorefrontLayout({
     editorialBenefits = [],
 }: AuthLayoutProps) {
     const { t } = useTranslation('auth');
-    const { storeProfile } = usePage().props as {
+    const { storeProfile } = usePage().props as unknown as {
         storeProfile: StoreProfile;
     };
 
@@ -26,7 +26,7 @@ export default function AuthStorefrontLayout({
 
     return (
         <div className="vsport-light min-h-dvh bg-canvas text-ink">
-            <div className="tablet-lg:grid tablet-lg:min-h-dvh tablet-lg:grid-cols-2 tablet-lg:[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="tablet-lg:grid tablet-lg:min-h-dvh tablet-lg:[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)] tablet-lg:grid-cols-2">
                 <aside
                     className={cn(
                         'relative hidden min-w-0 overflow-hidden tablet-lg:flex tablet-lg:flex-col tablet-lg:justify-end',

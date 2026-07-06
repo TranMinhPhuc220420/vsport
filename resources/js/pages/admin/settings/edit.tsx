@@ -37,9 +37,9 @@ export default function AdminSettingsEdit({
 }: AdminSettingsEditProps) {
     const { t } = useTranslation('admin');
     const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
-    const [logoWidePreviewUrl, setLogoWidePreviewUrl] = useState<
-        string | null
-    >(null);
+    const [logoWidePreviewUrl, setLogoWidePreviewUrl] = useState<string | null>(
+        null,
+    );
 
     const { data, setData, processing, errors, transform, post } =
         useForm<StoreProfileForm>({
@@ -83,6 +83,7 @@ export default function AdminSettingsEdit({
 
         setLogoPreviewUrl(file ? URL.createObjectURL(file) : null);
         setData('logo', file);
+
         if (!file) {
             setData('logoUrl', '');
         }
@@ -95,6 +96,7 @@ export default function AdminSettingsEdit({
 
         setLogoWidePreviewUrl(file ? URL.createObjectURL(file) : null);
         setData('logoWide', file);
+
         if (!file) {
             setData('logoWideUrl', '');
         }
@@ -128,12 +130,16 @@ export default function AdminSettingsEdit({
                     <div className="space-y-6">
                         <AdminFormSection
                             title={t('settings.profileSection')}
-                            description={t('settings.profileSectionDescription')}
+                            description={t(
+                                'settings.profileSectionDescription',
+                            )}
                         >
                             <AdminInputField
                                 label={t('settings.name')}
                                 value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
+                                onChange={(e) =>
+                                    setData('name', e.target.value)
+                                }
                                 error={errors.name}
                             />
                             <AdminTextareaField
@@ -149,7 +155,9 @@ export default function AdminSettingsEdit({
 
                         <AdminFormSection
                             title={t('settings.contactSection')}
-                            description={t('settings.contactSectionDescription')}
+                            description={t(
+                                'settings.contactSectionDescription',
+                            )}
                         >
                             <div className="grid gap-4 tablet:grid-cols-2">
                                 <AdminInputField
@@ -264,7 +272,9 @@ export default function AdminSettingsEdit({
                     <aside className="space-y-6 desktop:sticky desktop:top-24">
                         <AdminFormSection
                             title={t('settings.brandingSection')}
-                            description={t('settings.brandingSectionDescription')}
+                            description={t(
+                                'settings.brandingSectionDescription',
+                            )}
                         >
                             <div className="space-y-6">
                                 <LogoUploadField
@@ -288,7 +298,9 @@ export default function AdminSettingsEdit({
 
                         <AdminFormSection
                             title={t('settings.regionalSection')}
-                            description={t('settings.regionalSectionDescription')}
+                            description={t(
+                                'settings.regionalSectionDescription',
+                            )}
                         >
                             <AdminSelectField
                                 label={t('settings.currency')}

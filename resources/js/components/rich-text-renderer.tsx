@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { cn } from '@/lib/utils';
 import { sanitizeHtml } from '@/lib/richtext';
+import { cn } from '@/lib/utils';
 
 import './rich-text-renderer.css';
 
@@ -18,6 +18,7 @@ export function RichTextRenderer({
 }: RichTextRendererProps) {
     const safeHtml = useMemo(() => {
         const direct = String(html || '').trim();
+
         if (direct) {
             return sanitizeHtml(direct);
         }
@@ -25,8 +26,7 @@ export function RichTextRenderer({
         return '';
     }, [html]);
 
-    const showFallback =
-        !safeHtml && String(fallbackText || '').trim() !== '';
+    const showFallback = !safeHtml && String(fallbackText || '').trim() !== '';
 
     if (safeHtml) {
         return (
@@ -39,7 +39,7 @@ export function RichTextRenderer({
 
     if (showFallback) {
         return (
-            <div className={cn('whitespace-pre-wrap text-sm', className)}>
+            <div className={cn('text-sm whitespace-pre-wrap', className)}>
                 {fallbackText}
             </div>
         );

@@ -15,7 +15,7 @@ type CartSummaryProps = {
 function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
     const { t } = useTranslation('storefront');
     const { locale, currency } = useLocale();
-    const { auth } = usePage().props as {
+    const { auth } = usePage().props as unknown as {
         auth: { user: { id: number } | null };
     };
 

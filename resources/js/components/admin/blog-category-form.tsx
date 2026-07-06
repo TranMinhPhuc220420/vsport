@@ -1,7 +1,10 @@
 import { Head, useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import { AdminInputField, AdminTextareaField } from '@/components/admin/admin-field';
+import {
+    AdminInputField,
+    AdminTextareaField,
+} from '@/components/admin/admin-field';
 import {
     AdminFormErrorSummary,
     notifyAdminFormValidationError,

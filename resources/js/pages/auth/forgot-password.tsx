@@ -69,7 +69,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     )}
                 </Form>
 
-                <p className="text-center text-caption-md text-mute">
+                <p className="text-caption-md text-center text-mute">
                     {t('forgotPassword.returnTo')}{' '}
                     <AuthTextLink href={login()}>
                         {t('forgotPassword.logIn')}

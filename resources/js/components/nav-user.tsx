@@ -14,9 +14,10 @@ import {
 import { UserInfo } from '@/components/user-info';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useIsMobile } from '@/hooks/use-mobile';
+import type { Auth } from '@/types/auth';
 
 export function NavUser() {
-    const { auth } = usePage().props;
+    const { auth } = usePage().props as unknown as { auth: Auth };
     const { state } = useSidebar();
     const isMobile = useIsMobile();
 

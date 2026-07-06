@@ -2,26 +2,24 @@ import { Link } from '@inertiajs/react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { RichTextRenderer } from '@/components/rich-text-renderer';
 import { BlogArticleHero } from '@/components/storefront/blog-article-hero';
 import '@/components/storefront/blog-prose.css';
+import { BlogPostCard } from '@/components/storefront/blog-post-card';
+import type { BlogPostCardData } from '@/components/storefront/blog-post-card';
 import { BlogShareActions } from '@/components/storefront/blog-share-actions';
 import { BlogTableOfContents } from '@/components/storefront/blog-table-of-contents';
-import {
-    BlogPostCard,
-    type BlogPostCardData,
-} from '@/components/storefront/blog-post-card';
 import { NewsletterCta } from '@/components/storefront/newsletter-cta';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
-import { ProductCard } from '@/components/storefront/ProductCard';
 import {
     ProductRail,
     ProductRailItem,
 } from '@/components/storefront/product-rail';
+import { ProductCard } from '@/components/storefront/ProductCard';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { SectionHeader } from '@/components/storefront/section-header';
 import { StructuredData } from '@/components/storefront/structured-data';
-import { RichTextRenderer } from '@/components/rich-text-renderer';
 import { injectBlogHeadingIds } from '@/lib/blog-heading-utils';
 import type { ProductSummary } from '@/types/catalog';
 
@@ -106,7 +104,7 @@ export default function BlogShowPage({
                 </ScrollReveal>
 
                 <div className="mt-8 grid gap-12 desktop:grid-cols-[minmax(0,1fr)_16rem]">
-                    <article className="min-w-0 max-w-3xl">
+                    <article className="max-w-3xl min-w-0">
                         {post.excerpt && (
                             <ScrollReveal delay={40}>
                                 <p className="text-body-strong max-w-2xl text-mute">
@@ -122,7 +120,7 @@ export default function BlogShowPage({
                                         <li key={tag.id}>
                                             <Link
                                                 href={`/blog?tag=${tag.slug}`}
-                                                className="rounded-pill-lg border border-hairline px-3 py-1 text-caption-md text-mute transition hover:border-ink hover:text-ink"
+                                                className="text-caption-md rounded-pill-lg border border-hairline px-3 py-1 text-mute transition hover:border-ink hover:text-ink"
                                             >
                                                 {tag.name}
                                             </Link>
@@ -159,7 +157,9 @@ export default function BlogShowPage({
                                 direction="up"
                                 className="mt-12 border-t border-hairline pt-10"
                             >
-                                <SectionHeader title={t('blog.relatedProducts')} />
+                                <SectionHeader
+                                    title={t('blog.relatedProducts')}
+                                />
                                 <ProductRail className="mt-6">
                                     {post.products.map((product, index) => (
                                         <ProductRailItem

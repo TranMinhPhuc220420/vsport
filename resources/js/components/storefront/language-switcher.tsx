@@ -65,7 +65,7 @@ function StorefrontLanguageSwitcher({
                 <button
                     type="button"
                     className={cn(
-                        'text-caption-sm inline-flex items-center text-ink transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2',
+                        'text-caption-sm inline-flex items-center text-ink transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:outline-none',
                         className,
                     )}
                     aria-label={activeLocale?.label ?? 'Language'}

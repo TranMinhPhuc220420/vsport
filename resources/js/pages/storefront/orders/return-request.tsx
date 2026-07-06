@@ -85,6 +85,7 @@ export default function ReturnRequestPage({
     const ineligibleMessage = eligibility.reason
         ? t(`storefront:orders.returns.ineligible.${eligibility.reason}`)
         : null;
+    const formErrors = errors as typeof errors & { return?: string };
 
     return (
         <>
@@ -240,9 +241,9 @@ export default function ReturnRequestPage({
                                     {errors.items}
                                 </p>
                             ) : null}
-                            {errors.return ? (
+                            {formErrors.return ? (
                                 <p className="text-caption-md mt-2 text-red-600">
-                                    {errors.return}
+                                    {formErrors.return}
                                 </p>
                             ) : null}
                         </section>

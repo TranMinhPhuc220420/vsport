@@ -2,10 +2,8 @@ import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { BlogShareActions } from '@/components/storefront/blog-share-actions';
-import {
-    Breadcrumb,
-    type BreadcrumbItem,
-} from '@/components/storefront/breadcrumb';
+import { Breadcrumb } from '@/components/storefront/breadcrumb';
+import type { BreadcrumbItem } from '@/components/storefront/breadcrumb';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { formatDateTime, useLocale } from '@/hooks/use-locale';
 

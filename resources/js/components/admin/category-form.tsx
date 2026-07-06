@@ -1,8 +1,8 @@
 import { Head } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-import { CategoryFormFields } from '@/components/admin/category-form-fields';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { CategoryFormFields } from '@/components/admin/category-form-fields';
 
 type CategoryFormProps = {
     mode: 'create' | 'edit';

@@ -1,4 +1,7 @@
+import '@inertiajs/core';
+
 import type { Auth } from '@/types/auth';
+import type { Category } from '@/types/catalog';
 import type { StoreProfile } from '@/types/store-profile';
 
 declare module 'react' {
@@ -9,6 +12,18 @@ declare module 'react' {
 }
 
 declare module '@inertiajs/core' {
+    export interface PageProps {
+        name: string;
+        auth: Auth;
+        sidebarOpen: boolean;
+        locale: 'vi' | 'en';
+        locales: { code: 'vi' | 'en'; label: string }[];
+        navigation: {
+            categories: Category[];
+        };
+        storeProfile: StoreProfile;
+    }
+
     export interface InertiaConfig {
         sharedPageProps: {
             name: string;
@@ -17,7 +32,36 @@ declare module '@inertiajs/core' {
             locale: 'vi' | 'en';
             locales: { code: 'vi' | 'en'; label: string }[];
             navigation: {
-                categories: import('@/types/catalog').Category[];
+                categories: Category[];
+            };
+            storeProfile: StoreProfile;
+            [key: string]: unknown;
+        };
+    }
+}
+
+declare module '@inertiajs/core/types/types' {
+    export interface PageProps {
+        name: string;
+        auth: Auth;
+        sidebarOpen: boolean;
+        locale: 'vi' | 'en';
+        locales: { code: 'vi' | 'en'; label: string }[];
+        navigation: {
+            categories: Category[];
+        };
+        storeProfile: StoreProfile;
+    }
+
+    export interface InertiaConfig {
+        sharedPageProps: {
+            name: string;
+            auth: Auth;
+            sidebarOpen: boolean;
+            locale: 'vi' | 'en';
+            locales: { code: 'vi' | 'en'; label: string }[];
+            navigation: {
+                categories: Category[];
             };
             storeProfile: StoreProfile;
             [key: string]: unknown;

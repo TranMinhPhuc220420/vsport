@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -8,7 +8,6 @@ import { NikeByYouCustomizer } from '@/components/storefront/nike-by-you-customi
 import { OptionPicker } from '@/components/storefront/option-picker';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
-import { StructuredData } from '@/components/storefront/structured-data';
 import { PdpDisclosure } from '@/components/storefront/pdp-disclosure';
 import { PdpStickyMobileBar } from '@/components/storefront/pdp-sticky-mobile-bar';
 import { ProductAttributesSection } from '@/components/storefront/product-attributes-section';
@@ -25,6 +24,7 @@ import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { SizeGuideDisclosure } from '@/components/storefront/size-guide-disclosure';
 import { StarRating } from '@/components/storefront/star-rating';
 import { StockStatus } from '@/components/storefront/stock-status';
+import { StructuredData } from '@/components/storefront/structured-data';
 import { SustainabilityAccordion } from '@/components/storefront/sustainability-accordion';
 import { WishlistButton } from '@/components/storefront/wishlist-button';
 import { useCart } from '@/contexts/cart-context';
@@ -35,8 +35,8 @@ import {
     getAvailableValueIds,
     getGalleryImages,
     resolveVariant,
-    type SelectedOptions,
 } from '@/lib/variant-selection';
+import type { SelectedOptions } from '@/lib/variant-selection';
 import type { ProductDetail, ProductSummary } from '@/types/catalog';
 
 type ProductDetailPageProps = {
@@ -59,24 +59,29 @@ export default function ProductDetailPage({
     const detail = product;
     const { addItem } = useCart();
 
-    const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(() => {
-        if (initialVariantId) {
-            const variant = detail.variants.find((v) => v.id === initialVariantId);
+    const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(
+        () => {
+            if (initialVariantId) {
+                const variant = detail.variants.find(
+                    (v) => v.id === initialVariantId,
+                );
 
-            if (variant) {
-                return buildSelectionFromVariant(variant, detail.options);
+                if (variant) {
+                    return buildSelectionFromVariant(variant, detail.options);
+                }
             }
-        }
 
-        const initial: SelectedOptions = {};
-        for (const option of detail.options) {
-            if (option.values[0]) {
-                initial[option.id] = option.values[0].id;
+            const initial: SelectedOptions = {};
+
+            for (const option of detail.options) {
+                if (option.values[0]) {
+                    initial[option.id] = option.values[0].id;
+                }
             }
-        }
 
-        return initial;
-    });
+            return initial;
+        },
+    );
 
     const [customConfiguration, setCustomConfiguration] = useState<
         Record<string, { material: string; color: string }>
@@ -144,7 +149,10 @@ export default function ProductDetailPage({
             return;
         }
 
-        const optionsLabel = formatOptionsLabel(detail.options, selectedOptions);
+        const optionsLabel = formatOptionsLabel(
+            detail.options,
+            selectedOptions,
+        );
         const parts = optionsLabel.split(' / ');
 
         addItem({
@@ -156,8 +164,9 @@ export default function ProductDetailPage({
             options: detail.options.map((option) => ({
                 name: option.name,
                 value:
-                    option.values.find((v) => v.id === selectedOptions[option.id])
-                        ?.value ?? '',
+                    option.values.find(
+                        (v) => v.id === selectedOptions[option.id],
+                    )?.value ?? '',
             })),
             unitPrice: selectedVariant.unitPrice,
             imageUrl: primaryImage?.url,
@@ -175,21 +184,8 @@ export default function ProductDetailPage({
         setCustomConfiguration({});
     };
 
-    useEffect(() => {
-        if (initialVariantId) {
-            const variant = detail.variants.find((v) => v.id === initialVariantId);
-
-            if (variant) {
-                setSelectedOptions(
-                    buildSelectionFromVariant(variant, detail.options),
-                );
-            }
-        }
-    }, [initialVariantId, detail.variants, detail.options]);
-
     const showNikeByYou =
-        detail.isCustomizable &&
-        (detail.customizationOptions?.length ?? 0) > 0;
+        detail.isCustomizable && (detail.customizationOptions?.length ?? 0) > 0;
 
     return (
         <>
@@ -226,9 +222,14 @@ export default function ProductDetailPage({
                                 </h1>
                                 <div className="mt-3 flex flex-wrap items-center gap-3">
                                     {(detail.reviewCount ?? 0) > 0 ? (
-                                        <a href="#reviews" className="hover:opacity-80">
+                                        <a
+                                            href="#reviews"
+                                            className="hover:opacity-80"
+                                        >
                                             <StarRating
-                                                rating={detail.averageRating ?? 0}
+                                                rating={
+                                                    detail.averageRating ?? 0
+                                                }
                                                 size="sm"
                                                 showCount
                                                 reviewCount={
@@ -419,7 +420,8 @@ export default function ProductDetailPage({
                                             item.defaultVariantId ?? undefined
                                         }
                                         defaultVariantPrice={
-                                            item.defaultVariantPrice ?? undefined
+                                            item.defaultVariantPrice ??
+                                            undefined
                                         }
                                         inStock={item.inStock}
                                     />

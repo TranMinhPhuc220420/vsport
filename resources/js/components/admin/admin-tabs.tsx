@@ -36,7 +36,7 @@ export function AdminTabs({
                     <TabsTrigger
                         key={tab.value}
                         value={tab.value}
-                        className="rounded-admin-sm border-admin text-admin-secondary border border-transparent px-3 py-1.5 text-sm font-medium data-[state=active]:border-admin data-[state=active]:bg-[var(--admin-surface)] data-[state=active]:text-[var(--admin-primary)]"
+                        className="rounded-admin-sm border-admin text-admin-secondary data-[state=active]:border-admin border border-transparent px-3 py-1.5 text-sm font-medium data-[state=active]:bg-[var(--admin-surface)] data-[state=active]:text-[var(--admin-primary)]"
                     >
                         {tab.label}
                     </TabsTrigger>

@@ -1,9 +1,7 @@
 import type { CSSProperties } from 'react';
 
-import {
-    BlogPostCard,
-    type BlogPostCardData,
-} from '@/components/storefront/blog-post-card';
+import { BlogPostCard } from '@/components/storefront/blog-post-card';
+import type { BlogPostCardData } from '@/components/storefront/blog-post-card';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +29,7 @@ export function BlogBentoGrid({
                     className={cn(
                         'grid grid-cols-1 gap-2',
                         'tablet:grid-cols-2',
-                        'desktop:grid-cols-4 desktop:grid-rows-2 desktop:gap-0 desktop:h-[clamp(38rem,52vw,48rem)]',
+                        'desktop:h-[clamp(38rem,52vw,48rem)] desktop:grid-cols-4 desktop:grid-rows-2 desktop:gap-0',
                     )}
                 >
                     <div
@@ -53,7 +51,9 @@ export function BlogBentoGrid({
                             key={post.id}
                             className="h-full min-h-[16rem] desktop:min-h-0"
                             style={
-                                { '--stagger-index': index + 1 } as CSSProperties
+                                {
+                                    '--stagger-index': index + 1,
+                                } as CSSProperties
                             }
                         >
                             <BlogPostCard

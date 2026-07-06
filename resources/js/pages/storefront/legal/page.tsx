@@ -12,7 +12,9 @@ type LegalPageProps = {
 
 export default function LegalPage({ page, seo }: LegalPageProps) {
     const { t } = useTranslation('storefront');
-    const { storeProfile } = usePage().props as { storeProfile: StoreProfile };
+    const { storeProfile } = usePage().props as unknown as {
+        storeProfile: StoreProfile;
+    };
     const paragraphs = t(`legal.${page}.paragraphs`, {
         returnObjects: true,
     }) as string[];

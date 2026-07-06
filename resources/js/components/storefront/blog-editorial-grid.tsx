@@ -1,8 +1,6 @@
-import {
-    BlogPostCard,
-    type BlogPostCardData,
-} from '@/components/storefront/blog-post-card';
 import { BlogBentoGrid } from '@/components/storefront/blog-bento-grid';
+import { BlogPostCard } from '@/components/storefront/blog-post-card';
+import type { BlogPostCardData } from '@/components/storefront/blog-post-card';
 import { ScrollReveal } from '@/components/storefront/scroll-reveal';
 import { splitPostsForBentoGrid } from '@/lib/blog-editorial-layout';
 import { cn } from '@/lib/utils';
@@ -64,9 +62,11 @@ function RemainingPostsGridFixed({
         } else {
             const end = Math.min(i + 3, posts.length);
             const slice = posts.slice(i, end);
+
             if (slice.length > 0) {
                 chunks.push(slice);
             }
+
             i = end;
         }
     }

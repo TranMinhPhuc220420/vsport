@@ -13,6 +13,10 @@ type ProductOptionsEditorProps = {
     product: AdminProduct;
 };
 
+type ProductOptionsForm = {
+    options: any[];
+};
+
 const DISPLAY_TYPES = [
     { value: 'swatch', label: 'Swatch' },
     { value: 'button', label: 'Button' },
@@ -22,7 +26,7 @@ const DISPLAY_TYPES = [
 export function ProductOptionsEditor({ product }: ProductOptionsEditorProps) {
     const { t } = useTranslation('admin');
 
-    const form = useForm({
+    const form = useForm<ProductOptionsForm>({
         options: product.options.map((option) => ({
             id: option.id,
             name: option.name,
@@ -87,7 +91,7 @@ export function ProductOptionsEditor({ product }: ProductOptionsEditorProps) {
                 {form.data.options.map((option, optionIndex) => (
                     <div
                         key={option.id ?? `new-${optionIndex}`}
-                        className="border-admin space-y-4 rounded-admin-lg border bg-[var(--admin-surface)] p-4"
+                        className="border-admin rounded-admin-lg space-y-4 border bg-[var(--admin-surface)] p-4"
                     >
                         <div className="grid gap-4 tablet:grid-cols-2">
                             <AdminInputField
@@ -104,7 +108,8 @@ export function ProductOptionsEditor({ product }: ProductOptionsEditorProps) {
                                 value={option.displayType}
                                 onChange={(value) => {
                                     const options = [...form.data.options];
-                                    options[optionIndex].displayType = value as AdminProductOption['displayType'];
+                                    options[optionIndex].displayType =
+                                        value as AdminProductOption['displayType'];
                                     form.setData('options', options);
                                 }}
                                 options={DISPLAY_TYPES}
@@ -129,59 +134,74 @@ export function ProductOptionsEditor({ product }: ProductOptionsEditorProps) {
                             <p className="text-admin-secondary text-sm font-medium">
                                 {t('products.optionValues')}
                             </p>
-                            {option.values.map((value, valueIndex) => (
-                                <div
-                                    key={value.id ?? `value-${valueIndex}`}
-                                    className="grid gap-2 tablet:grid-cols-3"
-                                >
-                                    <AdminInputField
-                                        label={t('products.value')}
-                                        value={value.value}
-                                        onChange={(e) => {
-                                            const options = [
-                                                ...form.data.options,
-                                            ];
-                                            options[optionIndex].values[
-                                                valueIndex
-                                            ].value = e.target.value;
-                                            form.setData('options', options);
-                                        }}
-                                    />
-                                    {option.displayType === 'swatch' ? (
+                            {option.values.map(
+                                (value: any, valueIndex: number) => (
+                                    <div
+                                        key={value.id ?? `value-${valueIndex}`}
+                                        className="grid gap-2 tablet:grid-cols-3"
+                                    >
                                         <AdminInputField
-                                            label={t('products.swatchHex')}
-                                            value={value.swatchHex ?? ''}
+                                            label={t('products.value')}
+                                            value={value.value}
                                             onChange={(e) => {
                                                 const options = [
                                                     ...form.data.options,
                                                 ];
                                                 options[optionIndex].values[
                                                     valueIndex
-                                                ].swatchHex = e.target.value;
-                                                form.setData('options', options);
+                                                ].value = e.target.value;
+                                                form.setData(
+                                                    'options',
+                                                    options,
+                                                );
                                             }}
                                         />
-                                    ) : null}
-                                    <AdminInputField
-                                        label={t('products.salePrice')}
-                                        type="number"
-                                        min="0"
-                                        step="0.01"
-                                        value={value.salePrice?.toString() ?? ''}
-                                        onChange={(e) => {
-                                            const options = [
-                                                ...form.data.options,
-                                            ];
-                                            options[optionIndex].values[
-                                                valueIndex
-                                            ].salePrice = e.target.value
-                                                ? Number(e.target.value)
-                                                : null;
-                                            form.setData('options', options);
-                                        }}
-                                    />
-                                </div>
-                            ))}
+                                        {option.displayType === 'swatch' ? (
+                                            <AdminInputField
+                                                label={t('products.swatchHex')}
+                                                value={value.swatchHex ?? ''}
+                                                onChange={(e) => {
+                                                    const options = [
+                                                        ...form.data.options,
+                                                    ];
+                                                    options[optionIndex].values[
+                                                        valueIndex
+                                                    ].swatchHex =
+                                                        e.target.value;
+                                                    form.setData(
+                                                        'options',
+                                                        options,
+                                                    );
+                                                }}
+                                            />
+                                        ) : null}
+                                        <AdminInputField
+                                            label={t('products.salePrice')}
+                                            type="number"
+                                            min="0"
+                                            step="0.01"
+                                            value={
+                                                value.salePrice?.toString() ??
+                                                ''
+                                            }
+                                            onChange={(e) => {
+                                                const options = [
+                                                    ...form.data.options,
+                                                ];
+                                                options[optionIndex].values[
+                                                    valueIndex
+                                                ].salePrice = e.target.value
+                                                    ? Number(e.target.value)
+                                                    : null;
+                                                form.setData(
+                                                    'options',
+                                                    options,
+                                                );
+                                            }}
+                                        />
+                                    </div>
+                                ),
+                            )}
                             <AdminButton
                                 type="button"
                                 variant="secondary"
@@ -194,7 +214,11 @@ export function ProductOptionsEditor({ product }: ProductOptionsEditorProps) {
                 ))}
 
                 <div className="flex flex-wrap gap-3">
-                    <AdminButton type="button" variant="secondary" onClick={addOption}>
+                    <AdminButton
+                        type="button"
+                        variant="secondary"
+                        onClick={addOption}
+                    >
                         {t('products.addOption')}
                     </AdminButton>
                     <AdminButton type="submit" disabled={form.processing}>

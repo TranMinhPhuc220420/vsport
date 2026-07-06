@@ -101,7 +101,7 @@ function SettingsNavMobile({ items, className }: SettingsNavProps) {
         <nav
             aria-label={t('settings.nav.aria')}
             className={cn(
-                '-mx-6 flex gap-2 overflow-x-auto px-6 pb-1 scrollbar-none tablet-lg:hidden',
+                '-mx-6 flex scrollbar-none gap-2 overflow-x-auto px-6 pb-1 tablet-lg:hidden',
                 className,
             )}
         >

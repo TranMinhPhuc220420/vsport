@@ -164,7 +164,7 @@ export default function Register({ passwordRules }: Props) {
                             </StorefrontButton>
                         </div>
 
-                        <p className="text-center text-caption-md text-mute">
+                        <p className="text-caption-md text-center text-mute">
                             {t('register.hasAccount')}{' '}
                             <AuthTextLink href={login()} tabIndex={6}>
                                 {t('register.logIn')}

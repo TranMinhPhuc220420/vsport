@@ -6,7 +6,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const adminButtonVariants = cva(
-    'admin-body-strong rounded-admin-md inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap px-4 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--admin-surface)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+    'admin-body-strong rounded-admin-md inline-flex h-9 items-center justify-center gap-2 px-4 whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--admin-tertiary)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--admin-surface)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
     {
         variants: {
             variant: {
@@ -33,7 +33,9 @@ const adminButtonVariants = cva(
 
 function adminActionButtonClass(
     variant: NonNullable<VariantProps<typeof adminButtonVariants>['variant']>,
-    size: NonNullable<VariantProps<typeof adminButtonVariants>['size']> = 'default',
+    size: NonNullable<
+        VariantProps<typeof adminButtonVariants>['size']
+    > = 'default',
 ) {
     return adminButtonVariants({ variant, size });
 }

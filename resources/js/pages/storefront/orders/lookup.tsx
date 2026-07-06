@@ -2,7 +2,11 @@ import { Form, Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import OrderLookupController from '@/actions/App/Http/Controllers/Storefront/OrderLookupController';
-import { AuthField, AuthInput, StorefrontButton } from '@/components/storefront';
+import {
+    AuthField,
+    AuthInput,
+    StorefrontButton,
+} from '@/components/storefront';
 import { PageSeo } from '@/components/storefront/page-seo';
 import type { SeoData } from '@/components/storefront/page-seo';
 
@@ -80,7 +84,10 @@ export default function OrderLookupPage({ seo }: OrderLookupPageProps) {
                 </Form>
 
                 <p className="text-caption-md mt-6 text-mute">
-                    <Link href="/orders" className="underline underline-offset-4">
+                    <Link
+                        href="/orders"
+                        className="underline underline-offset-4"
+                    >
                         {t('orders.lookup.backToOrders')}
                     </Link>
                 </p>

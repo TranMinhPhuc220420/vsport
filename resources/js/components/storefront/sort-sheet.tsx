@@ -21,7 +21,13 @@ type SortSheetProps = {
     onChange: (value: string) => void;
 };
 
-function SortSheet({ open, onOpenChange, options, value, onChange }: SortSheetProps) {
+function SortSheet({
+    open,
+    onOpenChange,
+    options,
+    value,
+    onChange,
+}: SortSheetProps) {
     const { t } = useTranslation('storefront');
 
     const handleSelect = (v: string) => {

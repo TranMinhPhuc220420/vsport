@@ -2,8 +2,8 @@ import { useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
 import { AdminFormSection } from '@/components/admin/admin-form-section';
-import { Input } from '@/components/ui/input';
 import { AdminButton } from '@/components/admin/ui/admin-button';
+import { Input } from '@/components/ui/input';
 import type { AdminProduct } from '@/types/admin-product';
 
 type VariantInventoryGridProps = {
@@ -41,8 +41,12 @@ export function VariantInventoryGrid({ product }: VariantInventoryGridProps) {
                         <thead>
                             <tr className="border-admin border-b text-left">
                                 <th className="py-2 pr-4">SKU</th>
-                                <th className="py-2 pr-4">{t('products.variant')}</th>
-                                <th className="py-2">{t('products.quantity')}</th>
+                                <th className="py-2 pr-4">
+                                    {t('products.variant')}
+                                </th>
+                                <th className="py-2">
+                                    {t('products.quantity')}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,14 +66,20 @@ export function VariantInventoryGrid({ product }: VariantInventoryGridProps) {
                                             type="number"
                                             min={0}
                                             className="w-24"
-                                            value={form.data.variants[index].quantity}
+                                            value={
+                                                form.data.variants[index]
+                                                    .quantity
+                                            }
                                             onChange={(e) => {
                                                 const variants = [
                                                     ...form.data.variants,
                                                 ];
                                                 variants[index].quantity =
                                                     Number(e.target.value);
-                                                form.setData('variants', variants);
+                                                form.setData(
+                                                    'variants',
+                                                    variants,
+                                                );
                                             }}
                                         />
                                     </td>
@@ -79,7 +89,11 @@ export function VariantInventoryGrid({ product }: VariantInventoryGridProps) {
                     </table>
                 </div>
 
-                <AdminButton type="submit" disabled={form.processing} className="mt-4">
+                <AdminButton
+                    type="submit"
+                    disabled={form.processing}
+                    className="mt-4"
+                >
                     {t('products.saveInventory')}
                 </AdminButton>
             </AdminFormSection>

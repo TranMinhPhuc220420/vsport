@@ -85,7 +85,9 @@ export default function AdminProductsCreate({
                             <AdminInputField
                                 label={t('products.slug')}
                                 value={data.slug}
-                                onChange={(e) => setData('slug', e.target.value)}
+                                onChange={(e) =>
+                                    setData('slug', e.target.value)
+                                }
                                 error={errors.slug}
                             />
                         </div>

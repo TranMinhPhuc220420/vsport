@@ -3,9 +3,9 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import { StorefrontButton } from '@/components/storefront/Button';
 import { AuthField } from '@/components/storefront/auth/auth-field';
 import { AuthPasswordInput } from '@/components/storefront/auth/auth-password-input';
+import { StorefrontButton } from '@/components/storefront/Button';
 import {
     Dialog,
     DialogClose,

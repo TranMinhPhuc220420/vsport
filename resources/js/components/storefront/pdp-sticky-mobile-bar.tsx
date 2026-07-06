@@ -28,8 +28,7 @@ function PdpStickyMobileBar({
     className,
 }: PdpStickyMobileBarProps) {
     const { locale, currency } = useLocale();
-    const onSale =
-        listPrice !== undefined && listPrice > price;
+    const onSale = listPrice !== undefined && listPrice > price;
     const [visible, setVisible] = useState(false);
     const barRef = useRef<HTMLDivElement>(null);
 
@@ -89,7 +88,7 @@ function PdpStickyMobileBar({
             )}
             aria-hidden={!visible}
         >
-            <div className="mx-auto flex min-w-0 max-w-[90rem] items-center gap-3">
+            <div className="mx-auto flex max-w-[90rem] min-w-0 items-center gap-3">
                 {imageUrl ? (
                     <img
                         src={imageUrl}

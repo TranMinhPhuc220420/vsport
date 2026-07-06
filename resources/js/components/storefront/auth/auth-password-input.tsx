@@ -44,7 +44,7 @@ function AuthPasswordInput({
             <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute inset-y-0 right-0 flex items-center rounded-r-pill-md px-4 text-mute transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+                className="absolute inset-y-0 right-0 flex items-center rounded-r-pill-md px-4 text-mute transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
                 aria-label={
                     showPassword ? t('hidePassword') : t('showPassword')
                 }

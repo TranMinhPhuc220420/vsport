@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { clearLocalWishlist, readLocalWishlist } from '@/hooks/use-wishlist-storage';
+import {
+    clearLocalWishlist,
+    readLocalWishlist,
+} from '@/hooks/use-wishlist-storage';
 import {
     addServerWishlistItem,
     fetchServerWishlist,
@@ -71,9 +74,11 @@ function useServerWishlist(enabled: boolean) {
                 ? removeServerWishlistItem(input.productSlug)
                 : addServerWishlistItem(input.productSlug);
 
-            request
-                .then(setItems)
-                .catch(() => fetchServerWishlist().then(setItems).catch(() => {}));
+            request.then(setItems).catch(() =>
+                fetchServerWishlist()
+                    .then(setItems)
+                    .catch(() => {}),
+            );
         },
         [items],
     );
@@ -85,7 +90,11 @@ function useServerWishlist(enabled: boolean) {
 
         removeServerWishlistItem(productSlug)
             .then(setItems)
-            .catch(() => fetchServerWishlist().then(setItems).catch(() => {}));
+            .catch(() =>
+                fetchServerWishlist()
+                    .then(setItems)
+                    .catch(() => {}),
+            );
     }, []);
 
     const isWishlisted = useCallback(

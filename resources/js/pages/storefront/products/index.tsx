@@ -42,7 +42,9 @@ export default function ProductListingPage({
     const [filtersVisible, setFiltersVisible] = useState(false);
 
     // Load More accumulation
-    const [allProducts, setAllProducts] = useState<ProductSummary[]>(products.data);
+    const [allProducts, setAllProducts] = useState<ProductSummary[]>(
+        products.data,
+    );
     const isLoadingMoreRef = useRef(false);
     const isMountedRef = useRef(false);
 
@@ -68,8 +70,8 @@ export default function ProductListingPage({
     useEffect(() => {
         const removeStart = router.on('start', () => {
             if (!isLoadingMoreRef.current) {
-setIsLoading(true);
-}
+                setIsLoading(true);
+            }
         });
         const removeFinish = router.on('finish', () => setIsLoading(false));
 
@@ -81,17 +83,21 @@ setIsLoading(true);
 
     const handleLoadMore = () => {
         if (!products.links.next) {
-return;
-}
+            return;
+        }
 
         isLoadingMoreRef.current = true;
-        router.get(products.links.next, {}, {
-            preserveState: true,
-            preserveScroll: true,
-            onError: () => {
-                isLoadingMoreRef.current = false;
+        router.get(
+            products.links.next,
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onError: () => {
+                    isLoadingMoreRef.current = false;
+                },
             },
-        });
+        );
     };
 
     const hasNextPage = !!products.links.next;
@@ -167,7 +173,8 @@ return;
                                             key={product.id}
                                             style={
                                                 {
-                                                    '--stagger-index': index % 8,
+                                                    '--stagger-index':
+                                                        index % 8,
                                                 } as CSSProperties
                                             }
                                         >
@@ -176,16 +183,20 @@ return;
                                                 slug={product.slug}
                                                 name={product.name}
                                                 subtitle={
-                                                    product.subTitle ?? undefined
+                                                    product.subTitle ??
+                                                    undefined
                                                 }
                                                 imageUrl={
                                                     product.primaryImage?.url
                                                 }
                                                 price={product.listPrice}
                                                 salePrice={
-                                                    product.salePrice ?? undefined
+                                                    product.salePrice ??
+                                                    undefined
                                                 }
-                                                colorways={product.colorwaySwatches}
+                                                colorways={
+                                                    product.colorwaySwatches
+                                                }
                                                 defaultVariantId={
                                                     product.defaultVariantId ??
                                                     undefined

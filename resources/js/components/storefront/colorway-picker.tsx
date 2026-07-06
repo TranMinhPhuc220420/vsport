@@ -12,8 +12,7 @@ type ColorwayPickerProps = {
 
 function getColorwayThumbnail(colorway: ProductColorway): string | null {
     const primary =
-        colorway.images.find((image) => image.isPrimary) ??
-        colorway.images[0];
+        colorway.images.find((image) => image.isPrimary) ?? colorway.images[0];
 
     return primary?.url ?? null;
 }

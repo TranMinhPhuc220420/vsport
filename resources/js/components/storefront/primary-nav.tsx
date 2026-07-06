@@ -30,7 +30,11 @@ export function PrimaryNav() {
     const { itemCount } = useCart();
     const { itemCount: wishlistCount } = useWishlist();
     const { t } = useTranslation('storefront');
-    const { name: storeName, navigation, storeProfile } = usePage().props as {
+    const {
+        name: storeName,
+        navigation,
+        storeProfile,
+    } = usePage().props as unknown as {
         name: string;
         navigation: { categories: Category[] };
         storeProfile: StoreProfile;
@@ -81,7 +85,8 @@ export function PrimaryNav() {
                             href={home()}
                             className="text-heading-lg font-medium tracking-tight"
                         >
-                            {storeProfile.logoWideUrl ?? storeProfile.logoUrl ? (
+                            {(storeProfile.logoWideUrl ??
+                            storeProfile.logoUrl) ? (
                                 <img
                                     src={
                                         storeProfile.logoWideUrl ??

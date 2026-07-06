@@ -33,7 +33,7 @@ export function ProductAttributesSection({
                         {items.map((item) => (
                             <div
                                 key={`${group}-${item.key}`}
-                                className="grid grid-cols-2 gap-2 text-caption-md"
+                                className="text-caption-md grid grid-cols-2 gap-2"
                             >
                                 <dt className="text-mute">{item.label}</dt>
                                 <dd className="text-ink">{item.value}</dd>

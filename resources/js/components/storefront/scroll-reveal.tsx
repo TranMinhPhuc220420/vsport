@@ -102,7 +102,10 @@ function ScrollReveal({
     if (direction === 'clip') {
         return (
             <div ref={ref} className={className}>
-                <div className={cn(revealClasses, 'size-full')} style={revealStyle}>
+                <div
+                    className={cn(revealClasses, 'size-full')}
+                    style={revealStyle}
+                >
                     {content}
                 </div>
             </div>

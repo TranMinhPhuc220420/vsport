@@ -22,7 +22,9 @@ export type FlatCategoryTreeRow = CategoryTreeRow & {
 
 export type CategoryScope = 'all' | 'roots' | 'children';
 
-export function buildCategoryTree(flatRows: CategoryTreeRow[]): CategoryTreeNode[] {
+export function buildCategoryTree(
+    flatRows: CategoryTreeRow[],
+): CategoryTreeNode[] {
     const nodes = new Map<number, CategoryTreeNode>();
 
     for (const row of flatRows) {
@@ -130,8 +132,7 @@ export function filterCategoryTree(
 
         for (const node of nodes) {
             const childResult = filterNodes(node.children);
-            const selfMatches =
-                matchesSearch(node) && matchesScope(node);
+            const selfMatches = matchesSearch(node) && matchesScope(node);
             const hasMatchingChildren = childResult.filtered.length > 0;
 
             if (selfMatches || hasMatchingChildren) {

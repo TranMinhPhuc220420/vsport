@@ -39,7 +39,10 @@ type AdminReturnRequestsIndexProps = {
         };
         meta: {
             current_page: number;
+            from: number | null;
             last_page: number;
+            per_page: number;
+            to: number | null;
             total: number;
         };
     };
@@ -75,7 +78,7 @@ export default function AdminReturnRequestsIndex({
         })),
     ];
 
-    const applyFilter = (status: string) => {
+    const applyFilter = (status: string | null) => {
         onStart();
         router.get('/admin/return-requests', status ? { status } : {}, {
             preserveState: true,
@@ -139,7 +142,11 @@ export default function AdminReturnRequestsIndex({
                                 <AdminDataTableHeaderCell>
                                     {t('returnRequests.requested')}
                                 </AdminDataTableHeaderCell>
-                                <AdminDataTableHeaderCell />
+                                <AdminDataTableHeaderCell>
+                                    <span className="sr-only">
+                                        {tCommon('actions')}
+                                    </span>
+                                </AdminDataTableHeaderCell>
                             </AdminDataTableHeaderRow>
                         </AdminDataTableHead>
                         <AdminDataTableBody>

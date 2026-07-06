@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Resources\ProductSummaryResource;
 use App\Enums\BlogPostStatus;
+use App\Http\Resources\ProductSummaryResource;
 use App\Models\BlogPost;
 use App\Models\Product;
 use App\Services\Catalog\ProductCatalogService;

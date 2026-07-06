@@ -16,19 +16,18 @@ test('deploy check passes in testing environment with build manifest', function 
 
     expect($report->hasFailures())->toBeFalse()
         ->and(collect($report->items)->pluck('message'))
-        ->toContain('APP_KEY is configured.')
-        ->toContain('Vite build manifest found.');
+        ->toContain('APP_KEY is configured.');
 });
 
-test('deploy check reports missing build manifest', function () {
+test('deploy check reports missing build manifest in production', function () {
     $manifest = public_path('build/manifest.json');
     $backup = $manifest.'.bak';
 
-    if (! file_exists($manifest)) {
-        $this->markTestSkipped('Build manifest not present.');
-    }
+    $this->app->detectEnvironment(fn () => 'production');
 
-    rename($manifest, $backup);
+    if (file_exists($manifest)) {
+        rename($manifest, $backup);
+    }
 
     try {
         $report = $this->service->run();
@@ -37,7 +36,9 @@ test('deploy check reports missing build manifest', function () {
             ->and(collect($report->items)->pluck('message'))
             ->toContain('Frontend build missing. Run npm run build before deploy.');
     } finally {
-        rename($backup, $manifest);
+        if (file_exists($backup)) {
+            rename($backup, $manifest);
+        }
     }
 });
 

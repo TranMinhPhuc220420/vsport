@@ -38,7 +38,9 @@ export function BlogFeaturedImageCreateField({
                 </div>
             </div>
             <div>
-                <label className="admin-label">{t('blogPosts.imageFile')}</label>
+                <label className="admin-label">
+                    {t('blogPosts.imageFile')}
+                </label>
                 <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"

@@ -63,7 +63,9 @@ export function NikeByYouCustomizer({
 
     return (
         <div className="space-y-4">
-            <p className="text-caption-md text-mute">{t('pdp.nikeByYouDesc')}</p>
+            <p className="text-caption-md text-mute">
+                {t('pdp.nikeByYouDesc')}
+            </p>
             {options.map((option) => (
                 <div key={option.componentName}>
                     <p className="text-body-strong text-ink">
