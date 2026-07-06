@@ -43,7 +43,8 @@ Namespace: [`resources/js/components/storefront/`](../../../resources/js/compone
 | Badge | `Badge.tsx` | Variants: `promo`, `sale` |
 | FilterChip | `FilterChip.tsx` | Toggle chip with active state |
 | SearchPill | `SearchPill.tsx` | Search input with focus ring |
-| ProductCard | `ProductCard.tsx` | Presentational; mock props for now |
+| Auth form primitives | `components/storefront/auth/*` | AuthField, AuthInput, AuthPasswordInput, AuthCheckbox, AuthDivider, AuthAlert |
+| Auth layout | `layouts/auth/auth-storefront-layout.tsx` | Split editorial + form panel for `auth/*` pages |
 
 Layout pieces: `utility-bar.tsx`, `primary-nav.tsx`, `mobile-nav-drawer.tsx`, `footer.tsx`.
 
@@ -65,7 +66,7 @@ Wired in [`resources/js/app.tsx`](../../../resources/js/app.tsx) for `admin/*` p
 |-------------|--------|
 | `preview/*` | StorefrontLayout |
 | `admin/*` | AdminLayout |
-| `auth/*` | AuthLayout (unchanged) |
+| `auth/*` | AuthLayout (storefront split layout) |
 | `settings/*` | AppLayout + SettingsLayout (unchanged) |
 | default | AppLayout (customer dashboard) |
 
@@ -78,6 +79,7 @@ Internal styleguide at **`/preview/design-system`**:
 - Color swatches
 - Typography scale
 - Button, badge, chip, search variants
+- Auth form field previews
 - Product card grid (mock data)
 - PDP two-column layout preview
 
@@ -99,6 +101,6 @@ Manual:
 
 - Real home / PLP / PDP pages (Phase 3)
 - Catalog APIs (Phase 2)
-- Auth/settings Nike re-skin
+- Settings Nike re-skin
 - Dark mode on storefront/admin
 - Full PLP filter sidebar (Phase 3)

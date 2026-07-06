@@ -3,6 +3,12 @@ import { useState } from 'react';
 import type { CSSProperties } from 'react';
 
 import {
+    AuthAlert,
+    AuthCheckbox,
+    AuthDivider,
+    AuthField,
+    AuthInput,
+    AuthPasswordInput,
     FilterChip,
     ProductCard,
     ProductRail,
@@ -182,6 +188,73 @@ export default function DesignSystemPreview() {
                         {mockProducts.map((product) => (
                             <ProductCard key={product.name} {...product} />
                         ))}
+                    </div>
+                </section>
+
+                <section className="space-y-4">
+                    <h2 className="text-heading-xl text-ink">Auth forms</h2>
+                    <p className="text-caption-md text-mute">
+                        Storefront-styled fields for login, register, and
+                        checkout flows.
+                    </p>
+                    <div className="grid gap-8 desktop:grid-cols-2">
+                        <div className="space-y-4 rounded-none border border-hairline p-6">
+                            <h3 className="text-heading-lg text-ink">
+                                Login preview
+                            </h3>
+                            <AuthField id="preview-email" label="Email address">
+                                <AuthInput
+                                    id="preview-email"
+                                    type="email"
+                                    placeholder="email@example.com"
+                                    readOnly
+                                />
+                            </AuthField>
+                            <AuthField
+                                id="preview-password"
+                                label="Password"
+                                error="Password is required"
+                            >
+                                <AuthPasswordInput
+                                    id="preview-password"
+                                    placeholder="Password"
+                                    readOnly
+                                    error="Password is required"
+                                />
+                            </AuthField>
+                            <AuthCheckbox
+                                id="preview-remember"
+                                label="Remember me"
+                                readOnly
+                            />
+                            <StorefrontButton variant="primary" className="w-full">
+                                Log in
+                            </StorefrontButton>
+                        </div>
+
+                        <div className="space-y-4 rounded-none border border-hairline p-6">
+                            <h3 className="text-heading-lg text-ink">
+                                Register preview
+                            </h3>
+                            <AuthAlert variant="success">
+                                Account created successfully.
+                            </AuthAlert>
+                            <AuthField id="preview-name" label="Full name">
+                                <AuthInput
+                                    id="preview-name"
+                                    type="text"
+                                    placeholder="Full name"
+                                    readOnly
+                                />
+                            </AuthField>
+                            <AuthDivider label="Or continue with email" />
+                            <StorefrontButton
+                                variant="secondary"
+                                className="w-full"
+                            >
+                                Sign in with a passkey
+                            </StorefrontButton>
+                        </div>
                     </div>
                 </section>
 

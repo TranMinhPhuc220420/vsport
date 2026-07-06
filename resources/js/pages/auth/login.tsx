@@ -1,14 +1,17 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/react';
+import { LoaderCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import InputError from '@/components/input-error';
+
 import PasskeyVerify from '@/components/passkey-verify';
-import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
+import {
+    AuthAlert,
+    AuthCheckbox,
+    AuthField,
+    AuthInput,
+    AuthPasswordInput,
+    AuthTextLink,
+    StorefrontButton,
+} from '@/components/storefront';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -24,11 +27,18 @@ export default function Login({ status, canResetPassword }: Props) {
     setLayoutProps({
         title: t('login.pageTitle'),
         description: t('login.description'),
+        editorialHeadline: t('login.editorialHeadline'),
     });
 
     return (
         <>
             <Head title={t('login.title')} />
+
+            {status && (
+                <AuthAlert variant="success" className="mb-6">
+                    {status}
+                </AuthAlert>
+            )}
 
             <PasskeyVerify />
 
@@ -39,12 +49,13 @@ export default function Login({ status, canResetPassword }: Props) {
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">
-                                    {t('login.email')}
-                                </Label>
-                                <Input
+                        <div className="grid gap-5">
+                            <AuthField
+                                id="email"
+                                label={t('login.email')}
+                                error={errors.email}
+                            >
+                                <AuthInput
                                     id="email"
                                     type="email"
                                     name="email"
@@ -53,74 +64,67 @@ export default function Login({ status, canResetPassword }: Props) {
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder={t('login.emailPlaceholder')}
+                                    error={errors.email}
                                 />
-                                <InputError message={errors.email} />
-                            </div>
+                            </AuthField>
 
-                            <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">
-                                        {t('login.password')}
-                                    </Label>
-                                    {canResetPassword && (
-                                        <TextLink
+                            <AuthField
+                                id="password"
+                                label={t('login.password')}
+                                error={errors.password}
+                                labelAction={
+                                    canResetPassword ? (
+                                        <AuthTextLink
                                             href={request()}
-                                            className="ml-auto text-sm"
                                             tabIndex={5}
                                         >
                                             {t('login.forgotPassword')}
-                                        </TextLink>
-                                    )}
-                                </div>
-                                <PasswordInput
+                                        </AuthTextLink>
+                                    ) : undefined
+                                }
+                            >
+                                <AuthPasswordInput
                                     id="password"
                                     name="password"
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder={t('login.passwordPlaceholder')}
+                                    error={errors.password}
                                 />
-                                <InputError message={errors.password} />
-                            </div>
+                            </AuthField>
 
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    tabIndex={3}
-                                />
-                                <Label htmlFor="remember">
-                                    {t('login.remember')}
-                                </Label>
-                            </div>
+                            <AuthCheckbox
+                                id="remember"
+                                name="remember"
+                                tabIndex={3}
+                                label={t('login.remember')}
+                            />
 
-                            <Button
+                            <StorefrontButton
                                 type="submit"
-                                className="mt-4 w-full"
+                                variant="primary"
+                                className="w-full"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
                             >
-                                {processing && <Spinner />}
+                                {processing && (
+                                    <LoaderCircle className="size-4 animate-spin" />
+                                )}
                                 {t('login.submit')}
-                            </Button>
+                            </StorefrontButton>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
+                        <p className="text-center text-caption-md text-mute">
                             {t('login.noAccount')}{' '}
-                            <TextLink href={register()} tabIndex={5}>
+                            <AuthTextLink href={register()} tabIndex={5}>
                                 {t('login.signUp')}
-                            </TextLink>
-                        </div>
+                            </AuthTextLink>
+                        </p>
                     </>
                 )}
             </Form>
-
-            {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
         </>
     );
 }
