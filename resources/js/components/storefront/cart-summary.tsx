@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { StorefrontButton } from '@/components/storefront/Button';
 import { formatCurrency, useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
+import { login } from '@/routes';
 
 type CartSummaryProps = {
     subtotal: number;
@@ -20,7 +21,7 @@ function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
 
     const handleCheckout = () => {
         if (!auth.user) {
-            router.visit('/login');
+            router.visit(login());
 
             return;
         }
@@ -66,7 +67,7 @@ function CartSummary({ subtotal, itemCount, className }: CartSummaryProps) {
             </StorefrontButton>
             {!auth.user && itemCount > 0 && (
                 <p className="text-caption-md mt-3 text-mute">
-                    <Link href="/login" className="text-ink underline">
+                    <Link href={login()} className="text-ink underline">
                         {t('cart.signInToComplete')}
                     </Link>{' '}
                     {t('cart.signInSuffix')}

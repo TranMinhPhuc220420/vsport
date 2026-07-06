@@ -1,12 +1,10 @@
 import type { UrlMethodPair } from '@inertiajs/core';
 import { router } from '@inertiajs/react';
 import { usePasskeyVerify } from '@laravel/passkeys/react';
-import { KeyRound } from 'lucide-react';
+import { KeyRound, LoaderCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Spinner } from '@/components/ui/spinner';
+
+import { AuthDivider, StorefrontButton } from '@/components/storefront';
 
 type Props = {
     routes?: {
@@ -44,33 +42,33 @@ export default function PasskeyVerify({
     return (
         <>
             <div className="grid gap-2">
-                <Button
+                <StorefrontButton
                     type="button"
-                    variant="outline"
+                    variant="secondary"
                     className="w-full"
                     onClick={verify}
                     disabled={isLoading}
                 >
-                    {isLoading ? <Spinner /> : <KeyRound className="h-4 w-4" />}
+                    {isLoading ? (
+                        <LoaderCircle className="size-4 animate-spin" />
+                    ) : (
+                        <KeyRound className="size-4" />
+                    )}
                     {isLoading
                         ? (loadingLabel ?? t('passkey.authenticating'))
                         : (label ?? t('passkey.signIn'))}
-                </Button>
+                </StorefrontButton>
                 {error && (
-                    <InputError message={error} className="text-center" />
+                    <p
+                        role="alert"
+                        className="text-center text-caption-sm text-sale"
+                    >
+                        {error}
+                    </p>
                 )}
             </div>
 
-            <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                    <Separator className="w-full" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                        {separator ?? t('passkey.orEmail')}
-                    </span>
-                </div>
-            </div>
+            <AuthDivider label={separator ?? t('passkey.orEmail')} />
         </>
     );
 }

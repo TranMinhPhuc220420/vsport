@@ -39,3 +39,11 @@ export {
     CheckoutField,
     checkoutInputClassName,
 } from '@/components/storefront/checkout-form';
+export { AuthField } from '@/components/storefront/auth/auth-field';
+export { AuthInput, authInputClassName } from '@/components/storefront/auth/auth-input';
+export { AuthPasswordInput } from '@/components/storefront/auth/auth-password-input';
+export { AuthCheckbox } from '@/components/storefront/auth/auth-checkbox';
+export { AuthDivider } from '@/components/storefront/auth/auth-divider';
+export { AuthAlert } from '@/components/storefront/auth/auth-alert';
+export { AuthBenefitsList } from '@/components/storefront/auth/auth-benefits-list';
+export { AuthTextLink } from '@/components/storefront/auth/auth-text-link';

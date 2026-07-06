@@ -18,4 +18,7 @@ export type AuthLayoutProps = {
     name?: string;
     title?: string;
     description?: string;
+    editorialHeadline?: string;
+    editorialImage?: string | null;
+    editorialBenefits?: string[];
 };

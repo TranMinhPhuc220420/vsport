@@ -15,6 +15,7 @@ import { StarRating } from '@/components/storefront/star-rating';
 import { StarRatingInput } from '@/components/storefront/star-rating-input';
 import { formatDate, useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
+import { login } from '@/routes';
 import type { ProductReview } from '@/types/catalog';
 
 type ProductReviewsSectionProps = {
@@ -220,7 +221,7 @@ function GuestReviewPrompt() {
                 {t('pdp.signInToReviewHint')}
             </p>
             <Link
-                href="/login"
+                href={login()}
                 className={cn(
                     storefrontButtonVariants({ variant: 'primary' }),
                     'mt-5',

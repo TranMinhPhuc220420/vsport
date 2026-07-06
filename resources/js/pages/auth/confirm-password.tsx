@@ -1,15 +1,17 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/react';
+import { LoaderCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
     index as confirmOptions,
     store as confirmStore,
 } from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyConfirmationController';
-import InputError from '@/components/input-error';
+
 import PasskeyVerify from '@/components/passkey-verify';
-import PasswordInput from '@/components/password-input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
+import {
+    AuthField,
+    AuthPasswordInput,
+    StorefrontButton,
+} from '@/components/storefront';
 import { store } from '@/routes/password/confirm';
 
 export default function ConfirmPassword() {
@@ -18,6 +20,7 @@ export default function ConfirmPassword() {
     setLayoutProps({
         title: t('confirmPassword.title'),
         description: t('confirmPassword.description'),
+        editorialHeadline: t('confirmPassword.editorialHeadline'),
     });
 
     return (
@@ -36,12 +39,13 @@ export default function ConfirmPassword() {
 
             <Form {...store.form()} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (
-                    <div className="space-y-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="password">
-                                {t('confirmPassword.password')}
-                            </Label>
-                            <PasswordInput
+                    <div className="space-y-5">
+                        <AuthField
+                            id="password"
+                            label={t('confirmPassword.password')}
+                            error={errors.password}
+                        >
+                            <AuthPasswordInput
                                 id="password"
                                 name="password"
                                 placeholder={t(
@@ -49,21 +53,22 @@ export default function ConfirmPassword() {
                                 )}
                                 autoComplete="current-password"
                                 autoFocus
+                                error={errors.password}
                             />
+                        </AuthField>
 
-                            <InputError message={errors.password} />
-                        </div>
-
-                        <div className="flex items-center">
-                            <Button
-                                className="w-full"
-                                disabled={processing}
-                                data-test="confirm-password-button"
-                            >
-                                {processing && <Spinner />}
-                                {t('confirmPassword.submit')}
-                            </Button>
-                        </div>
+                        <StorefrontButton
+                            type="submit"
+                            variant="primary"
+                            className="w-full"
+                            disabled={processing}
+                            data-test="confirm-password-button"
+                        >
+                            {processing && (
+                                <LoaderCircle className="size-4 animate-spin" />
+                            )}
+                            {t('confirmPassword.submit')}
+                        </StorefrontButton>
                     </div>
                 )}
             </Form>

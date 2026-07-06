@@ -1,8 +1,12 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/react';
+import { LoaderCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
+
+import {
+    AuthAlert,
+    AuthTextLink,
+    StorefrontButton,
+} from '@/components/storefront';
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
 
@@ -12,6 +16,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
     setLayoutProps({
         title: t('verifyEmail.title'),
         description: t('verifyEmail.description'),
+        editorialHeadline: t('verifyEmail.editorialHeadline'),
     });
 
     return (
@@ -19,25 +24,31 @@ export default function VerifyEmail({ status }: { status?: string }) {
             <Head title={t('verifyEmail.title')} />
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <AuthAlert variant="success" className="mb-6">
                     {t('verifyEmail.resent')}
-                </div>
+                </AuthAlert>
             )}
 
-            <Form {...send.form()} className="space-y-6 text-center">
+            <Form {...send.form()} className="space-y-6">
                 {({ processing }) => (
                     <>
-                        <Button disabled={processing} variant="secondary">
-                            {processing && <Spinner />}
-                            {t('verifyEmail.resend')}
-                        </Button>
-
-                        <TextLink
-                            href={logout()}
-                            className="mx-auto block text-sm"
+                        <StorefrontButton
+                            type="submit"
+                            variant="primary"
+                            className="w-full"
+                            disabled={processing}
                         >
-                            {t('verifyEmail.logOut')}
-                        </TextLink>
+                            {processing && (
+                                <LoaderCircle className="size-4 animate-spin" />
+                            )}
+                            {t('verifyEmail.resend')}
+                        </StorefrontButton>
+
+                        <p className="text-center">
+                            <AuthTextLink href={logout()}>
+                                {t('verifyEmail.logOut')}
+                            </AuthTextLink>
+                        </p>
                     </>
                 )}
             </Form>

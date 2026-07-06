@@ -1,11 +1,13 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/react';
+import { LoaderCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
+
+import {
+    AuthField,
+    AuthInput,
+    AuthPasswordInput,
+    StorefrontButton,
+} from '@/components/storefront';
 import { update } from '@/routes/password';
 
 type Props = {
@@ -20,6 +22,7 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
     setLayoutProps({
         title: t('resetPassword.title'),
         description: t('resetPassword.description'),
+        editorialHeadline: t('resetPassword.editorialHeadline'),
     });
 
     return (
@@ -32,73 +35,70 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
                 resetOnSuccess={['password', 'password_confirmation']}
             >
                 {({ processing, errors }) => (
-                    <div className="grid gap-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">
-                                {t('resetPassword.email')}
-                            </Label>
-                            <Input
+                    <div className="grid gap-5">
+                        <AuthField
+                            id="email"
+                            label={t('resetPassword.email')}
+                            error={errors.email}
+                        >
+                            <AuthInput
                                 id="email"
                                 type="email"
                                 name="email"
                                 autoComplete="email"
                                 value={email}
-                                className="mt-1 block w-full"
                                 readOnly
+                                error={errors.email}
                             />
-                            <InputError
-                                message={errors.email}
-                                className="mt-2"
-                            />
-                        </div>
+                        </AuthField>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="password">
-                                {t('resetPassword.password')}
-                            </Label>
-                            <PasswordInput
+                        <AuthField
+                            id="password"
+                            label={t('resetPassword.password')}
+                            error={errors.password}
+                        >
+                            <AuthPasswordInput
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
-                                className="mt-1 block w-full"
                                 autoFocus
                                 placeholder={t(
                                     'resetPassword.passwordPlaceholder',
                                 )}
                                 passwordrules={passwordRules}
+                                error={errors.password}
                             />
-                            <InputError message={errors.password} />
-                        </div>
+                        </AuthField>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="password_confirmation">
-                                {t('resetPassword.confirmPassword')}
-                            </Label>
-                            <PasswordInput
+                        <AuthField
+                            id="password_confirmation"
+                            label={t('resetPassword.confirmPassword')}
+                            error={errors.password_confirmation}
+                        >
+                            <AuthPasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
-                                className="mt-1 block w-full"
                                 placeholder={t(
                                     'resetPassword.confirmPlaceholder',
                                 )}
                                 passwordrules={passwordRules}
+                                error={errors.password_confirmation}
                             />
-                            <InputError
-                                message={errors.password_confirmation}
-                                className="mt-2"
-                            />
-                        </div>
+                        </AuthField>
 
-                        <Button
+                        <StorefrontButton
                             type="submit"
-                            className="mt-4 w-full"
+                            variant="primary"
+                            className="mt-2 w-full"
                             disabled={processing}
                             data-test="reset-password-button"
                         >
-                            {processing && <Spinner />}
+                            {processing && (
+                                <LoaderCircle className="size-4 animate-spin" />
+                            )}
                             {t('resetPassword.submit')}
-                        </Button>
+                        </StorefrontButton>
                     </div>
                 )}
             </Form>
