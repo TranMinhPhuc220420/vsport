@@ -1,3 +1,4 @@
+export { StorefrontLanguageSwitcher } from '@/components/storefront/language-switcher';
 export { StorefrontButton } from '@/components/storefront/Button';
 export { StorefrontBadge } from '@/components/storefront/Badge';
 export { FilterChip } from '@/components/storefront/FilterChip';

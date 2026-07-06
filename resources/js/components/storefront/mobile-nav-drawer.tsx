@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LanguageSwitcher } from '@/components/language-switcher';
+import { StorefrontLanguageSwitcher } from '@/components/storefront/language-switcher';
 import { StorefrontButton } from '@/components/storefront/Button';
 import {
     Sheet,
@@ -148,7 +148,7 @@ export function MobileNavDrawer({
 
                 <div className="mt-auto border-t border-hairline px-6 py-6">
                     <div className="mb-4">
-                        <LanguageSwitcher />
+                        <StorefrontLanguageSwitcher variant="drawer" />
                     </div>
                     {auth.user ? (
                         <div className="flex flex-col gap-3">
