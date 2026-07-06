@@ -13,9 +13,12 @@ const LOCALE_FLAGS: Record<AppLocale, string> = {
     vi: '🇻🇳',
 };
 
+type LanguageSwitcherVariant = 'default' | 'compact' | 'utility';
+
 type LanguageSwitcherProps = {
     className?: string;
     compact?: boolean;
+    variant?: LanguageSwitcherVariant;
 };
 
 function LocaleOption({
@@ -42,9 +45,12 @@ function LocaleOption({
 export function LanguageSwitcher({
     className,
     compact = false,
+    variant,
 }: LanguageSwitcherProps) {
     const { locale, locales, updateLocale } = useLocale();
     const activeLocale = locales.find((option) => option.code === locale);
+    const resolvedVariant: LanguageSwitcherVariant =
+        variant ?? (compact ? 'utility' : 'default');
 
     return (
         <Select
@@ -54,9 +60,12 @@ export function LanguageSwitcher({
             <SelectTrigger
                 className={cn(
                     'w-fit shrink-0',
-                    compact
-                        ? 'text-caption-sm h-7 min-w-0 gap-0.5 border-none bg-transparent px-0 shadow-none [&>svg]:size-3.5'
-                        : 'text-caption-sm h-8 max-w-[9rem] gap-1',
+                    resolvedVariant === 'utility' &&
+                        'text-caption-sm h-auto min-h-0 gap-1 rounded-none border-none bg-transparent p-0 shadow-none hover:underline focus-visible:border-transparent focus-visible:ring-0 [&>svg]:ml-0.5 [&>svg]:size-3 [&>svg]:opacity-70',
+                    resolvedVariant === 'compact' &&
+                        'text-caption-sm h-7 min-w-0 gap-0.5 border-none bg-transparent px-0 shadow-none [&>svg]:size-3.5',
+                    resolvedVariant === 'default' &&
+                        'text-caption-sm h-8 gap-1',
                     className,
                 )}
                 aria-label={activeLocale?.label ?? 'Language'}
@@ -64,7 +73,7 @@ export function LanguageSwitcher({
                 <LocaleOption
                     code={locale}
                     label={activeLocale?.label ?? locale.toUpperCase()}
-                    showLabel={!compact}
+                    showLabel={resolvedVariant !== 'compact'}
                 />
             </SelectTrigger>
             <SelectContent align="end" className="min-w-[9.5rem]">
