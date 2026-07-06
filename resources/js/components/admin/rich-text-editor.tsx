@@ -59,6 +59,8 @@ type RichTextEditorProps = {
     minHeight?: string;
 };
 
+type HeadingLevel = 1 | 2 | 3 | 4;
+
 function htmlForCompare(html: string): string {
     return sanitizeHtml(html);
 }
@@ -315,8 +317,9 @@ export function RichTextEditor({
                                             .chain()
                                             .focus()
                                             .toggleHeading({
-                                                level: Number(level) as
-                                                    1 | 2 | 3 | 4,
+                                                level: Number(
+                                                    level,
+                                                ) as HeadingLevel,
                                             })
                                             .run();
                                     }
