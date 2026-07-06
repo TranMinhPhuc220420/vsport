@@ -12,18 +12,6 @@ declare module 'react' {
 }
 
 declare module '@inertiajs/core' {
-    export interface PageProps {
-        name: string;
-        auth: Auth;
-        sidebarOpen: boolean;
-        locale: 'vi' | 'en';
-        locales: { code: 'vi' | 'en'; label: string }[];
-        navigation: {
-            categories: Category[];
-        };
-        storeProfile: StoreProfile;
-    }
-
     export interface InertiaConfig {
         sharedPageProps: {
             name: string;
@@ -41,18 +29,6 @@ declare module '@inertiajs/core' {
 }
 
 declare module '@inertiajs/core/types/types' {
-    export interface PageProps {
-        name: string;
-        auth: Auth;
-        sidebarOpen: boolean;
-        locale: 'vi' | 'en';
-        locales: { code: 'vi' | 'en'; label: string }[];
-        navigation: {
-            categories: Category[];
-        };
-        storeProfile: StoreProfile;
-    }
-
     export interface InertiaConfig {
         sharedPageProps: {
             name: string;
