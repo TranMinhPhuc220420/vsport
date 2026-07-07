@@ -57,5 +57,8 @@ test('admin confirms a pending order', async ({ browser }) => {
     await expect(confirmButton).toBeVisible({ timeout: 15_000 });
     await confirmButton.click();
 
-    await expect(adminPage.getByText(/confirmed/i)).toBeVisible();
+    await expect(adminPage.getByTestId('order-status-stepper')).toHaveAttribute(
+        'data-current-status',
+        'confirmed',
+    );
 });

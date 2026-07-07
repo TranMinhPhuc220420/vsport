@@ -27,14 +27,22 @@ export function OrderStatusStepper({ currentStatus }: OrderStatusStepperProps) {
 
     if (isCancelled) {
         return (
-            <div className="rounded-admin-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            <div
+                className="rounded-admin-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+                data-testid="order-status-stepper"
+                data-current-status={currentStatus}
+            >
                 {t(orderStatusKey('cancelled'))}
             </div>
         );
     }
 
     return (
-        <ol className="flex flex-wrap gap-2">
+        <ol
+            className="flex flex-wrap gap-2"
+            data-testid="order-status-stepper"
+            data-current-status={currentStatus}
+        >
             {pipeline.map((status, index) => {
                 const isComplete = currentIndex > index;
                 const isCurrent = currentIndex === index;
